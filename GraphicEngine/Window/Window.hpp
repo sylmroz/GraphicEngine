@@ -1,6 +1,9 @@
 #ifndef GRAPHIC_ENGINE_WINDOW_HPP
 #define GRAPHIC_ENGINE_WINDOW_HPP
 
+#include "../HID/Keyboard/Keyboard.hpp"
+#include "../HID/Mouse/Mouse.hpp"
+
 #include <exception>
 
 namespace GraphicEngine
@@ -27,10 +30,11 @@ namespace GraphicEngine
 
 		virtual void poolEvents() = 0;
 
-		virtual bool windowShouldBeClosed() 
-		{
-			return shouldClose; 
-		};
+		virtual void registerKeyboard(std::shared_ptr<GraphicEngine::HID::Keyboard> keyboard) { _keyboard = keyboard; };
+
+		virtual void registerMouse(std::shared_ptr<GraphicEngine::HID::Mouse> mouse) { _mouse = mouse; };
+
+		virtual bool windowShouldBeClosed() { return shouldClose; };
 
 	protected:
 		virtual void initialize() = 0;
@@ -39,6 +43,9 @@ namespace GraphicEngine
 		size_t _height{ 0 };
 
 		bool shouldClose{ false };
+
+		std::shared_ptr<GraphicEngine::HID::Keyboard> _keyboard;
+		std::shared_ptr<GraphicEngine::HID::Mouse> _mouse;
 	};
 }
 

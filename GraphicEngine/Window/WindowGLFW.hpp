@@ -49,9 +49,15 @@ namespace GraphicEngine::GLFW
 
 		virtual bool windowShouldBeClosed() override;
 
+		virtual void registerMouse(std::shared_ptr<GraphicEngine::HID::Mouse> mouse) override;
+
+	private:
+		void grabAllKeys();
+		void grabAllPressedMouseButtons();
+
 	private:
 		std::shared_ptr<GLFWwindow> _glfwWindow;
-		GLFWWindowProfile _windowProfile;
+		GLFWWindowProfile _windowProfile = GLFWWindowProfile::NONE;
 	};
 }
 

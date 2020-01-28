@@ -1,12 +1,15 @@
 #include "Application.hpp"
 
-
+#include "Window/Window.hpp"
 #include "Window/WindowGLFW.hpp"
+#include "RenderingEngine/RenderingEngine.hpp"
 #include "RenderingEngine/VulkanRenderingEngine.hpp"
 #include "RenderingEngine/OpenGLRenderingEngine.hpp"
 
 #include <exception>
 #include <iostream>
+
+using namespace GraphicEngine::HID;
 
 Application::Application(int argc, char** argv)
 {
@@ -18,12 +21,56 @@ void Application::exec()
 {
 	try
 	{
+		keyboard = std::shared_ptr<Keyboard>(new Keyboard);
+		mouse = std::shared_ptr<Mouse>(new Mouse);
+		
 		auto window = windowFactory("glfw");
 		window->init(640, 480);
+		window->registerKeyboard(keyboard);
+		window->registerMouse(mouse);
+
 		auto renderingEngine = renderingEngineFactory("vulkan", window);
 		renderingEngine->init();
 
-		engine = std::shared_ptr<GraphicEngine::Engine>(new GraphicEngine::Engine(window, renderingEngine));
+
+		// Only for debug
+		keyboard->subscribe([](std::vector<Key> keys)
+			{
+				if (!keys.empty())
+				{
+					for (auto key : keys)
+					{
+						std::cout << key << " ";
+					}
+					std::cout << "\n";
+				}
+			}
+		);
+
+		mouse->subscribePositionEventHandler([](double x, double y)
+			{
+				std::cout << "Position: " << x << " " << y << "\n";
+			});
+
+		mouse->subscribeScrollEventHandler([](double x, double y)
+			{
+				std::cout << "Scroll: " << x << " " << y << "\n";
+			});
+
+		mouse->subscribe([](std::vector<Button> button)
+			{
+				if (!button.empty())
+				{
+					for (auto button : button)
+					{
+						std::cout << button << " ";
+					}
+					std::cout << "\n";
+				}
+			});
+
+		engine = std::shared_ptr<GraphicEngine::Engine>(new GraphicEngine::Engine(window, renderingEngine, keyboard, mouse));
+
 		engine->run();
 	}
 
