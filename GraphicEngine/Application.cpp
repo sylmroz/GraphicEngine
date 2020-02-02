@@ -25,16 +25,18 @@ void Application::exec()
 		mouse = std::shared_ptr<Mouse>(new Mouse);
 		
 		auto window = windowFactory("glfw");
+		auto renderingEngine = renderingEngineFactory("opengl", window);
+		
 		window->init(640, 480);
 		window->registerKeyboard(keyboard);
 		window->registerMouse(mouse);
 
-		auto renderingEngine = renderingEngineFactory("vulkan", window);
-		renderingEngine->init();
+		renderingEngine->init(window->getWidth(), window->getHeight());
+		window->addResizeCallbackListener([&](size_t width, size_t height) {renderingEngine->resizeFrameBuffer(width, height); });
 
 
 		// Only for debug
-		keyboard->subscribe([](std::vector<Key> keys)
+		/*keyboard->subscribe([](std::vector<Key> keys)
 			{
 				if (!keys.empty())
 				{
@@ -69,6 +71,8 @@ void Application::exec()
 				}
 			});
 
+		window->addResizeCallbackListener([](size_t w, size_t h) {std::cout << w << " " << h << "\n"; });*/
+
 		engine = std::shared_ptr<GraphicEngine::Engine>(new GraphicEngine::Engine(window, renderingEngine, keyboard, mouse));
 
 		engine->run();
@@ -80,10 +84,11 @@ void Application::exec()
 	}
 }
 
-std::shared_ptr<GraphicEngine::Window> Application::windowFactory(std::string type)
+std::shared_ptr<GraphicEngine::Window> Application::windowFactory(std::string windowType)
 {
-	if (type == "glfw")
+	if (windowType == "glfw")
 		return std::shared_ptr<GraphicEngine::Window>(new GraphicEngine::GLFW::WindowGLFW);
+
 	throw std::exception("Window type not supported!");
 }
 

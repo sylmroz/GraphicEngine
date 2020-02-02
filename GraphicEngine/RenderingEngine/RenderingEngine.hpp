@@ -7,7 +7,8 @@ namespace GraphicEngine
 	{
 	public:
 		virtual bool drawFrame() = 0;
-		virtual void init() = 0;
+		virtual void init(size_t width, size_t height) = 0;
+		virtual void resizeFrameBuffer(size_t width, size_t height) = 0;
 	private:
 		
 	};

@@ -13,7 +13,7 @@ public:
 	void exec();
 
 private:
-	std::shared_ptr<GraphicEngine::Window> windowFactory(std::string type);
+	std::shared_ptr<GraphicEngine::Window> windowFactory(std::string windowType);
 	std::shared_ptr<GraphicEngine::RenderingEngine> renderingEngineFactory(std::string type, std::shared_ptr<GraphicEngine::Window> window);
 
 private:

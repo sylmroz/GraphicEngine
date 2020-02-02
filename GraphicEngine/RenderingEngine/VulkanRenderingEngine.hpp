@@ -8,8 +8,9 @@ namespace GraphicEngine::Vulkan
 	class VulkanRenderingEngine : public GraphicEngine::RenderingEngine
 	{
 	public:
-		virtual bool drawFrame();
-		virtual void init();
+		virtual bool drawFrame() override;
+		virtual void init(size_t width, size_t height) override;
+		virtual void resizeFrameBuffer(size_t width, size_t height) override;
 	private:
 
 	};

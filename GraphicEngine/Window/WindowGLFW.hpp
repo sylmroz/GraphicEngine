@@ -18,26 +18,27 @@ namespace GraphicEngine::GLFW
 
 	class WindowGLFW : public GraphicEngine::Window
 	{
-		template <typename WindowApi>
 		struct WindowGLFWApi
 		{
-			void initialize()
-			{
-				static_cast<WindowApi&>(*this).init();
-			}
+			virtual void init() = 0;
+			virtual void swapBuffers(GLFWwindow* window) = 0;
 		};
 
-		struct WindowGLFWOpenGl : WindowGLFWApi<WindowGLFWOpenGl>
+		struct WindowGLFWOpenGl : WindowGLFWApi
 		{
-			void init();
+			virtual void init() override;
+			virtual void swapBuffers(GLFWwindow* window) override;
 		};
 
-		struct WindowGLFWVulkan : WindowGLFWApi<WindowGLFWVulkan>
+		struct WindowGLFWVulkan : WindowGLFWApi
 		{
-			void init();
+			virtual void init() override;
+			virtual void swapBuffers(GLFWwindow* window) override;
 		};
 
 	public:
+
+		virtual ~WindowGLFW();
 
 		void setGLFWWindowProfile(GLFWWindowProfile windowProfile) { _windowProfile = windowProfile; };
 
@@ -58,6 +59,8 @@ namespace GraphicEngine::GLFW
 	private:
 		std::shared_ptr<GLFWwindow> _glfwWindow;
 		GLFWWindowProfile _windowProfile = GLFWWindowProfile::NONE;
+
+		std::shared_ptr<WindowGLFWApi> _specialApi;
 	};
 }
 

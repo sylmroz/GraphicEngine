@@ -1,25 +1,53 @@
 #include "WindowGLFW.hpp"
+#include <stdexcept>
 
 using namespace GraphicEngine::HID;
 
+GraphicEngine::GLFW::WindowGLFW::~WindowGLFW()
+{
+	glfwTerminate();
+}
+
 void GraphicEngine::GLFW::WindowGLFW::swapBuffer()
 {
+	_specialApi->swapBuffers(_glfwWindow.get());
 }
 
 void GraphicEngine::GLFW::WindowGLFW::initialize()
 {
 	glfwInit();
 	
+
 	if (_windowProfile == OPENGL)
-		WindowGLFWOpenGl{}.init();
+	{
+		_specialApi = std::shared_ptr<WindowGLFWApi>(new WindowGLFWOpenGl);
+	}
 	else if (_windowProfile == VULKAN)
-		WindowGLFWVulkan{}.init();
+	{
+		_specialApi = std::shared_ptr<WindowGLFWApi>(new WindowGLFWVulkan);
+	}
+
+	_specialApi->init();
 
 	_glfwWindow = std::shared_ptr<GLFWwindow>(
 		glfwCreateWindow(_width, _height, "Graphic Engine", nullptr, nullptr), 
-		[](GLFWwindow* window) {glfwDestroyWindow(window); });
+		[](GLFWwindow* window) 
+		{
+			glfwDestroyWindow(window);
+		});
+
+	if (_glfwWindow == nullptr)
+		throw std::runtime_error("Failed to create GLFW window!");
 
 	glfwSetWindowUserPointer(_glfwWindow.get(), this);
+
+	auto resizeCallback = [](GLFWwindow* window, int width, int height)
+	{
+		auto app = reinterpret_cast<WindowGLFW*>(glfwGetWindowUserPointer(window));
+		app->_resizeSubject.next(width, height);
+	};
+
+	glfwSetFramebufferSizeCallback(_glfwWindow.get(), resizeCallback);
 }
 
 void GraphicEngine::GLFW::WindowGLFW::poolEvents()
@@ -97,7 +125,17 @@ void GraphicEngine::GLFW::WindowGLFW::WindowGLFWOpenGl::init()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 }
 
+void GraphicEngine::GLFW::WindowGLFW::WindowGLFWOpenGl::swapBuffers(GLFWwindow* window)
+{
+	glfwSwapBuffers(window);
+}
+
 void GraphicEngine::GLFW::WindowGLFW::WindowGLFWVulkan::init()
 {
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+}
+
+void GraphicEngine::GLFW::WindowGLFW::WindowGLFWVulkan::swapBuffers(GLFWwindow* window)
+{
+	// Do nothing. Vulkan Rendering Engine take care about it
 }
