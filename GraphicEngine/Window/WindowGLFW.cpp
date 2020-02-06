@@ -36,6 +36,8 @@ void GraphicEngine::GLFW::WindowGLFW::initialize()
 			glfwDestroyWindow(window);
 		});
 
+	glfwMakeContextCurrent(_glfwWindow.get());
+
 	if (_glfwWindow == nullptr)
 		throw std::runtime_error("Failed to create GLFW window!");
 
@@ -55,6 +57,17 @@ void GraphicEngine::GLFW::WindowGLFW::poolEvents()
 	glfwPollEvents();
 	grabAllKeys();
 	grabAllPressedMouseButtons();
+}
+
+std::vector<std::string> GraphicEngine::GLFW::WindowGLFW::getRequiredExtensions()
+{
+	uint32_t glfwExtensionCount = 0;
+	const char** glfwExtensions;
+	glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
+
+	std::vector<std::string> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
+
+	return extensions;
 }
 
 bool GraphicEngine::GLFW::WindowGLFW::windowShouldBeClosed()
@@ -80,6 +93,13 @@ void GraphicEngine::GLFW::WindowGLFW::registerMouse(std::shared_ptr<GraphicEngin
 
 	glfwSetScrollCallback(_glfwWindow.get(), scrollFun);
 	glfwSetCursorPosCallback(_glfwWindow.get(), positionlFun);
+}
+
+VkSurfaceKHR GraphicEngine::GLFW::WindowGLFW::getWindowSurface(vk::UniqueInstance& instance)
+{
+	VkSurfaceKHR _surface;
+	glfwCreateWindowSurface(instance.get(), _glfwWindow.get(), nullptr, &_surface);
+	return _surface;
 }
 
 void GraphicEngine::GLFW::WindowGLFW::grabAllKeys()

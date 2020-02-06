@@ -3,11 +3,12 @@
 
 #include "RenderingEngine.hpp"
 
-namespace GraphicEngine::Vulkan
+namespace GraphicEngine::OpenGL
 {
 	class OpenGLRenderingEngine : public GraphicEngine::RenderingEngine
 	{
 	public:
+		OpenGLRenderingEngine(std::shared_ptr<Window> window);
 		virtual bool drawFrame() override;
 		virtual void init(size_t width, size_t height) override;
 		virtual void resizeFrameBuffer(size_t width, size_t height) override;

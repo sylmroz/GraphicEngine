@@ -25,7 +25,7 @@ void Application::exec()
 		mouse = std::shared_ptr<Mouse>(new Mouse);
 		
 		auto window = windowFactory("glfw");
-		auto renderingEngine = renderingEngineFactory("opengl", window);
+		auto renderingEngine = renderingEngineFactory("vulkan", window);
 		
 		window->init(640, 480);
 		window->registerKeyboard(keyboard);
@@ -97,7 +97,7 @@ std::shared_ptr<GraphicEngine::RenderingEngine> Application::renderingEngineFact
 	std::shared_ptr<GraphicEngine::RenderingEngine> renderingEngine;
 	if (type == "vulkan")
 	{
-		renderingEngine = std::shared_ptr<GraphicEngine::RenderingEngine>(new GraphicEngine::Vulkan::VulkanRenderingEngine);
+		renderingEngine = std::shared_ptr<GraphicEngine::RenderingEngine>(new GraphicEngine::Vulkan::VulkanRenderingEngine(window));
 		auto glfwWindow = std::dynamic_pointer_cast<GraphicEngine::GLFW::WindowGLFW>(window);
 		if (glfwWindow != nullptr)
 		{
@@ -108,7 +108,7 @@ std::shared_ptr<GraphicEngine::RenderingEngine> Application::renderingEngineFact
 
 	else if (type == "opengl")
 	{
-		renderingEngine = std::shared_ptr<GraphicEngine::RenderingEngine>(new GraphicEngine::Vulkan::OpenGLRenderingEngine);
+		renderingEngine = std::shared_ptr<GraphicEngine::RenderingEngine>(new GraphicEngine::OpenGL::OpenGLRenderingEngine(window));
 		auto glfwWindow = std::dynamic_pointer_cast<GraphicEngine::GLFW::WindowGLFW>(window);
 		if (glfwWindow != nullptr)
 		{

@@ -3,7 +3,9 @@
 
 #include "Window.hpp"
 
+#define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
+#include <vulkan/vulkan.hpp>
 
 #include <memory>
 
@@ -48,9 +50,13 @@ namespace GraphicEngine::GLFW
 
 		virtual void poolEvents();
 
+		virtual std::vector<std::string> getRequiredExtensions() override;
+
 		virtual bool windowShouldBeClosed() override;
 
 		virtual void registerMouse(std::shared_ptr<GraphicEngine::HID::Mouse> mouse) override;
+
+		VkSurfaceKHR getWindowSurface(vk::UniqueInstance& instance);
 
 	private:
 		void grabAllKeys();

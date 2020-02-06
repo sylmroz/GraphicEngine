@@ -37,6 +37,8 @@ namespace GraphicEngine
 
 		virtual void poolEvents() = 0;
 
+		virtual std::vector<std::string> getRequiredExtensions() = 0;
+
 		virtual void registerKeyboard(std::shared_ptr<GraphicEngine::HID::Keyboard> keyboard) { _keyboard = keyboard; };
 
 		virtual void registerMouse(std::shared_ptr<GraphicEngine::HID::Mouse> mouse) { _mouse = mouse; };
