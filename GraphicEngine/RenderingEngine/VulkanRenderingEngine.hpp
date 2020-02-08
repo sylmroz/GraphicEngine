@@ -20,9 +20,11 @@ namespace GraphicEngine::Vulkan
 		vk::PhysicalDevice _physicalDevice;
 		vk::UniqueSurfaceKHR _surface;
 		vk::UniqueDevice _device;
+
 		GraphicEngine::Utils::Vulkan::SwapChainData _swapChainData;
 		vk::UniqueCommandPool _commandPool;
 		vk::CommandBuffer _commandBuffer;
+		std::unique_ptr<GraphicEngine::Utils::Vulkan::DeepBufferData> _deepBuffer;
 
 	private:
 		const std::vector<std::string> validationLayers = {

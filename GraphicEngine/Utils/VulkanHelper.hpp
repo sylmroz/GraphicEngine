@@ -57,14 +57,20 @@ namespace GraphicEngine::Utils::Vulkan
 	class ImageData
 	{
 	public:
-		ImageData(const vk::PhysicalDevice physicalDevice, const vk::UniqueDevice device, vk::MemoryPropertyFlags memoryProperty, vk::Extent3D extent,
-			vk::Format format, vk::ImageUsageFlags imageUsage, vk::ImageTiling tiling,
-			vk::SampleCountFlagBits numOfSamples, uint32_t mipLevel, vk::ImageLayout layout, vk::ImageAspectFlags aspectFlags);
+		ImageData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::Extent3D extent, vk::Format format, vk::SampleCountFlagBits numOfSamples,
+			vk::MemoryPropertyFlags memoryProperty, vk::ImageUsageFlags imageUsage, vk::ImageTiling tiling,
+			uint32_t mipLevel, vk::ImageLayout layout, vk::ImageAspectFlags aspectFlags);
 
 		vk::Format format;
 		vk::UniqueDeviceMemory deviceMemory;
 		vk::UniqueImage image;
 		vk::UniqueImageView imageView;
+	};
+
+	class DeepBufferData : public ImageData 
+	{
+	public:
+		DeepBufferData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::Extent3D extent, vk::Format format, vk::SampleCountFlagBits numOfSamples);
 	};
 
 	std::vector<const char*> getDeviceExtension();

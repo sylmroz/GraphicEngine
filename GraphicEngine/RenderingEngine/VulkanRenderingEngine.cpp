@@ -37,6 +37,7 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 		auto [w, h] = _window->getFrameBufferSize();
 		vk::Extent2D frameBufferSize(w, h);
 		_swapChainData = SwapChainData(_physicalDevice, _device, _surface, indices, frameBufferSize, vk::UniqueSwapchainKHR(), vk::ImageUsageFlagBits::eColorAttachment);
+		_deepBuffer = std::unique_ptr<DeepBufferData>(new DeepBufferData(_physicalDevice, _device, vk::Extent3D(frameBufferSize, 1), /*findSupportedFormats*/ vk::Format::eD16Unorm,/*selactMsaa*/ vk::SampleCountFlagBits::e1));
 	}
 
 	catch (vk::SystemError & err)

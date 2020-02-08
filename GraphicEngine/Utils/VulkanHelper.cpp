@@ -345,18 +345,27 @@ GraphicEngine::Utils::Vulkan::SwapChainSupportDetails::SwapChainSupportDetails(v
 {
 }
 
-GraphicEngine::Utils::Vulkan::ImageData::ImageData(const vk::PhysicalDevice physicalDevice, const vk::UniqueDevice device, vk::MemoryPropertyFlags memoryProperty, vk::Extent3D extent,
-	vk::Format format, vk::ImageUsageFlags imageUsage, vk::ImageTiling tiling, vk::SampleCountFlagBits numOfSamples, uint32_t mipLevel, vk::ImageLayout layout, vk::ImageAspectFlags aspectFlags)
+GraphicEngine::Utils::Vulkan::ImageData::ImageData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::Extent3D extent, vk::Format format, vk::SampleCountFlagBits numOfSamples,
+	vk::MemoryPropertyFlags memoryProperty, vk::ImageUsageFlags imageUsage, vk::ImageTiling tiling,
+	uint32_t mipLevel, vk::ImageLayout layout, vk::ImageAspectFlags aspectFlags)
 {
 	this->format = format;
 
-	vk::ImageCreateInfo imageCreateInfo(vk::ImageCreateFlags(), vk::ImageType::e2D, format, extent, mipLevel, 0, numOfSamples, tiling, imageUsage, vk::SharingMode::eExclusive, 0, nullptr, layout);
+	vk::ImageCreateInfo imageCreateInfo(vk::ImageCreateFlags(), vk::ImageType::e2D, format, extent, mipLevel, 1, numOfSamples, tiling, imageUsage, vk::SharingMode::eExclusive, 0, nullptr, layout);
 
 	this->image = device->createImageUnique(imageCreateInfo);
 	this->deviceMemory = allocateMemory(physicalDevice, device, memoryProperty, device->getImageMemoryRequirements(image.get()));
 
 	device->bindImageMemory(image.get(), deviceMemory.get(), 0);
+
 	vk::ComponentMapping componentMapping(vk::ComponentSwizzle::eR, vk::ComponentSwizzle::eG, vk::ComponentSwizzle::eB, vk::ComponentSwizzle::eA);
 	vk::ImageSubresourceRange subResourceRange(aspectFlags, 0, 1, 0, 1);
 	vk::ImageViewCreateInfo createInfo(vk::ImageViewCreateFlags(), image.get(), vk::ImageViewType::e2D, this->format, componentMapping, subResourceRange);
+	imageView = device->createImageViewUnique(createInfo);
+}
+
+GraphicEngine::Utils::Vulkan::DeepBufferData::DeepBufferData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::Extent3D extent, vk::Format format, vk::SampleCountFlagBits numOfSamples) :
+	ImageData(physicalDevice, device, extent, format, numOfSamples,
+		vk::MemoryPropertyFlagBits::eDeviceLocal, vk::ImageUsageFlagBits::eDepthStencilAttachment, vk::ImageTiling::eOptimal, 1, vk::ImageLayout::eUndefined, vk::ImageAspectFlagBits::eDepth)
+{
 }
