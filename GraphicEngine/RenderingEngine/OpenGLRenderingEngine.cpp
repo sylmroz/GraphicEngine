@@ -23,3 +23,7 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::resizeFrameBuffer(size_t widt
 {
 	glViewport(0, 0, width, height);
 }
+
+void GraphicEngine::OpenGL::OpenGLRenderingEngine::cleanup()
+{
+}

@@ -1,6 +1,8 @@
 #include "VulkanRenderingEngine.hpp"
 #include "../Window/WindowGLFW.hpp"
 
+#include <iostream>
+
 #ifdef NDEBUG
 const bool enableValidationLayers = false;
 #else
@@ -19,15 +21,6 @@ bool GraphicEngine::Vulkan::VulkanRenderingEngine::drawFrame()
 
 void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t height)
 {
-	createInstance();
-}
-
-void GraphicEngine::Vulkan::VulkanRenderingEngine::resizeFrameBuffer(size_t width, size_t height)
-{
-}
-
-void GraphicEngine::Vulkan::VulkanRenderingEngine::createInstance()
-{
 	using namespace GraphicEngine::Utils::Vulkan;
 	try
 	{
@@ -38,6 +31,12 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::createInstance()
 			_surface = vk::UniqueSurfaceKHR(surface, _deleter);
 		}
 		_physicalDevice = getPhysicalDevice(_instance, _surface);
+		_device = getUniqueLogicalDevice(_physicalDevice, _surface);
+		QueueFamilyIndices indices = findGraphicAndPresentQueueFamilyIndices(_physicalDevice, _surface);
+		_commandPool = createUniqueCommandPool(_device, indices);
+		auto [w, h] = _window->getFrameBufferSize();
+		vk::Extent2D frameBufferSize(w, h);
+		_swapChainData = SwapChainData(_physicalDevice, _device, _surface, indices, frameBufferSize, vk::UniqueSwapchainKHR(), vk::ImageUsageFlagBits::eColorAttachment);
 	}
 
 	catch (vk::SystemError & err)
@@ -48,4 +47,12 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::createInstance()
 	{
 		throw std::runtime_error("Vulkan Initialize: unknown error\n");
 	}
+}
+
+void GraphicEngine::Vulkan::VulkanRenderingEngine::resizeFrameBuffer(size_t width, size_t height)
+{
+}
+
+void GraphicEngine::Vulkan::VulkanRenderingEngine::cleanup()
+{
 }

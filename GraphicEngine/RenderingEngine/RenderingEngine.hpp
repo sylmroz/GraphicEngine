@@ -14,6 +14,7 @@ namespace GraphicEngine
 		virtual bool drawFrame() = 0;
 		virtual void init(size_t width, size_t height) = 0;
 		virtual void resizeFrameBuffer(size_t width, size_t height) = 0;
+		virtual void cleanup() = 0;
 	protected:
 		std::shared_ptr<Window> _window;
 	};

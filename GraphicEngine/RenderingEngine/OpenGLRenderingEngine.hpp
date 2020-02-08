@@ -12,6 +12,7 @@ namespace GraphicEngine::OpenGL
 		virtual bool drawFrame() override;
 		virtual void init(size_t width, size_t height) override;
 		virtual void resizeFrameBuffer(size_t width, size_t height) override;
+		virtual void cleanup() override;
 	private:
 
 	};

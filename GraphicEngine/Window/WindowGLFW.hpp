@@ -58,6 +58,8 @@ namespace GraphicEngine::GLFW
 
 		VkSurfaceKHR getWindowSurface(vk::UniqueInstance& instance);
 
+		virtual std::pair<uint32_t, uint32_t> getFrameBufferSize() override;
+
 	private:
 		void grabAllKeys();
 		void grabAllPressedMouseButtons();

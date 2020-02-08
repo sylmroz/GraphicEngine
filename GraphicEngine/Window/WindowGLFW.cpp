@@ -102,6 +102,13 @@ VkSurfaceKHR GraphicEngine::GLFW::WindowGLFW::getWindowSurface(vk::UniqueInstanc
 	return _surface;
 }
 
+std::pair<uint32_t, uint32_t> GraphicEngine::GLFW::WindowGLFW::getFrameBufferSize()
+{
+	int width{ 0 }, height{ 0 };
+	glfwGetFramebufferSize(_glfwWindow.get(), &width, &height);
+	return std::pair<uint32_t, uint32_t>(static_cast<uint32_t>(width), static_cast<uint32_t>(height));
+}
+
 void GraphicEngine::GLFW::WindowGLFW::grabAllKeys()
 {
 	

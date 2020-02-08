@@ -39,6 +39,8 @@ namespace GraphicEngine
 
 		virtual std::vector<std::string> getRequiredExtensions() = 0;
 
+		virtual std::pair<uint32_t, uint32_t> getFrameBufferSize() = 0;
+
 		virtual void registerKeyboard(std::shared_ptr<GraphicEngine::HID::Keyboard> keyboard) { _keyboard = keyboard; };
 
 		virtual void registerMouse(std::shared_ptr<GraphicEngine::HID::Mouse> mouse) { _mouse = mouse; };

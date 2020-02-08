@@ -13,13 +13,16 @@ namespace GraphicEngine::Vulkan
 		virtual bool drawFrame() override;
 		virtual void init(size_t width, size_t height) override;
 		virtual void resizeFrameBuffer(size_t width, size_t height) override;
-	private:
-		void createInstance();
+		virtual void cleanup() override;
 
 	private:
 		vk::UniqueInstance _instance;
 		vk::PhysicalDevice _physicalDevice;
 		vk::UniqueSurfaceKHR _surface;
+		vk::UniqueDevice _device;
+		GraphicEngine::Utils::Vulkan::SwapChainData _swapChainData;
+		vk::UniqueCommandPool _commandPool;
+		vk::CommandBuffer _commandBuffer;
 
 	private:
 		const std::vector<std::string> validationLayers = {

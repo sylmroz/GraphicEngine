@@ -26,4 +26,5 @@ void GraphicEngine::Engine::run()
 		_window->swapBuffer();
 		_window->poolEvents();
 	}
+	_renderingEngine->cleanup();
 }
