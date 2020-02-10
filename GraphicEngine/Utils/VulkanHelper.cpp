@@ -208,10 +208,11 @@ vk::UniqueCommandPool GraphicEngine::Utils::Vulkan::createUniqueCommandPool(cons
 	throw std::runtime_error("Graphic queue family index is empty!");
 }
 
-std::vector<vk::UniqueCommandBuffer> GraphicEngine::Utils::Vulkan::createUniqueCommandBuffers(const vk::UniqueDevice& device, const vk::UniqueCommandPool& commandPool)
+std::vector<vk::UniqueCommandBuffer> GraphicEngine::Utils::Vulkan::createUniqueCommandBuffers(const vk::UniqueDevice& device, const vk::UniqueCommandPool& commandPool, uint32_t commandCount)
 {
-	//vk::CommandBufferAllocateInfo allocateInfo(commandPool.get(),vk::CommandBufferLevel::ePrimary, )
-	return std::vector<vk::UniqueCommandBuffer>();
+	vk::CommandBufferAllocateInfo allocateInfo(commandPool.get(), vk::CommandBufferLevel::ePrimary, commandCount);
+	std::vector<vk::UniqueCommandBuffer> commandBuffers = device->allocateCommandBuffersUnique(allocateInfo);
+	return std::move(commandBuffers);
 }
 
 uint32_t GraphicEngine::Utils::Vulkan::findMemoryType(const vk::PhysicalDevice& physicalDevice, uint32_t typeFilter, vk::MemoryPropertyFlags memoryProperty)
@@ -230,6 +231,89 @@ uint32_t GraphicEngine::Utils::Vulkan::findMemoryType(const vk::PhysicalDevice& 
 vk::UniqueDeviceMemory GraphicEngine::Utils::Vulkan::allocateMemory(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::MemoryPropertyFlags memoryProperty, const vk::MemoryRequirements& memoryRequirements)
 {
 	return device->allocateMemoryUnique(vk::MemoryAllocateInfo(memoryRequirements.size, findMemoryType(physicalDevice, memoryRequirements.memoryTypeBits, memoryProperty)));
+}
+
+vk::UniqueRenderPass GraphicEngine::Utils::Vulkan::createRenderPass(const vk::UniqueDevice& device, vk::Format colorFormat, vk::Format depthFormat, vk::SampleCountFlagBits msaaSample)
+{
+	std::vector<vk::AttachmentDescription> attachmentDescriptors;
+
+	vk::AttachmentDescription depthAttachment(vk::AttachmentDescriptionFlags(), depthFormat, msaaSample,
+		vk::AttachmentLoadOp::eClear, vk::AttachmentStoreOp::eStore,
+		vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare,
+		vk::ImageLayout::eUndefined, vk::ImageLayout::eDepthStencilAttachmentOptimal);
+
+	vk::AttachmentReference depthAttachmentRef(1, vk::ImageLayout::eDepthStencilAttachmentOptimal);
+
+	if (msaaSample == vk::SampleCountFlagBits::e1)
+	{
+		vk::AttachmentDescription colorAttachment(vk::AttachmentDescriptionFlags(), colorFormat, msaaSample,
+			vk::AttachmentLoadOp::eClear, vk::AttachmentStoreOp::eStore,
+			vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare,
+			vk::ImageLayout::eUndefined, vk::ImageLayout::ePresentSrcKHR);
+		vk::AttachmentReference colorAttachmentRef(0, vk::ImageLayout::eColorAttachmentOptimal);
+
+		attachmentDescriptors.push_back(colorAttachment);
+		attachmentDescriptors.push_back(depthAttachment);
+
+		vk::SubpassDescription subpassDescription(vk::SubpassDescriptionFlags(), vk::PipelineBindPoint::eGraphics, 0, nullptr, 1, &colorAttachmentRef, nullptr, &depthAttachmentRef);
+
+		vk::SubpassDependency subpasDependency(VK_SUBPASS_EXTERNAL, 0,
+			vk::PipelineStageFlagBits::eColorAttachmentOutput, vk::PipelineStageFlagBits::eColorAttachmentOutput,
+			{}, vk::AccessFlagBits::eColorAttachmentRead | vk::AccessFlagBits::eColorAttachmentWrite);
+
+		vk::RenderPassCreateInfo renderPassCreateInfo(vk::RenderPassCreateFlags(), static_cast<uint32_t>(attachmentDescriptors.size()), attachmentDescriptors.data(), 1, &subpassDescription, 1, &subpasDependency);
+
+		return device->createRenderPassUnique(renderPassCreateInfo);
+	}
+
+	else
+	{
+		vk::AttachmentDescription colorAttachment(vk::AttachmentDescriptionFlags(), colorFormat, msaaSample,
+			vk::AttachmentLoadOp::eClear, vk::AttachmentStoreOp::eStore,
+			vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare,
+			vk::ImageLayout::eUndefined, vk::ImageLayout::eColorAttachmentOptimal);
+		vk::AttachmentReference colorAttachmentRef(0, vk::ImageLayout::eColorAttachmentOptimal);
+
+		vk::AttachmentDescription colorAttachmentResolve(vk::AttachmentDescriptionFlags(), colorFormat, vk::SampleCountFlagBits::e1,
+			vk::AttachmentLoadOp::eClear, vk::AttachmentStoreOp::eStore,
+			vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare,
+			vk::ImageLayout::eUndefined, vk::ImageLayout::ePresentSrcKHR);
+		vk::AttachmentReference colorAttachmenResolveRef(2, vk::ImageLayout::eColorAttachmentOptimal);
+
+		attachmentDescriptors.push_back(colorAttachment);
+		attachmentDescriptors.push_back(depthAttachment);
+		attachmentDescriptors.push_back(colorAttachmentResolve);
+
+		vk::SubpassDescription subpassDescription(vk::SubpassDescriptionFlags(), vk::PipelineBindPoint::eGraphics, 0, nullptr, 1, &colorAttachmentRef, &colorAttachmenResolveRef, &depthAttachmentRef);
+
+		vk::SubpassDependency subpasDependency(VK_SUBPASS_EXTERNAL, 0,
+			vk::PipelineStageFlagBits::eColorAttachmentOutput, vk::PipelineStageFlagBits::eColorAttachmentOutput,
+			{}, vk::AccessFlagBits::eColorAttachmentRead | vk::AccessFlagBits::eColorAttachmentWrite);
+
+		vk::RenderPassCreateInfo renderPassCreateInfo(vk::RenderPassCreateFlags(), static_cast<uint32_t>(attachmentDescriptors.size()), attachmentDescriptors.data(), 1, &subpassDescription, 1, &subpasDependency);
+
+		return device->createRenderPassUnique(renderPassCreateInfo);
+	}
+}
+
+vk::Format GraphicEngine::Utils::Vulkan::findDepthFormat(const vk::PhysicalDevice& physicalDevice)
+{
+	return findSupportedFormat(physicalDevice, { vk::Format::eD32Sfloat, vk::Format::eD32SfloatS8Uint, vk::Format::eD24UnormS8Uint },
+		vk::ImageTiling::eOptimal, vk::FormatFeatureFlagBits::eDepthStencilAttachment);
+}
+
+vk::Format GraphicEngine::Utils::Vulkan::findSupportedFormat(const vk::PhysicalDevice& physicalDevice, std::vector<vk::Format> candidates, vk::ImageTiling tiling, vk::FormatFeatureFlags formatFeatures)
+{
+	vk::FormatProperties props;
+	for (const vk::Format& format : candidates)
+	{
+		props = physicalDevice.getFormatProperties(format);
+		if ((tiling == vk::ImageTiling::eLinear) && ((props.linearTilingFeatures & formatFeatures) == formatFeatures))
+			return format;
+		if ((tiling == vk::ImageTiling::eOptimal) && ((props.optimalTilingFeatures & formatFeatures) == formatFeatures))
+			return format;
+	}
+	throw std::runtime_error("Failed to find supported format!");
 }
 
 GraphicEngine::Utils::Vulkan::SwapChainData::SwapChainData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, const vk::UniqueSurfaceKHR& surface, const QueueFamilyIndices& indices, const vk::Extent2D& extend, const vk::UniqueSwapchainKHR& oldSwapChain, vk::ImageUsageFlags imageUsage)

@@ -24,7 +24,11 @@ namespace GraphicEngine::Vulkan
 		GraphicEngine::Utils::Vulkan::SwapChainData _swapChainData;
 		vk::UniqueCommandPool _commandPool;
 		vk::CommandBuffer _commandBuffer;
-		std::unique_ptr<GraphicEngine::Utils::Vulkan::DeepBufferData> _deepBuffer;
+		std::unique_ptr<GraphicEngine::Utils::Vulkan::DeepBufferData> _depthBuffer;
+		vk::UniqueRenderPass _rendePass;
+
+	private:
+		vk::SampleCountFlagBits msaaSamples = vk::SampleCountFlagBits::e1;
 
 	private:
 		const std::vector<std::string> validationLayers = {
