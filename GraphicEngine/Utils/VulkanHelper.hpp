@@ -1,6 +1,7 @@
 #ifndef GRAPHIC_ENGINE_UTILS_VULKAN_HELPER_HPP
 #define GRAPHIC_ENGINE_UTILS_VULKAN_HELPER_HPP
 
+#include <array>
 #include <optional>
 #include <set>
 #include <string>
@@ -104,6 +105,15 @@ namespace GraphicEngine::Utils::Vulkan
 	vk::Format findSupportedFormat(const vk::PhysicalDevice& physicalDevice, std::vector<vk::Format> candidates, vk::ImageTiling tiling, vk::FormatFeatureFlags formatFeatures);
 
 	vk::Format findDepthFormat(const vk::PhysicalDevice& physicalDevice);
+
+	std::vector<vk::UniqueFramebuffer> createFrameBuffers(const vk::UniqueDevice& device, const vk::UniqueRenderPass& renderPass, vk::Extent2D extent, uint32_t layers,
+		const std::vector<vk::UniqueImageView>& swapChainImageViews);
+
+	std::vector<vk::UniqueFramebuffer> createFrameBuffers(const vk::UniqueDevice& device, const vk::UniqueRenderPass& renderPass, vk::Extent2D extent, uint32_t layers,
+		const std::vector<vk::UniqueImageView>& swapChainImageViews, const vk::UniqueImageView& depthImageView);
+
+	std::vector<vk::UniqueFramebuffer> createFrameBuffers(const vk::UniqueDevice& device, const vk::UniqueRenderPass& renderPass, vk::Extent2D extent, uint32_t layers,
+		const vk::UniqueImageView& colorImageView, const vk::UniqueImageView& depthImageView, const std::vector<vk::UniqueImageView>& swapChainImageViews);
 }
 
 #endif // !GRAPHIC_ENGINE_UTILS_VULKAN_HELPER_HPP

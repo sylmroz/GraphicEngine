@@ -302,6 +302,30 @@ vk::Format GraphicEngine::Utils::Vulkan::findDepthFormat(const vk::PhysicalDevic
 		vk::ImageTiling::eOptimal, vk::FormatFeatureFlagBits::eDepthStencilAttachment);
 }
 
+// TODO. Maybe use variadic template or std::optional
+std::vector<vk::UniqueFramebuffer> GraphicEngine::Utils::Vulkan::createFrameBuffers(const vk::UniqueDevice& device, const vk::UniqueRenderPass& renderPass, vk::Extent2D extent, uint32_t layers, const std::vector<vk::UniqueImageView>& swapChainImageViews)
+{
+	return std::vector<vk::UniqueFramebuffer>();
+}
+
+std::vector<vk::UniqueFramebuffer> GraphicEngine::Utils::Vulkan::createFrameBuffers(const vk::UniqueDevice& device, const vk::UniqueRenderPass& renderPass, vk::Extent2D extent, uint32_t layers, const std::vector<vk::UniqueImageView>& swapChainImageViews, const vk::UniqueImageView& depthImageView)
+{
+	return std::vector<vk::UniqueFramebuffer>();
+}
+
+std::vector<vk::UniqueFramebuffer> GraphicEngine::Utils::Vulkan::createFrameBuffers(const vk::UniqueDevice& device, const vk::UniqueRenderPass& renderPass, vk::Extent2D extent, uint32_t layers, const vk::UniqueImageView& colorImageView, const vk::UniqueImageView& depthImageView, const std::vector<vk::UniqueImageView>& swapChainImageViews)
+{
+	std::vector<vk::UniqueFramebuffer> frameBuffers;
+	for (const vk::UniqueImageView& swapChainImageView : swapChainImageViews)
+	{
+		std::array<vk::ImageView, 3> attachments = { colorImageView.get(), depthImageView.get(), swapChainImageView.get() };
+		vk::FramebufferCreateInfo createInfo(vk::FramebufferCreateFlags(), renderPass.get(), static_cast<uint32_t>(attachments.size()), attachments.data(), extent.width, extent.height, layers);
+		frameBuffers.push_back(device->createFramebufferUnique(createInfo));
+	}
+
+	return frameBuffers;
+}
+
 vk::Format GraphicEngine::Utils::Vulkan::findSupportedFormat(const vk::PhysicalDevice& physicalDevice, std::vector<vk::Format> candidates, vk::ImageTiling tiling, vk::FormatFeatureFlags formatFeatures)
 {
 	vk::FormatProperties props;
