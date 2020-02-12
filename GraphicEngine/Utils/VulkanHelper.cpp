@@ -477,3 +477,16 @@ GraphicEngine::Utils::Vulkan::DeepBufferData::DeepBufferData(const vk::PhysicalD
 		vk::MemoryPropertyFlagBits::eDeviceLocal, vk::ImageUsageFlagBits::eDepthStencilAttachment, vk::ImageTiling::eOptimal, 1, vk::ImageLayout::eUndefined, vk::ImageAspectFlagBits::eDepth)
 {
 }
+
+GraphicEngine::Utils::Vulkan::RenderingBarriers::RenderingBarriers(const vk::UniqueDevice& device, size_t maxFrames)
+{
+	imagesInFlight.resize(maxFrames);
+	for (size_t i{ 0 }; i < maxFrames; ++i)
+	{
+		vk::SemaphoreCreateInfo semaphoreCreateInfo;
+		imageAvailavleSemaphores.push_back(device->createSemaphoreUnique(semaphoreCreateInfo));
+		renderFinishedSemaphores.push_back(device->createSemaphoreUnique(semaphoreCreateInfo));
+		vk::FenceCreateInfo fenceCreateInfo(vk::FenceCreateFlagBits::eSignaled);
+		inFlightFences.push_back(device->createFenceUnique(fenceCreateInfo));
+	}
+}

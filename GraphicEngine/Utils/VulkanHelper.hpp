@@ -31,6 +31,15 @@ namespace GraphicEngine::Utils::Vulkan
 		std::vector<vk::PresentModeKHR> presentModes;
 	};
 
+	struct RenderingBarriers
+	{
+		RenderingBarriers(const vk::UniqueDevice& device, size_t maxFrames);
+		std::vector<vk::UniqueSemaphore> imageAvailavleSemaphores;
+		std::vector<vk::UniqueSemaphore> renderFinishedSemaphores;
+		std::vector<vk::UniqueFence> inFlightFences;
+		std::vector<vk::UniqueFence> imagesInFlight;
+	};
+
 	class SwapChainData
 	{
 	public:
