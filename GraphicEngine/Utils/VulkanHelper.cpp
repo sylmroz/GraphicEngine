@@ -530,7 +530,7 @@ GraphicEngine::Utils::Vulkan::RenderingBarriers::RenderingBarriers(const vk::Uni
 	for (size_t i{ 0 }; i < maxFrames; ++i)
 	{
 		vk::SemaphoreCreateInfo semaphoreCreateInfo;
-		imageAvailavleSemaphores.push_back(device->createSemaphoreUnique(semaphoreCreateInfo));
+		imageAvailableSemaphores.push_back(device->createSemaphoreUnique(semaphoreCreateInfo));
 		renderFinishedSemaphores.push_back(device->createSemaphoreUnique(semaphoreCreateInfo));
 		vk::FenceCreateInfo fenceCreateInfo(vk::FenceCreateFlagBits::eSignaled);
 		inFlightFences.push_back(device->createFenceUnique(fenceCreateInfo));

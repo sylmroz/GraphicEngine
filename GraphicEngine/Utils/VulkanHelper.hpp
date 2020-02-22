@@ -40,7 +40,7 @@ namespace GraphicEngine::Utils::Vulkan
 	struct RenderingBarriers
 	{
 		RenderingBarriers(const vk::UniqueDevice& device, size_t maxFrames);
-		std::vector<vk::UniqueSemaphore> imageAvailavleSemaphores;
+		std::vector<vk::UniqueSemaphore> imageAvailableSemaphores;
 		std::vector<vk::UniqueSemaphore> renderFinishedSemaphores;
 		std::vector<vk::UniqueFence> inFlightFences;
 		std::vector<vk::UniqueFence> imagesInFlight;

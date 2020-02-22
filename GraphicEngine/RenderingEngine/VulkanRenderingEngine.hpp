@@ -16,6 +16,8 @@ namespace GraphicEngine::Vulkan
 		virtual void cleanup() override;
 
 	private:
+		uint32_t calculateNextIndex();
+	private:
 		vk::UniqueInstance _instance;
 		vk::PhysicalDevice _physicalDevice;
 		vk::UniqueSurfaceKHR _surface;
@@ -28,9 +30,16 @@ namespace GraphicEngine::Vulkan
 		vk::UniqueRenderPass _rendePass;
 		std::unique_ptr<GraphicEngine::Utils::Vulkan::ImageData> _image;
 		std::vector<vk::UniqueFramebuffer> _frameBuffers;
+		std::unique_ptr<GraphicEngine::Utils::Vulkan::RenderingBarriers> _renderingBarriers;
+		vk::Queue _graphicQueue;
+		vk::Queue _presentQueue;
 
 	private:
 		vk::SampleCountFlagBits msaaSamples = vk::SampleCountFlagBits::e2;
+		uint32_t maxFrames{ 1 };
+		uint32_t currentFrameIndex{ 0 };
+		GraphicEngine::Utils::Vulkan::QueueFamilyIndices indices;
+		bool frameBufferResized{ false };
 
 	private:
 		const std::vector<std::string> validationLayers = {
