@@ -30,7 +30,7 @@ namespace GraphicEngine::Vulkan
 		std::vector<vk::UniqueFramebuffer> _frameBuffers;
 
 	private:
-		vk::SampleCountFlagBits msaaSamples = vk::SampleCountFlagBits::e4;
+		vk::SampleCountFlagBits msaaSamples = vk::SampleCountFlagBits::e2;
 
 	private:
 		const std::vector<std::string> validationLayers = {

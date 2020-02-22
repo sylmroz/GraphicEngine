@@ -22,6 +22,12 @@ namespace GraphicEngine::Utils::Vulkan
 		}
 	};
 
+	struct ShaderInfo
+	{
+		vk::ShaderModule shaderModule;
+		vk::SpecializationInfo specializationInfo;
+	};
+
 	struct SwapChainSupportDetails
 	{
 		SwapChainSupportDetails();
@@ -123,6 +129,10 @@ namespace GraphicEngine::Utils::Vulkan
 
 	std::vector<vk::UniqueFramebuffer> createFrameBuffers(const vk::UniqueDevice& device, const vk::UniqueRenderPass& renderPass, vk::Extent2D extent, uint32_t layers,
 		const vk::UniqueImageView& colorImageView, const vk::UniqueImageView& depthImageView, const std::vector<vk::UniqueImageView>& swapChainImageViews);
+
+	vk::UniquePipeline createGraphicPipeline(const vk::UniqueDevice& device, const vk::UniquePipelineCache& pipeliceCache, const ShaderInfo& vertexShaderInfo, const ShaderInfo& fragmentShaderInfo,
+		uint32_t vertexStride, std::vector<vk::VertexInputAttributeDescription> attributeDescriptions, const vk::VertexInputBindingDescription& bindingDescription,
+		bool depthBuffered, const vk::FrontFace& frontFace, const vk::UniquePipelineLayout& pipelineLayout, const vk::UniqueRenderPass& renderPass, vk::SampleCountFlagBits msaaSample, bool depthBoundsTestEnable = false, bool stencilTestEnable = false);
 }
 
 #endif // !GRAPHIC_ENGINE_UTILS_VULKAN_HELPER_HPP

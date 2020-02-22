@@ -326,6 +326,52 @@ std::vector<vk::UniqueFramebuffer> GraphicEngine::Utils::Vulkan::createFrameBuff
 	return frameBuffers;
 }
 
+vk::UniquePipeline GraphicEngine::Utils::Vulkan::createGraphicPipeline(const vk::UniqueDevice& device, const vk::UniquePipelineCache& pipeliceCache, const ShaderInfo& vertexShaderInfo, const ShaderInfo& fragmentShaderInfo, uint32_t vertexStride, std::vector<vk::VertexInputAttributeDescription> attributeDescriptions, const vk::VertexInputBindingDescription& bindingDescription, bool depthBuffered, const vk::FrontFace& frontFace, const vk::UniquePipelineLayout& pipelineLayout, const vk::UniqueRenderPass& renderPass, vk::SampleCountFlagBits msaaSample, bool depthBoundsTestEnable, bool stencilTestEnable)
+{
+	std::array<vk::PipelineShaderStageCreateInfo, 2> pipelineShaderCreateInfos =
+	{
+		vk::PipelineShaderStageCreateInfo(vk::PipelineShaderStageCreateFlags(), vk::ShaderStageFlagBits::eVertex, vertexShaderInfo.shaderModule , "main", &vertexShaderInfo.specializationInfo),
+		vk::PipelineShaderStageCreateInfo(vk::PipelineShaderStageCreateFlags(), vk::ShaderStageFlagBits::eFragment, fragmentShaderInfo.shaderModule, "main", &fragmentShaderInfo.specializationInfo)
+	};
+
+	vk::PipelineVertexInputStateCreateInfo pipelineVertexInputStateCreateInfo(vk::PipelineVertexInputStateCreateFlags(),
+		1, &bindingDescription,
+		static_cast<uint32_t>(attributeDescriptions.size()), attributeDescriptions.data());
+
+	vk::PipelineInputAssemblyStateCreateInfo pipelineInputAssemblyStateCreateInfo(vk::PipelineInputAssemblyStateCreateFlags(), vk::PrimitiveTopology::eTriangleList, false);
+
+	vk::PipelineViewportStateCreateInfo pipelineViewportCreateInfo(vk::PipelineViewportStateCreateFlags(), 1, nullptr, 1, nullptr);
+
+	vk::PipelineRasterizationStateCreateInfo pipelineRasterizationStateCreateInfo(vk::PipelineRasterizationStateCreateFlags(), false, false,
+		vk::PolygonMode::eFill, vk::CullModeFlagBits::eBack, vk::FrontFace::eCounterClockwise, false, 0, 0, 0, 1);
+
+	vk::PipelineMultisampleStateCreateInfo pipelineMultisampleState(vk::PipelineMultisampleStateCreateFlags(), msaaSample, true, 0.2f, nullptr, false, false);
+
+	vk::PipelineColorBlendAttachmentState pipelineColorBlendAttachmentState(false, vk::BlendFactor::eOne, vk::BlendFactor::eZero, vk::BlendOp::eAdd,
+		vk::BlendFactor::eOne, vk::BlendFactor::eZero, vk::BlendOp::eAdd,
+		vk::ColorComponentFlagBits::eR | vk::ColorComponentFlagBits::eG | vk::ColorComponentFlagBits::eB | vk::ColorComponentFlagBits::eA);
+
+	std::array<vk::DynamicState, 2> dynamicStates =
+	{
+		vk::DynamicState::eViewport,
+		vk::DynamicState::eScissor
+	};
+
+	vk::PipelineDynamicStateCreateInfo pipelineDynamicStateCreateInfo(vk::PipelineDynamicStateCreateFlags(), static_cast<uint32_t>(dynamicStates.size()), dynamicStates.data());
+
+	vk::PipelineColorBlendStateCreateInfo pipelineColorBlendStateCreateInfo(vk::PipelineColorBlendStateCreateFlags(), false, vk::LogicOp::eCopy, 1, &pipelineColorBlendAttachmentState, { 0.0f,0.0f,0.0f,0.0f });
+
+	vk::StencilOpState stencilOpState(vk::StencilOp::eKeep, vk::StencilOp::eKeep, vk::StencilOp::eKeep, vk::CompareOp::eAlways);
+	vk::PipelineDepthStencilStateCreateInfo pipelineDepthStencilCreateInfo(vk::PipelineDepthStencilStateCreateFlags(), depthBuffered, depthBuffered,
+		vk::CompareOp::eLess, depthBoundsTestEnable, stencilTestEnable, stencilOpState, stencilOpState, 0.0f, 1.0f);
+
+	vk::GraphicsPipelineCreateInfo graphicPipelineCreateInfo(vk::PipelineCreateFlags(), static_cast<uint32_t>(pipelineShaderCreateInfos.size()), pipelineShaderCreateInfos.data(),
+		&pipelineVertexInputStateCreateInfo, &pipelineInputAssemblyStateCreateInfo, nullptr, &pipelineViewportCreateInfo, &pipelineRasterizationStateCreateInfo,
+		&pipelineMultisampleState, &pipelineDepthStencilCreateInfo, &pipelineColorBlendStateCreateInfo, &pipelineDynamicStateCreateInfo, pipelineLayout.get(), renderPass.get());
+
+	return device->createGraphicsPipelineUnique(pipeliceCache.get(), graphicPipelineCreateInfo);
+}
+
 vk::Format GraphicEngine::Utils::Vulkan::findSupportedFormat(const vk::PhysicalDevice& physicalDevice, std::vector<vk::Format> candidates, vk::ImageTiling tiling, vk::FormatFeatureFlags formatFeatures)
 {
 	vk::FormatProperties props;
