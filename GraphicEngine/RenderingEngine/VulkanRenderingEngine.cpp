@@ -1,6 +1,7 @@
 #include "VulkanRenderingEngine.hpp"
 #include "../Window/WindowGLFW.hpp"
 
+
 #include <iostream>
 
 #undef max
@@ -37,7 +38,7 @@ bool GraphicEngine::Vulkan::VulkanRenderingEngine::drawFrame()
 	vk::Semaphore signalSemaphore(_renderingBarriers->renderFinishedSemaphores[currentFrameIndex].get());
 	vk::PipelineStageFlags pipelineStageFlags(vk::PipelineStageFlagBits::eColorAttachmentOutput);
 
-	vk::SubmitInfo submitInfo(1, &waitSemaphore, &pipelineStageFlags, 1, nullptr /*Will be command buffer*/, 1, &signalSemaphore);
+	vk::SubmitInfo submitInfo(1, &waitSemaphore, &pipelineStageFlags, 0, &(_commandBuffers[imageIndex.value].get()), 1, &signalSemaphore);
 
 	vk::Result submitResult = _graphicQueue.submit(1, &submitInfo, _renderingBarriers->inFlightFences[currentFrameIndex].get());
 	if (submitResult != vk::Result::eSuccess)
@@ -47,7 +48,7 @@ bool GraphicEngine::Vulkan::VulkanRenderingEngine::drawFrame()
 	
 	vk::SwapchainKHR sp(_swapChainData.swapChain.get());
 
-	vk::PresentInfoKHR presentInfo(1, &waitSemaphore, 1, &sp, &imageIndex.value);
+	vk::PresentInfoKHR presentInfo(1, &signalSemaphore, 1, &sp, &imageIndex.value);
 	vk::Result presentResult = _presentQueue.presentKHR(presentInfo);
 
 	if (presentResult == vk::Result::eErrorOutOfDateKHR || presentResult == vk::Result::eSuboptimalKHR || frameBufferResized)
@@ -76,12 +77,15 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 		_device = getUniqueLogicalDevice(_physicalDevice, _surface);
 		indices = findGraphicAndPresentQueueFamilyIndices(_physicalDevice, _surface);
 
-		_commandPool = createUniqueCommandPool(_device, indices);
 		auto [w, h] = _window->getFrameBufferSize();
 		vk::Extent2D frameBufferSize(w, h);
 		_swapChainData = SwapChainData(_physicalDevice, _device, _surface, indices, frameBufferSize, vk::UniqueSwapchainKHR(), vk::ImageUsageFlagBits::eColorAttachment);
+		
 		maxFrames = _swapChainData.images.size();
-		_renderingBarriers = std::unique_ptr<RenderingBarriers>(new RenderingBarriers(_device, maxFrames));
+		
+		_commandPool = createUniqueCommandPool(_device, indices);
+		_commandBuffers = _device->allocateCommandBuffersUnique(vk::CommandBufferAllocateInfo(_commandPool.get(), vk::CommandBufferLevel::ePrimary, maxFrames));
+
 		_depthBuffer = std::unique_ptr<DeepBufferData>(new DeepBufferData(_physicalDevice, _device, vk::Extent3D(frameBufferSize, 1), findDepthFormat(_physicalDevice), msaaSamples));
 		_rendePass = createRenderPass(_device, _swapChainData.format, _depthBuffer->format, msaaSamples);
 		_image = std::unique_ptr<ImageData>(new ImageData(_physicalDevice, _device,
@@ -89,8 +93,11 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 			vk::MemoryPropertyFlagBits::eDeviceLocal, vk::ImageUsageFlagBits::eColorAttachment | vk::ImageUsageFlagBits::eTransientAttachment,
 			vk::ImageTiling::eOptimal, 1, vk::ImageLayout::eUndefined, vk::ImageAspectFlagBits::eColor));
 		_frameBuffers = createFrameBuffers(_device, _rendePass, _swapChainData.extent, 1, _image->imageView, _depthBuffer->imageView, _swapChainData.imageViews);
+		
 		_graphicQueue = _device->getQueue(indices.graphicsFamily.value(), 0);
 		_presentQueue = _device->getQueue(indices.presentFamily.value(), 0);
+		
+		_renderingBarriers = std::unique_ptr<RenderingBarriers>(new RenderingBarriers(_device, maxFrames));
 	}
 
 	catch (vk::SystemError & err)
