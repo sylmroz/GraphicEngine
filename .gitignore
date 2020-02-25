@@ -117,3 +117,6 @@ ipch/
 *.vsp
 *.vspx
 *.sap
+
+# shader compiler
+compile.bat

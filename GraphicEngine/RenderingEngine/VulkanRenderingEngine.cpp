@@ -57,7 +57,6 @@ bool GraphicEngine::Vulkan::VulkanRenderingEngine::drawFrame()
 		// Should recreate swapchain
 	}
 
-
 	currentFrameIndex = calculateNextIndex();
 	return true;
 }
