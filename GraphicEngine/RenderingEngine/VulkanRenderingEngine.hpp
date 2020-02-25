@@ -3,6 +3,7 @@
 
 #include "RenderingEngine.hpp"
 #include "../Utils/VulkanHelper.hpp"
+#include "../drivers/vulkan/ShaderVulkan.hpp"
 
 namespace GraphicEngine::Vulkan
 {

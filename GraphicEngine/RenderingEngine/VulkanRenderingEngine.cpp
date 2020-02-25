@@ -1,8 +1,7 @@
 #include "VulkanRenderingEngine.hpp"
 #include "../Window/WindowGLFW.hpp"
 
-
-#include <iostream>
+//#include <iostream>
 
 #undef max
 
@@ -97,6 +96,8 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 		_presentQueue = _device->getQueue(indices.presentFamily.value(), 0);
 		
 		_renderingBarriers = std::unique_ptr<RenderingBarriers>(new RenderingBarriers(_device, maxFrames));
+
+		ShaderVulkan vertexShader(_device, "C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/spv/basic.vert.spv");
 	}
 
 	catch (vk::SystemError & err)
@@ -115,6 +116,7 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::resizeFrameBuffer(size_t widt
 
 void GraphicEngine::Vulkan::VulkanRenderingEngine::cleanup()
 {
+	_device->waitIdle();
 }
 
 uint32_t GraphicEngine::Vulkan::VulkanRenderingEngine::calculateNextIndex()

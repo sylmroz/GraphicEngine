@@ -5,11 +5,11 @@
 
 #include <vulkan/vulkan.hpp>
 
-class VulkanShader :public Shader<VulkanShader>
+class ShaderVulkan : public Shader<ShaderVulkan>
 {
 public:
-	VulkanShader(const vk::UniqueDevice device, const std::string& path) :
-		Shader<VulkanShader>(path)
+	ShaderVulkan(const vk::UniqueDevice& device, const std::string& path) :
+		Shader<ShaderVulkan>(path)
 	{
 		_device = device.get();
 		compile();
@@ -17,7 +17,7 @@ public:
 
 	vk::UniqueShaderModule shaderModule;
 
-protected:
+public:
 	void _compile()
 	{
 		shaderModule = _device.createShaderModuleUnique(vk::ShaderModuleCreateInfo(vk::ShaderModuleCreateFlags(), static_cast<uint32_t>(_data.size()), reinterpret_cast<uint32_t*>(_data.data())));

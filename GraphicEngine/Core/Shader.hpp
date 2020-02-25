@@ -2,7 +2,7 @@
 #define GRAPHIC_ENGINE_CORE_SHADER_HPP
 
 #include <fstream>
-#include <string>
+//#include <string>
 
 template <typename _Lang>
 class Shader
@@ -10,21 +10,20 @@ class Shader
 public:
 	Shader(const std::string& path)
 	{
-		_type = type;
-
-		std::ifstream shaderFile(path.c_str(), std::ios::binary|std::ios::ate);
+		std::ifstream shaderFile(path.c_str(), std::ios::binary | std::ios::ate);
 
 		if (!shaderFile.is_open())
 			throw std::runtime_error("Failed when open shader file: " + path);
 
 		auto fileSize = shaderFile.tellg();
-		shaderFile.seekg(0);
+		shaderFile.seekg(0, std::ios::beg);
 		_data.reserve(fileSize);
-		shaderFile.read(_data.data(), _data.size());
+		_data.assign((std::istreambuf_iterator<char>(shaderFile)), std::istreambuf_iterator<char>());
+		
 		shaderFile.close();
 	}
 
-	void compile()
+	void compile()	
 	{
 		try
 		{
