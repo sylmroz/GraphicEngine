@@ -1,7 +1,7 @@
 #ifndef GRAPHIC_ENGINE_RENDERING_ENGINE_HPP
 #define GRAPHIC_ENGINE_RENDERING_ENGINE_HPP
 
-#include "../Window/Window.hpp"
+#include "Window.hpp"
 
 namespace GraphicEngine
 {

@@ -1,9 +1,9 @@
 #ifndef GRAPHIC_ENGINE_VULKAN_RENDERING_ENGINE_HPP
 #define GRAPHIC_ENGINE_VULKAN_RENDERING_ENGINE_HPP
 
-#include "RenderingEngine.hpp"
-#include "../Utils/VulkanHelper.hpp"
-#include "../drivers/vulkan/ShaderVulkan.hpp"
+#include "../../Common/RenderingEngine.hpp"
+#include "VulkanShader.hpp"
+#include "VulkanHelper.hpp"
 
 namespace GraphicEngine::Vulkan
 {

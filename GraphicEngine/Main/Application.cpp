@@ -1,10 +1,10 @@
 #include "Application.hpp"
 
-#include "Window/Window.hpp"
-#include "Window/WindowGLFW.hpp"
-#include "RenderingEngine/RenderingEngine.hpp"
-#include "RenderingEngine/VulkanRenderingEngine.hpp"
-#include "RenderingEngine/OpenGLRenderingEngine.hpp"
+#include "../Common/Window.hpp"
+#include "../Platform/Glew/WindowGLFW.hpp"
+#include "../Common/RenderingEngine.hpp"
+#include "../Drivers/Vulkan/VulkanRenderingEngine.hpp"
+#include "../Drivers/OpenGL/OpenGLRenderingEngine.hpp"
 
 #include <exception>
 #include <iostream>

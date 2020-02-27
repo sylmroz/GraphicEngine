@@ -1,9 +1,9 @@
 #ifndef GRAPHIC_ENGINE_WINDOW_HPP
 #define GRAPHIC_ENGINE_WINDOW_HPP
 
-#include "../Utils/Subject.hpp"
-#include "../HID/Keyboard/Keyboard.hpp"
-#include "../HID/Mouse/Mouse.hpp"
+#include "../Core/Subject.hpp"
+#include "../Core/Input/Keyboard/Keyboard.hpp"
+#include "../Core/Input/Mouse/Mouse.hpp"
 
 #include <exception>
 

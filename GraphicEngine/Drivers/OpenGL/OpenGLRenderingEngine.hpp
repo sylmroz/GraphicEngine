@@ -1,7 +1,7 @@
 #ifndef GRAPHIC_ENGINE_OPENGL_RENDERING_ENGINE_HPP
 #define GRAPHIC_ENGINE_OPENGL_RENDERING_ENGINE_HPP
 
-#include "RenderingEngine.hpp"
+#include "../../Common/RenderingEngine.hpp"
 
 namespace GraphicEngine::OpenGL
 {

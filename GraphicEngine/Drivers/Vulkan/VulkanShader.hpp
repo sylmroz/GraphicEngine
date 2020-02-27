@@ -1,15 +1,15 @@
 #ifndef GRAPHIC_ENGINE_DRIVERS_VULKAN_SHADER_VULKAN_HPP
 #define GRAPHIC_ENGINE_DRIVERS_VULKAN_SHADER_VULKAN_HPP
 
-#include "../../Core/Shader.hpp"
+#include "../../Common/Shader.hpp"
 
 #include <vulkan/vulkan.hpp>
 
-class ShaderVulkan : public Shader<ShaderVulkan>
+class VulkanShader : public Shader<VulkanShader>
 {
 public:
-	ShaderVulkan(const vk::UniqueDevice& device, const std::string& path) :
-		Shader<ShaderVulkan>(path)
+	VulkanShader(const vk::UniqueDevice& device, const std::string& path) :
+		Shader<VulkanShader>(path)
 	{
 		_device = device.get();
 		compile();

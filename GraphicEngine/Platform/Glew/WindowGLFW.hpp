@@ -1,7 +1,7 @@
 #ifndef GRAPHIC_ENGINE_WINDOW_GLFW_HPP
 #define GRAPHIC_ENGINE_WINDOW_GLFW_HPP
 
-#include "Window.hpp"
+#include "../../Common/Window.hpp"
 
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>

@@ -1,5 +1,5 @@
 #include "VulkanRenderingEngine.hpp"
-#include "../Window/WindowGLFW.hpp"
+#include "../../Platform/Glew/WindowGLFW.hpp"
 
 //#include <iostream>
 
@@ -97,7 +97,7 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 		
 		_renderingBarriers = std::unique_ptr<RenderingBarriers>(new RenderingBarriers(_device, maxFrames));
 
-		ShaderVulkan vertexShader(_device, "C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/spv/basic.vert.spv");
+		VulkanShader vertexShader(_device, "C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/spv/basic.vert.spv");
 	}
 
 	catch (vk::SystemError & err)

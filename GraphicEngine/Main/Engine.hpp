@@ -1,10 +1,10 @@
 #ifndef GRAPHIC_ENGINE_ENGINE_HPP
 #define GRAPHIC_ENGINE_ENGINE_HPP
 
-#include "Window/Window.hpp"
-#include "RenderingEngine/RenderingEngine.hpp"
-#include "HID/Keyboard/Keyboard.hpp"
-#include "HID/Mouse/Mouse.hpp"
+#include "../Common/Window.hpp"
+#include "../Common/RenderingEngine.hpp"
+#include "../Core/Input/Keyboard/Keyboard.hpp"
+#include "../Core/Input/Mouse/Mouse.hpp"
 
 #include <memory>
 
