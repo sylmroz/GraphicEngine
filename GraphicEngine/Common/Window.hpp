@@ -69,7 +69,7 @@ namespace GraphicEngine
 		std::shared_ptr<GraphicEngine::HID::Keyboard> _keyboard;
 		std::shared_ptr<GraphicEngine::HID::Mouse> _mouse;
 
-		GraphicEngine::Utils::Subject<size_t,size_t> _resizeSubject;
+		GraphicEngine::Core::Subject<size_t,size_t> _resizeSubject;
 	};
 }
 

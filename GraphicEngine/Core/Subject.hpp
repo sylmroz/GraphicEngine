@@ -4,7 +4,7 @@
 #include <functional>
 #include <vector>
 
-namespace GraphicEngine::Utils
+namespace GraphicEngine::Core
 {
 	template <typename... Args>
 	class Subject

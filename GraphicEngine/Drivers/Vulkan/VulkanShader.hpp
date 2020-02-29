@@ -5,25 +5,37 @@
 
 #include <vulkan/vulkan.hpp>
 
-class VulkanShader : public Shader<VulkanShader>
+namespace GraphicEngine::Vulkan
 {
-public:
-	VulkanShader(const vk::UniqueDevice& device, const std::string& path) :
-		Shader<VulkanShader>(path)
+	class VulkanShader : public Shader
 	{
-		_device = device.get();
-		compile();
-	}
+	public:
+		VulkanShader(const vk::UniqueDevice& device, const std::string& code) :
+			Shader(code)
+		{
+			_device = device.get();
+			compile();
+		}
 
-	vk::UniqueShaderModule shaderModule;
+		template <typename Reader>
+		VulkanShader(const vk::UniqueDevice& device, Reader reader, const std::string& path) :
+			Shader(reader, path)
+		{
+			_device = device.get();
+			compile();
+		}
 
-public:
-	void _compile()
-	{
-		shaderModule = _device.createShaderModuleUnique(vk::ShaderModuleCreateInfo(vk::ShaderModuleCreateFlags(), static_cast<uint32_t>(_data.size()), reinterpret_cast<uint32_t*>(_data.data())));
-	}
-protected:
-	vk::Device _device;
-};
+	public:
+		vk::UniqueShaderModule shaderModule;
+
+	protected:
+		virtual void compile()
+		{
+			shaderModule = _device.createShaderModuleUnique(vk::ShaderModuleCreateInfo(vk::ShaderModuleCreateFlags(), static_cast<uint32_t>(_data.size()), reinterpret_cast<uint32_t*>(_data.data())));
+		}
+	protected:
+		vk::Device _device;
+	};
+}
 
 #endif // !GRAPHIC_ENGINE_DRIVERS_VULKAN_SHADER_VULKAN_HPP
