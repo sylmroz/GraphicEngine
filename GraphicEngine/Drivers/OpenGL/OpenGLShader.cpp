@@ -1,6 +1,6 @@
 #include "OpenGLShader.hpp"
 
-void GraphicEngine::OpenGL::OpenGLShaderBase::compile()
+void GraphicEngine::OpenGL::OpenGLShader::compile()
 {
 	_shaderId = glCreateShader(_shaderType);
 	const char* shaderSource = reinterpret_cast<const char*>(_data.data());
@@ -15,6 +15,8 @@ void GraphicEngine::OpenGL::OpenGLShaderBase::compile()
 		std::string infoLog;
 		infoLog.reserve(512);
 		glGetShaderInfoLog(_shaderId, 512, nullptr, &infoLog[0]);
-		throw std::runtime_error("OpenGL shader compilation error!\h" + infoLog);
+		std::string error = std::string("OpenGL shader compilation error! ");
+		error+=infoLog;
+		throw std::runtime_error(infoLog);
 	}
 }

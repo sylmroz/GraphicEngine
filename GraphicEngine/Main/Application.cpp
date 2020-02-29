@@ -34,45 +34,6 @@ void Application::exec()
 		renderingEngine->init(window->getWidth(), window->getHeight());
 		window->addResizeCallbackListener([&](size_t width, size_t height) {renderingEngine->resizeFrameBuffer(width, height); });
 
-
-		// Only for debug
-		/*keyboard->subscribe([](std::vector<Key> keys)
-			{
-				if (!keys.empty())
-				{
-					for (auto key : keys)
-					{
-						std::cout << key << " ";
-					}
-					std::cout << "\n";
-				}
-			}
-		);
-
-		mouse->subscribePositionEventHandler([](double x, double y)
-			{
-				std::cout << "Position: " << x << " " << y << "\n";
-			});
-
-		mouse->subscribeScrollEventHandler([](double x, double y)
-			{
-				std::cout << "Scroll: " << x << " " << y << "\n";
-			});
-
-		mouse->subscribe([](std::vector<Button> button)
-			{
-				if (!button.empty())
-				{
-					for (auto button : button)
-					{
-						std::cout << button << " ";
-					}
-					std::cout << "\n";
-				}
-			});
-
-		window->addResizeCallbackListener([](size_t w, size_t h) {std::cout << w << " " << h << "\n"; });*/
-
 		engine = std::shared_ptr<GraphicEngine::Engine>(new GraphicEngine::Engine(window, renderingEngine, keyboard, mouse));
 
 		engine->run();

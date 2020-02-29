@@ -5,12 +5,14 @@
 
 #include <GL/glew.h>
 
+#include <vector>
+
 namespace GraphicEngine::OpenGL
 {
-	class OpenGLShaderBase : public Shader
+	class OpenGLShader : public Shader
 	{
 	public:
-		OpenGLShaderBase(const std::string& code, uint32_t shaderType) :
+		OpenGLShader(const std::string& code, uint32_t shaderType) :
 			Shader(code)
 		{
 			_shaderType = shaderType;
@@ -18,11 +20,16 @@ namespace GraphicEngine::OpenGL
 		}
 
 		template <typename Reader>
-		OpenGLShaderBase(Reader reader,const std::string& path, uint32_t shaderType) :
+		OpenGLShader(Reader reader,const std::string& path, uint32_t shaderType) :
 			Shader(reader, path)
 		{
 			_shaderType = shaderType;
 			compile();
+		}
+
+		~OpenGLShader()
+		{
+			glDeleteShader(_shaderId);
 		}
 
 		uint32_t getShaderId()
@@ -38,52 +45,83 @@ namespace GraphicEngine::OpenGL
 		virtual void compile() override;
 	};
 
-	class OpenGLVertexShader : public OpenGLShaderBase
+	class OpenGLVertexShader : public OpenGLShader
 	{
 	public:
 		OpenGLVertexShader(const std::string& code) :
-			OpenGLShaderBase(code, GL_VERTEX_SHADER)
+			OpenGLShader(code, GL_VERTEX_SHADER)
 		{}
 
 		template <typename Reader>
 		OpenGLVertexShader(Reader reader, const std::string& path) :
-			OpenGLShaderBase(reader, path, GL_VERTEX_SHADER) {}
+			OpenGLShader(reader, path, GL_VERTEX_SHADER) {}
 	};
 
-	class OpenGLFragmetShader : public OpenGLShaderBase
+	class OpenGLFragmentShader : public OpenGLShader
 	{
 	public:
-		OpenGLFragmetShader(const std::string& code) :
-			OpenGLShaderBase(code, GL_FRAGMENT_SHADER)
+		OpenGLFragmentShader(const std::string& code) :
+			OpenGLShader(code, GL_FRAGMENT_SHADER)
 		{}
 
 		template <typename Reader>
-		OpenGLFragmetShader(Reader reader, const std::string& path) :
-			OpenGLShaderBase(reader, path, GL_FRAGMENT_SHADER) {}
+		OpenGLFragmentShader(Reader reader, const std::string& path) :
+			OpenGLShader(reader, path, GL_FRAGMENT_SHADER) {}
 	};
 
-	class OpenGLGeometryShader : public OpenGLShaderBase
+	class OpenGLGeometryShader : public OpenGLShader
 	{
 	public:
 		OpenGLGeometryShader(const std::string& code) :
-			OpenGLShaderBase(code, GL_GEOMETRY_SHADER)
+			OpenGLShader(code, GL_GEOMETRY_SHADER)
 		{}
 
 		template <typename Reader>
 		OpenGLGeometryShader(Reader reader, const std::string& path) :
-			OpenGLShaderBase(reader, path, GL_GEOMETRY_SHADER) {}
+			OpenGLShader(reader, path, GL_GEOMETRY_SHADER) {}
 	};
 
-	class OpenGLTesselationControlShader : public OpenGLShaderBase
+	class OpenGLTesselationControlShader : public OpenGLShader
 	{
 	public:
 		OpenGLTesselationControlShader(const std::string & code) :
-			OpenGLShaderBase(code, GL_TESS_CONTROL_SHADER)
+			OpenGLShader(code, GL_TESS_CONTROL_SHADER)
 		{}
 
 		template <typename Reader>
 		OpenGLTesselationControlShader(Reader reader, const std::string& path) :
-			OpenGLShaderBase(reader, path, GL_TESS_CONTROL_SHADER) {}
+			OpenGLShader(reader, path, GL_TESS_CONTROL_SHADER) {}
+	};
+
+	class OpenGLShaderProgram
+	{
+	public:
+		OpenGLShaderProgram(const std::vector<OpenGLShader>& shaders)
+		{
+			_shaderProgramId = glCreateProgram();
+			for (OpenGLShader shader : shaders)
+			{
+				glAttachShader(_shaderProgramId, shader.getShaderId());
+			}
+			glLinkProgram(_shaderProgramId);
+		}
+
+		uint32_t getShaderProgramId()
+		{
+			return _shaderProgramId;
+		}
+
+		void use()
+		{
+			glUseProgram(_shaderProgramId);
+		}
+
+		~OpenGLShaderProgram()
+		{
+			glDeleteProgram(_shaderProgramId);
+		}
+	protected:
+		uint32_t _shaderProgramId;
 	};
 }
 

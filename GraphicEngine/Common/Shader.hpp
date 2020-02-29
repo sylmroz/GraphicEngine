@@ -8,6 +8,8 @@ namespace GraphicEngine
 	class Shader
 	{
 	public:
+		Shader() {}
+
 		Shader(const std::string& code)
 		{
 			_data = code;
