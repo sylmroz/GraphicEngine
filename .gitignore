@@ -1,5 +1,6 @@
 #Ignore VIsual studio temporary folder
 .vs/
+.vscode/
 
 UtilityLib/[Dd]ebug/
 UtilityLib/[Rr]elease/
