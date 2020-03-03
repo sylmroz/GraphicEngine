@@ -1,7 +1,6 @@
 #include "WindowGLFW.hpp"
 #include <stdexcept>
-
-using namespace GraphicEngine::HID;
+using namespace GraphicEngine::Core::Inputs;
 
 GraphicEngine::GLFW::WindowGLFW::~WindowGLFW()
 {
@@ -75,7 +74,7 @@ bool GraphicEngine::GLFW::WindowGLFW::windowShouldBeClosed()
 	return glfwWindowShouldClose(_glfwWindow.get());
 }
 
-void GraphicEngine::GLFW::WindowGLFW::registerMouse(std::shared_ptr<GraphicEngine::HID::Mouse> mouse)
+void GraphicEngine::GLFW::WindowGLFW::registerMouse(std::shared_ptr<GraphicEngine::Core::Inputs::Mouse> mouse)
 {
 	_mouse = mouse;
 
@@ -111,18 +110,17 @@ std::pair<uint32_t, uint32_t> GraphicEngine::GLFW::WindowGLFW::getFrameBufferSiz
 
 void GraphicEngine::GLFW::WindowGLFW::grabAllKeys()
 {
-	
-	std::vector<Key> keys;
+	std::vector<KeyboardKey> keys;
 	if (glfwGetKey(_glfwWindow.get(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		keys.push_back(Key::KEY_ESCAPE);
+		keys.push_back(KeyboardKey::KEY_ESCAPE);
 	if (glfwGetKey(_glfwWindow.get(), GLFW_KEY_W) == GLFW_PRESS)
-		keys.push_back(Key::KEY_W);
+		keys.push_back(KeyboardKey::KEY_W);
 	if (glfwGetKey(_glfwWindow.get(), GLFW_KEY_A) == GLFW_PRESS)
-		keys.push_back(Key::KEY_A);
+		keys.push_back(KeyboardKey::KEY_A);
 	if (glfwGetKey(_glfwWindow.get(), GLFW_KEY_S) == GLFW_PRESS)
-		keys.push_back(Key::KEY_S);
+		keys.push_back(KeyboardKey::KEY_S);
 	if (glfwGetKey(_glfwWindow.get(), GLFW_KEY_D) == GLFW_PRESS)
-		keys.push_back(Key::KEY_D);
+		keys.push_back(KeyboardKey::KEY_D);
 
 	// Implement more if needed
 	if (!keys.empty())
@@ -131,14 +129,14 @@ void GraphicEngine::GLFW::WindowGLFW::grabAllKeys()
 
 void GraphicEngine::GLFW::WindowGLFW::grabAllPressedMouseButtons()
 {
-	std::vector<Button> buttons;
+	std::vector<MouseButton> buttons;
 
 	if (glfwGetMouseButton(_glfwWindow.get(), GLFW_MOUSE_BUTTON_LEFT))
-		buttons.push_back(Button::BUTTON_LEFT);
+		buttons.push_back(MouseButton::buttonLeft);
 	if (glfwGetMouseButton(_glfwWindow.get(), GLFW_MOUSE_BUTTON_MIDDLE))
-		buttons.push_back(Button::BUTTON_MIDDLE);
+		buttons.push_back(MouseButton::butonMiddle);
 	if (glfwGetMouseButton(_glfwWindow.get(), GLFW_MOUSE_BUTTON_RIGHT))
-		buttons.push_back(Button::BUTTON_RIGHT);
+		buttons.push_back(MouseButton::buttonRight);
 
 	if (!buttons.empty())
 		_mouse->notify(std::move(buttons));

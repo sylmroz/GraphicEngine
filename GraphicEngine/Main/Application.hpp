@@ -18,8 +18,8 @@ private:
 
 private:
 	std::shared_ptr<GraphicEngine::Engine> engine;
-	std::shared_ptr<GraphicEngine::HID::Keyboard> keyboard;
-	std::shared_ptr<GraphicEngine::HID::Mouse> mouse;
+	std::shared_ptr<GraphicEngine::Core::Inputs::Keyboard> keyboard;
+	std::shared_ptr<GraphicEngine::Core::Inputs::Mouse> mouse;
 };
 
 #endif // !APPLICATION_HPP

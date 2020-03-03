@@ -54,7 +54,7 @@ namespace GraphicEngine::GLFW
 
 		virtual bool windowShouldBeClosed() override;
 
-		virtual void registerMouse(std::shared_ptr<GraphicEngine::HID::Mouse> mouse) override;
+		virtual void registerMouse(std::shared_ptr<GraphicEngine::Core::Inputs::Mouse> mouse) override;
 
 		VkSurfaceKHR getWindowSurface(vk::UniqueInstance& instance);
 

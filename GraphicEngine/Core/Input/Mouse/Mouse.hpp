@@ -6,7 +6,7 @@
 #include <functional>
 #include <vector>
 
-namespace GraphicEngine::HID
+namespace GraphicEngine::Core::Inputs
 {
 	class Mouse
 	{
@@ -32,7 +32,7 @@ namespace GraphicEngine::HID
 			_scrollEventHandlers.push_back(eventHandler);
 		}
 
-		void notify(std::vector<Button> buttons)
+		void notify(std::vector<MouseButton> buttons)
 		{
 			for (auto eventHandler : _buttonEventHandlers)
 			{
@@ -40,7 +40,7 @@ namespace GraphicEngine::HID
 			}
 		}
 
-		void subscribe(std::function<void(std::vector<Button>)> eventHandler)
+		void subscribe(std::function<void(std::vector<MouseButton>)> eventHandler)
 		{
 			_buttonEventHandlers.push_back(eventHandler);
 		}
@@ -56,7 +56,7 @@ namespace GraphicEngine::HID
 	private:
 		std::vector<std::function<void(double, double)>> _positionEventHandlers;
 		std::vector<std::function<void(double, double)>> _scrollEventHandlers;
-		std::vector<std::function<void(std::vector<Button>)>> _buttonEventHandlers;
+		std::vector<std::function<void(std::vector<MouseButton>)>> _buttonEventHandlers;
 	};
 }
 

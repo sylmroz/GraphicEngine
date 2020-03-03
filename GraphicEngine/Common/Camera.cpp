@@ -1,4 +1,7 @@
 #include "Camera.hpp"
+#include "../Core/Ranges.hpp"
+
+#include <algorithm>
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
@@ -23,20 +26,18 @@ glm::mat4 GraphicEngine::Commmon::Camera::getProjectionMatrix()
 	return _projectionMatrix;
 }
 
-void GraphicEngine::Commmon::Camera::setCameraPerspectiveProperties(float fov, float aspectRatio, float zNear, float zFar)
+void GraphicEngine::Commmon::Camera::setCameraPerspectiveProperties(PerspectiveParameters perspectiveParameters)
 {
-	_fov = fov;
-	_aspectRatio = aspectRatio;
-	_zNear = zNear;
-	_zFar = zFar;
+	_perspectiveParameters = perspectiveParameters;
+	_cameraType = CameraType::Perspective;
+	_shouldUpdateProjection = true;
 }
 
-void GraphicEngine::Commmon::Camera::setCameraOrthogonalProperties(float left, float right, float top, float bottom)
+void GraphicEngine::Commmon::Camera::setCameraOrthogonalProperties(OrthogonalParameters orthogonalParameters)
 {
-	_left = left;
-	_right = right;
-	_top = top;
-	_bottom = bottom;
+	_orthogonalParameters = orthogonalParameters;
+	_cameraType = CameraType::Orthogonal;
+	_shouldUpdateProjection = true;
 }
 
 void GraphicEngine::Commmon::Camera::setSpeed(float speed)
@@ -61,13 +62,13 @@ float GraphicEngine::Commmon::Camera::getSensitivity()
 
 void GraphicEngine::Commmon::Camera::setFOV(float fov)
 {
-	_fov = fov;
+	_perspectiveParameters.fov = fov;
 	_shouldUpdateProjection = true;
 }
 
 void GraphicEngine::Commmon::Camera::setAspectRatio(float aspectRatio)
 {
-	_aspectRatio = aspectRatio;
+	_perspectiveParameters.aspectRatio = aspectRatio;
 	_shouldUpdateProjection = _shouldUpdateProjection;
 }
 
@@ -81,8 +82,13 @@ GraphicEngine::Commmon::Camera::Camera()
 {
 }
 
-GraphicEngine::Commmon::Camera::Camera(float fov, float aspectRatio, float zNear, float zFar) :
-	_fov(fov), _aspectRatio(glm::radians(aspectRatio)), _zNear(zNear), _zFar(zFar), _cameraType(CameraType::Perspective)
+GraphicEngine::Commmon::Camera::Camera(PerspectiveParameters perspectiveParameters) :
+	_perspectiveParameters(perspectiveParameters), _cameraType(CameraType::Perspective)
+{
+}
+
+GraphicEngine::Commmon::Camera::Camera(OrthogonalParameters orthogonalParameters):
+	_orthogonalParameters(orthogonalParameters), _cameraType(CameraType::Orthogonal)
 {
 }
 
@@ -104,20 +110,21 @@ void GraphicEngine::Commmon::Camera::rotate(const glm::vec2& offset)
 	_shouldUpdateView = true;
 }
 
-void GraphicEngine::Commmon::Camera::move(const glm::vec3& offset)
+void GraphicEngine::Commmon::Camera::move(const glm::vec2& offset)
 {
-	_position = _position + (offset * _speed);
+	_position = _position + (_direction * offset.x * _speed);
+	_position = _position + (glm::normalize(glm::cross(_direction, glm::vec3(0.0f, 1.0f, 0.0f)) * offset.x * _speed));
 	_shouldUpdateView = true;
 }
 
 glm::mat4 GraphicEngine::Commmon::Camera::caclulatePerspective()
 {
-	return glm::perspective(glm::radians(_fov), _aspectRatio, _zNear, _zFar);
+	return glm::perspective(glm::radians(_perspectiveParameters.fov), _perspectiveParameters.aspectRatio, _perspectiveParameters.zNear, _perspectiveParameters.zFar);
 }
 
 glm::mat4 GraphicEngine::Commmon::Camera::calculateOrthogonal()
 {
-	return glm::ortho(_left, _right, _bottom, _top);
+	return glm::ortho(_orthogonalParameters.left, _orthogonalParameters.right, _orthogonalParameters.bottom, _orthogonalParameters.top);
 }
 
 void GraphicEngine::Commmon::Camera::updateViewMatrix()
@@ -140,4 +147,58 @@ void GraphicEngine::Commmon::Camera::updateProjectionMatrix()
 {
 	_projectionMatrix = calculateProjectionMatrix();
 	_shouldUpdateProjection = false;
+}
+
+GraphicEngine::Commmon::CameraController::CameraController(std::shared_ptr<Camera> camera):
+	_camera(camera)
+{
+}
+
+void GraphicEngine::Commmon::CameraController::setCameraType(CameraType cameraType)
+{
+	_camera->setCameraType(cameraType);
+}
+
+void GraphicEngine::Commmon::CameraController::setDt(float dt)
+{
+	_dt = dt;
+}
+
+void GraphicEngine::Commmon::CameraController::setInitialMousePosition(float x, float y)
+{
+	_prevMousePosition = glm::vec2(x, y);
+}
+
+void GraphicEngine::Commmon::CameraController::rotate(float x, float y, const std::vector<GraphicEngine::Core::Inputs::MouseButton>& buttons)
+{
+	glm::vec2 newOffset = _prevMousePosition - glm::vec2(x, y);
+	if (_rotateButton == Core::Inputs::MouseButton::buttonNone || std::find(std::begin(buttons), std::end(buttons), _rotateButton) != std::end(buttons))
+	{
+		_camera->rotate(newOffset * _dt);
+		_prevMousePosition += newOffset;
+	}
+}
+
+void GraphicEngine::Commmon::CameraController::move(std::vector<GraphicEngine::Core::Inputs::KeyboardKey> keys)
+{
+	using namespace Core::Inputs;
+	std::vector<KeyboardKey> basicMovementKeys{ KeyboardKey::KEY_W, KeyboardKey::KEY_A, KeyboardKey::KEY_S, KeyboardKey::KEY_D };
+	std::vector<KeyboardKey> FilteredKeys = GameEngine::Core::Ranges::filter(keys, [&](KeyboardKey key) 
+		{
+			return std::find(std::begin(basicMovementKeys), std::end(basicMovementKeys), key) != std::end(basicMovementKeys); 
+		});
+	glm::vec2 movementOffset{ 0.0,0.0 };
+	for (KeyboardKey key : FilteredKeys)
+	{
+		if (key == KeyboardKey::KEY_W)
+			movementOffset.x += _dt;
+		else if (key == KeyboardKey::KEY_S)
+			movementOffset.x -= _dt;
+		else if (key == KeyboardKey::KEY_A)
+			movementOffset.y -= _dt;
+		else if (key == KeyboardKey::KEY_D)
+			movementOffset.y += _dt;
+	}
+
+	_camera->move(movementOffset);
 }

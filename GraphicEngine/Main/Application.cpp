@@ -9,7 +9,7 @@
 #include <exception>
 #include <iostream>
 
-using namespace GraphicEngine::HID;
+using namespace GraphicEngine::Core::Inputs;
 
 Application::Application(int argc, char** argv)
 {
@@ -23,13 +23,21 @@ void Application::exec()
 	{
 		keyboard = std::shared_ptr<Keyboard>(new Keyboard);
 		mouse = std::shared_ptr<Mouse>(new Mouse);
+
+		
 		
 		auto window = windowFactory("glfw");
-		auto renderingEngine = renderingEngineFactory("vulkan", window);
+		auto renderingEngine = renderingEngineFactory("opengl", window);
 		
 		window->init(640, 480);
 		window->registerKeyboard(keyboard);
 		window->registerMouse(mouse);
+
+		std::shared_ptr<GraphicEngine::Commmon::Camera> camera(new GraphicEngine::Commmon::Camera);
+		GraphicEngine::Commmon::CameraController cameraController(camera);
+		keyboard->subscribe([&](std::vector<GraphicEngine::Core::Inputs::KeyboardKey> keys) { cameraController.move(keys); });
+		mouse->subscribePositionEventHandler([&](float x, float y) { cameraController.rotate(x, y, {}); });
+		cameraController.setInitialMousePosition(window->getWidth() / 2, window->getHeight() / 2);
 
 		renderingEngine->init(window->getWidth(), window->getHeight());
 		window->addResizeCallbackListener([&](size_t width, size_t height) {renderingEngine->resizeFrameBuffer(width, height); });

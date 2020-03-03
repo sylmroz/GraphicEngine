@@ -6,13 +6,13 @@
 #include <functional>
 #include <vector>
 
-namespace GraphicEngine::HID
+namespace GraphicEngine::Core::Inputs
 {
 	class Keyboard
 	{
 	public:
 
-		void notify(std::vector<Key> keys)
+		void notify(std::vector<KeyboardKey> keys)
 		{
 			for (auto eventHandler : _eventHandlers)
 			{
@@ -20,12 +20,12 @@ namespace GraphicEngine::HID
 			}
 		}
 
-		void subscribe(std::function<void(std::vector<Key>)> eventHandler)
+		void subscribe(std::function<void(std::vector<KeyboardKey>)> eventHandler)
 		{
 			_eventHandlers.push_back(eventHandler);
 		}
 	private:
-		std::vector<std::function<void(std::vector<Key>)>> _eventHandlers;
+		std::vector<std::function<void(std::vector<KeyboardKey>)>> _eventHandlers;
 	};
 }
 

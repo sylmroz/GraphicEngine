@@ -1,9 +1,9 @@
 #ifndef GRAPHIC_ENGINE_HID_KEYBOARD_ENUM_KEYS_HPP
 #define GRAPHIC_ENGINE_HID_KEYBOARD_ENUM_KEYS_HPP
 
-namespace GraphicEngine::HID
+namespace GraphicEngine::Core::Inputs
 {
-	enum Key
+	enum class KeyboardKey
 	{
 		KEY_UNKNOWN = -1,
 		KEY_SPACE = 32,

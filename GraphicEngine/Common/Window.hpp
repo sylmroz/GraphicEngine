@@ -4,6 +4,7 @@
 #include "../Core/Subject.hpp"
 #include "../Core/Input/Keyboard/Keyboard.hpp"
 #include "../Core/Input/Mouse/Mouse.hpp"
+#include "../Common/Camera.hpp"
 
 #include <exception>
 
@@ -41,9 +42,9 @@ namespace GraphicEngine
 
 		virtual std::pair<uint32_t, uint32_t> getFrameBufferSize() = 0;
 
-		virtual void registerKeyboard(std::shared_ptr<GraphicEngine::HID::Keyboard> keyboard) { _keyboard = keyboard; };
+		virtual void registerKeyboard(std::shared_ptr<GraphicEngine::Core::Inputs::Keyboard> keyboard) { _keyboard = keyboard; };
 
-		virtual void registerMouse(std::shared_ptr<GraphicEngine::HID::Mouse> mouse) { _mouse = mouse; };
+		virtual void registerMouse(std::shared_ptr<GraphicEngine::Core::Inputs::Mouse> mouse) { _mouse = mouse; };
 
 		virtual void addResizeCallbackListener(std::function<void(size_t, size_t)> resizeListener)
 		{
@@ -66,8 +67,8 @@ namespace GraphicEngine
 
 		bool shouldClose{ false };
 
-		std::shared_ptr<GraphicEngine::HID::Keyboard> _keyboard;
-		std::shared_ptr<GraphicEngine::HID::Mouse> _mouse;
+		std::shared_ptr<GraphicEngine::Core::Inputs::Keyboard> _keyboard;
+		std::shared_ptr<GraphicEngine::Core::Inputs::Mouse> _mouse;
 
 		GraphicEngine::Core::Subject<size_t,size_t> _resizeSubject;
 	};

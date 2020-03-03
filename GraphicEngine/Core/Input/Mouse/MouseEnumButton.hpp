@@ -1,13 +1,14 @@
 #ifndef GRAPHIC_ENGINE_HID_MOUSE_ENUM_KEYS_HPP
 #define GRAPHIC_ENGINE_HID_MOUSE_ENUM_KEYS_HPP
 
-namespace GraphicEngine::HID
+namespace GraphicEngine::Core::Inputs
 {
-	enum Button
+	enum class MouseButton
 	{
-		BUTTON_LEFT,
-		BUTTON_MIDDLE,
-		BUTTON_RIGHT,
+		buttonNone, // This button will newer been used
+		buttonLeft,
+		butonMiddle,
+		buttonRight,
 	};
 }
 

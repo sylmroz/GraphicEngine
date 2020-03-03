@@ -16,8 +16,8 @@ namespace GraphicEngine
 
 		Engine(std::shared_ptr<Window> window,
 			std::shared_ptr<RenderingEngine> renderingEngine,
-			std::shared_ptr<HID::Keyboard> keyboard,
-			std::shared_ptr<HID::Mouse> mouse);
+			std::shared_ptr<Core::Inputs::Keyboard> keyboard,
+			std::shared_ptr<Core::Inputs::Mouse> mouse);
 
 		void setWindow(std::shared_ptr<Window> window) { _window = window; };
 		void setRenderingEngine(std::shared_ptr<RenderingEngine> renderingEngine) { _renderingEngine = renderingEngine; };
@@ -27,8 +27,8 @@ namespace GraphicEngine
 	private:
 		std::shared_ptr<Window> _window;
 		std::shared_ptr<RenderingEngine> _renderingEngine;
-		std::shared_ptr<HID::Keyboard> _keyboard;
-		std::shared_ptr<HID::Mouse> _mouse;
+		std::shared_ptr<Core::Inputs::Keyboard> _keyboard;
+		std::shared_ptr<Core::Inputs::Mouse> _mouse;
 
 		bool shutdown = false;
 	};
