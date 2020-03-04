@@ -20,6 +20,7 @@ private:
 	std::shared_ptr<GraphicEngine::Engine> engine;
 	std::shared_ptr<GraphicEngine::Core::Inputs::Keyboard> keyboard;
 	std::shared_ptr<GraphicEngine::Core::Inputs::Mouse> mouse;
+	std::shared_ptr < GraphicEngine::Commmon::CameraController> cameraController;
 };
 
 #endif // !APPLICATION_HPP

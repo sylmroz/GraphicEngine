@@ -3,16 +3,17 @@
 
 #include "KeyboardEnumKeys.hpp"
 
-#include <functional>
+#include "../../Subject.hpp"
+
 #include <vector>
 
 namespace GraphicEngine::Core::Inputs
 {
-	class Keyboard
+	class Keyboard: public Subject<std::vector<KeyboardKey>>
 	{
 	public:
 
-		void notify(std::vector<KeyboardKey> keys)
+		/*void notify(std::vector<KeyboardKey> keys)
 		{
 			for (auto eventHandler : _eventHandlers)
 			{
@@ -23,9 +24,9 @@ namespace GraphicEngine::Core::Inputs
 		void subscribe(std::function<void(std::vector<KeyboardKey>)> eventHandler)
 		{
 			_eventHandlers.push_back(eventHandler);
-		}
+		}*/
 	private:
-		std::vector<std::function<void(std::vector<KeyboardKey>)>> _eventHandlers;
+		//std::vector<std::function<void(std::vector<KeyboardKey>)>> _eventHandlers;
 	};
 }
 

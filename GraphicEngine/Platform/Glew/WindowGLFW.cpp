@@ -124,7 +124,7 @@ void GraphicEngine::GLFW::WindowGLFW::grabAllKeys()
 
 	// Implement more if needed
 	if (!keys.empty())
-		_keyboard->notify(std::move(keys));
+		_keyboard->next(std::move(keys));
 }
 
 void GraphicEngine::GLFW::WindowGLFW::grabAllPressedMouseButtons()

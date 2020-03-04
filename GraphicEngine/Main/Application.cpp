@@ -34,15 +34,15 @@ void Application::exec()
 		window->registerMouse(mouse);
 
 		std::shared_ptr<GraphicEngine::Commmon::Camera> camera(new GraphicEngine::Commmon::Camera);
-		GraphicEngine::Commmon::CameraController cameraController(camera);
-		keyboard->subscribe([&](std::vector<GraphicEngine::Core::Inputs::KeyboardKey> keys) { cameraController.move(keys); });
-		mouse->subscribePositionEventHandler([&](float x, float y) { cameraController.rotate(x, y, {}); });
-		cameraController.setInitialMousePosition(window->getWidth() / 2, window->getHeight() / 2);
+		cameraController = std::shared_ptr<GraphicEngine::Commmon::CameraController>(new GraphicEngine::Commmon::CameraController(camera));
+		keyboard->subscribe([&](std::vector<GraphicEngine::Core::Inputs::KeyboardKey> keys) { cameraController->move(keys); });
+		mouse->subscribePositionEventHandler([&](float x, float y) { cameraController->rotate(x, y, {}); });
+		cameraController->setInitialMousePosition(window->getWidth() / 2, window->getHeight() / 2);
 
 		renderingEngine->init(window->getWidth(), window->getHeight());
 		window->addResizeCallbackListener([&](size_t width, size_t height) {renderingEngine->resizeFrameBuffer(width, height); });
 
-		engine = std::shared_ptr<GraphicEngine::Engine>(new GraphicEngine::Engine(window, renderingEngine, keyboard, mouse));
+		engine = std::shared_ptr<GraphicEngine::Engine>(new GraphicEngine::Engine(window, renderingEngine, keyboard, mouse, cameraController));
 
 		engine->run();
 	}
