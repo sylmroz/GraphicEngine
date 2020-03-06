@@ -11,11 +11,11 @@
 
 namespace GraphicEngine::GLFW
 {
-	enum GLFWWindowProfile
+	enum class GLFWWindowProfile
 	{
-		OPENGL,
-		VULKAN,
-		NONE
+		OpenGL,
+		Vulkan,
+		None
 	};
 
 	class WindowGLFW : public GraphicEngine::Window
@@ -66,7 +66,7 @@ namespace GraphicEngine::GLFW
 
 	private:
 		std::shared_ptr<GLFWwindow> _glfwWindow;
-		GLFWWindowProfile _windowProfile = GLFWWindowProfile::NONE;
+		GLFWWindowProfile _windowProfile = GLFWWindowProfile::None;
 
 		std::shared_ptr<WindowGLFWApi> _specialApi;
 	};

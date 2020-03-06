@@ -17,11 +17,11 @@ void GraphicEngine::GLFW::WindowGLFW::initialize()
 	glfwInit();
 	
 
-	if (_windowProfile == OPENGL)
+	if (_windowProfile == GLFWWindowProfile::OpenGL)
 	{
 		_specialApi = std::shared_ptr<WindowGLFWApi>(new WindowGLFWOpenGl);
 	}
-	else if (_windowProfile == VULKAN)
+	else if (_windowProfile == GLFWWindowProfile::Vulkan)
 	{
 		_specialApi = std::shared_ptr<WindowGLFWApi>(new WindowGLFWVulkan);
 	}
