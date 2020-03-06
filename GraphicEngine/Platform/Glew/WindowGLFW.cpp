@@ -45,7 +45,7 @@ void GraphicEngine::GLFW::WindowGLFW::initialize()
 	auto resizeCallback = [](GLFWwindow* window, int width, int height)
 	{
 		auto app = reinterpret_cast<WindowGLFW*>(glfwGetWindowUserPointer(window));
-		app->_resizeSubject.next(width, height);
+		app->_resizeSubject.notify(width, height);
 	};
 
 	glfwSetFramebufferSizeCallback(_glfwWindow.get(), resizeCallback);
@@ -124,7 +124,7 @@ void GraphicEngine::GLFW::WindowGLFW::grabAllKeys()
 
 	// Implement more if needed
 	if (!keys.empty())
-		_keyboard->next(std::move(keys));
+		_keyboard->notify(std::move(keys));
 }
 
 void GraphicEngine::GLFW::WindowGLFW::grabAllPressedMouseButtons()

@@ -25,11 +25,9 @@ namespace GraphicEngine::Core
 			return _interval.count();
 		}
 
-		
 	protected:
 		std::chrono::time_point<std::chrono::system_clock> _actualTime;
 		std::chrono::duration<double> _interval;
-
 	};
 }
 

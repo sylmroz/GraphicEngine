@@ -15,7 +15,7 @@ namespace GraphicEngine::Core
 			functions.push_back(f);
 		}
 
-		void next(Args... args)
+		void notify(Args... args)
 		{
 			for (auto& f : functions)
 			{
