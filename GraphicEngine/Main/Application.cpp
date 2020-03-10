@@ -24,10 +24,8 @@ void Application::exec()
 		keyboard = std::shared_ptr<Keyboard>(new Keyboard);
 		mouse = std::shared_ptr<Mouse>(new Mouse);
 
-		
-		
 		auto window = windowFactory("glfw");
-		auto renderingEngine = renderingEngineFactory("opengl", window);
+		auto renderingEngine = renderingEngineFactory("vulkan", window);
 		
 		window->init(640, 480);
 		window->registerKeyboard(keyboard);
@@ -70,7 +68,7 @@ std::shared_ptr<GraphicEngine::RenderingEngine> Application::renderingEngineFact
 		auto glfwWindow = std::dynamic_pointer_cast<GraphicEngine::GLFW::WindowGLFW>(window);
 		if (glfwWindow != nullptr)
 		{
-			glfwWindow->setGLFWWindowProfile(GraphicEngine::GLFW::GLFWWindowProfile::VULKAN);
+			glfwWindow->setGLFWWindowProfile(GraphicEngine::GLFW::GLFWWindowProfile::Vulkan);
 		}
 		return renderingEngine;
 	}
@@ -81,7 +79,7 @@ std::shared_ptr<GraphicEngine::RenderingEngine> Application::renderingEngineFact
 		auto glfwWindow = std::dynamic_pointer_cast<GraphicEngine::GLFW::WindowGLFW>(window);
 		if (glfwWindow != nullptr)
 		{
-			glfwWindow->setGLFWWindowProfile(GraphicEngine::GLFW::GLFWWindowProfile::OPENGL);
+			glfwWindow->setGLFWWindowProfile(GraphicEngine::GLFW::GLFWWindowProfile::OpenGL);
 		}
 		return renderingEngine;
 	}

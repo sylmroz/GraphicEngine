@@ -18,6 +18,7 @@ namespace GraphicEngine::Vulkan
 
 	private:
 		uint32_t calculateNextIndex();
+		void buildCommandBuffers();
 	private:
 		vk::UniqueInstance _instance;
 		vk::PhysicalDevice _physicalDevice;
