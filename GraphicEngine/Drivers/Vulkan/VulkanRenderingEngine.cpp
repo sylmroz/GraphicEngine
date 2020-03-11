@@ -1,8 +1,6 @@
 #include "VulkanRenderingEngine.hpp"
 #include "../../Platform/Glew/WindowGLFW.hpp"
 
-#include "../../Core/IO/FileReader.hpp"
-
 #undef max
 
 GraphicEngine::Vulkan::VulkanRenderingEngine::VulkanRenderingEngine(std::shared_ptr<Window> window) :
@@ -62,8 +60,6 @@ bool GraphicEngine::Vulkan::VulkanRenderingEngine::drawFrame()
 
 void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t height)
 {
-	using namespace GraphicEngine::Utils::Vulkan;
-	using namespace GraphicEngine::Core::IO;
 	try
 	{
 		_instance = createUniqueInstance("Graphic Engine", "Vulklan Base", validationLayers, _window->getRequiredExtensions(), VK_API_VERSION_1_0);
@@ -99,8 +95,6 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 		_renderingBarriers = std::unique_ptr<RenderingBarriers>(new RenderingBarriers(_device, maxFrames));
 
 		buildCommandBuffers();
-
-		//VulkanShader vertexShader(_device, readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/spv/basic.vert.spv"));
 	}
 
 	catch (vk::SystemError & err)

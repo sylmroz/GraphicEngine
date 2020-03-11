@@ -6,9 +6,10 @@
 #include <set>
 #include <string>
 #include <vector>
+
 #include <vulkan/vulkan.hpp>
 
-namespace GraphicEngine::Utils::Vulkan
+namespace GraphicEngine::Vulkan
 {
 
 	struct QueueFamilyIndices
@@ -133,6 +134,8 @@ namespace GraphicEngine::Utils::Vulkan
 	vk::UniquePipeline createGraphicPipeline(const vk::UniqueDevice& device, const vk::UniquePipelineCache& pipeliceCache, const ShaderInfo& vertexShaderInfo, const ShaderInfo& fragmentShaderInfo,
 		uint32_t vertexStride, std::vector<vk::VertexInputAttributeDescription> attributeDescriptions, const vk::VertexInputBindingDescription& bindingDescription,
 		bool depthBuffered, const vk::FrontFace& frontFace, const vk::UniquePipelineLayout& pipelineLayout, const vk::UniqueRenderPass& renderPass, vk::SampleCountFlagBits msaaSample, bool depthBoundsTestEnable = false, bool stencilTestEnable = false);
+
+	std::vector<vk::VertexInputAttributeDescription> createVertexInputAttributeDescriptions(const std::vector<std::pair<uint32_t, uint32_t>>& vertexSizeOffset);
 }
 
 #endif // !GRAPHIC_ENGINE_UTILS_VULKAN_HELPER_HPP

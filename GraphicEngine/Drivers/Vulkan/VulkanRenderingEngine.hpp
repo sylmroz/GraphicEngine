@@ -25,14 +25,14 @@ namespace GraphicEngine::Vulkan
 		vk::UniqueSurfaceKHR _surface;
 		vk::UniqueDevice _device;
 
-		GraphicEngine::Utils::Vulkan::SwapChainData _swapChainData;
+		SwapChainData _swapChainData;
 		vk::UniqueCommandPool _commandPool;
 		std::vector<vk::UniqueCommandBuffer> _commandBuffers;
-		std::unique_ptr<GraphicEngine::Utils::Vulkan::DeepBufferData> _depthBuffer;
+		std::unique_ptr<DeepBufferData> _depthBuffer;
 		vk::UniqueRenderPass _rendePass;
-		std::unique_ptr<GraphicEngine::Utils::Vulkan::ImageData> _image;
+		std::unique_ptr<ImageData> _image;
 		std::vector<vk::UniqueFramebuffer> _frameBuffers;
-		std::unique_ptr<GraphicEngine::Utils::Vulkan::RenderingBarriers> _renderingBarriers;
+		std::unique_ptr<RenderingBarriers> _renderingBarriers;
 		vk::Queue _graphicQueue;
 		vk::Queue _presentQueue;
 
@@ -40,7 +40,7 @@ namespace GraphicEngine::Vulkan
 		vk::SampleCountFlagBits msaaSamples = vk::SampleCountFlagBits::e2;
 		uint32_t maxFrames{ 1 };
 		uint32_t currentFrameIndex{ 0 };
-		GraphicEngine::Utils::Vulkan::QueueFamilyIndices indices;
+		QueueFamilyIndices indices;
 		bool frameBufferResized{ false };
 
 	private:

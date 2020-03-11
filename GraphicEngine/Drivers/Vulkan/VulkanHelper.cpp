@@ -1,6 +1,7 @@
 #include "VulkanHelper.hpp"
 #include <iomanip>
 #include <iostream>
+#include <map>
 
 #undef max
 
@@ -15,7 +16,7 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityF
 	return VK_FALSE;
 }
 
-std::vector<const char*> GraphicEngine::Utils::Vulkan::getDeviceExtension()
+std::vector<const char*> GraphicEngine::Vulkan::getDeviceExtension()
 {
 	const std::vector<const char*> deviceExtensions =
 	{
@@ -25,7 +26,7 @@ std::vector<const char*> GraphicEngine::Utils::Vulkan::getDeviceExtension()
 	return deviceExtensions;
 }
 
-std::optional<uint32_t> GraphicEngine::Utils::Vulkan::getGraphicQueueFamilyIndex(const vk::PhysicalDevice& physicalDevice)
+std::optional<uint32_t> GraphicEngine::Vulkan::getGraphicQueueFamilyIndex(const vk::PhysicalDevice& physicalDevice)
 {
 	std::vector<vk::QueueFamilyProperties> queueFamilyProperties = physicalDevice.getQueueFamilyProperties();
 
@@ -36,7 +37,7 @@ std::optional<uint32_t> GraphicEngine::Utils::Vulkan::getGraphicQueueFamilyIndex
 	return tempGraphicQueueFamilyIndex < queueFamilyProperties.size() ? std::optional<uint32_t>{tempGraphicQueueFamilyIndex} : std::nullopt;
 }
 
-GraphicEngine::Utils::Vulkan::QueueFamilyIndices GraphicEngine::Utils::Vulkan::findGraphicAndPresentQueueFamilyIndices(const vk::PhysicalDevice& physicalDevice, vk::UniqueSurfaceKHR& surface)
+GraphicEngine::Vulkan::QueueFamilyIndices GraphicEngine::Vulkan::findGraphicAndPresentQueueFamilyIndices(const vk::PhysicalDevice& physicalDevice, vk::UniqueSurfaceKHR& surface)
 {
 	std::vector<vk::QueueFamilyProperties> queueFamilyProperties = physicalDevice.getQueueFamilyProperties();
 
@@ -78,7 +79,7 @@ GraphicEngine::Utils::Vulkan::QueueFamilyIndices GraphicEngine::Utils::Vulkan::f
 	return indices;
 }
 
-vk::UniqueInstance GraphicEngine::Utils::Vulkan::createUniqueInstance(std::string appName, std::string engineName, std::vector<std::string> validationLayers, std::vector<std::string> extensionLayers, uint32_t apiVersion)
+vk::UniqueInstance GraphicEngine::Vulkan::createUniqueInstance(std::string appName, std::string engineName, std::vector<std::string> validationLayers, std::vector<std::string> extensionLayers, uint32_t apiVersion)
 {
 #if (VULKAN_HPP_DISPATCH_LOADER_DYNAMIC == 1)
 	static vk::DynamicLoader dl;
@@ -144,14 +145,14 @@ vk::UniqueInstance GraphicEngine::Utils::Vulkan::createUniqueInstance(std::strin
 	return instance;
 }
 
-bool GraphicEngine::Utils::Vulkan::isPhysicalDeviceSituable(const vk::PhysicalDevice& physicalDevice, vk::UniqueSurfaceKHR& surface)
+bool GraphicEngine::Vulkan::isPhysicalDeviceSituable(const vk::PhysicalDevice& physicalDevice, vk::UniqueSurfaceKHR& surface)
 {
 	QueueFamilyIndices indices = findGraphicAndPresentQueueFamilyIndices(physicalDevice, surface);
 
 	return indices.isComplete() && physicalDevice.getFeatures().samplerAnisotropy;;
 }
 
-vk::PhysicalDevice GraphicEngine::Utils::Vulkan::getPhysicalDevice(const vk::UniqueInstance& instance, vk::UniqueSurfaceKHR& surface)
+vk::PhysicalDevice GraphicEngine::Vulkan::getPhysicalDevice(const vk::UniqueInstance& instance, vk::UniqueSurfaceKHR& surface)
 {
 	auto physicalDevices = instance->enumeratePhysicalDevices();
 
@@ -166,7 +167,7 @@ vk::PhysicalDevice GraphicEngine::Utils::Vulkan::getPhysicalDevice(const vk::Uni
 	return vk::PhysicalDevice();
 }
 
-vk::UniqueDevice GraphicEngine::Utils::Vulkan::getUniqueLogicalDevice(const vk::PhysicalDevice& physicalDevice, vk::UniqueSurfaceKHR& surface)
+vk::UniqueDevice GraphicEngine::Vulkan::getUniqueLogicalDevice(const vk::PhysicalDevice& physicalDevice, vk::UniqueSurfaceKHR& surface)
 {
 	QueueFamilyIndices indices = findGraphicAndPresentQueueFamilyIndices(physicalDevice, surface);
 
@@ -197,7 +198,7 @@ vk::UniqueDevice GraphicEngine::Utils::Vulkan::getUniqueLogicalDevice(const vk::
 	throw std::runtime_error("Failed to create logical device!");
 }
 
-vk::UniqueCommandPool GraphicEngine::Utils::Vulkan::createUniqueCommandPool(const vk::UniqueDevice& device, const QueueFamilyIndices& queueFamilyIndex)
+vk::UniqueCommandPool GraphicEngine::Vulkan::createUniqueCommandPool(const vk::UniqueDevice& device, const QueueFamilyIndices& queueFamilyIndex)
 {
 	if (queueFamilyIndex.graphicsFamily.has_value())
 	{
@@ -208,14 +209,14 @@ vk::UniqueCommandPool GraphicEngine::Utils::Vulkan::createUniqueCommandPool(cons
 	throw std::runtime_error("Graphic queue family index is empty!");
 }
 
-std::vector<vk::UniqueCommandBuffer> GraphicEngine::Utils::Vulkan::createUniqueCommandBuffers(const vk::UniqueDevice& device, const vk::UniqueCommandPool& commandPool, uint32_t commandCount)
+std::vector<vk::UniqueCommandBuffer> GraphicEngine::Vulkan::createUniqueCommandBuffers(const vk::UniqueDevice& device, const vk::UniqueCommandPool& commandPool, uint32_t commandCount)
 {
 	vk::CommandBufferAllocateInfo allocateInfo(commandPool.get(), vk::CommandBufferLevel::ePrimary, commandCount);
 	std::vector<vk::UniqueCommandBuffer> commandBuffers = device->allocateCommandBuffersUnique(allocateInfo);
 	return std::move(commandBuffers);
 }
 
-uint32_t GraphicEngine::Utils::Vulkan::findMemoryType(const vk::PhysicalDevice& physicalDevice, uint32_t typeFilter, vk::MemoryPropertyFlags memoryProperty)
+uint32_t GraphicEngine::Vulkan::findMemoryType(const vk::PhysicalDevice& physicalDevice, uint32_t typeFilter, vk::MemoryPropertyFlags memoryProperty)
 {
 	vk::PhysicalDeviceMemoryProperties memoryProperties = physicalDevice.getMemoryProperties();
 
@@ -228,12 +229,12 @@ uint32_t GraphicEngine::Utils::Vulkan::findMemoryType(const vk::PhysicalDevice& 
 	throw std::runtime_error("Failed to find situable memory!");
 }
 
-vk::UniqueDeviceMemory GraphicEngine::Utils::Vulkan::allocateMemory(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::MemoryPropertyFlags memoryProperty, const vk::MemoryRequirements& memoryRequirements)
+vk::UniqueDeviceMemory GraphicEngine::Vulkan::allocateMemory(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::MemoryPropertyFlags memoryProperty, const vk::MemoryRequirements& memoryRequirements)
 {
 	return device->allocateMemoryUnique(vk::MemoryAllocateInfo(memoryRequirements.size, findMemoryType(physicalDevice, memoryRequirements.memoryTypeBits, memoryProperty)));
 }
 
-vk::UniqueRenderPass GraphicEngine::Utils::Vulkan::createRenderPass(const vk::UniqueDevice& device, vk::Format colorFormat, vk::Format depthFormat, vk::SampleCountFlagBits msaaSample)
+vk::UniqueRenderPass GraphicEngine::Vulkan::createRenderPass(const vk::UniqueDevice& device, vk::Format colorFormat, vk::Format depthFormat, vk::SampleCountFlagBits msaaSample)
 {
 	std::vector<vk::AttachmentDescription> attachmentDescriptors;
 
@@ -296,24 +297,24 @@ vk::UniqueRenderPass GraphicEngine::Utils::Vulkan::createRenderPass(const vk::Un
 	}
 }
 
-vk::Format GraphicEngine::Utils::Vulkan::findDepthFormat(const vk::PhysicalDevice& physicalDevice)
+vk::Format GraphicEngine::Vulkan::findDepthFormat(const vk::PhysicalDevice& physicalDevice)
 {
 	return findSupportedFormat(physicalDevice, { vk::Format::eD32Sfloat, vk::Format::eD32SfloatS8Uint, vk::Format::eD24UnormS8Uint },
 		vk::ImageTiling::eOptimal, vk::FormatFeatureFlagBits::eDepthStencilAttachment);
 }
 
 // TODO. Maybe use variadic template or std::optional
-std::vector<vk::UniqueFramebuffer> GraphicEngine::Utils::Vulkan::createFrameBuffers(const vk::UniqueDevice& device, const vk::UniqueRenderPass& renderPass, vk::Extent2D extent, uint32_t layers, const std::vector<vk::UniqueImageView>& swapChainImageViews)
+std::vector<vk::UniqueFramebuffer> GraphicEngine::Vulkan::createFrameBuffers(const vk::UniqueDevice& device, const vk::UniqueRenderPass& renderPass, vk::Extent2D extent, uint32_t layers, const std::vector<vk::UniqueImageView>& swapChainImageViews)
 {
 	return std::vector<vk::UniqueFramebuffer>();
 }
 
-std::vector<vk::UniqueFramebuffer> GraphicEngine::Utils::Vulkan::createFrameBuffers(const vk::UniqueDevice& device, const vk::UniqueRenderPass& renderPass, vk::Extent2D extent, uint32_t layers, const std::vector<vk::UniqueImageView>& swapChainImageViews, const vk::UniqueImageView& depthImageView)
+std::vector<vk::UniqueFramebuffer> GraphicEngine::Vulkan::createFrameBuffers(const vk::UniqueDevice& device, const vk::UniqueRenderPass& renderPass, vk::Extent2D extent, uint32_t layers, const std::vector<vk::UniqueImageView>& swapChainImageViews, const vk::UniqueImageView& depthImageView)
 {
 	return std::vector<vk::UniqueFramebuffer>();
 }
 
-std::vector<vk::UniqueFramebuffer> GraphicEngine::Utils::Vulkan::createFrameBuffers(const vk::UniqueDevice& device, const vk::UniqueRenderPass& renderPass, vk::Extent2D extent, uint32_t layers, const vk::UniqueImageView& colorImageView, const vk::UniqueImageView& depthImageView, const std::vector<vk::UniqueImageView>& swapChainImageViews)
+std::vector<vk::UniqueFramebuffer> GraphicEngine::Vulkan::createFrameBuffers(const vk::UniqueDevice& device, const vk::UniqueRenderPass& renderPass, vk::Extent2D extent, uint32_t layers, const vk::UniqueImageView& colorImageView, const vk::UniqueImageView& depthImageView, const std::vector<vk::UniqueImageView>& swapChainImageViews)
 {
 	std::vector<vk::UniqueFramebuffer> frameBuffers;
 	for (const vk::UniqueImageView& swapChainImageView : swapChainImageViews)
@@ -326,7 +327,7 @@ std::vector<vk::UniqueFramebuffer> GraphicEngine::Utils::Vulkan::createFrameBuff
 	return frameBuffers;
 }
 
-vk::UniquePipeline GraphicEngine::Utils::Vulkan::createGraphicPipeline(const vk::UniqueDevice& device, const vk::UniquePipelineCache& pipeliceCache, const ShaderInfo& vertexShaderInfo, const ShaderInfo& fragmentShaderInfo, uint32_t vertexStride, std::vector<vk::VertexInputAttributeDescription> attributeDescriptions, const vk::VertexInputBindingDescription& bindingDescription, bool depthBuffered, const vk::FrontFace& frontFace, const vk::UniquePipelineLayout& pipelineLayout, const vk::UniqueRenderPass& renderPass, vk::SampleCountFlagBits msaaSample, bool depthBoundsTestEnable, bool stencilTestEnable)
+vk::UniquePipeline GraphicEngine::Vulkan::createGraphicPipeline(const vk::UniqueDevice& device, const vk::UniquePipelineCache& pipeliceCache, const ShaderInfo& vertexShaderInfo, const ShaderInfo& fragmentShaderInfo, uint32_t vertexStride, std::vector<vk::VertexInputAttributeDescription> attributeDescriptions, const vk::VertexInputBindingDescription& bindingDescription, bool depthBuffered, const vk::FrontFace& frontFace, const vk::UniquePipelineLayout& pipelineLayout, const vk::UniqueRenderPass& renderPass, vk::SampleCountFlagBits msaaSample, bool depthBoundsTestEnable, bool stencilTestEnable)
 {
 	std::array<vk::PipelineShaderStageCreateInfo, 2> pipelineShaderCreateInfos =
 	{
@@ -372,7 +373,27 @@ vk::UniquePipeline GraphicEngine::Utils::Vulkan::createGraphicPipeline(const vk:
 	return device->createGraphicsPipelineUnique(pipeliceCache.get(), graphicPipelineCreateInfo);
 }
 
-vk::Format GraphicEngine::Utils::Vulkan::findSupportedFormat(const vk::PhysicalDevice& physicalDevice, std::vector<vk::Format> candidates, vk::ImageTiling tiling, vk::FormatFeatureFlags formatFeatures)
+std::vector<vk::VertexInputAttributeDescription> GraphicEngine::Vulkan::createVertexInputAttributeDescriptions(const std::vector<std::pair<uint32_t, uint32_t>>& vertexSizeOffset)
+{
+	
+	std::vector<vk::VertexInputAttributeDescription> attributeDescriptions;
+
+	std::map<uint32_t, vk::Format> dataFormatTypes = {
+		{1, vk::Format::eR32Sfloat},
+		{2, vk::Format::eR32G32Sfloat},
+		{3, vk::Format::eR32G32B32Sfloat},
+		{4, vk::Format::eR32G32B32A32Sfloat},
+	};
+
+	for (size_t i{ 0 }; i < vertexSizeOffset.size(); ++i)
+	{
+		attributeDescriptions.push_back(vk::VertexInputAttributeDescription(i, 0, dataFormatTypes[vertexSizeOffset[0].first], vertexSizeOffset[0].second));
+	}
+
+	return attributeDescriptions;
+}
+
+vk::Format GraphicEngine::Vulkan::findSupportedFormat(const vk::PhysicalDevice& physicalDevice, std::vector<vk::Format> candidates, vk::ImageTiling tiling, vk::FormatFeatureFlags formatFeatures)
 {
 	vk::FormatProperties props;
 	for (const vk::Format& format : candidates)
@@ -386,12 +407,12 @@ vk::Format GraphicEngine::Utils::Vulkan::findSupportedFormat(const vk::PhysicalD
 	throw std::runtime_error("Failed to find supported format!");
 }
 
-GraphicEngine::Utils::Vulkan::SwapChainData::SwapChainData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, const vk::UniqueSurfaceKHR& surface, const QueueFamilyIndices& indices, const vk::Extent2D& extend, const vk::UniqueSwapchainKHR& oldSwapChain, vk::ImageUsageFlags imageUsage)
+GraphicEngine::Vulkan::SwapChainData::SwapChainData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, const vk::UniqueSurfaceKHR& surface, const QueueFamilyIndices& indices, const vk::Extent2D& extend, const vk::UniqueSwapchainKHR& oldSwapChain, vk::ImageUsageFlags imageUsage)
 {
 	createSwapChainData(physicalDevice, device, surface, indices, extend, oldSwapChain, imageUsage);
 }
 
-void GraphicEngine::Utils::Vulkan::SwapChainData::createSwapChainData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, const vk::UniqueSurfaceKHR& surface, const QueueFamilyIndices& indices, const vk::Extent2D& extend, const vk::UniqueSwapchainKHR& oldSwapChain, vk::ImageUsageFlags imageUsage)
+void GraphicEngine::Vulkan::SwapChainData::createSwapChainData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, const vk::UniqueSurfaceKHR& surface, const QueueFamilyIndices& indices, const vk::Extent2D& extend, const vk::UniqueSwapchainKHR& oldSwapChain, vk::ImageUsageFlags imageUsage)
 {
 	SwapChainSupportDetails swapChainSupportDetails = getSwapChainSuppordDetails(physicalDevice, surface);
 	this->extent = pickSurfaceExtent(swapChainSupportDetails.capabilities, extend);
@@ -427,12 +448,12 @@ void GraphicEngine::Utils::Vulkan::SwapChainData::createSwapChainData(const vk::
 	}
 }
 
-GraphicEngine::Utils::Vulkan::SwapChainSupportDetails GraphicEngine::Utils::Vulkan::SwapChainData::getSwapChainSuppordDetails(const vk::PhysicalDevice& physicalDevice, const vk::UniqueSurfaceKHR& surface)
+GraphicEngine::Vulkan::SwapChainSupportDetails GraphicEngine::Vulkan::SwapChainData::getSwapChainSuppordDetails(const vk::PhysicalDevice& physicalDevice, const vk::UniqueSurfaceKHR& surface)
 {
 	return SwapChainSupportDetails(physicalDevice.getSurfaceCapabilitiesKHR(surface.get()), physicalDevice.getSurfaceFormatsKHR(surface.get()), physicalDevice.getSurfacePresentModesKHR(surface.get()));
 }
 
-vk::SurfaceFormatKHR GraphicEngine::Utils::Vulkan::SwapChainData::pickSurfaceFormat(const std::vector<vk::SurfaceFormatKHR>& formats)
+vk::SurfaceFormatKHR GraphicEngine::Vulkan::SwapChainData::pickSurfaceFormat(const std::vector<vk::SurfaceFormatKHR>& formats)
 {
 	if (formats.size() > 0)
 	{
@@ -457,7 +478,7 @@ vk::SurfaceFormatKHR GraphicEngine::Utils::Vulkan::SwapChainData::pickSurfaceFor
 	throw std::runtime_error("Failed to pick surface format!");
 }
 
-vk::PresentModeKHR GraphicEngine::Utils::Vulkan::SwapChainData::pickPresentMode(const std::vector<vk::PresentModeKHR>& presentModes)
+vk::PresentModeKHR GraphicEngine::Vulkan::SwapChainData::pickPresentMode(const std::vector<vk::PresentModeKHR>& presentModes)
 {
 	if (presentModes.size() > 0)
 	{
@@ -477,7 +498,7 @@ vk::PresentModeKHR GraphicEngine::Utils::Vulkan::SwapChainData::pickPresentMode(
 	throw std::runtime_error("Failed to pick present mode!");
 }
 
-vk::Extent2D GraphicEngine::Utils::Vulkan::SwapChainData::pickSurfaceExtent(const vk::SurfaceCapabilitiesKHR& capabilities, vk::Extent2D frameBufferExtent)
+vk::Extent2D GraphicEngine::Vulkan::SwapChainData::pickSurfaceExtent(const vk::SurfaceCapabilitiesKHR& capabilities, vk::Extent2D frameBufferExtent)
 {
 	if (capabilities.currentExtent.width == std::numeric_limits<uint32_t>::max())
 	{
@@ -490,16 +511,16 @@ vk::Extent2D GraphicEngine::Utils::Vulkan::SwapChainData::pickSurfaceExtent(cons
 	return capabilities.currentExtent;
 }
 
-GraphicEngine::Utils::Vulkan::SwapChainSupportDetails::SwapChainSupportDetails()
+GraphicEngine::Vulkan::SwapChainSupportDetails::SwapChainSupportDetails()
 {
 }
 
-GraphicEngine::Utils::Vulkan::SwapChainSupportDetails::SwapChainSupportDetails(vk::SurfaceCapabilitiesKHR capabilities, std::vector<vk::SurfaceFormatKHR> formats, std::vector<vk::PresentModeKHR> presentModes) :
+GraphicEngine::Vulkan::SwapChainSupportDetails::SwapChainSupportDetails(vk::SurfaceCapabilitiesKHR capabilities, std::vector<vk::SurfaceFormatKHR> formats, std::vector<vk::PresentModeKHR> presentModes) :
 	capabilities(capabilities), formats(formats), presentModes(presentModes)
 {
 }
 
-GraphicEngine::Utils::Vulkan::ImageData::ImageData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::Extent3D extent, vk::Format format, vk::SampleCountFlagBits numOfSamples,
+GraphicEngine::Vulkan::ImageData::ImageData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::Extent3D extent, vk::Format format, vk::SampleCountFlagBits numOfSamples,
 	vk::MemoryPropertyFlags memoryProperty, vk::ImageUsageFlags imageUsage, vk::ImageTiling tiling,
 	uint32_t mipLevel, vk::ImageLayout layout, vk::ImageAspectFlags aspectFlags)
 {
@@ -518,13 +539,13 @@ GraphicEngine::Utils::Vulkan::ImageData::ImageData(const vk::PhysicalDevice& phy
 	imageView = device->createImageViewUnique(createInfo);
 }
 
-GraphicEngine::Utils::Vulkan::DeepBufferData::DeepBufferData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::Extent3D extent, vk::Format format, vk::SampleCountFlagBits numOfSamples) :
+GraphicEngine::Vulkan::DeepBufferData::DeepBufferData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::Extent3D extent, vk::Format format, vk::SampleCountFlagBits numOfSamples) :
 	ImageData(physicalDevice, device, extent, format, numOfSamples,
 		vk::MemoryPropertyFlagBits::eDeviceLocal, vk::ImageUsageFlagBits::eDepthStencilAttachment, vk::ImageTiling::eOptimal, 1, vk::ImageLayout::eUndefined, vk::ImageAspectFlagBits::eDepth)
 {
 }
 
-GraphicEngine::Utils::Vulkan::RenderingBarriers::RenderingBarriers(const vk::UniqueDevice& device, size_t maxFrames)
+GraphicEngine::Vulkan::RenderingBarriers::RenderingBarriers(const vk::UniqueDevice& device, size_t maxFrames)
 {
 	imagesInFlight.resize(maxFrames);
 	for (size_t i{ 0 }; i < maxFrames; ++i)
