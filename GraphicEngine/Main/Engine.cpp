@@ -5,7 +5,7 @@ GraphicEngine::Engine::Engine(std::shared_ptr<Window> window,
 	std::shared_ptr<RenderingEngine> renderingEngine,
 	std::shared_ptr<Core::Inputs::Keyboard> keyboard,
 	std::shared_ptr<Core::Inputs::Mouse> mouse,
-	std::shared_ptr<Commmon::CameraController> cameraController):
+	std::shared_ptr<Common::CameraController> cameraController):
 	_window(window),
 	_renderingEngine(renderingEngine),
 	_keyboard(keyboard),

@@ -1,0 +1,13 @@
+#ifndef GRAPHIC_ENGINE_DRIVERS_OPENGL_HELPER_HPP
+#define GRAPHIC_ENGINE_DRIVERS_OPENGL_HELPER_HPP
+
+#include <GL/GL.h>
+#include <GL/glew.h>
+
+namespace GraphicEngine::OpenGL
+{
+
+}
+
+#endif // !GRAPHIC_ENGINE_DRIVERS_OPENGL_HELPER_HPP
+

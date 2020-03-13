@@ -7,92 +7,92 @@
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-glm::mat4 GraphicEngine::Commmon::Camera::getViewProjectionMatrix()
+glm::mat4 GraphicEngine::Common::Camera::getViewProjectionMatrix()
 {
 	return _viewProjectionMatrix;
 }
 
-glm::mat4 GraphicEngine::Commmon::Camera::getViewMatrix()
+glm::mat4 GraphicEngine::Common::Camera::getViewMatrix()
 {
 	if (_shouldUpdateView)
 		updateViewMatrix();
 	return _viewMatrix;
 }
 
-glm::mat4 GraphicEngine::Commmon::Camera::getProjectionMatrix()
+glm::mat4 GraphicEngine::Common::Camera::getProjectionMatrix()
 {
 	if (_shouldUpdateProjection)
 		updateProjectionMatrix();
 	return _projectionMatrix;
 }
 
-void GraphicEngine::Commmon::Camera::setCameraPerspectiveProperties(PerspectiveParameters perspectiveParameters)
+void GraphicEngine::Common::Camera::setCameraPerspectiveProperties(PerspectiveParameters perspectiveParameters)
 {
 	_perspectiveParameters = perspectiveParameters;
 	_cameraType = CameraType::Perspective;
 	_shouldUpdateProjection = true;
 }
 
-void GraphicEngine::Commmon::Camera::setCameraOrthogonalProperties(OrthogonalParameters orthogonalParameters)
+void GraphicEngine::Common::Camera::setCameraOrthogonalProperties(OrthogonalParameters orthogonalParameters)
 {
 	_orthogonalParameters = orthogonalParameters;
 	_cameraType = CameraType::Orthogonal;
 	_shouldUpdateProjection = true;
 }
 
-void GraphicEngine::Commmon::Camera::setSpeed(float speed)
+void GraphicEngine::Common::Camera::setSpeed(float speed)
 {
 	_speed = speed;
 }
 
-float GraphicEngine::Commmon::Camera::getSpeed()
+float GraphicEngine::Common::Camera::getSpeed()
 {
 	return _speed;
 }
 
-void GraphicEngine::Commmon::Camera::setSensitivity(float sensitivity)
+void GraphicEngine::Common::Camera::setSensitivity(float sensitivity)
 {
 	_sensitivity = sensitivity;
 }
 
-float GraphicEngine::Commmon::Camera::getSensitivity()
+float GraphicEngine::Common::Camera::getSensitivity()
 {
 	return _sensitivity;
 }
 
-void GraphicEngine::Commmon::Camera::setFOV(float fov)
+void GraphicEngine::Common::Camera::setFOV(float fov)
 {
 	_perspectiveParameters.fov = fov;
 	_shouldUpdateProjection = true;
 }
 
-void GraphicEngine::Commmon::Camera::setAspectRatio(float aspectRatio)
+void GraphicEngine::Common::Camera::setAspectRatio(float aspectRatio)
 {
 	_perspectiveParameters.aspectRatio = aspectRatio;
 	_shouldUpdateProjection = _shouldUpdateProjection;
 }
 
-void GraphicEngine::Commmon::Camera::setCameraType(CameraType cameraType)
+void GraphicEngine::Common::Camera::setCameraType(CameraType cameraType)
 {
 	_cameraType = cameraType;
 	_shouldUpdateProjection = true;
 }
 
-GraphicEngine::Commmon::Camera::Camera()
+GraphicEngine::Common::Camera::Camera()
 {
 }
 
-GraphicEngine::Commmon::Camera::Camera(PerspectiveParameters perspectiveParameters) :
+GraphicEngine::Common::Camera::Camera(PerspectiveParameters perspectiveParameters) :
 	_perspectiveParameters(perspectiveParameters), _cameraType(CameraType::Perspective)
 {
 }
 
-GraphicEngine::Commmon::Camera::Camera(OrthogonalParameters orthogonalParameters):
+GraphicEngine::Common::Camera::Camera(OrthogonalParameters orthogonalParameters):
 	_orthogonalParameters(orthogonalParameters), _cameraType(CameraType::Orthogonal)
 {
 }
 
-void GraphicEngine::Commmon::Camera::rotate(const glm::vec2& offset)
+void GraphicEngine::Common::Camera::rotate(const glm::vec2& offset)
 {
 	_yawPitchOffset = (offset * _sensitivity);
 	float oldPitch = _yawPitch.y;
@@ -110,24 +110,24 @@ void GraphicEngine::Commmon::Camera::rotate(const glm::vec2& offset)
 	_shouldUpdateView = true;
 }
 
-void GraphicEngine::Commmon::Camera::move(const glm::vec2& offset)
+void GraphicEngine::Common::Camera::move(const glm::vec2& offset)
 {
 	_position = _position + (_direction * offset.x * _speed);
 	_position = _position + (glm::normalize(glm::cross(_direction, glm::vec3(0.0f, 1.0f, 0.0f)) * offset.x * _speed));
 	_shouldUpdateView = true;
 }
 
-glm::mat4 GraphicEngine::Commmon::Camera::caclulatePerspective()
+glm::mat4 GraphicEngine::Common::Camera::caclulatePerspective()
 {
 	return glm::perspective(glm::radians(_perspectiveParameters.fov), _perspectiveParameters.aspectRatio, _perspectiveParameters.zNear, _perspectiveParameters.zFar);
 }
 
-glm::mat4 GraphicEngine::Commmon::Camera::calculateOrthogonal()
+glm::mat4 GraphicEngine::Common::Camera::calculateOrthogonal()
 {
 	return glm::ortho(_orthogonalParameters.left, _orthogonalParameters.right, _orthogonalParameters.bottom, _orthogonalParameters.top);
 }
 
-void GraphicEngine::Commmon::Camera::updateViewMatrix()
+void GraphicEngine::Common::Camera::updateViewMatrix()
 {
 	glm::vec3 up = glm::vec3(0.0, 1.0, 0.0);
 	glm::vec3 right = glm::normalize(glm::cross(_direction, up));
@@ -143,33 +143,33 @@ void GraphicEngine::Commmon::Camera::updateViewMatrix()
 	_shouldUpdateView = false;
 }
 
-void GraphicEngine::Commmon::Camera::updateProjectionMatrix()
+void GraphicEngine::Common::Camera::updateProjectionMatrix()
 {
 	_projectionMatrix = calculateProjectionMatrix();
 	_shouldUpdateProjection = false;
 }
 
-GraphicEngine::Commmon::CameraController::CameraController(std::shared_ptr<Camera> camera):
+GraphicEngine::Common::CameraController::CameraController(std::shared_ptr<Camera> camera):
 	_camera(camera)
 {
 }
 
-void GraphicEngine::Commmon::CameraController::setCameraType(CameraType cameraType)
+void GraphicEngine::Common::CameraController::setCameraType(CameraType cameraType)
 {
 	_camera->setCameraType(cameraType);
 }
 
-void GraphicEngine::Commmon::CameraController::setDt(float dt)
+void GraphicEngine::Common::CameraController::setDt(float dt)
 {
 	_dt = dt;
 }
 
-void GraphicEngine::Commmon::CameraController::setInitialMousePosition(float x, float y)
+void GraphicEngine::Common::CameraController::setInitialMousePosition(float x, float y)
 {
 	_prevMousePosition = glm::vec2(x, y);
 }
 
-void GraphicEngine::Commmon::CameraController::rotate(float x, float y, const std::vector<GraphicEngine::Core::Inputs::MouseButton>& buttons)
+void GraphicEngine::Common::CameraController::rotate(float x, float y, const std::vector<GraphicEngine::Core::Inputs::MouseButton>& buttons)
 {
 	glm::vec2 newOffset = _prevMousePosition - glm::vec2(x, y);
 	if (_rotateButton == Core::Inputs::MouseButton::buttonNone || std::find(std::begin(buttons), std::end(buttons), _rotateButton) != std::end(buttons))
@@ -179,7 +179,7 @@ void GraphicEngine::Commmon::CameraController::rotate(float x, float y, const st
 	}
 }
 
-void GraphicEngine::Commmon::CameraController::move(std::vector<GraphicEngine::Core::Inputs::KeyboardKey> keys)
+void GraphicEngine::Common::CameraController::move(std::vector<GraphicEngine::Core::Inputs::KeyboardKey> keys)
 {
 	using namespace Core::Inputs;
 	std::vector<KeyboardKey> basicMovementKeys{ KeyboardKey::KEY_W, KeyboardKey::KEY_A, KeyboardKey::KEY_S, KeyboardKey::KEY_D };

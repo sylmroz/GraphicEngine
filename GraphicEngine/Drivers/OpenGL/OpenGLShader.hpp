@@ -12,19 +12,19 @@ namespace GraphicEngine::OpenGL
 	class OpenGLShader : public Shader
 	{
 	public:
-		OpenGLShader(const std::string& code, uint32_t shaderType) :
+		OpenGLShader(const std::string& code, const uint32_t shaderType) :
 			Shader(code)
 		{
 			_shaderType = shaderType;
-			compile();
+			OpenGLShader::compile();
 		}
 
 		template <typename Reader>
-		OpenGLShader(Reader reader,const std::string& path, uint32_t shaderType) :
+		OpenGLShader(Reader reader,const std::string& path, const uint32_t shaderType) :
 			Shader(reader, path)
 		{
 			_shaderType = shaderType;
-			compile();
+			OpenGLShader::compile();
 		}
 
 		~OpenGLShader()
@@ -32,7 +32,7 @@ namespace GraphicEngine::OpenGL
 			glDeleteShader(_shaderId);
 		}
 
-		uint32_t getShaderId()
+		uint32_t getShaderId() const
 		{
 			return _shaderId;
 		}

@@ -1,6 +1,8 @@
 #include "VulkanRenderingEngine.hpp"
 #include "../../Platform/Glew/WindowGLFW.hpp"
 
+#include "../../Common/Vertex.hpp"
+
 #undef max
 
 GraphicEngine::Vulkan::VulkanRenderingEngine::VulkanRenderingEngine(std::shared_ptr<Window> window) :

@@ -31,8 +31,8 @@ void Application::exec()
 		window->registerKeyboard(keyboard);
 		window->registerMouse(mouse);
 
-		std::shared_ptr<GraphicEngine::Commmon::Camera> camera(new GraphicEngine::Commmon::Camera);
-		cameraController = std::shared_ptr<GraphicEngine::Commmon::CameraController>(new GraphicEngine::Commmon::CameraController(camera));
+		std::shared_ptr<GraphicEngine::Common::Camera> camera(new GraphicEngine::Common::Camera);
+		cameraController = std::shared_ptr<GraphicEngine::Common::CameraController>(new GraphicEngine::Common::CameraController(camera));
 		keyboard->subscribe([&](std::vector<GraphicEngine::Core::Inputs::KeyboardKey> keys) { cameraController->move(keys); });
 		mouse->subscribePositionEventHandler([&](float x, float y) { cameraController->rotate(x, y, {}); });
 		cameraController->setInitialMousePosition(window->getWidth() / 2, window->getHeight() / 2);

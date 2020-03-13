@@ -8,7 +8,7 @@
 
 #include <glm/glm.hpp>
 
-namespace GraphicEngine::Commmon
+namespace GraphicEngine::Common
 {
 	enum class CameraType
 	{
@@ -39,7 +39,7 @@ namespace GraphicEngine::Commmon
 
 		Camera();
 		Camera(PerspectiveParameters perspectiveParameters);
-		Camera(OrthogonalParameters perspectiveParameters);
+		Camera(OrthogonalParameters ororthogonalParameter);
 
 		void rotate(const glm::vec2& offset);
 		void move(const glm::vec2& offset);
