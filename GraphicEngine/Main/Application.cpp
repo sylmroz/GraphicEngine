@@ -1,10 +1,10 @@
 #include "Application.hpp"
 
 #include "../Common/Window.hpp"
-#include "../Platform/Glew/WindowGLFW.hpp"
-#include "../Common/RenderingEngine.hpp"
 #include "../Drivers/Vulkan/VulkanRenderingEngine.hpp"
 #include "../Drivers/OpenGL/OpenGLRenderingEngine.hpp"
+#include "../Platform/Glew/WindowGLFW.hpp"
+#include "../Common/RenderingEngine.hpp"
 
 #include <exception>
 #include <iostream>
@@ -25,7 +25,7 @@ void Application::exec()
 		mouse = std::shared_ptr<Mouse>(new Mouse);
 
 		auto window = windowFactory("glfw");
-		auto renderingEngine = renderingEngineFactory("vulkan", window);
+		auto renderingEngine = renderingEngineFactory("opengl", window);
 		
 		window->init(640, 480);
 		window->registerKeyboard(keyboard);

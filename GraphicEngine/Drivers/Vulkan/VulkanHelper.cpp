@@ -387,7 +387,9 @@ std::vector<vk::VertexInputAttributeDescription> GraphicEngine::Vulkan::createVe
 
 	for (size_t i{ 0 }; i < vertexSizeOffset.size(); ++i)
 	{
-		attributeDescriptions.push_back(vk::VertexInputAttributeDescription(i, 0, dataFormatTypes[vertexSizeOffset[0].first], vertexSizeOffset[0].second));
+		attributeDescriptions.emplace_back(
+			vk::VertexInputAttributeDescription(i, 0, dataFormatTypes[vertexSizeOffset[0].first],
+			                                    vertexSizeOffset[0].second));
 	}
 
 	return attributeDescriptions;

@@ -3,6 +3,8 @@
 
 #include "Window.hpp"
 
+#include "Vertex.hpp"
+
 namespace GraphicEngine
 {
 	class RenderingEngine
@@ -17,6 +19,21 @@ namespace GraphicEngine
 		virtual void cleanup() = 0;
 	protected:
 		std::shared_ptr<Window> _window;
+
+		std::vector<Common::VertexP> vertices =
+		{
+			Common::VertexP(glm::vec3(0.5f,  0.5f, 0.0f)),
+			Common::VertexP(glm::vec3(0.5f, -0.5f, 0.0f)),
+			Common::VertexP(glm::vec3(-0.5f, -0.5f, 0.0f)),
+			Common::VertexP(glm::vec3(-0.5f,  0.5f, 0.0f))
+		};
+
+		std::vector<uint32_t> indices =
+		{
+			0,1,3,
+			1,2,3
+		};
+		
 	};
 }
 

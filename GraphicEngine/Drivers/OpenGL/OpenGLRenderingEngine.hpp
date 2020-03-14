@@ -3,6 +3,9 @@
 
 #include "../../Common/RenderingEngine.hpp"
 
+#include "OpenGLHelper.hpp"
+#include "OpenGLShader.hpp"
+
 namespace GraphicEngine::OpenGL
 {
 	class OpenGLRenderingEngine : public GraphicEngine::RenderingEngine
@@ -14,7 +17,8 @@ namespace GraphicEngine::OpenGL
 		virtual void resizeFrameBuffer(size_t width, size_t height) override;
 		virtual void cleanup() override;
 	private:
-
+		std::unique_ptr<OpenGLShaderProgram> program;
+		std::unique_ptr<VertexBuffer<GraphicEngine::Common::VertexP>> vertexBuffer;
 	};
 }
 

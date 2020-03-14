@@ -1,20 +1,22 @@
 #include "Engine.hpp"
 #include "../Core/Timer.hpp"
 
+#include <utility>
+
 GraphicEngine::Engine::Engine(std::shared_ptr<Window> window,
 	std::shared_ptr<RenderingEngine> renderingEngine,
 	std::shared_ptr<Core::Inputs::Keyboard> keyboard,
 	std::shared_ptr<Core::Inputs::Mouse> mouse,
 	std::shared_ptr<Common::CameraController> cameraController):
-	_window(window),
-	_renderingEngine(renderingEngine),
-	_keyboard(keyboard),
-	_mouse(mouse),
-	_cameraController(cameraController)
+	_window(std::move(window)),
+	_renderingEngine(std::move(renderingEngine)),
+	_keyboard(std::move(keyboard)),
+	_mouse(std::move(mouse)),
+	_cameraController(std::move(cameraController))
 {
 	_keyboard->subscribe([&](std::vector<Core::Inputs::KeyboardKey> keys)
 		{
-			auto escKey = std::find(std::begin(keys), std::end(keys), Core::Inputs::KeyboardKey::KEY_ESCAPE);
+			const auto escKey = std::find(std::begin(keys), std::end(keys), Core::Inputs::KeyboardKey::KEY_ESCAPE);
 			if (escKey != std::end(keys))
 				shutdown = true;
 		}
