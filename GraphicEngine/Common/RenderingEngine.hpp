@@ -20,12 +20,12 @@ namespace GraphicEngine
 	protected:
 		std::shared_ptr<Window> _window;
 
-		std::vector<Common::VertexP> vertices =
+		std::vector<Common::VertexPC> vertices =
 		{
-			Common::VertexP(glm::vec3(0.5f,  0.5f, 0.0f)),
-			Common::VertexP(glm::vec3(0.5f, -0.5f, 0.0f)),
-			Common::VertexP(glm::vec3(-0.5f, -0.5f, 0.0f)),
-			Common::VertexP(glm::vec3(-0.5f,  0.5f, 0.0f))
+			{glm::vec3(0.5f,  0.5f, 0.0f), glm::vec3(0,0,1)},
+			{glm::vec3(0.5f, -0.5f, 0.0f), glm::vec3(1,0,0)},
+			{glm::vec3(-0.5f, -0.5f, 0.0f),glm::vec3(0,1,0)},
+			{glm::vec3(-0.5f,  0.5f, 0.0f),glm::vec3(1,1,0)}
 		};
 
 		std::vector<uint32_t> indices =

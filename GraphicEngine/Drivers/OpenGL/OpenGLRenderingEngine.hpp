@@ -18,7 +18,7 @@ namespace GraphicEngine::OpenGL
 		virtual void cleanup() override;
 	private:
 		std::unique_ptr<OpenGLShaderProgram> program;
-		std::unique_ptr<VertexBuffer<GraphicEngine::Common::VertexP>> vertexBuffer;
+		std::unique_ptr<VertexBuffer<Common::VertexPC>> vertexBuffer;
 	};
 }
 

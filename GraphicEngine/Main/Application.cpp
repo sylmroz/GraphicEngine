@@ -8,6 +8,7 @@
 
 #include <exception>
 #include <iostream>
+#include <utility>
 
 using namespace GraphicEngine::Core::Inputs;
 
@@ -25,7 +26,7 @@ void Application::exec()
 		mouse = std::shared_ptr<Mouse>(new Mouse);
 
 		auto window = windowFactory("glfw");
-		auto renderingEngine = renderingEngineFactory("opengl", window);
+		auto renderingEngine = renderingEngineFactory("vulkan", window);
 		
 		window->init(640, 480);
 		window->registerKeyboard(keyboard);
@@ -33,7 +34,7 @@ void Application::exec()
 
 		std::shared_ptr<GraphicEngine::Common::Camera> camera(new GraphicEngine::Common::Camera);
 		cameraController = std::shared_ptr<GraphicEngine::Common::CameraController>(new GraphicEngine::Common::CameraController(camera));
-		keyboard->subscribe([&](std::vector<GraphicEngine::Core::Inputs::KeyboardKey> keys) { cameraController->move(keys); });
+		keyboard->subscribe([&](std::vector<GraphicEngine::Core::Inputs::KeyboardKey> keys) { cameraController->move(std::move(keys)); });
 		mouse->subscribePositionEventHandler([&](float x, float y) { cameraController->rotate(x, y, {}); });
 		cameraController->setInitialMousePosition(window->getWidth() / 2, window->getHeight() / 2);
 
@@ -51,7 +52,7 @@ void Application::exec()
 	}
 }
 
-std::shared_ptr<GraphicEngine::Window> Application::windowFactory(std::string windowType)
+std::shared_ptr<GraphicEngine::Window> Application::windowFactory(const std::string& windowType)
 {
 	if (windowType == "glfw")
 		return std::shared_ptr<GraphicEngine::Window>(new GraphicEngine::GLFW::WindowGLFW);

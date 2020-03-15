@@ -28,7 +28,7 @@ namespace GraphicEngine::Vulkan
 		SwapChainData _swapChainData;
 		vk::UniqueCommandPool _commandPool;
 		std::vector<vk::UniqueCommandBuffer> _commandBuffers;
-		std::unique_ptr<DeepBufferData> _depthBuffer;
+		std::unique_ptr<DepthBufferData> _depthBuffer;
 		vk::UniqueRenderPass _rendePass;
 		std::unique_ptr<ImageData> _image;
 		std::vector<vk::UniqueFramebuffer> _frameBuffers;

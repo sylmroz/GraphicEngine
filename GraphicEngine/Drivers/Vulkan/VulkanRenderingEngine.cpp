@@ -1,12 +1,12 @@
 #include "VulkanRenderingEngine.hpp"
 #include "../../Platform/Glew/WindowGLFW.hpp"
 
-#include "../../Common/Vertex.hpp"
+#include <utility>
 
 #undef max
 
 GraphicEngine::Vulkan::VulkanRenderingEngine::VulkanRenderingEngine(std::shared_ptr<Window> window) :
-	RenderingEngine(window)
+	RenderingEngine(std::move(window))
 {
 }
 
@@ -26,19 +26,19 @@ bool GraphicEngine::Vulkan::VulkanRenderingEngine::drawFrame()
 		throw std::runtime_error("Failed to acquire next image!");
 	}
 
-	if (_renderingBarriers->imagesInFlight[imageIndex.value].get() != vk::Fence())
-		_device->waitForFences(1, &(_renderingBarriers->inFlightFences[imageIndex.value].get()), true, std::numeric_limits<uint64_t>::max());
+	if (_renderingBarriers->imagesInFlight[imageIndex.value] != vk::Fence())
+		_device->waitForFences(1, &(_renderingBarriers->imagesInFlight[imageIndex.value]), true, std::numeric_limits<uint64_t>::max());
 
-	_renderingBarriers->imagesInFlight[imageIndex.value].get() = _renderingBarriers->inFlightFences[currentFrameIndex].get();
-
-	_device->resetFences(1, &(_renderingBarriers->inFlightFences[currentFrameIndex].get()));
+	_renderingBarriers->imagesInFlight[imageIndex.value] = _renderingBarriers->inFlightFences[currentFrameIndex].get();
 
 	vk::Semaphore waitSemaphore(_renderingBarriers->imageAvailableSemaphores[currentFrameIndex].get());
 	vk::Semaphore signalSemaphore(_renderingBarriers->renderFinishedSemaphores[currentFrameIndex].get());
 	vk::PipelineStageFlags pipelineStageFlags(vk::PipelineStageFlagBits::eColorAttachmentOutput);
 
-	vk::SubmitInfo submitInfo(1, &waitSemaphore, &pipelineStageFlags, 0, &(_commandBuffers[imageIndex.value].get()), 1, &signalSemaphore);
+	vk::SubmitInfo submitInfo(1, &waitSemaphore, &pipelineStageFlags, 1, &(_commandBuffers[imageIndex.value].get()), 1, &signalSemaphore);
 
+	_device->resetFences(1, &(_renderingBarriers->inFlightFences[currentFrameIndex].get()));
+	
 	vk::Result submitResult = _graphicQueue.submit(1, &submitInfo, _renderingBarriers->inFlightFences[currentFrameIndex].get());
 	if (submitResult != vk::Result::eSuccess)
 	{
@@ -83,7 +83,7 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 		_commandPool = createUniqueCommandPool(_device, indices);
 		_commandBuffers = _device->allocateCommandBuffersUnique(vk::CommandBufferAllocateInfo(_commandPool.get(), vk::CommandBufferLevel::ePrimary, maxFrames));
 
-		_depthBuffer = std::unique_ptr<DeepBufferData>(new DeepBufferData(_physicalDevice, _device, vk::Extent3D(frameBufferSize, 1), findDepthFormat(_physicalDevice), msaaSamples));
+		_depthBuffer = std::unique_ptr<DepthBufferData>(new DepthBufferData(_physicalDevice, _device, vk::Extent3D(frameBufferSize, 1), findDepthFormat(_physicalDevice), msaaSamples));
 		_rendePass = createRenderPass(_device, _swapChainData.format, _depthBuffer->format, msaaSamples);
 		_image = std::unique_ptr<ImageData>(new ImageData(_physicalDevice, _device,
 			vk::Extent3D(_swapChainData.extent, 1), _swapChainData.format, msaaSamples,
@@ -115,6 +115,7 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::resizeFrameBuffer(size_t widt
 
 void GraphicEngine::Vulkan::VulkanRenderingEngine::cleanup()
 {
+	_graphicQueue.waitIdle();
 	_device->waitIdle();
 }
 
@@ -134,11 +135,14 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::buildCommandBuffers()
 	for (auto& commandBuffer : _commandBuffers)
 	{
 		commandBuffer->begin(vk::CommandBufferBeginInfo(vk::CommandBufferUsageFlags()));
-		vk::RenderPassBeginInfo renderPassBeginInfo(_rendePass.get(), _frameBuffers[i].get(), vk::Rect2D(vk::Offset2D(0, 0), _swapChainData.extent), static_cast<uint32_t>(clearValues.size()), clearValues.data());
-		commandBuffer->beginRenderPass(renderPassBeginInfo, vk::SubpassContents::eInline);
+		
 		commandBuffer->setViewport(0, vk::Viewport(0.0f, 0.0f, static_cast<float>(_swapChainData.extent.width), static_cast<float>(_swapChainData.extent.height), 0.0f, 1.0f));
 		commandBuffer->setScissor(0, vk::Rect2D(vk::Offset2D(0, 0), _swapChainData.extent));
+
+		vk::RenderPassBeginInfo renderPassBeginInfo(_rendePass.get(), _frameBuffers[i].get(), vk::Rect2D(vk::Offset2D(0, 0), _swapChainData.extent), static_cast<uint32_t>(clearValues.size()), clearValues.data());
+		commandBuffer->beginRenderPass(renderPassBeginInfo, vk::SubpassContents::eInline);
 		commandBuffer->endRenderPass();
+
 		commandBuffer->end();
 		++i;
 	}

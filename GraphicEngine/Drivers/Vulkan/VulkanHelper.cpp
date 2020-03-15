@@ -145,7 +145,7 @@ vk::UniqueInstance GraphicEngine::Vulkan::createUniqueInstance(std::string appNa
 	return instance;
 }
 
-bool GraphicEngine::Vulkan::isPhysicalDeviceSituable(const vk::PhysicalDevice& physicalDevice, vk::UniqueSurfaceKHR& surface)
+bool GraphicEngine::Vulkan::isPhysicalDeviceSuitable(const vk::PhysicalDevice& physicalDevice, vk::UniqueSurfaceKHR& surface)
 {
 	QueueFamilyIndices indices = findGraphicAndPresentQueueFamilyIndices(physicalDevice, surface);
 
@@ -158,7 +158,7 @@ vk::PhysicalDevice GraphicEngine::Vulkan::getPhysicalDevice(const vk::UniqueInst
 
 	for (auto physicalDevice : physicalDevices)
 	{
-		if (isPhysicalDeviceSituable(physicalDevice, surface))
+		if (isPhysicalDeviceSuitable(physicalDevice, surface))
 		{
 			return physicalDevice;
 		}
@@ -443,10 +443,10 @@ void GraphicEngine::Vulkan::SwapChainData::createSwapChainData(const vk::Physica
 
 	vk::ComponentMapping componentMapping(vk::ComponentSwizzle::eR, vk::ComponentSwizzle::eG, vk::ComponentSwizzle::eB, vk::ComponentSwizzle::eA);
 	vk::ImageSubresourceRange subResourceRange(vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1);
-	for (auto image : images)
+	for (auto& image : images)
 	{
 		vk::ImageViewCreateInfo createInfo(vk::ImageViewCreateFlags() , image, vk::ImageViewType::e2D, this->format, componentMapping, subResourceRange);
-		imageViews.push_back(device->createImageViewUnique(createInfo));
+		imageViews.emplace_back(device->createImageViewUnique(createInfo));
 	}
 }
 
@@ -541,7 +541,7 @@ GraphicEngine::Vulkan::ImageData::ImageData(const vk::PhysicalDevice& physicalDe
 	imageView = device->createImageViewUnique(createInfo);
 }
 
-GraphicEngine::Vulkan::DeepBufferData::DeepBufferData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::Extent3D extent, vk::Format format, vk::SampleCountFlagBits numOfSamples) :
+GraphicEngine::Vulkan::DepthBufferData::DepthBufferData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::Extent3D extent, vk::Format format, vk::SampleCountFlagBits numOfSamples) :
 	ImageData(physicalDevice, device, extent, format, numOfSamples,
 		vk::MemoryPropertyFlagBits::eDeviceLocal, vk::ImageUsageFlagBits::eDepthStencilAttachment, vk::ImageTiling::eOptimal, 1, vk::ImageLayout::eUndefined, vk::ImageAspectFlagBits::eDepth)
 {

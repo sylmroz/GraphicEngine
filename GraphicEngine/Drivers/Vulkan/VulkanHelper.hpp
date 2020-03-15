@@ -44,7 +44,7 @@ namespace GraphicEngine::Vulkan
 		std::vector<vk::UniqueSemaphore> imageAvailableSemaphores;
 		std::vector<vk::UniqueSemaphore> renderFinishedSemaphores;
 		std::vector<vk::UniqueFence> inFlightFences;
-		std::vector<vk::UniqueFence> imagesInFlight;
+		std::vector<vk::Fence> imagesInFlight;
 	};
 
 	class SwapChainData
@@ -84,10 +84,10 @@ namespace GraphicEngine::Vulkan
 		vk::UniqueImageView imageView;
 	};
 
-	class DeepBufferData : public ImageData 
+	class DepthBufferData : public ImageData 
 	{
 	public:
-		DeepBufferData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::Extent3D extent, vk::Format format, vk::SampleCountFlagBits numOfSamples);
+		DepthBufferData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::Extent3D extent, vk::Format format, vk::SampleCountFlagBits numOfSamples);
 	};
 
 	std::vector<const char*> getDeviceExtension();
@@ -102,7 +102,7 @@ namespace GraphicEngine::Vulkan
 		std::vector<std::string> extensionLayers = {},
 		uint32_t apiVersion = VK_API_VERSION_1_0);
 
-	bool isPhysicalDeviceSituable(const vk::PhysicalDevice& physicalDevice, vk::UniqueSurfaceKHR& surface);
+	bool isPhysicalDeviceSuitable(const vk::PhysicalDevice& physicalDevice, vk::UniqueSurfaceKHR& surface);
 
 	vk::PhysicalDevice getPhysicalDevice(const vk::UniqueInstance& instance, vk::UniqueSurfaceKHR& surface);
 
@@ -136,6 +136,16 @@ namespace GraphicEngine::Vulkan
 		bool depthBuffered, const vk::FrontFace& frontFace, const vk::UniquePipelineLayout& pipelineLayout, const vk::UniqueRenderPass& renderPass, vk::SampleCountFlagBits msaaSample, bool depthBoundsTestEnable = false, bool stencilTestEnable = false);
 
 	std::vector<vk::VertexInputAttributeDescription> createVertexInputAttributeDescriptions(const std::vector<std::pair<uint32_t, uint32_t>>& vertexSizeOffset);
+
+	template <typename F, typename... Args>
+	void singleTimeCommand(const vk::UniqueDevice& device, const vk::UniqueCommandPool& commandPool,const vk::Queue& graphicQueue, F fun, Args... args)
+	{
+		auto commandBuffer = std::move(device->allocateCommandBuffersUnique(vk::CommandBufferAllocateInfo(commandPool.get(), vk::CommandBufferLevel::ePrimary, 1)).front());
+		commandBuffer->begin(vk::CommandBufferBeginInfo(vk::CommandBufferUsageFlagBits::eOneTimeSubmit));
+		fun(commandBuffer, args...);
+		commandBuffer->end();
+		graphicQueue.submit(vk::SubmitInfo(0, nullptr, nullptr, 1, &(commandBuffer.get())), nullptr);
+	}
 }
 
 #endif // !GRAPHIC_ENGINE_UTILS_VULKAN_HELPER_HPP

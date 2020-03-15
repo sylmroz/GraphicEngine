@@ -99,6 +99,7 @@ namespace GraphicEngine::OpenGL
 		protected:
 			GLuint _ebo;
 		};
+		
 	public:
 		VertexBuffer(const std::vector<_Vertex>& vertices)
 		{
