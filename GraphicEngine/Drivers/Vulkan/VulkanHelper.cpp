@@ -416,7 +416,7 @@ GraphicEngine::Vulkan::SwapChainData::SwapChainData(const vk::PhysicalDevice& ph
 
 void GraphicEngine::Vulkan::SwapChainData::createSwapChainData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, const vk::UniqueSurfaceKHR& surface, const QueueFamilyIndices& indices, const vk::Extent2D& extend, const vk::UniqueSwapchainKHR& oldSwapChain, vk::ImageUsageFlags imageUsage)
 {
-	SwapChainSupportDetails swapChainSupportDetails = getSwapChainSuppordDetails(physicalDevice, surface);
+	SwapChainSupportDetails swapChainSupportDetails = getSwapChainSupportDetails(physicalDevice, surface);
 	this->extent = pickSurfaceExtent(swapChainSupportDetails.capabilities, extend);
 	vk::SurfaceFormatKHR surfaceFormat = pickSurfaceFormat(swapChainSupportDetails.formats).format;
 	this->format = surfaceFormat.format;
@@ -450,7 +450,7 @@ void GraphicEngine::Vulkan::SwapChainData::createSwapChainData(const vk::Physica
 	}
 }
 
-GraphicEngine::Vulkan::SwapChainSupportDetails GraphicEngine::Vulkan::SwapChainData::getSwapChainSuppordDetails(const vk::PhysicalDevice& physicalDevice, const vk::UniqueSurfaceKHR& surface)
+GraphicEngine::Vulkan::SwapChainSupportDetails GraphicEngine::Vulkan::SwapChainData::getSwapChainSupportDetails(const vk::PhysicalDevice& physicalDevice, const vk::UniqueSurfaceKHR& surface)
 {
 	return SwapChainSupportDetails(physicalDevice.getSurfaceCapabilitiesKHR(surface.get()), physicalDevice.getSurfaceFormatsKHR(surface.get()), physicalDevice.getSurfacePresentModesKHR(surface.get()));
 }
@@ -545,6 +545,17 @@ GraphicEngine::Vulkan::DepthBufferData::DepthBufferData(const vk::PhysicalDevice
 	ImageData(physicalDevice, device, extent, format, numOfSamples,
 		vk::MemoryPropertyFlagBits::eDeviceLocal, vk::ImageUsageFlagBits::eDepthStencilAttachment, vk::ImageTiling::eOptimal, 1, vk::ImageLayout::eUndefined, vk::ImageAspectFlagBits::eDepth)
 {
+}
+
+GraphicEngine::Vulkan::BufferData::BufferData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device,
+	const vk::BufferUsageFlags& usageFlags, const vk::MemoryPropertyFlags& properties, uint32_t size)
+{
+	buffer = device->createBufferUnique(vk::BufferCreateInfo(vk::BufferCreateFlags(), size, usageFlags, vk::SharingMode::eExclusive));
+	vk::MemoryRequirements memoryRequirements = device->getBufferMemoryRequirements(buffer.get());
+
+	vk::MemoryAllocateInfo allocateInfo(memoryRequirements.size, findMemoryType(physicalDevice, memoryRequirements.memoryTypeBits, properties));
+	memory = device->allocateMemoryUnique(allocateInfo);
+	device->bindBufferMemory(buffer.get(), memory.get(), 0);
 }
 
 GraphicEngine::Vulkan::RenderingBarriers::RenderingBarriers(const vk::UniqueDevice& device, size_t maxFrames)

@@ -11,7 +11,34 @@
 
 namespace GraphicEngine::Vulkan
 {
+	template <typename T>
+	void copyMemoryToDevice(const vk::UniqueDevice& device, const vk::UniqueDeviceMemory& memory, const T* data, uint32_t count)
+	{
+		uint32_t deviceSize = sizeof(T) * count;
+		void* _data;
+		device->mapMemory(memory.get(), 0, deviceSize, vk::MemoryMapFlags(), &_data);
+		memcpy(_data, data, deviceSize);
+		device->unmapMemory(memory.get());
+	}
 
+	template <typename F, typename... Args>
+	void singleTimeCommand(const vk::UniqueCommandBuffer& commandBuffer, const vk::UniqueCommandPool& commandPool, const vk::Queue& graphicQueue, F fun, Args... args)
+	{
+		commandBuffer->begin(vk::CommandBufferBeginInfo(vk::CommandBufferUsageFlagBits::eOneTimeSubmit));
+		fun(commandBuffer, args...);
+		commandBuffer->end();
+		graphicQueue.submit(vk::SubmitInfo(0, nullptr, nullptr, 1, &(commandBuffer.get())), nullptr);
+	}
+
+	template <typename F, typename... Args>
+	void singleTimeCommand(const vk::UniqueDevice& device, const vk::UniqueCommandPool& commandPool, const vk::Queue& graphicQueue, F fun, Args... args)
+	{
+		auto commandBuffer = std::move(
+			device->allocateCommandBuffersUnique(
+				vk::CommandBufferAllocateInfo(commandPool.get(), vk::CommandBufferLevel::ePrimary, 1)).front());
+		singleTimeCommand(commandBuffer, commandPool, graphicQueue, fun, args...);
+	}
+	
 	struct QueueFamilyIndices
 	{
 		std::optional<uint32_t> graphicsFamily;
@@ -46,7 +73,7 @@ namespace GraphicEngine::Vulkan
 		std::vector<vk::UniqueFence> inFlightFences;
 		std::vector<vk::Fence> imagesInFlight;
 	};
-
+	
 	class SwapChainData
 	{
 	public:
@@ -64,7 +91,7 @@ namespace GraphicEngine::Vulkan
 		void createSwapChainData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, const vk::UniqueSurfaceKHR& surface,
 			const QueueFamilyIndices& indices, const vk::Extent2D& extend, const vk::UniqueSwapchainKHR& oldSwapChain, vk::ImageUsageFlags imageUsage);
 
-		SwapChainSupportDetails getSwapChainSuppordDetails(const vk::PhysicalDevice& physicalDevice, const vk::UniqueSurfaceKHR& surface);
+		SwapChainSupportDetails getSwapChainSupportDetails(const vk::PhysicalDevice& physicalDevice, const vk::UniqueSurfaceKHR& surface);
 
 		vk::SurfaceFormatKHR pickSurfaceFormat(const std::vector<vk::SurfaceFormatKHR>& formats);
 		vk::PresentModeKHR pickPresentMode(const std::vector<vk::PresentModeKHR>& presentModes);
@@ -88,6 +115,78 @@ namespace GraphicEngine::Vulkan
 	{
 	public:
 		DepthBufferData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::Extent3D extent, vk::Format format, vk::SampleCountFlagBits numOfSamples);
+	};
+
+	class BufferData
+	{
+	public:
+		
+		BufferData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device,
+		           const vk::BufferUsageFlags& usageFlags, const vk::MemoryPropertyFlags& properties, uint32_t size);
+
+		vk::UniqueBuffer buffer;
+		vk::UniqueDeviceMemory memory;
+	};
+
+	template <typename T>
+	class UniformBuffer
+	{
+		UniformBuffer(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, uint32_t count)
+		{
+			_device = device;;
+			for (uint32_t i{ 0 }; i < count; ++i)
+			{
+				_bufferData.emplace_back(BufferData(physicalDevice, device, vk::BufferUsageFlagBits::eUniformBuffer,
+					vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent, sizeof(T)));
+			}
+		}
+		
+		void setValue(T value)
+		{
+			_value = value;
+		}
+
+		void update(uint32_t bufferIndex)
+		{
+			copyMemoryToDevice<T>(_device, _bufferData[bufferIndex].memory, &_value, 1);
+		}
+
+		void updateAndSet(T value, uint32_t bufferIndex)
+		{
+			setValue(value);
+			update(bufferIndex);
+		}
+	private:
+		std::vector<BufferData> _bufferData;
+		T _value;
+		vk::UniqueDevice _device;
+	};
+
+	template <typename T>
+	class DeviceBufferData
+	{
+	public:
+		DeviceBufferData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, const vk::UniqueCommandPool& commandPool, vk::Queue queue,
+			const vk::BufferUsageFlags& usageFlags, const T* data, uint32_t size)
+		{
+			BufferData stagingBuffer(physicalDevice, device, usageFlags, vk::MemoryPropertyFlagBits::eHostVisible|vk::MemoryPropertyFlagBits::eHostCoherent, size);
+			copyMemoryToDevice<T>(device, stagingBuffer.memory, data, size);
+			buffer = std::make_unique<BufferData>(physicalDevice, device, usageFlags, vk::MemoryPropertyFlagBits::eDeviceLocal, size);
+			singleTimeCommand(device, commandPool, queue, [&](const vk::UniqueCommandBuffer& commandBuffer)
+				{
+					commandBuffer->copyBuffer(stagingBuffer.buffer.get(), buffer->buffer.get(), vk::BufferCopy(0, 0, sizeof(T) * size));
+				});
+		}
+
+		std::unique_ptr<BufferData> buffer;
+	};
+
+	class IndicesDeviceBuffer : public DeviceBufferData<uint32_t>
+	{
+	public:
+		IndicesDeviceBuffer(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, const vk::UniqueCommandPool& commandPool, vk::Queue queue,
+			const vk::BufferUsageFlags& usageFlags, const vk::MemoryPropertyFlags& properties,const std::vector<uint32_t>& indices):
+			DeviceBufferData(physicalDevice, device, commandPool, queue, vk::BufferUsageFlagBits::eIndexBuffer,indices.data(), indices.size()){}
 	};
 
 	std::vector<const char*> getDeviceExtension();
@@ -133,19 +232,12 @@ namespace GraphicEngine::Vulkan
 
 	vk::UniquePipeline createGraphicPipeline(const vk::UniqueDevice& device, const vk::UniquePipelineCache& pipeliceCache, const ShaderInfo& vertexShaderInfo, const ShaderInfo& fragmentShaderInfo,
 		uint32_t vertexStride, std::vector<vk::VertexInputAttributeDescription> attributeDescriptions, const vk::VertexInputBindingDescription& bindingDescription,
-		bool depthBuffered, const vk::FrontFace& frontFace, const vk::UniquePipelineLayout& pipelineLayout, const vk::UniqueRenderPass& renderPass, vk::SampleCountFlagBits msaaSample, bool depthBoundsTestEnable = false, bool stencilTestEnable = false);
+		bool depthBuffered, const vk::FrontFace& frontFace, const vk::UniquePipelineLayout& pipelineLayout,
+		const vk::UniqueRenderPass& renderPass, vk::SampleCountFlagBits msaaSample, bool depthBoundsTestEnable = false,
+		bool stencilTestEnable = false);
 
 	std::vector<vk::VertexInputAttributeDescription> createVertexInputAttributeDescriptions(const std::vector<std::pair<uint32_t, uint32_t>>& vertexSizeOffset);
 
-	template <typename F, typename... Args>
-	void singleTimeCommand(const vk::UniqueDevice& device, const vk::UniqueCommandPool& commandPool,const vk::Queue& graphicQueue, F fun, Args... args)
-	{
-		auto commandBuffer = std::move(device->allocateCommandBuffersUnique(vk::CommandBufferAllocateInfo(commandPool.get(), vk::CommandBufferLevel::ePrimary, 1)).front());
-		commandBuffer->begin(vk::CommandBufferBeginInfo(vk::CommandBufferUsageFlagBits::eOneTimeSubmit));
-		fun(commandBuffer, args...);
-		commandBuffer->end();
-		graphicQueue.submit(vk::SubmitInfo(0, nullptr, nullptr, 1, &(commandBuffer.get())), nullptr);
-	}
 }
 
 #endif // !GRAPHIC_ENGINE_UTILS_VULKAN_HELPER_HPP
