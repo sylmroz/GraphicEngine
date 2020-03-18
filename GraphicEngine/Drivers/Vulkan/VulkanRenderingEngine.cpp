@@ -96,6 +96,8 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 
 		_renderingBarriers = std::unique_ptr<RenderingBarriers>(new RenderingBarriers(_device, maxFrames));
 
+		_vertexBuffer = std::make_unique<VertexBuffer<GraphicEngine::Common::VertexPC>>(_physicalDevice, _device, _commandPool, _graphicQueue, vertices, RenderingEngine::indices);
+
 		buildCommandBuffers();
 	}
 
@@ -141,6 +143,10 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::buildCommandBuffers()
 
 		vk::RenderPassBeginInfo renderPassBeginInfo(_rendePass.get(), _frameBuffers[i].get(), vk::Rect2D(vk::Offset2D(0, 0), _swapChainData.extent), static_cast<uint32_t>(clearValues.size()), clearValues.data());
 		commandBuffer->beginRenderPass(renderPassBeginInfo, vk::SubpassContents::eInline);
+
+		_vertexBuffer->bind(commandBuffer);
+		_vertexBuffer->draw(commandBuffer);
+
 		commandBuffer->endRenderPass();
 
 		commandBuffer->end();

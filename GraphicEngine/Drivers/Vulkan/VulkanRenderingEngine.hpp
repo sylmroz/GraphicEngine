@@ -35,6 +35,7 @@ namespace GraphicEngine::Vulkan
 		std::unique_ptr<RenderingBarriers> _renderingBarriers;
 		vk::Queue _graphicQueue;
 		vk::Queue _presentQueue;
+		std::unique_ptr<VertexBuffer<GraphicEngine::Common::VertexPC>> _vertexBuffer;
 
 	private:
 		vk::SampleCountFlagBits msaaSamples = vk::SampleCountFlagBits::e2;
