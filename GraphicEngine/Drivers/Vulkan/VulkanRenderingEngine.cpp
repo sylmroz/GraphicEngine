@@ -1,6 +1,8 @@
 #include "VulkanRenderingEngine.hpp"
 #include "../../Platform/Glew/WindowGLFW.hpp"
 
+#include "../../Core/IO/FileReader.hpp"
+
 #include <utility>
 
 #undef max
@@ -98,6 +100,17 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 
 		_vertexBuffer = std::make_unique<VertexBuffer<GraphicEngine::Common::VertexPC>>(_physicalDevice, _device, _commandPool, _graphicQueue, vertices, RenderingEngine::indices);
 
+		_vertexShader = std::make_unique<VulkanShader>(_device, Core::IO::readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Spv/basic.vert.spv"));
+		_fragmentShader = std::make_unique<VulkanShader>(_device, Core::IO::readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Spv/basic.frag.spv"));
+
+		_pipelineCache = _device->createPipelineCacheUnique(vk::PipelineCacheCreateInfo());
+		
+		_pipelineLayout = _device->createPipelineLayoutUnique(vk::PipelineLayoutCreateInfo(vk::PipelineLayoutCreateFlags(), 0/**/));
+		_graphicPipeline = createGraphicPipeline(_device, _pipelineCache, ShaderInfo{ _vertexShader->shaderModule.get(),vk::SpecializationInfo() },
+			ShaderInfo{ _fragmentShader->shaderModule.get(),vk::SpecializationInfo() }, Common::VertexPC::getStride(), createVertexInputAttributeDescriptions(Common::VertexPC::getSizeAndOffsets()),
+			vk::VertexInputBindingDescription(0, Common::VertexPC::getStride()), true, vk::FrontFace::eClockwise, _pipelineLayout, _rendePass, msaaSamples);
+		
+
 		buildCommandBuffers();
 	}
 
@@ -144,6 +157,8 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::buildCommandBuffers()
 		vk::RenderPassBeginInfo renderPassBeginInfo(_rendePass.get(), _frameBuffers[i].get(), vk::Rect2D(vk::Offset2D(0, 0), _swapChainData.extent), static_cast<uint32_t>(clearValues.size()), clearValues.data());
 		commandBuffer->beginRenderPass(renderPassBeginInfo, vk::SubpassContents::eInline);
 
+		commandBuffer->bindPipeline(vk::PipelineBindPoint::eGraphics, _graphicPipeline.get());
+		
 		_vertexBuffer->bind(commandBuffer);
 		_vertexBuffer->draw(commandBuffer);
 
