@@ -2,6 +2,7 @@
 #define GRAPHIC_ENGINE_UTILS_VULKAN_HELPER_HPP
 
 #include <array>
+#include <iostream>
 #include <optional>
 #include <string>
 #include <vector>
@@ -123,9 +124,10 @@ namespace GraphicEngine::Vulkan
 		
 		BufferData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device,
 		           const vk::BufferUsageFlags& usageFlags, const vk::MemoryPropertyFlags& properties, uint32_t size);
+		virtual ~BufferData() = default;
 
-		vk::UniqueBuffer buffer;
 		vk::UniqueDeviceMemory memory;
+		vk::UniqueBuffer buffer;
 	};
 
 	template <typename T>
@@ -178,6 +180,8 @@ namespace GraphicEngine::Vulkan
 				});
 		}
 
+		virtual ~DeviceBufferData() = default;
+
 		std::unique_ptr<BufferData> buffer;
 	};
 
@@ -221,6 +225,7 @@ namespace GraphicEngine::Vulkan
 			{
 				commandBuffer->draw(_size, 1, 0, 0);
 			}
+			virtual ~_VertexBuffer() = default;
 		protected:
 			std::unique_ptr<VertexDeviceBuffer<_Vertex>> _vertexArrayObject;
 			uint32_t _size;
@@ -247,6 +252,9 @@ namespace GraphicEngine::Vulkan
 			{
 				commandBuffer->drawIndexed(this->_size, 1, 0, 0, 0);
 			}
+
+			virtual ~_VertexBufferWithIndices() = default;
+			
 		private:
 			std::unique_ptr<IndicesDeviceBuffer> _indicesDeviceBuffer;
 		};

@@ -56,6 +56,8 @@ namespace GraphicEngine::OpenGL
 			{
 				glBindVertexArray(0);
 			}
+
+			virtual ~_VertexBuffer() = default;
 			
 		protected:
 			GLuint _vbo, _vao;
@@ -96,6 +98,8 @@ namespace GraphicEngine::OpenGL
 			{
 				glDrawElements(GL_TRIANGLES, this->_size, GL_UNSIGNED_INT, nullptr);
 			}
+
+			virtual ~_VertexBufferWithElements() = default;
 		protected:
 			GLuint _ebo;
 		};
