@@ -9,7 +9,7 @@ GraphicEngine::OpenGL::OpenGLRenderingEngine::OpenGLRenderingEngine(std::shared_
 
 bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 {
-	glClearColor(0.5f, 0.0f, 0.5f, 1.0f);
+	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	program->use();
 	vertexBuffer->bind();
@@ -26,8 +26,8 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 	}
 	glViewport(0, 0, width, height);
 
-	OpenGLVertexShader vert(readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Glsl/basic.vert"));
-	OpenGLFragmentShader frag(readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Glsl/basic.frag"));
+	OpenGLVertexShader vert(readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Glsl/basicPC.vert"));
+	OpenGLFragmentShader frag(readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Glsl/basicPC.frag"));
 	program = std::unique_ptr<OpenGLShaderProgram>(new OpenGLShaderProgram({ vert, frag }));
 	vertexBuffer = std::unique_ptr<VertexBuffer<GraphicEngine::Common::VertexPC>>(new VertexBuffer<GraphicEngine::Common::VertexPC>(vertices, indices));
 }

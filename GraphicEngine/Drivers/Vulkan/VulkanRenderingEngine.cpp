@@ -100,14 +100,14 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 
 		_vertexBuffer = std::make_unique<VertexBuffer<GraphicEngine::Common::VertexPC>>(_physicalDevice, _device, _commandPool, _graphicQueue, vertices, RenderingEngine::indices);
 
-		_vertexShader = std::make_unique<VulkanShader>(_device, Core::IO::readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Spv/basic.vert.spv"));
-		_fragmentShader = std::make_unique<VulkanShader>(_device, Core::IO::readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Spv/basic.frag.spv"));
+		_vertexShader = std::make_unique<VulkanShader>(_device, Core::IO::readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Spv/basicPC.vert.spv"));
+		_fragmentShader = std::make_unique<VulkanShader>(_device, Core::IO::readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Spv/basicPC.frag.spv"));
 
 		_pipelineCache = _device->createPipelineCacheUnique(vk::PipelineCacheCreateInfo());
 		
 		_pipelineLayout = _device->createPipelineLayoutUnique(vk::PipelineLayoutCreateInfo(vk::PipelineLayoutCreateFlags(), 0/**/));
 		_graphicPipeline = createGraphicPipeline(_device, _pipelineCache, ShaderInfo{ _vertexShader->shaderModule.get(),vk::SpecializationInfo() },
-			ShaderInfo{ _fragmentShader->shaderModule.get(),vk::SpecializationInfo() }, Common::VertexPC::getStride(), createVertexInputAttributeDescriptions(Common::VertexPC::getSizeAndOffsets()),
+			ShaderInfo{ _fragmentShader->shaderModule.get(),vk::SpecializationInfo() }, createVertexInputAttributeDescriptions(Common::VertexPC::getSizeAndOffsets()),
 			vk::VertexInputBindingDescription(0, Common::VertexPC::getStride()), true, vk::FrontFace::eClockwise, _pipelineLayout, _rendePass, msaaSamples);
 		
 

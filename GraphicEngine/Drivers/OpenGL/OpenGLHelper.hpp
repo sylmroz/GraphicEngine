@@ -40,8 +40,6 @@ namespace GraphicEngine::OpenGL
 				unbind();
 			}
 
-			
-
 			void bind() const
 			{
 				glBindVertexArray(_vao);

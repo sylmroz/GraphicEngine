@@ -328,7 +328,7 @@ std::vector<vk::UniqueFramebuffer> GraphicEngine::Vulkan::createFrameBuffers(con
 	return frameBuffers;
 }
 
-vk::UniquePipeline GraphicEngine::Vulkan::createGraphicPipeline(const vk::UniqueDevice& device, const vk::UniquePipelineCache& pipeliceCache, const ShaderInfo& vertexShaderInfo, const ShaderInfo& fragmentShaderInfo, uint32_t vertexStride, std::vector<vk::VertexInputAttributeDescription> attributeDescriptions, const vk::VertexInputBindingDescription& bindingDescription, bool depthBuffered, const vk::FrontFace& frontFace, const vk::UniquePipelineLayout& pipelineLayout, const vk::UniqueRenderPass& renderPass, vk::SampleCountFlagBits msaaSample, bool depthBoundsTestEnable, bool stencilTestEnable)
+vk::UniquePipeline GraphicEngine::Vulkan::createGraphicPipeline(const vk::UniqueDevice& device, const vk::UniquePipelineCache& pipeliceCache, const ShaderInfo& vertexShaderInfo, const ShaderInfo& fragmentShaderInfo, std::vector<vk::VertexInputAttributeDescription> attributeDescriptions, const vk::VertexInputBindingDescription& bindingDescription, bool depthBuffered, const vk::FrontFace& frontFace, const vk::UniquePipelineLayout& pipelineLayout, const vk::UniqueRenderPass& renderPass, vk::SampleCountFlagBits msaaSample, bool depthBoundsTestEnable, bool stencilTestEnable)
 {
 	std::array<vk::PipelineShaderStageCreateInfo, 2> pipelineShaderCreateInfos =
 	{
@@ -345,7 +345,7 @@ vk::UniquePipeline GraphicEngine::Vulkan::createGraphicPipeline(const vk::Unique
 	vk::PipelineViewportStateCreateInfo pipelineViewportCreateInfo(vk::PipelineViewportStateCreateFlags(), 1, nullptr, 1, nullptr);
 
 	vk::PipelineRasterizationStateCreateInfo pipelineRasterizationStateCreateInfo(vk::PipelineRasterizationStateCreateFlags(), false, false,
-		vk::PolygonMode::eFill, vk::CullModeFlagBits::eBack, vk::FrontFace::eCounterClockwise, false, 0, 0, 0, 1);
+		vk::PolygonMode::eFill, vk::CullModeFlagBits::eBack, frontFace, false, 0, 0, 0, 1);
 
 	vk::PipelineMultisampleStateCreateInfo pipelineMultisampleState(vk::PipelineMultisampleStateCreateFlags(), msaaSample, true, 0.2f, nullptr, false, false);
 
@@ -389,8 +389,8 @@ std::vector<vk::VertexInputAttributeDescription> GraphicEngine::Vulkan::createVe
 	for (size_t i{ 0 }; i < vertexSizeOffset.size(); ++i)
 	{
 		attributeDescriptions.emplace_back(
-			vk::VertexInputAttributeDescription(i, 0, dataFormatTypes[vertexSizeOffset[0].first],
-			                                    vertexSizeOffset[0].second));
+			vk::VertexInputAttributeDescription(i, 0, dataFormatTypes[vertexSizeOffset[i].first],
+			                                    vertexSizeOffset[i].second));
 	}
 
 	return attributeDescriptions;
