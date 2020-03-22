@@ -3,6 +3,7 @@
 
 #include <array>
 #include <iostream>
+#include <numeric>
 #include <optional>
 #include <string>
 #include <vector>
@@ -99,6 +100,18 @@ namespace GraphicEngine::Vulkan
 		vk::Extent2D pickSurfaceExtent(const vk::SurfaceCapabilitiesKHR& capabilities, vk::Extent2D frameBufferExtent);
 	};
 
+	class BufferData
+	{
+	public:
+
+		BufferData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device,
+			const vk::BufferUsageFlags& usageFlags, const vk::MemoryPropertyFlags& properties, uint32_t size);
+		virtual ~BufferData() = default;
+
+		vk::UniqueDeviceMemory memory;
+		vk::UniqueBuffer buffer;
+	};
+
 	class ImageData
 	{
 	public:
@@ -118,27 +131,21 @@ namespace GraphicEngine::Vulkan
 		DepthBufferData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::Extent3D extent, vk::Format format, vk::SampleCountFlagBits numOfSamples);
 	};
 
-	class BufferData
+	class TextureData : public ImageData
 	{
-	public:
 		
-		BufferData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device,
-		           const vk::BufferUsageFlags& usageFlags, const vk::MemoryPropertyFlags& properties, uint32_t size);
-		virtual ~BufferData() = default;
-
-		vk::UniqueDeviceMemory memory;
-		vk::UniqueBuffer buffer;
+		// TODO
 	};
 
 	template <typename T>
 	class UniformBuffer
 	{
+	public:
 		UniformBuffer(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, uint32_t count)
 		{
-			_device = device;;
 			for (uint32_t i{ 0 }; i < count; ++i)
 			{
-				_bufferData.emplace_back(BufferData(physicalDevice, device, vk::BufferUsageFlagBits::eUniformBuffer,
+				_bufferData.emplace_back(std::make_shared<BufferData>(physicalDevice, device, vk::BufferUsageFlagBits::eUniformBuffer,
 					vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent, sizeof(T)));
 			}
 		}
@@ -148,20 +155,21 @@ namespace GraphicEngine::Vulkan
 			_value = value;
 		}
 
-		void update(uint32_t bufferIndex)
+		void update(const vk::UniqueDevice& device, uint32_t bufferIndex)
 		{
-			copyMemoryToDevice<T>(_device, _bufferData[bufferIndex].memory, &_value, 1);
+			copyMemoryToDevice<T>(device, _bufferData[bufferIndex]->memory, &_value, 1);
 		}
 
-		void updateAndSet(T value, uint32_t bufferIndex)
+		void updateAndSet(const vk::UniqueDevice& device, T value, uint32_t bufferIndex)
 		{
 			setValue(value);
-			update(bufferIndex);
+			update(device, bufferIndex);
 		}
+
+		std::vector<std::shared_ptr<BufferData>> _bufferData;
+		
 	private:
-		std::vector<BufferData> _bufferData;
 		T _value;
-		vk::UniqueDevice _device;
 	};
 
 	template <typename T>
@@ -330,6 +338,14 @@ namespace GraphicEngine::Vulkan
 		bool stencilTestEnable = false);
 
 	std::vector<vk::VertexInputAttributeDescription> createVertexInputAttributeDescriptions(const std::vector<std::pair<uint32_t, uint32_t>>& vertexSizeOffset);
+
+	vk::UniqueDescriptorPool createDescriptorPool(const vk::UniqueDevice& device, const std::vector<vk::DescriptorPoolSize>& descriptorSizes);
+
+	vk::UniqueDescriptorSetLayout createDescriptorSetLayout(const vk::UniqueDevice& device,
+		const std::vector<std::tuple<vk::DescriptorType, uint32_t, vk::ShaderStageFlags>>& bindingData, vk::DescriptorSetLayoutCreateFlags flags);
+
+	void updateDescriptorSets(const vk::UniqueDevice& device, const vk::UniqueDescriptorPool& descriptorPool, const vk::UniqueDescriptorSetLayout& descriptorSetLayout, uint32_t layoutCount,
+		const std::vector<vk::UniqueDescriptorSet>& descriptorSets, const std::vector<std::vector<std::shared_ptr<BufferData>>>& uniformBuffers, const std::vector<std::pair<vk::UniqueImageView, vk::UniqueSampler>>& imageUniforms);
 
 }
 

@@ -10,7 +10,7 @@ namespace GraphicEngine::Vulkan
 	class VulkanRenderingEngine : public GraphicEngine::RenderingEngine
 	{
 	public:
-		VulkanRenderingEngine(std::shared_ptr<Window> window);
+		VulkanRenderingEngine(std::shared_ptr<Window> window, std::shared_ptr<Common::Camera> camera);
 		virtual bool drawFrame() override;
 		virtual void init(size_t width, size_t height) override;
 		virtual void resizeFrameBuffer(size_t width, size_t height) override;
@@ -29,7 +29,7 @@ namespace GraphicEngine::Vulkan
 		vk::UniqueCommandPool _commandPool;
 		std::vector<vk::UniqueCommandBuffer> _commandBuffers;
 		std::unique_ptr<DepthBufferData> _depthBuffer;
-		vk::UniqueRenderPass _rendePass;
+		vk::UniqueRenderPass _renderPass;
 		std::unique_ptr<ImageData> _image;
 		std::vector<vk::UniqueFramebuffer> _frameBuffers;
 		std::unique_ptr<RenderingBarriers> _renderingBarriers;
@@ -41,6 +41,11 @@ namespace GraphicEngine::Vulkan
 		std::unique_ptr<VertexBuffer<Common::VertexPC>> _vertexBuffer;
 		std::unique_ptr<VulkanShader> _vertexShader;
 		std::unique_ptr<VulkanShader> _fragmentShader;
+		std::unique_ptr<UniformBuffer<glm::mat4>> _uniformBuffer;
+		
+		vk::UniqueDescriptorPool _descriptorPool;
+		vk::UniqueDescriptorSetLayout _descriptorSetLayout;
+		std::vector<vk::UniqueDescriptorSet> _descriptorSets;
 		
 
 	private:

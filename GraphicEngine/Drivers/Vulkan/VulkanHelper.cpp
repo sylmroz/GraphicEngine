@@ -396,6 +396,56 @@ std::vector<vk::VertexInputAttributeDescription> GraphicEngine::Vulkan::createVe
 	return attributeDescriptions;
 }
 
+vk::UniqueDescriptorPool GraphicEngine::Vulkan::createDescriptorPool(const vk::UniqueDevice& device, const std::vector<vk::DescriptorPoolSize>& descriptorSizes)
+{
+	uint32_t maxSet = std::accumulate(std::begin(descriptorSizes), std::end(descriptorSizes), 0,
+		[](uint32_t sum, const vk::DescriptorPoolSize& descriptorPoolSize) { return sum + descriptorPoolSize.descriptorCount; });
+
+	return device->createDescriptorPoolUnique(vk::DescriptorPoolCreateInfo(vk::DescriptorPoolCreateFlagBits::eFreeDescriptorSet, maxSet, static_cast<uint32_t>(descriptorSizes.size()), descriptorSizes.data()));
+}
+
+vk::UniqueDescriptorSetLayout GraphicEngine::Vulkan::createDescriptorSetLayout(const vk::UniqueDevice& device, const std::vector<std::tuple<vk::DescriptorType, uint32_t, vk::ShaderStageFlags>>& bindingData, vk::DescriptorSetLayoutCreateFlags flags)
+{
+	std::vector<vk::DescriptorSetLayoutBinding> bindings;
+	for (uint32_t i{ 0 }; i < bindingData.size(); ++i)
+	{
+		bindings.emplace_back(vk::DescriptorSetLayoutBinding(i, std::get<0>(bindingData[i]), std::get<1>(bindingData[i]), std::get<2>(bindingData[i])));
+	}
+	return device->createDescriptorSetLayoutUnique(vk::DescriptorSetLayoutCreateInfo(flags, static_cast<uint32_t>(bindings.size()), bindings.data()));
+}
+
+void GraphicEngine::Vulkan::updateDescriptorSets(const vk::UniqueDevice& device, const vk::UniqueDescriptorPool& descriptorPool, const vk::UniqueDescriptorSetLayout& descriptorSetLayout, uint32_t layoutCount,
+	const std::vector<vk::UniqueDescriptorSet>& descriptorSets, const std::vector<std::vector<std::shared_ptr<BufferData>>>& uniformBuffers, const std::vector<std::pair<vk::UniqueImageView, vk::UniqueSampler>>& imageUniforms)
+{
+	std::vector<vk::DescriptorSetLayout> layouts(layoutCount, descriptorSetLayout.get());
+	vk::DescriptorSetAllocateInfo descriptorSetAllocateInfo(descriptorPool.get(), static_cast<uint32_t>(layouts.size()), layouts.data());
+
+	for (uint32_t i{ 0 }; i < descriptorSets.size(); ++i)
+	{
+		uint32_t dstBinding{ 0 };
+		std::vector<vk::WriteDescriptorSet> writeDescriptorSets;
+		if (!uniformBuffers.empty())
+		{
+			for (auto& uniformBuffer : uniformBuffers)
+			{
+				vk::DescriptorBufferInfo bufferInfo(uniformBuffer[i]->buffer.get(), 0, VK_WHOLE_SIZE);
+				writeDescriptorSets.emplace_back(descriptorSets[i].get(), dstBinding++, 0, 1, vk::DescriptorType::eUniformBuffer, nullptr, &bufferInfo, nullptr);
+			}
+		}
+
+		if (!imageUniforms.empty())
+		{
+			for (auto& imageUniform : imageUniforms)
+			{
+				vk::DescriptorImageInfo imageInfo(imageUniform.second.get(), imageUniform.first.get(), vk::ImageLayout::eShaderReadOnlyOptimal);
+				writeDescriptorSets.emplace_back(descriptorSets[i].get(), dstBinding++, 0, 1, vk::DescriptorType::eCombinedImageSampler, &imageInfo, nullptr, nullptr);
+			}
+		}
+
+		device->updateDescriptorSets(static_cast<uint32_t>(writeDescriptorSets.size()), writeDescriptorSets.data(), 0, nullptr);
+	}
+}
+
 vk::Format GraphicEngine::Vulkan::findSupportedFormat(const vk::PhysicalDevice& physicalDevice, std::vector<vk::Format> candidates, vk::ImageTiling tiling, vk::FormatFeatureFlags formatFeatures)
 {
 	vk::FormatProperties props;

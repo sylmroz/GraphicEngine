@@ -10,16 +10,23 @@ namespace GraphicEngine
 	class RenderingEngine
 	{
 	public:
-		RenderingEngine(std::shared_ptr<Window> window) :
-			_window(window) {}
+		RenderingEngine(std::shared_ptr<Window> window,
+			std::shared_ptr<Common::Camera> camera) :
+			_window(window),
+			_camera(camera)
+		{}
 
 		virtual bool drawFrame() = 0;
 		virtual void init(size_t width, size_t height) = 0;
 		virtual void resizeFrameBuffer(size_t width, size_t height) = 0;
 		virtual void cleanup() = 0;
+
+		void setCamera(std::shared_ptr<Common::Camera> camera) { _camera = camera; }
 	protected:
 		std::shared_ptr<Window> _window;
 
+		std::shared_ptr<Common::Camera> _camera;
+		
 		std::vector<Common::VertexPC> vertices =
 		{
 			{glm::vec3(0.5f,  0.5f, 0.0f), glm::vec3(0,0,1)},

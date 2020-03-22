@@ -9,7 +9,7 @@
 
 glm::mat4 GraphicEngine::Common::Camera::getViewProjectionMatrix()
 {
-	return _viewProjectionMatrix;
+	return getProjectionMatrix()*getViewMatrix();
 }
 
 glm::mat4 GraphicEngine::Common::Camera::getViewMatrix()

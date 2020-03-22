@@ -11,7 +11,7 @@ namespace GraphicEngine::OpenGL
 	class OpenGLRenderingEngine : public GraphicEngine::RenderingEngine
 	{
 	public:
-		OpenGLRenderingEngine(std::shared_ptr<Window> window);
+		OpenGLRenderingEngine(std::shared_ptr<Window> window, std::shared_ptr<Common::Camera> camera);
 		virtual bool drawFrame() override;
 		virtual void init(size_t width, size_t height) override;
 		virtual void resizeFrameBuffer(size_t width, size_t height) override;

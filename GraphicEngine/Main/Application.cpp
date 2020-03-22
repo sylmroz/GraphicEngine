@@ -32,15 +32,22 @@ void Application::exec()
 		window->registerKeyboard(keyboard);
 		window->registerMouse(mouse);
 
-		std::shared_ptr<GraphicEngine::Common::Camera> camera(new GraphicEngine::Common::Camera);
+		GraphicEngine::Common::PerspectiveParameters perspectiveParameters;
+		perspectiveParameters.aspectRatio = static_cast<float>(window->getHeight()) / static_cast<float>(window->getWidth());
+		perspectiveParameters.fov = 45;
+		perspectiveParameters.zFar = 1000;
+		perspectiveParameters.zNear = 0.01;
+		camera = std::make_shared<GraphicEngine::Common::Camera>(perspectiveParameters);
+		
 		cameraController = std::shared_ptr<GraphicEngine::Common::CameraController>(new GraphicEngine::Common::CameraController(camera));
 		keyboard->subscribe([&](std::vector<GraphicEngine::Core::Inputs::KeyboardKey> keys) { cameraController->move(std::move(keys)); });
 		mouse->subscribePositionEventHandler([&](float x, float y) { cameraController->rotate(x, y, {}); });
 		cameraController->setInitialMousePosition(window->getWidth() / 2, window->getHeight() / 2);
 
+		
 		renderingEngine->init(window->getWidth(), window->getHeight());
 		window->addResizeCallbackListener([&](size_t width, size_t height) {renderingEngine->resizeFrameBuffer(width, height); });
-
+		renderingEngine->setCamera(camera);
 		engine = std::shared_ptr<GraphicEngine::Engine>(new GraphicEngine::Engine(window, renderingEngine, keyboard, mouse, cameraController));
 
 		engine->run();
@@ -65,7 +72,7 @@ std::shared_ptr<GraphicEngine::RenderingEngine> Application::renderingEngineFact
 	std::shared_ptr<GraphicEngine::RenderingEngine> renderingEngine;
 	if (type == "vulkan")
 	{
-		renderingEngine = std::shared_ptr<GraphicEngine::RenderingEngine>(new GraphicEngine::Vulkan::VulkanRenderingEngine(window));
+		renderingEngine = std::shared_ptr<GraphicEngine::RenderingEngine>(new GraphicEngine::Vulkan::VulkanRenderingEngine(window, camera));
 		auto glfwWindow = std::dynamic_pointer_cast<GraphicEngine::GLFW::WindowGLFW>(window);
 		if (glfwWindow != nullptr)
 		{
@@ -76,7 +83,7 @@ std::shared_ptr<GraphicEngine::RenderingEngine> Application::renderingEngineFact
 
 	else if (type == "opengl")
 	{
-		renderingEngine = std::shared_ptr<GraphicEngine::RenderingEngine>(new GraphicEngine::OpenGL::OpenGLRenderingEngine(window));
+		renderingEngine = std::shared_ptr<GraphicEngine::RenderingEngine>(new GraphicEngine::OpenGL::OpenGLRenderingEngine(window, camera));
 		auto glfwWindow = std::dynamic_pointer_cast<GraphicEngine::GLFW::WindowGLFW>(window);
 		if (glfwWindow != nullptr)
 		{
