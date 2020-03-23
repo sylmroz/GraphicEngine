@@ -17,7 +17,7 @@ namespace GraphicEngine::Core::Inputs
 			notify(_positionEventHandlers, xPos, yPos);
 		}
 
-		void scrollnEventHandlerNotify(double xOffset, double yOffset)
+		void scrollEventHandlerNotify(double xOffset, double yOffset)
 		{
 			notify(_scrollEventHandlers, xOffset, yOffset);
 		}

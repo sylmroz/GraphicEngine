@@ -33,7 +33,7 @@ void Application::exec()
 		window->registerMouse(mouse);
 
 		GraphicEngine::Common::PerspectiveParameters perspectiveParameters;
-		perspectiveParameters.aspectRatio = static_cast<float>(window->getHeight()) / static_cast<float>(window->getWidth());
+		perspectiveParameters.aspectRatio = static_cast<float>(window->getWidth()) / static_cast<float>(window->getHeight());
 		perspectiveParameters.fov = 45;
 		perspectiveParameters.zFar = 1000;
 		perspectiveParameters.zNear = 0.01;

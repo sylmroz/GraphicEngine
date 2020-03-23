@@ -81,17 +81,17 @@ void GraphicEngine::GLFW::WindowGLFW::registerMouse(std::shared_ptr<GraphicEngin
 	auto scrollFun = [](GLFWwindow* window, double xOffset, double yOffset)
 	{
 		auto app = reinterpret_cast<WindowGLFW*>(glfwGetWindowUserPointer(window));
-		app->_mouse->scrollnEventHandlerNotify(xOffset, yOffset);
+		app->_mouse->scrollEventHandlerNotify(xOffset, yOffset);
 	};
 
-	auto positionlFun = [](GLFWwindow* window, double xPos, double ypos)
+	auto positionFun = [](GLFWwindow* window, double xPos, double yPos)
 	{
 		auto app = reinterpret_cast<WindowGLFW*>(glfwGetWindowUserPointer(window));
-		app->_mouse->positionEventHandlerNotify(xPos, ypos);
+		app->_mouse->positionEventHandlerNotify(xPos, yPos);
 	};
 
 	glfwSetScrollCallback(_glfwWindow.get(), scrollFun);
-	glfwSetCursorPosCallback(_glfwWindow.get(), positionlFun);
+	glfwSetCursorPosCallback(_glfwWindow.get(), positionFun);
 }
 
 VkSurfaceKHR GraphicEngine::GLFW::WindowGLFW::getWindowSurface(vk::UniqueInstance& instance)

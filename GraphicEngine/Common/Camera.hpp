@@ -77,9 +77,9 @@ namespace GraphicEngine::Common
 		glm::mat4 _projectionMatrix = glm::mat4();
 		glm::mat4 _viewProjectionMatrix = glm::mat4();
 
-		glm::vec3 _position = glm::vec3(0.0, 0.0, 0.0);
-		glm::vec3 _direction = glm::vec3(0.0, 0.0, 1.0);
-		glm::vec3 _up = glm::vec3(0.0, 1.0, 0.0);
+		glm::vec3 _position = glm::vec3(2.0, 2.0, 2.0);
+		glm::vec3 _direction = glm::normalize(glm::vec3(-1.0, -1.0, -1.0));
+		glm::vec3 _up = glm::vec3(0.0, 0.0, 1.0);
 
 		glm::vec2 _yawPitch = glm::vec2(0.0, 0.0);
 		glm::vec2 _yawPitchOffset = glm::vec2(0.0, 0.0);
@@ -92,7 +92,7 @@ namespace GraphicEngine::Common
 		bool _shouldUpdateView{ false };
 		bool _shouldUpdateProjection{ false };
 		CameraType _cameraType = CameraType::Perspective;
-		float _speed{ 1.0f };
+		float _speed{ 0.5f };
 		float _sensitivity{ 1.0f };
 	};
 
@@ -115,7 +115,7 @@ namespace GraphicEngine::Common
 		std::shared_ptr<Camera> _camera;
 		float _dt{ 0.0f };
 		glm::vec2 _prevMousePosition;
-		GraphicEngine::Core::Inputs::MouseButton _rotateButton = GraphicEngine::Core::Inputs::MouseButton::buttonNone;
+		GraphicEngine::Core::Inputs::MouseButton _rotateButton = GraphicEngine::Core::Inputs::MouseButton::buttonLeft;
 	};
 }
 

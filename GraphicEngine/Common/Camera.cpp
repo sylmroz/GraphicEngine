@@ -6,10 +6,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
+#include <iostream>
 
 glm::mat4 GraphicEngine::Common::Camera::getViewProjectionMatrix()
 {
-	return getProjectionMatrix()*getViewMatrix();
+	return getProjectionMatrix() * getViewMatrix();
 }
 
 glm::mat4 GraphicEngine::Common::Camera::getViewMatrix()
@@ -82,14 +83,14 @@ GraphicEngine::Common::Camera::Camera()
 {
 }
 
-GraphicEngine::Common::Camera::Camera(PerspectiveParameters perspectiveParameters) :
-	_perspectiveParameters(perspectiveParameters), _cameraType(CameraType::Perspective)
+GraphicEngine::Common::Camera::Camera(PerspectiveParameters perspectiveParameters)
 {
+	setCameraPerspectiveProperties(perspectiveParameters);
 }
 
-GraphicEngine::Common::Camera::Camera(OrthogonalParameters orthogonalParameters):
-	_orthogonalParameters(orthogonalParameters), _cameraType(CameraType::Orthogonal)
+GraphicEngine::Common::Camera::Camera(OrthogonalParameters orthogonalParameters)
 {
+	setCameraOrthogonalProperties(orthogonalParameters);
 }
 
 void GraphicEngine::Common::Camera::rotate(const glm::vec2& offset)
@@ -112,8 +113,10 @@ void GraphicEngine::Common::Camera::rotate(const glm::vec2& offset)
 
 void GraphicEngine::Common::Camera::move(const glm::vec2& offset)
 {
-	_position = _position + (_direction * offset.x * _speed);
-	_position = _position + (glm::normalize(glm::cross(_direction, glm::vec3(0.0f, 1.0f, 0.0f)) * offset.x * _speed));
+	if (offset.x != 0)
+		_position = _position + (_direction * offset.x * _speed);
+	if (offset.y != 0)
+		_position = _position + (glm::normalize(glm::cross(_direction, glm::vec3(0.0f, 0.0f, 1.0f))) * offset.y * _speed);
 	_shouldUpdateView = true;
 }
 
@@ -129,13 +132,16 @@ glm::mat4 GraphicEngine::Common::Camera::calculateOrthogonal()
 
 void GraphicEngine::Common::Camera::updateViewMatrix()
 {
-	glm::vec3 up = glm::vec3(0.0, 1.0, 0.0);
+	glm::vec3 up = glm::vec3(0.0, 0.0, 1.0);
 	glm::vec3 right = glm::normalize(glm::cross(_direction, up));
 	glm::quat yawQuat = glm::angleAxis(glm::radians(_yawPitchOffset.x), up);
 	glm::quat pitchQuat = glm::angleAxis(glm::radians(_yawPitchOffset.y), right);
-	glm::quat rot = glm::normalize(glm::cross(yawQuat, pitchQuat));
-	_direction = glm::normalize(glm::rotate(rot, _direction));
-	_up = glm::normalize(glm::cross(right, _direction));
+	if (yawQuat != glm::quat(1.0, 0.0, 0.0, 0.0) && pitchQuat != glm::quat(1.0, 0.0, 0.0, 0.0))
+	{
+		glm::quat rot = glm::normalize(glm::cross(yawQuat, pitchQuat));
+		_direction = glm::normalize(glm::rotate(rot, _direction));
+		_up = glm::normalize(glm::cross(right, _direction));
+	}
 
 	_viewMatrix = glm::lookAt(_position, _position + _direction, _up);
 
@@ -172,10 +178,11 @@ void GraphicEngine::Common::CameraController::setInitialMousePosition(float x, f
 void GraphicEngine::Common::CameraController::rotate(float x, float y, const std::vector<GraphicEngine::Core::Inputs::MouseButton>& buttons)
 {
 	glm::vec2 newOffset = _prevMousePosition - glm::vec2(x, y);
+	std::cout << newOffset.x << " " << newOffset.y <<" "<< buttons.size()<< "\n";
 	if (_rotateButton == Core::Inputs::MouseButton::buttonNone || std::find(std::begin(buttons), std::end(buttons), _rotateButton) != std::end(buttons))
 	{
 		_camera->rotate(newOffset * _dt);
-		_prevMousePosition += newOffset;
+		_prevMousePosition = glm::vec2(x, y);
 	}
 }
 
@@ -195,9 +202,9 @@ void GraphicEngine::Common::CameraController::move(std::vector<GraphicEngine::Co
 		else if (key == KeyboardKey::KEY_S)
 			movementOffset.x -= _dt;
 		else if (key == KeyboardKey::KEY_A)
-			movementOffset.y -= _dt;
-		else if (key == KeyboardKey::KEY_D)
 			movementOffset.y += _dt;
+		else if (key == KeyboardKey::KEY_D)
+			movementOffset.y -= _dt;
 	}
 
 	_camera->move(movementOffset);
