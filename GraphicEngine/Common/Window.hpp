@@ -2,11 +2,12 @@
 #define GRAPHIC_ENGINE_WINDOW_HPP
 
 #include "../Core/Subject.hpp"
-#include "../Core/Input/Keyboard/Keyboard.hpp"
-#include "../Core/Input/Mouse/Mouse.hpp"
+#include "../Core/Input/Keyboard/KeyboardEventProxy.hpp"
+#include "../Core/Input/Mouse/MouseEventProxy.hpp"
 #include "../Common/Camera.hpp"
 
 #include <exception>
+#include <utility>
 
 namespace GraphicEngine
 {
@@ -42,16 +43,12 @@ namespace GraphicEngine
 
 		virtual std::pair<uint32_t, uint32_t> getFrameBufferSize() = 0;
 
-		virtual void registerKeyboard(std::shared_ptr<GraphicEngine::Core::Inputs::Keyboard> keyboard) { _keyboard = keyboard; };
-
-		virtual void registerMouse(std::shared_ptr<GraphicEngine::Core::Inputs::Mouse> mouse) { _mouse = mouse; };
-
 		virtual void addResizeCallbackListener(std::function<void(size_t, size_t)> resizeListener)
 		{
-			_resizeSubject.subscribe(resizeListener);
+			_resizeSubject.subscribe(std::move(resizeListener));
 		}
 
-		virtual bool windowShouldBeClosed() { return shouldClose; }
+		virtual bool windowShouldBeClosed() { return _shouldClose; }
 
 		size_t getWidth() { return _width; }
 		void setWidth(size_t width) { _width = width; }
@@ -65,10 +62,7 @@ namespace GraphicEngine
 		size_t _width{ 0 };
 		size_t _height{ 0 };
 
-		bool shouldClose{ false };
-
-		std::shared_ptr<GraphicEngine::Core::Inputs::Keyboard> _keyboard;
-		std::shared_ptr<GraphicEngine::Core::Inputs::Mouse> _mouse;
+		bool _shouldClose{ false };
 
 		GraphicEngine::Core::Subject<size_t,size_t> _resizeSubject;
 	};

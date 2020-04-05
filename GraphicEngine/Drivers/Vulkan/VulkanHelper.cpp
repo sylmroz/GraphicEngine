@@ -92,7 +92,6 @@ vk::UniqueInstance GraphicEngine::Vulkan::createUniqueInstance(std::string appNa
 #endif
 
 	std::vector<const char*> requiredLayers;
-
 	for (auto const& layer : validationLayers)
 	{
 		if (std::find_if(std::begin(layerProperties), std::end(layerProperties), [layer](auto layerProperty) { return layer == layerProperty.layerName; }) == std::end(layerProperties))
@@ -165,7 +164,7 @@ vk::PhysicalDevice GraphicEngine::Vulkan::getPhysicalDevice(const vk::UniqueInst
 		}
 	}
 
-	return vk::PhysicalDevice();
+	throw std::runtime_error("No physical devices!");
 }
 
 vk::UniqueDevice GraphicEngine::Vulkan::getUniqueLogicalDevice(const vk::PhysicalDevice& physicalDevice, vk::UniqueSurfaceKHR& surface)

@@ -1,5 +1,5 @@
-#ifndef GRAPHIC_ENGINE_COMMMON_CAMERA_HPP
-#define GRAPHIC_ENGINE_COMMMON_CAMERA_HPP
+#ifndef GRAPHIC_ENGINE_COMMON_CAMERA_HPP
+#define GRAPHIC_ENGINE_COMMON_CAMERA_HPP
 
 #include "../Core/Input/Keyboard/KeyboardEnumKeys.hpp"
 #include "../Core/Input/Mouse/MouseEnumButton.hpp"
@@ -89,8 +89,8 @@ namespace GraphicEngine::Common
 		OrthogonalParameters _orthogonalParameters;
 
 	private:
-		bool _shouldUpdateView{ false };
-		bool _shouldUpdateProjection{ false };
+		bool _shouldUpdateView{ true };
+		bool _shouldUpdateProjection{ true };
 		CameraType _cameraType = CameraType::Perspective;
 		float _speed{ 0.5f };
 		float _sensitivity{ 1.0f };
@@ -119,5 +119,5 @@ namespace GraphicEngine::Common
 	};
 }
 
-#endif // !GRAPHIC_ENGINE_COMMMON_CAMERA_HPP
+#endif // !GRAPHIC_ENGINE_COMMON_CAMERA_HPP
 

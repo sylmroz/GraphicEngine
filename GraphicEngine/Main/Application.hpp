@@ -5,6 +5,8 @@
 
 #include <string>
 
+#include "../Common/WindowKeyboardMouse.hpp"
+
 class Application
 {
 public:
@@ -13,13 +15,13 @@ public:
 	void exec();
 
 private:
-	std::shared_ptr<GraphicEngine::Window> windowFactory(const std::string& windowType);
+	std::shared_ptr < GraphicEngine::Common::WindowKeyboardMouse> windowFactory(const std::string& windowType);
 	std::shared_ptr<GraphicEngine::RenderingEngine> renderingEngineFactory(std::string type, std::shared_ptr<GraphicEngine::Window> window);
 
 private:
 	std::shared_ptr<GraphicEngine::Engine> engine;
-	std::shared_ptr<GraphicEngine::Core::Inputs::Keyboard> keyboard;
-	std::shared_ptr<GraphicEngine::Core::Inputs::Mouse> mouse;
+	std::shared_ptr<GraphicEngine::Core::Inputs::KeyboardEventProxy> keyboard;
+	std::shared_ptr<GraphicEngine::Core::Inputs::MouseEventProxy> mouse;
 	std::shared_ptr<GraphicEngine::Common::CameraController> cameraController;
 	std::shared_ptr<GraphicEngine::Common::Camera> camera;
 };

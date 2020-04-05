@@ -70,7 +70,7 @@ void GraphicEngine::Common::Camera::setFOV(float fov)
 void GraphicEngine::Common::Camera::setAspectRatio(float aspectRatio)
 {
 	_perspectiveParameters.aspectRatio = aspectRatio;
-	_shouldUpdateProjection = _shouldUpdateProjection;
+	_shouldUpdateProjection = true;
 }
 
 void GraphicEngine::Common::Camera::setCameraType(CameraType cameraType)
@@ -132,7 +132,7 @@ glm::mat4 GraphicEngine::Common::Camera::calculateOrthogonal()
 
 void GraphicEngine::Common::Camera::updateViewMatrix()
 {
-	glm::vec3 up = glm::vec3(0.0, 0.0, 1.0);
+	/*glm::vec3 up = glm::vec3(0.0, 0.0, 1.0);
 	glm::vec3 right = glm::normalize(glm::cross(_direction, up));
 	glm::quat yawQuat = glm::angleAxis(glm::radians(_yawPitchOffset.x), up);
 	glm::quat pitchQuat = glm::angleAxis(glm::radians(_yawPitchOffset.y), right);
@@ -141,7 +141,7 @@ void GraphicEngine::Common::Camera::updateViewMatrix()
 		glm::quat rot = glm::normalize(glm::cross(yawQuat, pitchQuat));
 		_direction = glm::normalize(glm::rotate(rot, _direction));
 		_up = glm::normalize(glm::cross(right, _direction));
-	}
+	}*/
 
 	_viewMatrix = glm::lookAt(_position, _position + _direction, _up);
 
@@ -202,9 +202,9 @@ void GraphicEngine::Common::CameraController::move(std::vector<GraphicEngine::Co
 		else if (key == KeyboardKey::KEY_S)
 			movementOffset.x -= _dt;
 		else if (key == KeyboardKey::KEY_A)
-			movementOffset.y += _dt;
-		else if (key == KeyboardKey::KEY_D)
 			movementOffset.y -= _dt;
+		else if (key == KeyboardKey::KEY_D)
+			movementOffset.y += _dt;
 	}
 
 	_camera->move(movementOffset);

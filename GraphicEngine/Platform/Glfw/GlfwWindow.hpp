@@ -9,6 +9,8 @@
 
 #include <memory>
 
+#include "../../Common/WindowKeyboardMouse.hpp"
+
 namespace GraphicEngine::GLFW
 {
 	enum class GLFWWindowProfile
@@ -18,8 +20,22 @@ namespace GraphicEngine::GLFW
 		None
 	};
 
-	class WindowGLFW : public GraphicEngine::Window
+	class GlfwWindow : public Common::WindowKeyboardMouse
 	{
+	public:
+		//From Keyboard interface
+		std::vector<Core::Inputs::KeyboardKey> getPressedKeys() override;
+
+		// From Mouse Interface
+		std::vector<Core::Inputs::MouseButton> getPressedButtons() override;
+
+		void setCursorPosition(const glm::vec2& pos) override;
+
+		glm::vec2 getCursorPosition() override;
+
+		glm::vec2 getScrollValue() override;
+
+	private:
 		struct WindowGLFWApi
 		{
 			virtual void init() = 0;
@@ -40,7 +56,7 @@ namespace GraphicEngine::GLFW
 
 	public:
 
-		virtual ~WindowGLFW();
+		virtual ~GlfwWindow();
 
 		void setGLFWWindowProfile(GLFWWindowProfile windowProfile) { _windowProfile = windowProfile; };
 
@@ -48,21 +64,16 @@ namespace GraphicEngine::GLFW
 		virtual void swapBuffer() override;
 		virtual void initialize() override;
 
-		virtual void poolEvents();
+		virtual void poolEvents() override;
 
 		virtual std::vector<std::string> getRequiredExtensions() override;
-
-		virtual bool windowShouldBeClosed() override;
-
-		virtual void registerMouse(std::shared_ptr<GraphicEngine::Core::Inputs::Mouse> mouse) override;
-
 		VkSurfaceKHR getWindowSurface(vk::UniqueInstance& instance);
+		
+		virtual bool windowShouldBeClosed() override;
 
 		virtual std::pair<uint32_t, uint32_t> getFrameBufferSize() override;
 
-	private:
-		void grabAllKeys();
-		void grabAllPressedMouseButtons();
+		std::shared_ptr<GLFWwindow> getGlfwWindow();
 
 	private:
 		std::shared_ptr<GLFWwindow> _glfwWindow;

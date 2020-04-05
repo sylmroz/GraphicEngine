@@ -5,8 +5,8 @@
 #include "../Common/Window.hpp"
 #include "../Common/RenderingEngine.hpp"
 #include "../Core/Timer.hpp"
-#include "../Core/Input/Keyboard/Keyboard.hpp"
-#include "../Core/Input/Mouse/Mouse.hpp"
+#include "../Core/Input/Keyboard/KeyboardEventProxy.hpp"
+#include "../Core/Input/Mouse/MouseEventProxy.hpp"
 
 #include <memory>
 
@@ -18,8 +18,8 @@ namespace GraphicEngine
 
 		Engine(std::shared_ptr<Window> window,
 			std::shared_ptr<RenderingEngine> renderingEngine,
-			std::shared_ptr<Core::Inputs::Keyboard> keyboard,
-			std::shared_ptr<Core::Inputs::Mouse> mouse,
+			std::shared_ptr<Core::Inputs::KeyboardEventProxy> keyboard,
+			std::shared_ptr<Core::Inputs::MouseEventProxy> mouse,
 			std::shared_ptr<Common::CameraController> cameraController);
 
 		void setWindow(std::shared_ptr<Window> window) { _window = window; };
@@ -30,8 +30,8 @@ namespace GraphicEngine
 	private:
 		std::shared_ptr<Window> _window;
 		std::shared_ptr<RenderingEngine> _renderingEngine;
-		std::shared_ptr<Core::Inputs::Keyboard> _keyboard;
-		std::shared_ptr<Core::Inputs::Mouse> _mouse;
+		std::shared_ptr<Core::Inputs::KeyboardEventProxy> _keyboard;
+		std::shared_ptr<Core::Inputs::MouseEventProxy> _mouse;
 		std::shared_ptr<Common::CameraController> _cameraController;
 
 		bool shutdown = false;

@@ -9,7 +9,7 @@
 
 namespace GraphicEngine::Core::Inputs
 {
-	class Keyboard: public Subject<std::vector<KeyboardKey>>
+	class KeyboardEventProxy: public Subject<std::vector<KeyboardKey>>
 	{
 	};
 }

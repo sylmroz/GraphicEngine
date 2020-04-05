@@ -1,5 +1,5 @@
 #include "VulkanRenderingEngine.hpp"
-#include "../../Platform/Glew/WindowGLFW.hpp"
+#include "../../Platform/Glfw/GlfwWindow.hpp"
 
 #include "../../Core/IO/FileReader.hpp"
 
@@ -70,7 +70,7 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 	{
 		_instance = createUniqueInstance("Graphic Engine", "Vulkan Base", validationLayers, _window->getRequiredExtensions(), VK_API_VERSION_1_0);
 		{
-			auto surface = std::dynamic_pointer_cast<GraphicEngine::GLFW::WindowGLFW>(_window)->getWindowSurface(_instance);
+			auto surface = std::dynamic_pointer_cast<GraphicEngine::GLFW::GlfwWindow>(_window)->getWindowSurface(_instance);
 			vk::ObjectDestroy<vk::Instance, VULKAN_HPP_DEFAULT_DISPATCHER_TYPE> _deleter(_instance.get());
 			_surface = vk::UniqueSurfaceKHR(surface, _deleter);
 		}
@@ -131,6 +131,12 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 	{
 		throw std::runtime_error(err.what());
 	}
+
+	catch (std::runtime_error& err)
+	{
+		throw std::runtime_error(err.what());
+	}
+
 	catch (...)
 	{
 		throw std::runtime_error("Vulkan Initialize: unknown error\n");
