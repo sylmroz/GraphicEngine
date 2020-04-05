@@ -6,6 +6,7 @@
 #include <string>
 
 #include "../Common/WindowKeyboardMouse.hpp"
+#include "../Core/EventManager.hpp"
 
 class Application
 {
@@ -24,6 +25,7 @@ private:
 	std::shared_ptr<GraphicEngine::Core::Inputs::MouseEventProxy> mouse;
 	std::shared_ptr<GraphicEngine::Common::CameraController> cameraController;
 	std::shared_ptr<GraphicEngine::Common::Camera> camera;
+	std::shared_ptr<GraphicEngine::Core::EventManager> eventManager;
 };
 
 #endif // !APPLICATION_HPP

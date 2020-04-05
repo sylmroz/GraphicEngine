@@ -26,13 +26,12 @@ void Application::exec()
 	{
 		keyboard = std::shared_ptr<KeyboardEventProxy>(new KeyboardEventProxy);
 		mouse = std::shared_ptr<MouseEventProxy>(new MouseEventProxy);
+		eventManager = std::shared_ptr<GraphicEngine::Core::EventManager>(new GraphicEngine::Core::EventManager);
 
 		auto window = windowFactory("glfw");
 		auto renderingEngine = renderingEngineFactory("vulkan", window);
 		
 		window->init(640, 480);
-		//window->registerKeyboard(keyboard);
-		//window->registerMouse(mouse);
 
 		GraphicEngine::Common::PerspectiveParameters perspectiveParameters;
 		perspectiveParameters.aspectRatio = static_cast<float>(window->getWidth()) / static_cast<float>(window->getHeight());
@@ -42,8 +41,7 @@ void Application::exec()
 		camera = std::make_shared<GraphicEngine::Common::Camera>(perspectiveParameters);
 		
 		cameraController = std::shared_ptr<GraphicEngine::Common::CameraController>(new GraphicEngine::Common::CameraController(camera));
-		keyboard->subscribe([&](std::vector<GraphicEngine::Core::Inputs::KeyboardKey> keys) { cameraController->move(std::move(keys)); });
-		//mouse->subscribePositionEventHandler([&](float x, float y) { cameraController->rotate(x, y, {}); });
+		
 		cameraController->setInitialMousePosition(window->getWidth() / 2, window->getHeight() / 2);
 
 		
