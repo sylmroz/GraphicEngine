@@ -7,8 +7,9 @@
 
 #undef max
 
-GraphicEngine::Vulkan::VulkanRenderingEngine::VulkanRenderingEngine(std::shared_ptr<Window> window, std::shared_ptr<Common::Camera> camera) :
-	RenderingEngine(std::move(window), std::move(camera))
+GraphicEngine::Vulkan::VulkanRenderingEngine::VulkanRenderingEngine(std::shared_ptr<Common::WindowKeyboardMouse> window,
+	std::shared_ptr<Common::Camera> camera, std::shared_ptr<Core::EventManager> eventManager) :
+	RenderingEngine(std::move(window), std::move(camera), std::move(eventManager))
 {
 }
 

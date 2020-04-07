@@ -3,16 +3,19 @@
 
 #include <utility>
 
-GraphicEngine::Engine::Engine(std::shared_ptr<Window> window,
+GraphicEngine::Engine::Engine(std::shared_ptr<Common::WindowKeyboardMouse> window,
 	std::shared_ptr<RenderingEngine> renderingEngine,
 	std::shared_ptr<Core::Inputs::KeyboardEventProxy> keyboard,
 	std::shared_ptr<Core::Inputs::MouseEventProxy> mouse,
-	std::shared_ptr<Common::CameraController> cameraController):
+	std::shared_ptr<Common::CameraController> cameraController,
+	std::shared_ptr<Core::EventManager> eventManager):
 	_window(std::move(window)),
 	_renderingEngine(std::move(renderingEngine)),
 	_keyboard(std::move(keyboard)),
 	_mouse(std::move(mouse)),
-	_cameraController(std::move(cameraController))
+	_cameraController(std::move(cameraController)),
+	_eventManager(std::move(eventManager))
+
 {
 	_keyboard->subscribe([&](std::vector<Core::Inputs::KeyboardKey> keys)
 		{
@@ -34,6 +37,7 @@ void GraphicEngine::Engine::run()
 		timer.updateTime();
 		_cameraController->setDt(timer.getInterval());
 		_window->poolEvents();
+		_eventManager->call();
 	}
 	_renderingEngine->cleanup();
 }

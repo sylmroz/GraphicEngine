@@ -26,11 +26,10 @@ void Application::exec()
 	{
 		keyboard = std::shared_ptr<KeyboardEventProxy>(new KeyboardEventProxy);
 		mouse = std::shared_ptr<MouseEventProxy>(new MouseEventProxy);
-		eventManager = std::shared_ptr<GraphicEngine::Core::EventManager>(new GraphicEngine::Core::EventManager);
-
+		
 		auto window = windowFactory("glfw");
 		auto renderingEngine = renderingEngineFactory("vulkan", window);
-		
+
 		window->init(640, 480);
 
 		GraphicEngine::Common::PerspectiveParameters perspectiveParameters;
@@ -39,17 +38,31 @@ void Application::exec()
 		perspectiveParameters.zFar = 1000;
 		perspectiveParameters.zNear = 0.01;
 		camera = std::make_shared<GraphicEngine::Common::Camera>(perspectiveParameters);
-		
-		cameraController = std::shared_ptr<GraphicEngine::Common::CameraController>(new GraphicEngine::Common::CameraController(camera));
-		
-		cameraController->setInitialMousePosition(window->getWidth() / 2, window->getHeight() / 2);
 
-		
+		cameraController = std::shared_ptr<GraphicEngine::Common::CameraController>(new GraphicEngine::Common::CameraController(camera));
+		cameraController->setInitialMousePosition(glm::vec2(window->getWidth() / 2, window->getHeight() / 2));
+
+		eventManager = std::shared_ptr<GraphicEngine::Core::EventManager>(new GraphicEngine::Core::EventManager);
+
+		eventManager->addSubject([&]()
+			{
+				cameraController->updateCamera(
+					window->getCursorPosition(),
+					window->getScrollValue(),
+					window->getPressedButtons(),
+					window->getPressedKeys());
+			});
+		eventManager->addSubject([&](glm::vec2 pos)
+			{
+				window->setCursorPosition(pos);
+			}, glm::vec2(window->getWidth() / 2, window->getHeight() / 2));
+
+
 		renderingEngine->init(window->getWidth(), window->getHeight());
 		window->addResizeCallbackListener([&](size_t width, size_t height) {renderingEngine->resizeFrameBuffer(width, height); });
 		renderingEngine->setCamera(camera);
-		engine = std::shared_ptr<GraphicEngine::Engine>(new GraphicEngine::Engine(window, renderingEngine, keyboard, mouse, cameraController));
-
+		//engine = std::shared_ptr<GraphicEngine::Engine>(new GraphicEngine::Engine(window, renderingEngine, keyboard, mouse, cameraController, eventManager));
+		engine = std::shared_ptr<GraphicEngine::Engine>(new GraphicEngine::Engine(window, renderingEngine, keyboard, mouse, cameraController, eventManager));
 		engine->run();
 	}
 
@@ -67,12 +80,12 @@ std::shared_ptr<GraphicEngine::Common::WindowKeyboardMouse> Application::windowF
 	throw std::exception("Window type not supported!");
 }
 
-std::shared_ptr<GraphicEngine::RenderingEngine> Application::renderingEngineFactory(std::string type, std::shared_ptr<GraphicEngine::Window> window)
+std::shared_ptr<GraphicEngine::RenderingEngine> Application::renderingEngineFactory(std::string type, std::shared_ptr<GraphicEngine::Common::WindowKeyboardMouse>& window)
 {
 	std::shared_ptr<GraphicEngine::RenderingEngine> renderingEngine;
 	if (type == "vulkan")
 	{
-		renderingEngine = std::shared_ptr<GraphicEngine::RenderingEngine>(new GraphicEngine::Vulkan::VulkanRenderingEngine(window, camera));
+		renderingEngine = std::shared_ptr<GraphicEngine::RenderingEngine>(new GraphicEngine::Vulkan::VulkanRenderingEngine(window, camera, eventManager));
 		auto glfwWindow = std::dynamic_pointer_cast<GraphicEngine::GLFW::GlfwWindow>(window);
 		if (glfwWindow != nullptr)
 		{
@@ -83,7 +96,7 @@ std::shared_ptr<GraphicEngine::RenderingEngine> Application::renderingEngineFact
 
 	else if (type == "opengl")
 	{
-		renderingEngine = std::shared_ptr<GraphicEngine::RenderingEngine>(new GraphicEngine::OpenGL::OpenGLRenderingEngine(window, camera));
+		renderingEngine = std::shared_ptr<GraphicEngine::RenderingEngine>(new GraphicEngine::OpenGL::OpenGLRenderingEngine(window, camera, eventManager));
 		auto glfwWindow = std::dynamic_pointer_cast<GraphicEngine::GLFW::GlfwWindow>(window);
 		if (glfwWindow != nullptr)
 		{

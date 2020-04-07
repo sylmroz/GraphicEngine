@@ -2,6 +2,7 @@
 #define GRAPHIC_ENGINE_VULKAN_RENDERING_ENGINE_HPP
 
 #include "../../Common/RenderingEngine.hpp"
+#include "../../Common/WindowKeyboardMouse.hpp"
 #include "VulkanShader.hpp"
 #include "VulkanHelper.hpp"
 
@@ -10,7 +11,7 @@ namespace GraphicEngine::Vulkan
 	class VulkanRenderingEngine : public GraphicEngine::RenderingEngine
 	{
 	public:
-		VulkanRenderingEngine(std::shared_ptr<Window> window, std::shared_ptr<Common::Camera> camera);
+		VulkanRenderingEngine(std::shared_ptr<Common::WindowKeyboardMouse> window, std::shared_ptr<Common::Camera> camera, std::shared_ptr<Core::EventManager> eventManager);
 		virtual bool drawFrame() override;
 		virtual void init(size_t width, size_t height) override;
 		virtual void resizeFrameBuffer(size_t width, size_t height) override;

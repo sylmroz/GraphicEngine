@@ -2,8 +2,10 @@
 
 #include "../../Core/IO/FileReader.hpp"
 
-GraphicEngine::OpenGL::OpenGLRenderingEngine::OpenGLRenderingEngine(std::shared_ptr<Window> window, std::shared_ptr<Common::Camera> camera):
-	RenderingEngine(window, camera)
+GraphicEngine::OpenGL::OpenGLRenderingEngine::OpenGLRenderingEngine(std::shared_ptr<Common::WindowKeyboardMouse> window,
+	std::shared_ptr<Common::Camera> camera,
+	std::shared_ptr<Core::EventManager> eventManager):
+	RenderingEngine(window, camera, eventManager)
 {
 }
 

@@ -170,19 +170,32 @@ void GraphicEngine::Common::CameraController::setDt(float dt)
 	_dt = dt;
 }
 
-void GraphicEngine::Common::CameraController::setInitialMousePosition(float x, float y)
+void GraphicEngine::Common::CameraController::setInitialMousePosition(glm::vec2 pos)
 {
-	_prevMousePosition = glm::vec2(x, y);
+	_prevMousePosition = pos;
 }
 
-void GraphicEngine::Common::CameraController::rotate(float x, float y, const std::vector<GraphicEngine::Core::Inputs::MouseButton>& buttons)
+void GraphicEngine::Common::CameraController::updateCamera(glm::vec2 cursorPosition, glm::vec2 scrollPosition, const std::vector<Core::Inputs::MouseButton>& buttons, std::vector<Core::Inputs::KeyboardKey> keys)
 {
-	glm::vec2 newOffset = _prevMousePosition - glm::vec2(x, y);
+	move(keys);
+	zoom(scrollPosition.x);
+	rotate(cursorPosition, buttons);
+}
+
+bool GraphicEngine::Common::CameraController::isCameraActivated()
+{
+	// TODO
+	return true;
+}
+
+void GraphicEngine::Common::CameraController::rotate(glm::vec2 pos, const std::vector<GraphicEngine::Core::Inputs::MouseButton>& buttons)
+{
+	glm::vec2 newOffset = _prevMousePosition - pos;
 	std::cout << newOffset.x << " " << newOffset.y <<" "<< buttons.size()<< "\n";
 	if (_rotateButton == Core::Inputs::MouseButton::buttonNone || std::find(std::begin(buttons), std::end(buttons), _rotateButton) != std::end(buttons))
 	{
 		_camera->rotate(newOffset * _dt);
-		_prevMousePosition = glm::vec2(x, y);
+		_prevMousePosition = pos;
 	}
 }
 
@@ -208,4 +221,8 @@ void GraphicEngine::Common::CameraController::move(std::vector<GraphicEngine::Co
 	}
 
 	_camera->move(movementOffset);
+}
+
+void GraphicEngine::Common::CameraController::zoom(double offset)
+{
 }

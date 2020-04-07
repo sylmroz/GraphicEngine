@@ -17,7 +17,7 @@ public:
 
 private:
 	std::shared_ptr < GraphicEngine::Common::WindowKeyboardMouse> windowFactory(const std::string& windowType);
-	std::shared_ptr<GraphicEngine::RenderingEngine> renderingEngineFactory(std::string type, std::shared_ptr<GraphicEngine::Window> window);
+	std::shared_ptr<GraphicEngine::RenderingEngine> renderingEngineFactory(std::string type, std::shared_ptr<GraphicEngine::Common::WindowKeyboardMouse>& window);
 
 private:
 	std::shared_ptr<GraphicEngine::Engine> engine;

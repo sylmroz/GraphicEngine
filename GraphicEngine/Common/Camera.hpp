@@ -105,17 +105,25 @@ namespace GraphicEngine::Common
 
 		void setDt(float dt);
 
-		void setInitialMousePosition(float x, float y);
+		void setInitialMousePosition(glm::vec2 pos);
 
-		void rotate(float x, float y, const std::vector<GraphicEngine::Core::Inputs::MouseButton>& buttons);
+		bool isCameraActivated();
+
+		void updateCamera(glm::vec2 cursorPosition, glm::vec2 scrollPosition,
+			const std::vector<Core::Inputs::MouseButton>& buttons,
+			std::vector<Core::Inputs::KeyboardKey> keys);
+
+		void rotate(glm::vec2 pos, const std::vector<GraphicEngine::Core::Inputs::MouseButton>& buttons);
 
 		void move(std::vector<GraphicEngine::Core::Inputs::KeyboardKey> keys);
+
+		void zoom(double offset);
 
 	private:
 		std::shared_ptr<Camera> _camera;
 		float _dt{ 0.0f };
 		glm::vec2 _prevMousePosition;
-		GraphicEngine::Core::Inputs::MouseButton _rotateButton = GraphicEngine::Core::Inputs::MouseButton::buttonLeft;
+		GraphicEngine::Core::Inputs::MouseButton _rotateButton = GraphicEngine::Core::Inputs::MouseButton::buttonNone;
 	};
 }
 
