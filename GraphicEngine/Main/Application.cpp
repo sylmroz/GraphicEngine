@@ -56,6 +56,10 @@ void Application::exec()
 			{
 				window->setCursorPosition(pos);
 			}, glm::vec2(window->getWidth() / 2, window->getHeight() / 2));
+		eventManager->addSubject([&]()
+			{
+				keyboard->notify(window->getPressedKeys());
+			});
 
 
 		renderingEngine->init(window->getWidth(), window->getHeight());

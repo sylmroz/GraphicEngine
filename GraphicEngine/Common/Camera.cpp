@@ -107,7 +107,6 @@ void GraphicEngine::Common::Camera::rotate(const glm::vec2& offset)
 		_yawPitch.y = oldPitch;
 		_yawPitchOffset.y = 0.0f;
 	}
-
 	_shouldUpdateView = true;
 }
 
@@ -132,7 +131,7 @@ glm::mat4 GraphicEngine::Common::Camera::calculateOrthogonal()
 
 void GraphicEngine::Common::Camera::updateViewMatrix()
 {
-	/*glm::vec3 up = glm::vec3(0.0, 0.0, 1.0);
+	glm::vec3 up = glm::vec3(0.0, 0.0, 1.0);
 	glm::vec3 right = glm::normalize(glm::cross(_direction, up));
 	glm::quat yawQuat = glm::angleAxis(glm::radians(_yawPitchOffset.x), up);
 	glm::quat pitchQuat = glm::angleAxis(glm::radians(_yawPitchOffset.y), right);
@@ -141,7 +140,7 @@ void GraphicEngine::Common::Camera::updateViewMatrix()
 		glm::quat rot = glm::normalize(glm::cross(yawQuat, pitchQuat));
 		_direction = glm::normalize(glm::rotate(rot, _direction));
 		_up = glm::normalize(glm::cross(right, _direction));
-	}*/
+	}
 
 	_viewMatrix = glm::lookAt(_position, _position + _direction, _up);
 
@@ -191,11 +190,9 @@ bool GraphicEngine::Common::CameraController::isCameraActivated()
 void GraphicEngine::Common::CameraController::rotate(glm::vec2 pos, const std::vector<GraphicEngine::Core::Inputs::MouseButton>& buttons)
 {
 	glm::vec2 newOffset = _prevMousePosition - pos;
-	std::cout << newOffset.x << " " << newOffset.y <<" "<< buttons.size()<< "\n";
 	if (_rotateButton == Core::Inputs::MouseButton::buttonNone || std::find(std::begin(buttons), std::end(buttons), _rotateButton) != std::end(buttons))
 	{
 		_camera->rotate(newOffset * _dt);
-		_prevMousePosition = pos;
 	}
 }
 
