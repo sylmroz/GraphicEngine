@@ -5,13 +5,14 @@
 #include "../../Common/WindowKeyboardMouse.hpp"
 #include "VulkanShader.hpp"
 #include "VulkanHelper.hpp"
+#include "VulkanWindowContext.hpp"
 
 namespace GraphicEngine::Vulkan
 {
-	class VulkanRenderingEngine : public GraphicEngine::RenderingEngine
+	class VulkanRenderingEngine : public RenderingEngine
 	{
 	public:
-		VulkanRenderingEngine(std::shared_ptr<Common::WindowKeyboardMouse> window, std::shared_ptr<Common::Camera> camera, std::shared_ptr<Core::EventManager> eventManager);
+		VulkanRenderingEngine(std::shared_ptr<VulkanWindowContext> vulkanWindowContext, std::shared_ptr<Common::Camera> camera, std::shared_ptr<Core::EventManager> eventManager);
 		virtual bool drawFrame() override;
 		virtual void init(size_t width, size_t height) override;
 		virtual void resizeFrameBuffer(size_t width, size_t height) override;
@@ -55,6 +56,8 @@ namespace GraphicEngine::Vulkan
 		uint32_t currentFrameIndex{ 0 };
 		QueueFamilyIndices indices;
 		bool frameBufferResized{ false };
+
+		std::shared_ptr<VulkanWindowContext> _vulkanWindowContext;
 
 	private:
 		const std::vector<std::string> validationLayers = {

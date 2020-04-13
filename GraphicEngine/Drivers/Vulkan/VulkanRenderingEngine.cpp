@@ -7,9 +7,10 @@
 
 #undef max
 
-GraphicEngine::Vulkan::VulkanRenderingEngine::VulkanRenderingEngine(std::shared_ptr<Common::WindowKeyboardMouse> window,
+GraphicEngine::Vulkan::VulkanRenderingEngine::VulkanRenderingEngine(std::shared_ptr<VulkanWindowContext> vulkanWindowContext,
 	std::shared_ptr<Common::Camera> camera, std::shared_ptr<Core::EventManager> eventManager) :
-	RenderingEngine(std::move(window), std::move(camera), std::move(eventManager))
+	_vulkanWindowContext(vulkanWindowContext),
+	RenderingEngine(std::move(camera), std::move(eventManager))
 {
 }
 
@@ -69,9 +70,9 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 {
 	try
 	{
-		_instance = createUniqueInstance("Graphic Engine", "Vulkan Base", validationLayers, _window->getRequiredExtensions(), VK_API_VERSION_1_0);
+		_instance = createUniqueInstance("Graphic Engine", "Vulkan Base", validationLayers, _vulkanWindowContext->getRequiredExtensions(), VK_API_VERSION_1_0);
 		{
-			auto surface = std::dynamic_pointer_cast<GraphicEngine::GLFW::GlfwWindow>(_window)->getWindowSurface(_instance);
+			auto surface = _vulkanWindowContext->createSurface(_instance);
 			vk::ObjectDestroy<vk::Instance, VULKAN_HPP_DEFAULT_DISPATCHER_TYPE> _deleter(_instance.get());
 			_surface = vk::UniqueSurfaceKHR(surface, _deleter);
 		}
@@ -79,8 +80,7 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 		_device = getUniqueLogicalDevice(_physicalDevice, _surface);
 		indices = findGraphicAndPresentQueueFamilyIndices(_physicalDevice, _surface);
 
-		auto [w, h] = _window->getFrameBufferSize();
-		vk::Extent2D frameBufferSize(w, h);
+		vk::Extent2D frameBufferSize(width, height);
 		_swapChainData = SwapChainData(_physicalDevice, _device, _surface, indices, frameBufferSize, vk::UniqueSwapchainKHR(), vk::ImageUsageFlagBits::eColorAttachment);
 
 		maxFrames = _swapChainData.images.size();

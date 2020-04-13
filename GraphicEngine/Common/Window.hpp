@@ -39,8 +39,6 @@ namespace GraphicEngine
 
 		virtual void poolEvents() = 0;
 
-		virtual std::vector<std::string> getRequiredExtensions() = 0;
-
 		virtual std::pair<uint32_t, uint32_t> getFrameBufferSize() = 0;
 
 		virtual void addResizeCallbackListener(std::function<void(size_t, size_t)> resizeListener)
@@ -56,8 +54,8 @@ namespace GraphicEngine
 		size_t getHeight() { return _height; }
 		void setHeight(size_t height) { _height = height; }
 
-	protected:
 		virtual void initialize() = 0;
+
 	protected:
 		size_t _width{ 0 };
 		size_t _height{ 0 };

@@ -117,27 +117,9 @@ void GraphicEngine::GLFW::GlfwWindow::poolEvents()
 	glfwPollEvents();
 }
 
-std::vector<std::string> GraphicEngine::GLFW::GlfwWindow::getRequiredExtensions()
-{
-	uint32_t glfwExtensionCount = 0;
-	const char** glfwExtensions;
-	glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
-
-	std::vector<std::string> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
-
-	return extensions;
-}
-
 bool GraphicEngine::GLFW::GlfwWindow::windowShouldBeClosed()
 {
 	return glfwWindowShouldClose(_glfwWindow.get());
-}
-
-VkSurfaceKHR GraphicEngine::GLFW::GlfwWindow::getWindowSurface(vk::UniqueInstance& instance)
-{
-	VkSurfaceKHR _surface;
-	glfwCreateWindowSurface(instance.get(), _glfwWindow.get(), nullptr, &_surface);
-	return _surface;
 }
 
 std::pair<uint32_t, uint32_t> GraphicEngine::GLFW::GlfwWindow::getFrameBufferSize()

@@ -1,5 +1,6 @@
 #ifndef GRAPHIC_ENGINE_COMMON_WINDOW_KEYBOARD_MOUSE_HPP
 #define GRAPHIC_ENGINE_COMMON_WINDOW_KEYBOARD_MOUSE_HPP
+
 #include "Keyboard.hpp"
 #include "Mouse.hpp"
 #include "Window.hpp"

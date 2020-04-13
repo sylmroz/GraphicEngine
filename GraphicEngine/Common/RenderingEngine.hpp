@@ -11,10 +11,8 @@ namespace GraphicEngine
 	class RenderingEngine
 	{
 	public:
-		RenderingEngine(std::shared_ptr<Common::WindowKeyboardMouse> window,
-			std::shared_ptr<Common::Camera> camera,
+		RenderingEngine(std::shared_ptr<Common::Camera> camera,
 			std::shared_ptr<Core::EventManager> eventManager) :
-			_window(window),
 			_camera(camera),
 			_eventManager(eventManager)
 		{}
@@ -26,8 +24,6 @@ namespace GraphicEngine
 
 		void setCamera(std::shared_ptr<Common::Camera> camera) { _camera = camera; }
 	protected:
-		std::shared_ptr<Common::WindowKeyboardMouse> _window;
-
 		std::shared_ptr<Common::Camera> _camera;
 
 		std::shared_ptr<Core::EventManager> _eventManager;

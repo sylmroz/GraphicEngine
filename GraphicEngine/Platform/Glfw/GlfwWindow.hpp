@@ -3,9 +3,7 @@
 
 #include "../../Common/Window.hpp"
 
-#define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
-#include <vulkan/vulkan.hpp>
 
 #include <memory>
 
@@ -65,9 +63,6 @@ namespace GraphicEngine::GLFW
 		virtual void initialize() override;
 
 		virtual void poolEvents() override;
-
-		virtual std::vector<std::string> getRequiredExtensions() override;
-		VkSurfaceKHR getWindowSurface(vk::UniqueInstance& instance);
 		
 		virtual bool windowShouldBeClosed() override;
 
@@ -75,7 +70,7 @@ namespace GraphicEngine::GLFW
 
 		std::shared_ptr<GLFWwindow> getGlfwWindow();
 
-	private:
+	protected:
 		std::shared_ptr<GLFWwindow> _glfwWindow;
 		GLFWWindowProfile _windowProfile = GLFWWindowProfile::None;
 

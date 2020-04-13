@@ -7,6 +7,10 @@
 
 #include "../Common/WindowKeyboardMouse.hpp"
 #include "../Core/EventManager.hpp"
+#include "../Drivers/OpenGL/OpenGLRenderingEngine.hpp"
+#include "../Drivers/Vulkan/VulkanRenderingEngine.hpp"
+#include "../Platform/Glfw/OpenGL/GlfwOpenGLWindow.hpp"
+#include "../Platform/Glfw/Vulkan/GlfwVulkanWindow.hpp"
 
 class Application
 {
@@ -14,10 +18,6 @@ public:
 	Application(int argc, char** argv);
 
 	void exec();
-
-private:
-	std::shared_ptr < GraphicEngine::Common::WindowKeyboardMouse> windowFactory(const std::string& windowType);
-	std::shared_ptr<GraphicEngine::RenderingEngine> renderingEngineFactory(std::string type, std::shared_ptr<GraphicEngine::Common::WindowKeyboardMouse>& window);
 
 private:
 	std::shared_ptr<GraphicEngine::Engine> engine;
