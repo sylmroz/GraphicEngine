@@ -27,7 +27,7 @@ glm::mat4 GraphicEngine::Common::Camera::getProjectionMatrix()
 	return _projectionMatrix;
 }
 
-void GraphicEngine::Common::Camera::setCameraPerspectiveProperties(PerspectiveParameters perspectiveParameters)
+void GraphicEngine::Common::Camera::setCameraPerspectiveProperties(PerspectiveParameters_s perspectiveParameters)
 {
 	_perspectiveParameters = perspectiveParameters;
 	_cameraType = CameraType::Perspective;
@@ -81,9 +81,11 @@ void GraphicEngine::Common::Camera::setCameraType(CameraType cameraType)
 
 GraphicEngine::Common::Camera::Camera()
 {
+	PerspectiveParameters_s perspectiveParameters;
+	setCameraPerspectiveProperties(perspectiveParameters);
 }
 
-GraphicEngine::Common::Camera::Camera(PerspectiveParameters perspectiveParameters)
+GraphicEngine::Common::Camera::Camera(PerspectiveParameters_s perspectiveParameters)
 {
 	setCameraPerspectiveProperties(perspectiveParameters);
 }

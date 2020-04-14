@@ -25,13 +25,13 @@ namespace GraphicEngine
 			std::shared_ptr<Common::CameraController> cameraController,
 			std::shared_ptr<Core::EventManager> eventManager);
 
-		void setWindow(std::shared_ptr<Window> window) { _window = window; };
-		void setRenderingEngine(std::shared_ptr<RenderingEngine> renderingEngine) { _renderingEngine = renderingEngine; };
-
+		//void setWindow(std::shared_ptr<Window> window) { _window = window; };
+		//void setRenderingEngine(std::shared_ptr<RenderingEngine> renderingEngine) { _renderingEngine = renderingEngine; };
+		void initialize();
 		void run();
 	protected:
 	private:
-		std::shared_ptr<Window> _window;
+		std::shared_ptr<Common::WindowKeyboardMouse> _window;
 		std::shared_ptr<RenderingEngine> _renderingEngine;
 		std::shared_ptr<Core::Inputs::KeyboardEventProxy> _keyboard;
 		std::shared_ptr<Core::Inputs::MouseEventProxy> _mouse;

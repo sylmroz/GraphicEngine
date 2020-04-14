@@ -56,7 +56,7 @@ namespace GraphicEngine::Core
 		}
 
 		template <typename Subject>
-		void addSubject(Subject&& subject)
+		void addSubject(Subject& subject)
 		{
 			_notifiers.emplace_back(std::shared_ptr<NotifierBase>(new Notifier(
 				[&]

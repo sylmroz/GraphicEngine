@@ -8,6 +8,12 @@
 
 #include <glm/glm.hpp>
 
+#include <boost/di.hpp>
+
+namespace di = boost::di;
+
+inline auto PerspectiveParameters = []() {};
+
 namespace GraphicEngine::Common
 {
 	enum class CameraType
@@ -16,7 +22,7 @@ namespace GraphicEngine::Common
 		Orthogonal
 	};
 
-	struct PerspectiveParameters
+	struct PerspectiveParameters_s
 	{
 		float fov{ 45.0f };
 		float aspectRatio{ 1920.0f / 1080.0f }; // Typical full hd resolution
@@ -38,7 +44,7 @@ namespace GraphicEngine::Common
 	public:
 
 		Camera();
-		Camera(PerspectiveParameters perspectiveParameters);
+		BOOST_DI_INJECT(Camera, (named = PerspectiveParameters) PerspectiveParameters_s perspectiveParameters);
 		Camera(OrthogonalParameters ororthogonalParameter);
 
 		void rotate(const glm::vec2& offset);
@@ -48,7 +54,7 @@ namespace GraphicEngine::Common
 		glm::mat4 getViewMatrix();
 		glm::mat4 getProjectionMatrix();
 
-		void setCameraPerspectiveProperties(PerspectiveParameters perspectiveParameters);
+		void setCameraPerspectiveProperties(PerspectiveParameters_s perspectiveParameters);
 		void setCameraOrthogonalProperties(OrthogonalParameters orthogonalParameters);
 
 		void setSpeed(float speed);
@@ -84,7 +90,7 @@ namespace GraphicEngine::Common
 		glm::vec2 _yawPitch = glm::vec2(0.0, 0.0);
 		glm::vec2 _yawPitchOffset = glm::vec2(0.0, 0.0);
 
-		PerspectiveParameters _perspectiveParameters;
+		PerspectiveParameters_s _perspectiveParameters;
 
 		OrthogonalParameters _orthogonalParameters;
 

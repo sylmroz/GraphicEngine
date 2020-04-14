@@ -10,7 +10,7 @@
 GraphicEngine::Vulkan::VulkanRenderingEngine::VulkanRenderingEngine(std::shared_ptr<VulkanWindowContext> vulkanWindowContext,
 	std::shared_ptr<Common::Camera> camera, std::shared_ptr<Core::EventManager> eventManager) :
 	_vulkanWindowContext(vulkanWindowContext),
-	RenderingEngine(std::move(camera), std::move(eventManager))
+	RenderingEngine(camera, eventManager)
 {
 }
 
