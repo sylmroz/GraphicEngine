@@ -178,8 +178,6 @@
     <ClCompile Include="Main\Engine.cpp" />
     <ClCompile Include="Main\main.cpp" />
     <ClCompile Include="Platform\Glfw\GlfwWindow.cpp" />
-    <ClCompile Include="Platform\Glfw\OpenGL\GlfwOpenGLWindow.cpp" />
-    <ClCompile Include="Platform\Glfw\Vulkan\GlfwVulkanWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common\Camera.hpp" />
@@ -211,8 +209,6 @@
     <ClInclude Include="Main\Application.hpp" />
     <ClInclude Include="Main\Engine.hpp" />
     <ClInclude Include="Platform\Glfw\GlfwWindow.hpp" />
-    <ClInclude Include="Platform\Glfw\OpenGL\GlfwOpenGLWindow.hpp" />
-    <ClInclude Include="Platform\Glfw\Vulkan\GlfwVulkanWindow.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
