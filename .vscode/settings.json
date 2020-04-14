@@ -1,0 +1,16 @@
+{
+    "C_Cpp.errorSquiggles": "Disabled",
+    "glsllint.glslangValidatorPath": "C:/Program Files/gslang/install/bin",
+    "glsllint.additionalStageAssociations": {
+        ".frag": "frag",
+        ".vert": "vert"
+      },
+    "glsl-linter.validatorPath": "C:/Program Files/gslang/install/bin/glslangValidator.exe",
+    "glsl-linter.fileExtensions": {
+      ".frag": "frag",
+      ".vert": "vert",
+      ".tese": "tese",
+      ".tesc": "tesc",
+      ".geom": "geom"
+    }
+  }

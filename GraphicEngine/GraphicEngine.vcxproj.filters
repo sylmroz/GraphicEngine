@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{c8a7268d-2162-4961-bc23-d31d1350cdcf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Inputs">
+      <UniqueIdentifier>{9b0cbfb1-27a4-4aa4-abdf-3bc0a5486645}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Inputs\Keyboard">
+      <UniqueIdentifier>{312ae5c8-ba4d-480d-a652-07ded61d8a9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Inputs\Mouse">
+      <UniqueIdentifier>{74df503e-7032-4b72-a443-13728895cad8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{87d63154-b6f5-45eb-9eff-f666d06072cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Drivers">
+      <UniqueIdentifier>{cff85f20-395a-4c13-9a0a-337244194768}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Drivers\OpenGL">
+      <UniqueIdentifier>{443f419d-9a9b-4e23-b1f0-519a1262f09e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Drivers\Vulkan">
+      <UniqueIdentifier>{0916e98c-566c-4098-96da-94a4ec0095d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main">
+      <UniqueIdentifier>{a08ed5f4-22b4-41e4-819b-e013b57779d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{85eff489-b93e-42b6-9474-21ac14c4289f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\IO">
+      <UniqueIdentifier>{21331a6d-6282-4c29-994c-7388a41dc55b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets">
+      <UniqueIdentifier>{f20a17aa-89b3-43d6-ad18-ead88936ffd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Shaders">
+      <UniqueIdentifier>{a855cfa1-6c99-468c-aa7c-e731fa66cb84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Shaders\Glsl">
+      <UniqueIdentifier>{d5dacb15-0301-45e2-937c-cd293370e690}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Shaders\Spv">
+      <UniqueIdentifier>{731f65ff-e57e-46cb-b072-ed5d17db0ecf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Shaders\Hls">
+      <UniqueIdentifier>{8c6b67d8-d75e-4e06-bbd2-6760cc2c9e69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Glfw">
+      <UniqueIdentifier>{95b5fe9e-8a29-46cc-9d68-5918b3c15405}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Glfw\Vulkan">
+      <UniqueIdentifier>{bee9c329-e2c1-4686-8264-4e481e481890}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Glfw\OpenGL">
+      <UniqueIdentifier>{1b804abd-54e8-4d17-a133-22839d79ea39}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="Assets\Shaders\Glsl\basic.frag">
+      <Filter>Assets\Shaders\Glsl</Filter>
+    </None>
+    <None Include="Assets\Shaders\Glsl\basic.vert">
+      <Filter>Assets\Shaders\Glsl</Filter>
+    </None>
+    <None Include="Assets\Shaders\Spv\basic.frag.spv">
+      <Filter>Assets\Shaders\Spv</Filter>
+    </None>
+    <None Include="Assets\Shaders\Spv\basic.vert.spv">
+      <Filter>Assets\Shaders\Spv</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Drivers\OpenGL\OpenGLRenderingEngine.cpp">
+      <Filter>Drivers\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Drivers\Vulkan\VulkanHelper.cpp">
+      <Filter>Drivers\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="Drivers\Vulkan\VulkanRenderingEngine.cpp">
+      <Filter>Drivers\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="Main\Application.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Main\Engine.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Main\main.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Drivers\OpenGL\OpenGLShader.cpp">
+      <Filter>Drivers\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Camera.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform\Glfw\GlfwWindow.cpp">
+      <Filter>Platform\Glfw</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform\Glfw\Vulkan\GlfwVulkanWindow.cpp">
+      <Filter>Platform\Glfw\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform\Glfw\OpenGL\GlfwOpenGLWindow.cpp">
+      <Filter>Platform\Glfw\OpenGL</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Core\Input\Keyboard\KeyboardEnumKeys.hpp">
+      <Filter>Core\Inputs\Keyboard</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Input\Mouse\MouseEnumButton.hpp">
+      <Filter>Core\Inputs\Mouse</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Camera.hpp">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\RenderingEngine.hpp">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Shader.hpp">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Window.hpp">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Drivers\OpenGL\OpenGLRenderingEngine.hpp">
+      <Filter>Drivers\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Drivers\Vulkan\VulkanHelper.hpp">
+      <Filter>Drivers\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Drivers\Vulkan\VulkanRenderingEngine.hpp">
+      <Filter>Drivers\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Drivers\Vulkan\VulkanShader.hpp">
+      <Filter>Drivers\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Main\Application.hpp">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Main\Engine.hpp">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Drivers\OpenGL\OpenGLShader.hpp">
+      <Filter>Drivers\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Subject.hpp">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\IO\FileReader.hpp">
+      <Filter>Core\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Ranges.hpp">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Timer.hpp">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Logger.hpp">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Vertex.hpp">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Drivers\OpenGL\OpenGLHelper.hpp">
+      <Filter>Drivers\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\VertexBuffer.hpp">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Input\Mouse\MouseEventProxy.hpp">
+      <Filter>Core\Inputs\Mouse</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Input\Keyboard\KeyboardEventProxy.hpp">
+      <Filter>Core\Inputs\Keyboard</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Mouse.hpp">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Glfw\GlfwWindow.hpp">
+      <Filter>Platform\Glfw</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Keyboard.hpp">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\WindowKeyboardMouse.hpp">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\EventManager.hpp">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Drivers\Vulkan\VulkanWindowContext.hpp">
+      <Filter>Drivers\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Glfw\Vulkan\GlfwVulkanWindow.hpp">
+      <Filter>Platform\Glfw\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Glfw\OpenGL\GlfwOpenGLWindow.hpp">
+      <Filter>Platform\Glfw\OpenGL</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
