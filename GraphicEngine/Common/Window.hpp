@@ -2,9 +2,7 @@
 #define GRAPHIC_ENGINE_WINDOW_HPP
 
 #include "../Core/Subject.hpp"
-#include "../Core/Input/Keyboard/KeyboardEventProxy.hpp"
 #include "../Core/Input/Mouse/MouseEventProxy.hpp"
-#include "../Common/Camera.hpp"
 
 #include <exception>
 #include <utility>

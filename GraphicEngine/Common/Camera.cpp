@@ -6,7 +6,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
-#include <iostream>
 
 glm::mat4 GraphicEngine::Common::Camera::getViewProjectionMatrix()
 {
@@ -156,9 +155,24 @@ void GraphicEngine::Common::Camera::updateProjectionMatrix()
 	_shouldUpdateProjection = false;
 }
 
-GraphicEngine::Common::CameraController::CameraController(std::shared_ptr<Camera> camera):
-	_camera(camera)
+GraphicEngine::Common::CameraController::CameraController(std::shared_ptr<Camera> camera, std::shared_ptr<WindowKeyboardMouse> window, std::shared_ptr<Core::EventManager> eventManager) :
+	_camera(camera),
+	_window(window),
+	_eventManager(eventManager)
 {
+	_eventManager->addSubject([&]()
+		{
+			if (isCameraActivated())
+			{
+				updateCamera(
+					_window->getCursorPosition(),
+					_window->getScrollValue(),
+					_window->getPressedButtons(),
+					_window->getPressedKeys()
+				);
+				//_window->setCursorPosition(glm::vec2(_window->getWidth() / 2, _window->getHeight() / 2));
+			}
+		});
 }
 
 void GraphicEngine::Common::CameraController::setCameraType(CameraType cameraType)
@@ -189,16 +203,19 @@ bool GraphicEngine::Common::CameraController::isCameraActivated()
 	return true;
 }
 
-void GraphicEngine::Common::CameraController::rotate(glm::vec2 pos, const std::vector<GraphicEngine::Core::Inputs::MouseButton>& buttons)
+void GraphicEngine::Common::CameraController::rotate(glm::vec2 pos, const std::vector<Core::Inputs::MouseButton>& buttons)
 {
 	glm::vec2 newOffset = _prevMousePosition - pos;
+
 	if (_rotateButton == Core::Inputs::MouseButton::buttonNone || std::find(std::begin(buttons), std::end(buttons), _rotateButton) != std::end(buttons))
 	{
 		_camera->rotate(newOffset * _dt);
 	}
+
+	_prevMousePosition = pos;
 }
 
-void GraphicEngine::Common::CameraController::move(std::vector<GraphicEngine::Core::Inputs::KeyboardKey> keys)
+void GraphicEngine::Common::CameraController::move(std::vector<Core::Inputs::KeyboardKey> keys)
 {
 	using namespace Core::Inputs;
 	std::vector<KeyboardKey> basicMovementKeys{ KeyboardKey::KEY_W, KeyboardKey::KEY_A, KeyboardKey::KEY_S, KeyboardKey::KEY_D };

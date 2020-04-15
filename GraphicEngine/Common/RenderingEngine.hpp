@@ -2,9 +2,8 @@
 #define GRAPHIC_ENGINE_RENDERING_ENGINE_HPP
 
 #include "../Core/EventManager.hpp"
-#include "Window.hpp"
 #include "Vertex.hpp"
-#include "WindowKeyboardMouse.hpp"
+#include "Camera.hpp"
 
 namespace GraphicEngine
 {

@@ -1,14 +1,12 @@
 #include "Engine.hpp"
 #include "../Core/Timer.hpp"
 
-#include <utility>
-
 GraphicEngine::Engine::Engine(std::shared_ptr<Common::WindowKeyboardMouse> window,
-	std::shared_ptr<RenderingEngine> renderingEngine,
-	std::shared_ptr<Core::Inputs::KeyboardEventProxy> keyboard,
-	std::shared_ptr<Core::Inputs::MouseEventProxy> mouse,
-	std::shared_ptr<Common::CameraController> cameraController,
-	std::shared_ptr<Core::EventManager> eventManager):
+                              std::shared_ptr<RenderingEngine> renderingEngine,
+                              std::shared_ptr<Core::Inputs::KeyboardEventProxy> keyboard,
+                              std::shared_ptr<Core::Inputs::MouseEventProxy> mouse,
+                              std::shared_ptr<Common::CameraController> cameraController,
+                              std::shared_ptr<Core::EventManager> eventManager):
 	_window(window),
 	_renderingEngine(renderingEngine),
 	_keyboard(keyboard),
@@ -33,20 +31,6 @@ void GraphicEngine::Engine::initialize()
 		}
 	);
 
-	_eventManager = std::shared_ptr<Core::EventManager>(new Core::EventManager);
-
-	_eventManager->addSubject([&]()
-		{
-			_cameraController->updateCamera(
-				_window->getCursorPosition(),
-				_window->getScrollValue(),
-				_window->getPressedButtons(),
-				_window->getPressedKeys());
-		});
-	_eventManager->addSubject([&]()
-		{
-			_window->setCursorPosition(glm::vec2(_window->getWidth() / 2, _window->getHeight() / 2));
-		});
 	_eventManager->addSubject([&]()
 		{
 			_keyboard->notify(_window->getPressedKeys());

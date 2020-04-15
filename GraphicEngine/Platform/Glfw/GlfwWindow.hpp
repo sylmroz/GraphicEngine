@@ -1,8 +1,6 @@
 #ifndef GRAPHIC_ENGINE_WINDOW_GLFW_HPP
 #define GRAPHIC_ENGINE_WINDOW_GLFW_HPP
 
-#include "../../Common/Window.hpp"
-
 #include <GLFW/glfw3.h>
 
 #include <memory>
@@ -78,5 +76,5 @@ namespace GraphicEngine::GLFW
 	};
 }
 
-#endif // !#ifndef GRAPHIC_ENGINE_WINDOW_HPP
+#endif // !GRAPHIC_ENGINE_WINDOW_GLFW_HPP
 

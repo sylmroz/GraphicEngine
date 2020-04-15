@@ -2,7 +2,6 @@
 #define GRAPHIC_ENGINE_VULKAN_RENDERING_ENGINE_HPP
 
 #include "../../Common/RenderingEngine.hpp"
-#include "../../Common/WindowKeyboardMouse.hpp"
 #include "VulkanShader.hpp"
 #include "VulkanHelper.hpp"
 #include "VulkanWindowContext.hpp"
@@ -61,7 +60,6 @@ namespace GraphicEngine::Vulkan
 
 	private:
 		const std::vector<std::string> validationLayers = {
-			//"VK_LAYER_LUNARG_standard_validation"
 			"VK_LAYER_KHRONOS_validation"
 		};
 	};

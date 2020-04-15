@@ -1,5 +1,6 @@
 #include "GlfwWindow.hpp"
 #include <stdexcept>
+
 using namespace GraphicEngine::Core::Inputs;
 
 std::vector<KeyboardKey> GraphicEngine::GLFW::GlfwWindow::getPressedKeys()

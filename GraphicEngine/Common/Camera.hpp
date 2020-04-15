@@ -4,11 +4,15 @@
 #include "../Core/Input/Keyboard/KeyboardEnumKeys.hpp"
 #include "../Core/Input/Mouse/MouseEnumButton.hpp"
 
+#include "../Core/EventManager.hpp"
+#include "WindowKeyboardMouse.hpp"
+
 #include <functional>
 
 #include <glm/glm.hpp>
 
 #include <boost/di.hpp>
+
 
 namespace di = boost::di;
 
@@ -98,14 +102,14 @@ namespace GraphicEngine::Common
 		bool _shouldUpdateView{ true };
 		bool _shouldUpdateProjection{ true };
 		CameraType _cameraType = CameraType::Perspective;
-		float _speed{ 0.5f };
-		float _sensitivity{ 25.0f };
+		float _speed{ 1.0f };
+		float _sensitivity{ 180.0f };
 	};
 
 	class CameraController
 	{
 	public:
-		CameraController(std::shared_ptr<Camera> camera);
+		CameraController(std::shared_ptr<Camera> camera, std::shared_ptr<WindowKeyboardMouse> window, std::shared_ptr<Core::EventManager> eventManager);
 
 		void setCameraType(CameraType cameraType);
 
@@ -121,15 +125,18 @@ namespace GraphicEngine::Common
 
 		void rotate(glm::vec2 pos, const std::vector<GraphicEngine::Core::Inputs::MouseButton>& buttons);
 
-		void move(std::vector<GraphicEngine::Core::Inputs::KeyboardKey> keys);
+		void move(std::vector<Core::Inputs::KeyboardKey> keys);
 
 		void zoom(double offset);
 
 	private:
 		std::shared_ptr<Camera> _camera;
+		std::shared_ptr<WindowKeyboardMouse> _window;
+		std::shared_ptr<Core::EventManager> _eventManager;
+		
 		float _dt{ 0.0f };
 		glm::vec2 _prevMousePosition;
-		GraphicEngine::Core::Inputs::MouseButton _rotateButton = GraphicEngine::Core::Inputs::MouseButton::buttonNone;
+		Core::Inputs::MouseButton _rotateButton = Core::Inputs::MouseButton::buttonNone;
 	};
 }
 

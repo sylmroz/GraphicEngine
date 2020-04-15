@@ -1,9 +1,6 @@
 #include "VulkanRenderingEngine.hpp"
-#include "../../Platform/Glfw/GlfwWindow.hpp"
 
 #include "../../Core/IO/FileReader.hpp"
-
-#include <utility>
 
 #undef max
 

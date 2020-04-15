@@ -1,8 +1,9 @@
 #ifndef GRAPHIC_ENGINE_ENGINE_HPP
 #define GRAPHIC_ENGINE_ENGINE_HPP
 
+#include "../Common/WindowKeyboardMouse.hpp"
+
 #include "../Common/Camera.hpp"
-#include "../Common/Window.hpp"
 #include "../Common/RenderingEngine.hpp"
 #include "../Core/EventManager.hpp"
 #include "../Core/Input/Keyboard/KeyboardEventProxy.hpp"
@@ -10,7 +11,6 @@
 
 #include <memory>
 
-#include "../Common/WindowKeyboardMouse.hpp"
 
 namespace GraphicEngine
 {
