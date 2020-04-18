@@ -13,7 +13,7 @@ namespace GraphicEngine::OpenGL
 		class _VertexBuffer
 		{
 		public:
-			_VertexBuffer(){}
+			_VertexBuffer() {}
 			_VertexBuffer(const std::vector<_Vertex>& vertices)
 			{
 				this->_size = vertices.size();
@@ -46,14 +46,14 @@ namespace GraphicEngine::OpenGL
 			{
 				glDrawArrays(GL_TRIANGLES, 0, _size);
 			}
-			
+
 			void unbind() const
 			{
 				glBindVertexArray(0);
 			}
 
 			virtual ~_VertexBuffer() = default;
-			
+
 		protected:
 			GLuint _vbo, _vao;
 			GLsizei _size;
@@ -62,7 +62,7 @@ namespace GraphicEngine::OpenGL
 		class _VertexBufferWithElements : public _VertexBuffer
 		{
 		public:
-			_VertexBufferWithElements(){}
+			_VertexBufferWithElements() {}
 			_VertexBufferWithElements(const std::vector<_Vertex>& vertices, const std::vector<uint32_t>& indices)
 			{
 				this->_size = indices.size();
@@ -76,7 +76,7 @@ namespace GraphicEngine::OpenGL
 
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->_ebo);
 				glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(uint32_t), indices.data(), GL_STATIC_DRAW);
-				
+
 				std::vector<std::pair<uint32_t, uint32_t>> sizesAndOffsets = _Vertex::getSizeAndOffsets();
 
 				uint32_t i{ 0 };
@@ -98,7 +98,7 @@ namespace GraphicEngine::OpenGL
 		protected:
 			GLuint _ebo;
 		};
-		
+
 	public:
 		VertexBuffer(const std::vector<_Vertex>& vertices)
 		{

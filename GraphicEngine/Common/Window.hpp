@@ -18,7 +18,7 @@ namespace GraphicEngine
 			try
 			{
 				initialize();
-				m_resizeSubject.subscribe([&](size_t width, size_t height) 
+				m_resizeSubject.subscribe([&](size_t width, size_t height)
 					{
 						setWidth(width);
 						setHeight(height);
@@ -59,6 +59,6 @@ namespace GraphicEngine
 
 		bool m_shouldClose{ false };
 
-		Core::Subject<size_t,size_t> m_resizeSubject;
+		Core::Subject<size_t, size_t> m_resizeSubject;
 	};
 }

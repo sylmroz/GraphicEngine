@@ -376,7 +376,7 @@ vk::UniquePipeline GraphicEngine::Vulkan::createGraphicPipeline(const vk::Unique
 
 std::vector<vk::VertexInputAttributeDescription> GraphicEngine::Vulkan::createVertexInputAttributeDescriptions(const std::vector<std::pair<uint32_t, uint32_t>>& vertexSizeOffset)
 {
-	
+
 	std::vector<vk::VertexInputAttributeDescription> attributeDescriptions;
 
 	std::map<uint32_t, vk::Format> dataFormatTypes = {
@@ -390,7 +390,7 @@ std::vector<vk::VertexInputAttributeDescription> GraphicEngine::Vulkan::createVe
 	{
 		attributeDescriptions.emplace_back(
 			vk::VertexInputAttributeDescription(i, 0, dataFormatTypes[vertexSizeOffset[i].first],
-			                                    vertexSizeOffset[i].second));
+				vertexSizeOffset[i].second));
 	}
 
 	return attributeDescriptions;
@@ -494,7 +494,7 @@ void GraphicEngine::Vulkan::SwapChainData::createSwapChainData(const vk::Physica
 	vk::ImageSubresourceRange subResourceRange(vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1);
 	for (auto& image : images)
 	{
-		vk::ImageViewCreateInfo createInfo(vk::ImageViewCreateFlags() , image, vk::ImageViewType::e2D, this->format, componentMapping, subResourceRange);
+		vk::ImageViewCreateInfo createInfo(vk::ImageViewCreateFlags(), image, vk::ImageViewType::e2D, this->format, componentMapping, subResourceRange);
 		imageViews.emplace_back(device->createImageViewUnique(createInfo));
 	}
 }

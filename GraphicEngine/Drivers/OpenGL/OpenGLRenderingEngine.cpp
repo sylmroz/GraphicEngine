@@ -4,7 +4,7 @@
 
 GraphicEngine::OpenGL::OpenGLRenderingEngine::OpenGLRenderingEngine(
 	std::shared_ptr<Common::Camera> camera,
-	std::shared_ptr<Core::EventManager> eventManager):
+	std::shared_ptr<Core::EventManager> eventManager) :
 	RenderingEngine(camera, eventManager)
 {
 }

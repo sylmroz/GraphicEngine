@@ -25,7 +25,7 @@ namespace GraphicEngine
 		std::shared_ptr<Common::Camera> m_camera;
 
 		std::shared_ptr<Core::EventManager> m_eventManager;
-		
+
 		std::vector<Common::VertexPC> vertices =
 		{
 			{glm::vec3(0.5f,  0.5f, 0.0f), glm::vec3(0,0,1)},
@@ -39,7 +39,7 @@ namespace GraphicEngine
 			0,1,3,
 			1,2,3
 		};
-		
+
 	};
 }
 

@@ -5,6 +5,6 @@ namespace GraphicEngine::Common
 	class VertexBuffer
 	{
 	public:
-		
+
 	};
 }

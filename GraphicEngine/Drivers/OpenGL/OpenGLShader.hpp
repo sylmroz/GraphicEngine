@@ -20,7 +20,7 @@ namespace GraphicEngine::OpenGL
 		}
 
 		template <typename Reader>
-		OpenGLShader(Reader reader,const std::string& path, const uint32_t shaderType) :
+		OpenGLShader(Reader reader, const std::string& path, const uint32_t shaderType) :
 			Shader(reader, path)
 		{
 			_shaderType = shaderType;
@@ -84,7 +84,7 @@ namespace GraphicEngine::OpenGL
 	class OpenGLTesselationControlShader : public OpenGLShader
 	{
 	public:
-		OpenGLTesselationControlShader(const std::string & code) :
+		OpenGLTesselationControlShader(const std::string& code) :
 			OpenGLShader(code, GL_TESS_CONTROL_SHADER)
 		{}
 

@@ -61,7 +61,7 @@ namespace GraphicEngine::GLFW
 		virtual void initialize() override;
 
 		virtual void poolEvents() override;
-		
+
 		virtual bool windowShouldBeClosed() override;
 
 		virtual std::pair<uint32_t, uint32_t> getFrameBufferSize() override;

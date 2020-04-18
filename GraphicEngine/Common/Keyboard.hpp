@@ -12,7 +12,7 @@ namespace GraphicEngine::Common
 	public:
 		virtual ~Keyboard() = default;
 		virtual std::vector<Core::Inputs::KeyboardKey> getPressedKeys() = 0;
-		
+
 	protected:
 		std::vector<Core::Inputs::KeyboardKey> _keys;
 	};

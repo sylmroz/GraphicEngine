@@ -27,7 +27,7 @@ void Application::exec()
 	try
 	{
 		GraphicEngine::Common::PerspectiveParameters_s perspectiveParameters;
-		
+
 		auto injector = di::make_injector(
 			//di::bind<GraphicEngine::GLFW::GlfwVulkanWindow>.in(di::singleton),
 			//di::bind<GraphicEngine::GLFW::GlfwWindow>.to<GraphicEngine::GLFW::GlfwVulkanWindow>().in(di::singleton),

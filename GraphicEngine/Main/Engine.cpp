@@ -2,11 +2,11 @@
 #include "../Core/Timer.hpp"
 
 GraphicEngine::Engine::Engine(std::shared_ptr<Common::WindowKeyboardMouse> window,
-                              std::shared_ptr<RenderingEngine> renderingEngine,
-                              std::shared_ptr<Core::Inputs::KeyboardEventProxy> keyboard,
-                              std::shared_ptr<Core::Inputs::MouseEventProxy> mouse,
-                              std::shared_ptr<Common::CameraController> cameraController,
-                              std::shared_ptr<Core::EventManager> eventManager):
+	std::shared_ptr<RenderingEngine> renderingEngine,
+	std::shared_ptr<Core::Inputs::KeyboardEventProxy> keyboard,
+	std::shared_ptr<Core::Inputs::MouseEventProxy> mouse,
+	std::shared_ptr<Common::CameraController> cameraController,
+	std::shared_ptr<Core::EventManager> eventManager) :
 	m_window(window),
 	m_renderingEngine(renderingEngine),
 	m_keyboard(keyboard),

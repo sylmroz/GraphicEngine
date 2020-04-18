@@ -42,11 +42,11 @@ namespace GraphicEngine::Vulkan
 		std::unique_ptr<VulkanShader> m_vertexShader;
 		std::unique_ptr<VulkanShader> m_fragmentShader;
 		std::unique_ptr<UniformBuffer<glm::mat4>> m_uniformBuffer;
-		
+
 		vk::UniqueDescriptorPool m_descriptorPool;
 		vk::UniqueDescriptorSetLayout m_descriptorSetLayout;
 		std::vector<vk::UniqueDescriptorSet> m_descriptorSets;
-		
+
 
 	private:
 		vk::SampleCountFlagBits m_msaaSamples = vk::SampleCountFlagBits::e2;

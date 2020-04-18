@@ -41,7 +41,7 @@ bool GraphicEngine::Vulkan::VulkanRenderingEngine::drawFrame()
 	m_device->resetFences(1, &(m_renderingBarriers->inFlightFences[m_currentFrameIndex].get()));
 
 	m_uniformBuffer->updateAndSet(m_device, m_camera->getViewProjectionMatrix(), imageIndex.value);
-	
+
 	vk::Result submitResult = m_graphicQueue.submit(1, &submitInfo, m_renderingBarriers->inFlightFences[m_currentFrameIndex].get());
 	if (submitResult != vk::Result::eSuccess)
 	{
@@ -103,7 +103,7 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 		m_vertexShader = std::make_unique<VulkanShader>(m_device, Core::IO::readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Spv/basicPCVP.vert.spv"));
 		m_fragmentShader = std::make_unique<VulkanShader>(m_device, Core::IO::readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Spv/basicPCVP.frag.spv"));
 
-		
+
 		m_uniformBuffer = std::make_unique<UniformBuffer<glm::mat4>>(m_physicalDevice, m_device, m_maxFrames);
 		m_descriptorSetLayout = createDescriptorSetLayout(m_device, { {vk::DescriptorType::eUniformBuffer,1,vk::ShaderStageFlagBits::eVertex} }, vk::DescriptorSetLayoutCreateFlags());
 		m_descriptorPool = createDescriptorPool(m_device, { vk::DescriptorPoolSize(vk::DescriptorType::eUniformBuffer, m_maxFrames) });
@@ -112,20 +112,20 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 		std::vector<std::vector<std::shared_ptr<BufferData>>> uniformBuffers;
 		uniformBuffers.emplace_back(m_uniformBuffer->bufferData);
 		updateDescriptorSets(m_device, m_descriptorPool, m_descriptorSetLayout, m_maxFrames, m_descriptorSets, uniformBuffers, {});
-		
+
 		m_pipelineLayout = m_device->createPipelineLayoutUnique(vk::PipelineLayoutCreateInfo(vk::PipelineLayoutCreateFlags(), 1, &m_descriptorSetLayout.get()));
 
 		m_pipelineCache = m_device->createPipelineCacheUnique(vk::PipelineCacheCreateInfo());
 		m_graphicPipeline = createGraphicPipeline(m_device, m_pipelineCache, ShaderInfo{ m_vertexShader->shaderModule.get(),vk::SpecializationInfo() },
 			ShaderInfo{ m_fragmentShader->shaderModule.get(),vk::SpecializationInfo() }, createVertexInputAttributeDescriptions(Common::VertexPC::getSizeAndOffsets()),
 			vk::VertexInputBindingDescription(0, Common::VertexPC::getStride()), true, vk::FrontFace::eClockwise, m_pipelineLayout, m_renderPass, m_msaaSamples);
-		
-		
+
+
 
 		buildCommandBuffers();
 	}
 
-	catch (vk::SystemError & err)
+	catch (vk::SystemError& err)
 	{
 		throw std::runtime_error(err.what());
 	}
@@ -167,7 +167,7 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::buildCommandBuffers()
 	for (auto& commandBuffer : m_commandBuffers)
 	{
 		commandBuffer->begin(vk::CommandBufferBeginInfo(vk::CommandBufferUsageFlags()));
-		
+
 		commandBuffer->setViewport(0, vk::Viewport(0.0f, 0.0f, static_cast<float>(m_swapChainData.extent.width), static_cast<float>(m_swapChainData.extent.height), 0.0f, 1.0f));
 		commandBuffer->setScissor(0, vk::Rect2D(vk::Offset2D(0, 0), m_swapChainData.extent));
 
@@ -177,7 +177,7 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::buildCommandBuffers()
 		commandBuffer->bindPipeline(vk::PipelineBindPoint::eGraphics, m_graphicPipeline.get());
 
 		commandBuffer->bindDescriptorSets(vk::PipelineBindPoint::eGraphics, m_pipelineLayout.get(), 0, 1, &m_descriptorSets[i].get(), 0, nullptr);
-		
+
 		m_vertexBuffer->bind(commandBuffer);
 		m_vertexBuffer->draw(commandBuffer);
 

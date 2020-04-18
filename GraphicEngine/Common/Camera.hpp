@@ -132,7 +132,7 @@ namespace GraphicEngine::Common
 		std::shared_ptr<Camera> m_camera;
 		std::shared_ptr<WindowKeyboardMouse> m_window;
 		std::shared_ptr<Core::EventManager> m_eventManager;
-		
+
 		float m_dt{ 0.0f };
 		glm::vec2 m_prevMousePosition;
 		Core::Inputs::MouseButton m_rotateButton = Core::Inputs::MouseButton::buttonLeft;

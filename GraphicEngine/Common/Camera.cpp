@@ -99,7 +99,7 @@ void GraphicEngine::Common::Camera::rotate(const glm::vec2& offset)
 	m_yawPitchOffset = (offset * m_sensitivity);
 	float oldPitch = m_yawPitch.y;
 	m_yawPitch += m_yawPitchOffset;
-	
+
 	if (m_yawPitch.x > 360.0f || m_yawPitch.x < -360.0)
 		m_yawPitch.x = 0.0f;
 
@@ -219,9 +219,9 @@ void GraphicEngine::Common::CameraController::move(std::vector<Core::Inputs::Key
 {
 	using namespace Core::Inputs;
 	std::vector<KeyboardKey> basicMovementKeys{ KeyboardKey::KEY_W, KeyboardKey::KEY_A, KeyboardKey::KEY_S, KeyboardKey::KEY_D };
-	std::vector<KeyboardKey> filteredKeys = GameEngine::Core::Ranges::filter(keys, [&](KeyboardKey key) 
+	std::vector<KeyboardKey> filteredKeys = GameEngine::Core::Ranges::filter(keys, [&](KeyboardKey key)
 		{
-			return std::find(std::begin(basicMovementKeys), std::end(basicMovementKeys), key) != std::end(basicMovementKeys); 
+			return std::find(std::begin(basicMovementKeys), std::end(basicMovementKeys), key) != std::end(basicMovementKeys);
 		});
 	glm::vec2 movementOffset{ 0.0,0.0 };
 	for (KeyboardKey key : filteredKeys)
