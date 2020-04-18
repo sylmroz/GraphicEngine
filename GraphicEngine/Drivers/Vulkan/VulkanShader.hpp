@@ -13,7 +13,7 @@ namespace GraphicEngine::Vulkan
 		VulkanShader(const vk::UniqueDevice& device, const std::string& code) :
 			Shader(code)
 		{
-			_device = device.get();
+			m_device = device.get();
 			compile();
 		}
 
@@ -21,7 +21,7 @@ namespace GraphicEngine::Vulkan
 		VulkanShader(const vk::UniqueDevice& device, Reader reader, const std::string& path) :
 			Shader(reader, path)
 		{
-			_device = device.get();
+			m_device = device.get();
 			compile();
 		}
 
@@ -31,10 +31,10 @@ namespace GraphicEngine::Vulkan
 	protected:
 		virtual void compile()
 		{
-			shaderModule = _device.createShaderModuleUnique(vk::ShaderModuleCreateInfo(vk::ShaderModuleCreateFlags(), static_cast<uint32_t>(_data.size()), reinterpret_cast<uint32_t*>(_data.data())));
+			shaderModule = m_device.createShaderModuleUnique(vk::ShaderModuleCreateInfo(vk::ShaderModuleCreateFlags(), static_cast<uint32_t>(m_data.size()), reinterpret_cast<uint32_t*>(m_data.data())));
 		}
 	protected:
-		vk::Device _device;
+		vk::Device m_device;
 	};
 }
 

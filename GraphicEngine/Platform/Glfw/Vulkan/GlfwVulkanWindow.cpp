@@ -2,7 +2,7 @@
 
 GraphicEngine::GLFW::GlfwVulkanWindow::GlfwVulkanWindow()
 {
-	this->setGLFWWindowProfile(GLFWWindowProfile::Vulkan);
+	this->setWindowGlfwProfile(WindowGlfwProfile::Vulkan);
 }
 
 GraphicEngine::GLFW::GlfwVulkanWindowContext::GlfwVulkanWindowContext(std::shared_ptr<GlfwWindow> glfwWindow) :

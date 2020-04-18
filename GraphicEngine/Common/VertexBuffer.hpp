@@ -1,5 +1,4 @@
-#ifndef GRAPHIC_ENGINE_COMMON_VERTEX_BUFFER_HPP
-#define GRAPHIC_ENGINE_COMMON_VERTEX_BUFFER_HPP
+#pragma once
 
 namespace GraphicEngine::Common
 {
@@ -9,6 +8,3 @@ namespace GraphicEngine::Common
 		
 	};
 }
-
-#endif //!GRAPHIC_ENGINE_COMMON_VERTEX_BUFFER_HPP
-

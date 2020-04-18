@@ -2,5 +2,5 @@
 
 GraphicEngine::GLFW::GlfwOpenGLWindow::GlfwOpenGLWindow()
 {
-	setGLFWWindowProfile(GLFWWindowProfile::OpenGL);
+	setWindowGlfwProfile(WindowGlfwProfile::OpenGL);
 }

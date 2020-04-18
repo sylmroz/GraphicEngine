@@ -1,9 +1,9 @@
-#ifndef GRAPHIC_ENGINE_OPENGL_SHADER_HPP
-#define GRAPHIC_ENGINE_OPENGL_SHADER_HPP
+#pragma once
 
 #include "../../Common/Shader.hpp"
 
 #include <GL/glew.h>
+#include <string>
 
 #include <vector>
 
@@ -98,32 +98,29 @@ namespace GraphicEngine::OpenGL
 	public:
 		OpenGLShaderProgram(const std::vector<OpenGLShader>& shaders)
 		{
-			_shaderProgramId = glCreateProgram();
-			for (OpenGLShader shader : shaders)
+			m_shaderProgramId = glCreateProgram();
+			for (const auto& shader : shaders)
 			{
-				glAttachShader(_shaderProgramId, shader.getShaderId());
+				glAttachShader(m_shaderProgramId, shader.getShaderId());
 			}
-			glLinkProgram(_shaderProgramId);
+			glLinkProgram(m_shaderProgramId);
 		}
 
 		uint32_t getShaderProgramId()
 		{
-			return _shaderProgramId;
+			return m_shaderProgramId;
 		}
 
 		void use()
 		{
-			glUseProgram(_shaderProgramId);
+			glUseProgram(m_shaderProgramId);
 		}
 
 		~OpenGLShaderProgram()
 		{
-			glDeleteProgram(_shaderProgramId);
+			glDeleteProgram(m_shaderProgramId);
 		}
 	protected:
-		uint32_t _shaderProgramId;
+		uint32_t m_shaderProgramId;
 	};
 }
-
-#endif // !GRAPHIC_ENGINE_OPENGL_SHADER_HPP
-

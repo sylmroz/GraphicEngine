@@ -1,9 +1,7 @@
-#ifndef GRAPHIC_ENGINE_UTILS_VULKAN_HELPER_HPP
-#define GRAPHIC_ENGINE_UTILS_VULKAN_HELPER_HPP
+#pragma once
 
 #include <array>
 #include <iostream>
-#include <numeric>
 #include <optional>
 #include <string>
 #include <vector>
@@ -145,19 +143,19 @@ namespace GraphicEngine::Vulkan
 		{
 			for (uint32_t i{ 0 }; i < count; ++i)
 			{
-				_bufferData.emplace_back(std::make_shared<BufferData>(physicalDevice, device, vk::BufferUsageFlagBits::eUniformBuffer,
+				bufferData.emplace_back(std::make_shared<BufferData>(physicalDevice, device, vk::BufferUsageFlagBits::eUniformBuffer,
 					vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent, sizeof(T)));
 			}
 		}
 		
 		void setValue(T value)
 		{
-			_value = value;
+			m_value = value;
 		}
 
 		void update(const vk::UniqueDevice& device, uint32_t bufferIndex)
 		{
-			copyMemoryToDevice<T>(device, _bufferData[bufferIndex]->memory, &_value, 1);
+			copyMemoryToDevice<T>(device, bufferData[bufferIndex]->memory, &m_value, 1);
 		}
 
 		void updateAndSet(const vk::UniqueDevice& device, T value, uint32_t bufferIndex)
@@ -166,10 +164,10 @@ namespace GraphicEngine::Vulkan
 			update(device, bufferIndex);
 		}
 
-		std::vector<std::shared_ptr<BufferData>> _bufferData;
+		std::vector<std::shared_ptr<BufferData>> bufferData;
 		
 	private:
-		T _value;
+		T m_value;
 	};
 
 	template <typename T>
@@ -348,6 +346,3 @@ namespace GraphicEngine::Vulkan
 		const std::vector<vk::UniqueDescriptorSet>& descriptorSets, const std::vector<std::vector<std::shared_ptr<BufferData>>>& uniformBuffers, const std::vector<std::pair<vk::UniqueImageView, vk::UniqueSampler>>& imageUniforms);
 
 }
-
-#endif // !GRAPHIC_ENGINE_UTILS_VULKAN_HELPER_HPP
-

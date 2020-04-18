@@ -6,15 +6,15 @@
 
 GraphicEngine::Vulkan::VulkanRenderingEngine::VulkanRenderingEngine(std::shared_ptr<VulkanWindowContext> vulkanWindowContext,
 	std::shared_ptr<Common::Camera> camera, std::shared_ptr<Core::EventManager> eventManager) :
-	_vulkanWindowContext(vulkanWindowContext),
+	m_vulkanWindowContext(vulkanWindowContext),
 	RenderingEngine(camera, eventManager)
 {
 }
 
 bool GraphicEngine::Vulkan::VulkanRenderingEngine::drawFrame()
 {
-	_device->waitForFences(1, &(_renderingBarriers->inFlightFences[currentFrameIndex].get()), true, std::numeric_limits<uint64_t>::max());
-	vk::ResultValue<uint32_t> imageIndex = _device->acquireNextImageKHR(_swapChainData.swapChain.get(), std::numeric_limits<uint64_t>::max(), _renderingBarriers->imageAvailableSemaphores[currentFrameIndex].get(), vk::Fence());
+	m_device->waitForFences(1, &(m_renderingBarriers->inFlightFences[m_currentFrameIndex].get()), true, std::numeric_limits<uint64_t>::max());
+	vk::ResultValue<uint32_t> imageIndex = m_device->acquireNextImageKHR(m_swapChainData.swapChain.get(), std::numeric_limits<uint64_t>::max(), m_renderingBarriers->imageAvailableSemaphores[m_currentFrameIndex].get(), vk::Fence());
 
 	if (imageIndex.result == vk::Result::eErrorOutOfDateKHR)
 	{
@@ -27,39 +27,39 @@ bool GraphicEngine::Vulkan::VulkanRenderingEngine::drawFrame()
 		throw std::runtime_error("Failed to acquire next image!");
 	}
 
-	if (_renderingBarriers->imagesInFlight[imageIndex.value] != vk::Fence())
-		_device->waitForFences(1, &(_renderingBarriers->imagesInFlight[imageIndex.value]), true, std::numeric_limits<uint64_t>::max());
+	if (m_renderingBarriers->imagesInFlight[imageIndex.value] != vk::Fence())
+		m_device->waitForFences(1, &(m_renderingBarriers->imagesInFlight[imageIndex.value]), true, std::numeric_limits<uint64_t>::max());
 
-	_renderingBarriers->imagesInFlight[imageIndex.value] = _renderingBarriers->inFlightFences[currentFrameIndex].get();
+	m_renderingBarriers->imagesInFlight[imageIndex.value] = m_renderingBarriers->inFlightFences[m_currentFrameIndex].get();
 
-	vk::Semaphore waitSemaphore(_renderingBarriers->imageAvailableSemaphores[currentFrameIndex].get());
-	vk::Semaphore signalSemaphore(_renderingBarriers->renderFinishedSemaphores[currentFrameIndex].get());
+	vk::Semaphore waitSemaphore(m_renderingBarriers->imageAvailableSemaphores[m_currentFrameIndex].get());
+	vk::Semaphore signalSemaphore(m_renderingBarriers->renderFinishedSemaphores[m_currentFrameIndex].get());
 	vk::PipelineStageFlags pipelineStageFlags(vk::PipelineStageFlagBits::eColorAttachmentOutput);
 
-	vk::SubmitInfo submitInfo(1, &waitSemaphore, &pipelineStageFlags, 1, &(_commandBuffers[imageIndex.value].get()), 1, &signalSemaphore);
+	vk::SubmitInfo submitInfo(1, &waitSemaphore, &pipelineStageFlags, 1, &(m_commandBuffers[imageIndex.value].get()), 1, &signalSemaphore);
 
-	_device->resetFences(1, &(_renderingBarriers->inFlightFences[currentFrameIndex].get()));
+	m_device->resetFences(1, &(m_renderingBarriers->inFlightFences[m_currentFrameIndex].get()));
 
-	_uniformBuffer->updateAndSet(_device, _camera->getViewProjectionMatrix(), imageIndex.value);
+	m_uniformBuffer->updateAndSet(m_device, m_camera->getViewProjectionMatrix(), imageIndex.value);
 	
-	vk::Result submitResult = _graphicQueue.submit(1, &submitInfo, _renderingBarriers->inFlightFences[currentFrameIndex].get());
+	vk::Result submitResult = m_graphicQueue.submit(1, &submitInfo, m_renderingBarriers->inFlightFences[m_currentFrameIndex].get());
 	if (submitResult != vk::Result::eSuccess)
 	{
 		throw std::runtime_error("Failed to submit draw command buffer!");
 	}
 
-	vk::SwapchainKHR sp(_swapChainData.swapChain.get());
+	vk::SwapchainKHR sp(m_swapChainData.swapChain.get());
 
 	vk::PresentInfoKHR presentInfo(1, &signalSemaphore, 1, &sp, &imageIndex.value);
-	vk::Result presentResult = _presentQueue.presentKHR(presentInfo);
+	vk::Result presentResult = m_presentQueue.presentKHR(presentInfo);
 
-	if (presentResult == vk::Result::eErrorOutOfDateKHR || presentResult == vk::Result::eSuboptimalKHR || frameBufferResized)
+	if (presentResult == vk::Result::eErrorOutOfDateKHR || presentResult == vk::Result::eSuboptimalKHR || m_frameBufferResized)
 	{
-		frameBufferResized = false;
+		m_frameBufferResized = false;
 		// Should recreate swapchain
 	}
 
-	currentFrameIndex = calculateNextIndex();
+	m_currentFrameIndex = calculateNextIndex();
 	return true;
 }
 
@@ -67,58 +67,58 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 {
 	try
 	{
-		_instance = createUniqueInstance("Graphic Engine", "Vulkan Base", validationLayers, _vulkanWindowContext->getRequiredExtensions(), VK_API_VERSION_1_0);
+		m_instance = createUniqueInstance("Graphic Engine", "Vulkan Base", m_validationLayers, m_vulkanWindowContext->getRequiredExtensions(), VK_API_VERSION_1_0);
 		{
-			auto surface = _vulkanWindowContext->createSurface(_instance);
-			vk::ObjectDestroy<vk::Instance, VULKAN_HPP_DEFAULT_DISPATCHER_TYPE> _deleter(_instance.get());
-			_surface = vk::UniqueSurfaceKHR(surface, _deleter);
+			auto surface = m_vulkanWindowContext->createSurface(m_instance);
+			vk::ObjectDestroy<vk::Instance, VULKAN_HPP_DEFAULT_DISPATCHER_TYPE> _deleter(m_instance.get());
+			m_surface = vk::UniqueSurfaceKHR(surface, _deleter);
 		}
-		_physicalDevice = getPhysicalDevice(_instance, _surface);
-		_device = getUniqueLogicalDevice(_physicalDevice, _surface);
-		indices = findGraphicAndPresentQueueFamilyIndices(_physicalDevice, _surface);
+		m_physicalDevice = getPhysicalDevice(m_instance, m_surface);
+		m_device = getUniqueLogicalDevice(m_physicalDevice, m_surface);
+		m_indices = findGraphicAndPresentQueueFamilyIndices(m_physicalDevice, m_surface);
 
 		vk::Extent2D frameBufferSize(width, height);
-		_swapChainData = SwapChainData(_physicalDevice, _device, _surface, indices, frameBufferSize, vk::UniqueSwapchainKHR(), vk::ImageUsageFlagBits::eColorAttachment);
+		m_swapChainData = SwapChainData(m_physicalDevice, m_device, m_surface, m_indices, frameBufferSize, vk::UniqueSwapchainKHR(), vk::ImageUsageFlagBits::eColorAttachment);
 
-		maxFrames = _swapChainData.images.size();
+		m_maxFrames = m_swapChainData.images.size();
 
-		_commandPool = createUniqueCommandPool(_device, indices);
-		_commandBuffers = _device->allocateCommandBuffersUnique(vk::CommandBufferAllocateInfo(_commandPool.get(), vk::CommandBufferLevel::ePrimary, maxFrames));
+		m_commandPool = createUniqueCommandPool(m_device, m_indices);
+		m_commandBuffers = m_device->allocateCommandBuffersUnique(vk::CommandBufferAllocateInfo(m_commandPool.get(), vk::CommandBufferLevel::ePrimary, m_maxFrames));
 
-		_depthBuffer = std::unique_ptr<DepthBufferData>(new DepthBufferData(_physicalDevice, _device, vk::Extent3D(frameBufferSize, 1), findDepthFormat(_physicalDevice), msaaSamples));
-		_renderPass = createRenderPass(_device, _swapChainData.format, _depthBuffer->format, msaaSamples);
-		_image = std::unique_ptr<ImageData>(new ImageData(_physicalDevice, _device,
-			vk::Extent3D(_swapChainData.extent, 1), _swapChainData.format, msaaSamples,
+		m_depthBuffer = std::unique_ptr<DepthBufferData>(new DepthBufferData(m_physicalDevice, m_device, vk::Extent3D(frameBufferSize, 1), findDepthFormat(m_physicalDevice), m_msaaSamples));
+		m_renderPass = createRenderPass(m_device, m_swapChainData.format, m_depthBuffer->format, m_msaaSamples);
+		m_image = std::unique_ptr<ImageData>(new ImageData(m_physicalDevice, m_device,
+			vk::Extent3D(m_swapChainData.extent, 1), m_swapChainData.format, m_msaaSamples,
 			vk::MemoryPropertyFlagBits::eDeviceLocal, vk::ImageUsageFlagBits::eColorAttachment | vk::ImageUsageFlagBits::eTransientAttachment,
 			vk::ImageTiling::eOptimal, 1, vk::ImageLayout::eUndefined, vk::ImageAspectFlagBits::eColor));
-		_frameBuffers = createFrameBuffers(_device, _renderPass, _swapChainData.extent, 1, _image->imageView, _depthBuffer->imageView, _swapChainData.imageViews);
+		m_frameBuffers = createFrameBuffers(m_device, m_renderPass, m_swapChainData.extent, 1, m_image->imageView, m_depthBuffer->imageView, m_swapChainData.imageViews);
 
-		_graphicQueue = _device->getQueue(indices.graphicsFamily.value(), 0);
-		_presentQueue = _device->getQueue(indices.presentFamily.value(), 0);
+		m_graphicQueue = m_device->getQueue(m_indices.graphicsFamily.value(), 0);
+		m_presentQueue = m_device->getQueue(m_indices.presentFamily.value(), 0);
 
-		_renderingBarriers = std::unique_ptr<RenderingBarriers>(new RenderingBarriers(_device, maxFrames));
+		m_renderingBarriers = std::unique_ptr<RenderingBarriers>(new RenderingBarriers(m_device, m_maxFrames));
 
-		_vertexBuffer = std::make_unique<VertexBuffer<GraphicEngine::Common::VertexPC>>(_physicalDevice, _device, _commandPool, _graphicQueue, vertices, RenderingEngine::indices);
+		m_vertexBuffer = std::make_unique<VertexBuffer<GraphicEngine::Common::VertexPC>>(m_physicalDevice, m_device, m_commandPool, m_graphicQueue, vertices, RenderingEngine::indices);
 
-		_vertexShader = std::make_unique<VulkanShader>(_device, Core::IO::readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Spv/basicPCVP.vert.spv"));
-		_fragmentShader = std::make_unique<VulkanShader>(_device, Core::IO::readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Spv/basicPCVP.frag.spv"));
+		m_vertexShader = std::make_unique<VulkanShader>(m_device, Core::IO::readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Spv/basicPCVP.vert.spv"));
+		m_fragmentShader = std::make_unique<VulkanShader>(m_device, Core::IO::readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Spv/basicPCVP.frag.spv"));
 
 		
-		_uniformBuffer = std::make_unique<UniformBuffer<glm::mat4>>(_physicalDevice, _device, maxFrames);
-		_descriptorSetLayout = createDescriptorSetLayout(_device, { {vk::DescriptorType::eUniformBuffer,1,vk::ShaderStageFlagBits::eVertex} }, vk::DescriptorSetLayoutCreateFlags());
-		_descriptorPool = createDescriptorPool(_device, { vk::DescriptorPoolSize(vk::DescriptorType::eUniformBuffer, maxFrames) });
-		std::vector<vk::DescriptorSetLayout> layouts(maxFrames, _descriptorSetLayout.get());
-		_descriptorSets = _device->allocateDescriptorSetsUnique(vk::DescriptorSetAllocateInfo(_descriptorPool.get(), maxFrames, layouts.data()));
+		m_uniformBuffer = std::make_unique<UniformBuffer<glm::mat4>>(m_physicalDevice, m_device, m_maxFrames);
+		m_descriptorSetLayout = createDescriptorSetLayout(m_device, { {vk::DescriptorType::eUniformBuffer,1,vk::ShaderStageFlagBits::eVertex} }, vk::DescriptorSetLayoutCreateFlags());
+		m_descriptorPool = createDescriptorPool(m_device, { vk::DescriptorPoolSize(vk::DescriptorType::eUniformBuffer, m_maxFrames) });
+		std::vector<vk::DescriptorSetLayout> layouts(m_maxFrames, m_descriptorSetLayout.get());
+		m_descriptorSets = m_device->allocateDescriptorSetsUnique(vk::DescriptorSetAllocateInfo(m_descriptorPool.get(), m_maxFrames, layouts.data()));
 		std::vector<std::vector<std::shared_ptr<BufferData>>> uniformBuffers;
-		uniformBuffers.emplace_back(_uniformBuffer->_bufferData);
-		updateDescriptorSets(_device, _descriptorPool, _descriptorSetLayout, maxFrames, _descriptorSets, uniformBuffers, {});
+		uniformBuffers.emplace_back(m_uniformBuffer->bufferData);
+		updateDescriptorSets(m_device, m_descriptorPool, m_descriptorSetLayout, m_maxFrames, m_descriptorSets, uniformBuffers, {});
 		
-		_pipelineLayout = _device->createPipelineLayoutUnique(vk::PipelineLayoutCreateInfo(vk::PipelineLayoutCreateFlags(), 1, &_descriptorSetLayout.get()));
+		m_pipelineLayout = m_device->createPipelineLayoutUnique(vk::PipelineLayoutCreateInfo(vk::PipelineLayoutCreateFlags(), 1, &m_descriptorSetLayout.get()));
 
-		_pipelineCache = _device->createPipelineCacheUnique(vk::PipelineCacheCreateInfo());
-		_graphicPipeline = createGraphicPipeline(_device, _pipelineCache, ShaderInfo{ _vertexShader->shaderModule.get(),vk::SpecializationInfo() },
-			ShaderInfo{ _fragmentShader->shaderModule.get(),vk::SpecializationInfo() }, createVertexInputAttributeDescriptions(Common::VertexPC::getSizeAndOffsets()),
-			vk::VertexInputBindingDescription(0, Common::VertexPC::getStride()), true, vk::FrontFace::eClockwise, _pipelineLayout, _renderPass, msaaSamples);
+		m_pipelineCache = m_device->createPipelineCacheUnique(vk::PipelineCacheCreateInfo());
+		m_graphicPipeline = createGraphicPipeline(m_device, m_pipelineCache, ShaderInfo{ m_vertexShader->shaderModule.get(),vk::SpecializationInfo() },
+			ShaderInfo{ m_fragmentShader->shaderModule.get(),vk::SpecializationInfo() }, createVertexInputAttributeDescriptions(Common::VertexPC::getSizeAndOffsets()),
+			vk::VertexInputBindingDescription(0, Common::VertexPC::getStride()), true, vk::FrontFace::eClockwise, m_pipelineLayout, m_renderPass, m_msaaSamples);
 		
 		
 
@@ -147,13 +147,13 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::resizeFrameBuffer(size_t widt
 
 void GraphicEngine::Vulkan::VulkanRenderingEngine::cleanup()
 {
-	_graphicQueue.waitIdle();
-	_device->waitIdle();
+	m_graphicQueue.waitIdle();
+	m_device->waitIdle();
 }
 
 uint32_t GraphicEngine::Vulkan::VulkanRenderingEngine::calculateNextIndex()
 {
-	return (currentFrameIndex + 1) % maxFrames;
+	return (m_currentFrameIndex + 1) % m_maxFrames;
 }
 
 void GraphicEngine::Vulkan::VulkanRenderingEngine::buildCommandBuffers()
@@ -164,22 +164,22 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::buildCommandBuffers()
 	clearValues[1].depthStencil = vk::ClearDepthStencilValue(1.0f, 0.0f);
 	clearValues[2].color = vk::ClearColorValue(std::array<float, 4>({ 0.2f,0.2f,0.2f,1.0f }));
 	int i{ 0 };
-	for (auto& commandBuffer : _commandBuffers)
+	for (auto& commandBuffer : m_commandBuffers)
 	{
 		commandBuffer->begin(vk::CommandBufferBeginInfo(vk::CommandBufferUsageFlags()));
 		
-		commandBuffer->setViewport(0, vk::Viewport(0.0f, 0.0f, static_cast<float>(_swapChainData.extent.width), static_cast<float>(_swapChainData.extent.height), 0.0f, 1.0f));
-		commandBuffer->setScissor(0, vk::Rect2D(vk::Offset2D(0, 0), _swapChainData.extent));
+		commandBuffer->setViewport(0, vk::Viewport(0.0f, 0.0f, static_cast<float>(m_swapChainData.extent.width), static_cast<float>(m_swapChainData.extent.height), 0.0f, 1.0f));
+		commandBuffer->setScissor(0, vk::Rect2D(vk::Offset2D(0, 0), m_swapChainData.extent));
 
-		vk::RenderPassBeginInfo renderPassBeginInfo(_renderPass.get(), _frameBuffers[i].get(), vk::Rect2D(vk::Offset2D(0, 0), _swapChainData.extent), static_cast<uint32_t>(clearValues.size()), clearValues.data());
+		vk::RenderPassBeginInfo renderPassBeginInfo(m_renderPass.get(), m_frameBuffers[i].get(), vk::Rect2D(vk::Offset2D(0, 0), m_swapChainData.extent), static_cast<uint32_t>(clearValues.size()), clearValues.data());
 		commandBuffer->beginRenderPass(renderPassBeginInfo, vk::SubpassContents::eInline);
 
-		commandBuffer->bindPipeline(vk::PipelineBindPoint::eGraphics, _graphicPipeline.get());
+		commandBuffer->bindPipeline(vk::PipelineBindPoint::eGraphics, m_graphicPipeline.get());
 
-		commandBuffer->bindDescriptorSets(vk::PipelineBindPoint::eGraphics, _pipelineLayout.get(), 0, 1, &_descriptorSets[i].get(), 0, nullptr);
+		commandBuffer->bindDescriptorSets(vk::PipelineBindPoint::eGraphics, m_pipelineLayout.get(), 0, 1, &m_descriptorSets[i].get(), 0, nullptr);
 		
-		_vertexBuffer->bind(commandBuffer);
-		_vertexBuffer->draw(commandBuffer);
+		m_vertexBuffer->bind(commandBuffer);
+		m_vertexBuffer->draw(commandBuffer);
 
 		commandBuffer->endRenderPass();
 

@@ -1,5 +1,4 @@
-#ifndef GRAPGIC_ENGINE_COMMON_KEYBOARD_HPP
-#define GRAPGIC_ENGINE_COMMON_KEYBOARD_HPP
+#pragma once
 
 #include "../Core/Input/Keyboard/KeyboardEnumKeys.hpp"
 
@@ -18,5 +17,3 @@ namespace GraphicEngine::Common
 		std::vector<Core::Inputs::KeyboardKey> _keys;
 	};
 }
-
-#endif // !GRAPGIC_ENGINE_COMMON_KEYBOARD_HPP

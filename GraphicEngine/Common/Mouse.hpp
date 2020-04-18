@@ -1,5 +1,4 @@
-#ifndef GRAPGIC_ENGINE_COMMON_MOUSE_HPP
-#define GRAPGIC_ENGINE_COMMON_MOUSE_HPP
+#pragma once
 
 #include "../Core/Input/Mouse/MouseEnumButton.hpp"
 
@@ -42,5 +41,3 @@ namespace GraphicEngine::Common
 		virtual ~Mouse() = default;
 	};
 }
-
-#endif // !GRAPGIC_ENGINE_COMMON_IMOUSE_HPP

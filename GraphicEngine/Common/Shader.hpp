@@ -1,7 +1,6 @@
-#ifndef GRAPHIC_ENGINE_CORE_SHADER_HPP
-#define GRAPHIC_ENGINE_CORE_SHADER_HPP
+#pragma once
 
-#include <fstream>
+#include <string>
 
 namespace GraphicEngine
 {
@@ -12,20 +11,17 @@ namespace GraphicEngine
 
 		Shader(const std::string& code)
 		{
-			_data = code;
+			m_data = code;
 		}
 
 		template <typename Reader>
 		Shader(Reader reader, const std::string& path)
 		{
-			_data = reader(path);
+			m_data = reader(path);
 		}
 
 		virtual void compile() = 0;
 	protected:
-		std::string _data;
+		std::string m_data;
 	};
 }
-
-#endif // !GRAPHIC_ENGINE_CORE_SHADER_HPP
-

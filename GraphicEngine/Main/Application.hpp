@@ -1,5 +1,4 @@
-#ifndef APPLICATION_HPP
-#define APPLICATION_HPP
+#pragma once
 
 class Application
 {
@@ -8,6 +7,3 @@ public:
 
 	void exec();
 };
-
-#endif // !APPLICATION_HPP
-

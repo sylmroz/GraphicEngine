@@ -1,5 +1,4 @@
-#ifndef GRAPHIC_ENGINE_COMMON_CAMERA_HPP
-#define GRAPHIC_ENGINE_COMMON_CAMERA_HPP
+#pragma once
 
 #include "../Core/Input/Keyboard/KeyboardEnumKeys.hpp"
 #include "../Core/Input/Mouse/MouseEnumButton.hpp"
@@ -83,27 +82,27 @@ namespace GraphicEngine::Common
 		};
 
 	private:
-		glm::mat4 _viewMatrix = glm::mat4();
-		glm::mat4 _projectionMatrix = glm::mat4();
-		glm::mat4 _viewProjectionMatrix = glm::mat4();
+		glm::mat4 m_viewMatrix = glm::mat4();
+		glm::mat4 m_projectionMatrix = glm::mat4();
+		glm::mat4 m_viewProjectionMatrix = glm::mat4();
 
-		glm::vec3 _position = glm::vec3(2.0, 2.0, 2.0);
-		glm::vec3 _direction = glm::normalize(glm::vec3(-1.0, -1.0, -1.0));
-		glm::vec3 _up = glm::vec3(0.0, 0.0, 1.0);
+		glm::vec3 m_position = glm::vec3(2.0, 2.0, 2.0);
+		glm::vec3 m_direction = glm::normalize(glm::vec3(-1.0, -1.0, -1.0));
+		glm::vec3 m_up = glm::vec3(0.0, 0.0, 1.0);
 
-		glm::vec2 _yawPitch = glm::vec2(0.0, 0.0);
-		glm::vec2 _yawPitchOffset = glm::vec2(0.0, 0.0);
+		glm::vec2 m_yawPitch = glm::vec2(0.0, 0.0);
+		glm::vec2 m_yawPitchOffset = glm::vec2(0.0, 0.0);
 
-		PerspectiveParameters_s _perspectiveParameters;
+		PerspectiveParameters_s m_perspectiveParameters;
 
-		OrthogonalParameters _orthogonalParameters;
+		OrthogonalParameters m_orthogonalParameters;
 
 	private:
-		bool _shouldUpdateView{ true };
-		bool _shouldUpdateProjection{ true };
-		CameraType _cameraType = CameraType::Perspective;
-		float _speed{ 1.0f };
-		float _sensitivity{ 180.0f };
+		bool m_shouldUpdateView{ true };
+		bool m_shouldUpdateProjection{ true };
+		CameraType m_cameraType = CameraType::Perspective;
+		float m_speed{ 1.0f };
+		float m_sensitivity{ 180.0f };
 	};
 
 	class CameraController
@@ -130,15 +129,13 @@ namespace GraphicEngine::Common
 		void zoom(double offset);
 
 	private:
-		std::shared_ptr<Camera> _camera;
-		std::shared_ptr<WindowKeyboardMouse> _window;
-		std::shared_ptr<Core::EventManager> _eventManager;
+		std::shared_ptr<Camera> m_camera;
+		std::shared_ptr<WindowKeyboardMouse> m_window;
+		std::shared_ptr<Core::EventManager> m_eventManager;
 		
-		float _dt{ 0.0f };
-		glm::vec2 _prevMousePosition;
-		Core::Inputs::MouseButton _rotateButton = Core::Inputs::MouseButton::buttonNone;
+		float m_dt{ 0.0f };
+		glm::vec2 m_prevMousePosition;
+		Core::Inputs::MouseButton m_rotateButton = Core::Inputs::MouseButton::buttonLeft;
 	};
 }
-
-#endif // !GRAPHIC_ENGINE_COMMON_CAMERA_HPP
 

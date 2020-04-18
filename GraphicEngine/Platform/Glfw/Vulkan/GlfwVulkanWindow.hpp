@@ -1,5 +1,4 @@
-#ifndef GRAPHIC_ENGINE_WINDOW_GLFW_VULKAN_HPP
-#define GRAPHIC_ENGINE_WINDOW_GLFW_VULKAN_HPP
+#pragma once
 
 #define GLFW_INCLUDE_VULKAN
 
@@ -25,6 +24,3 @@ namespace GraphicEngine::GLFW
 		std::shared_ptr<GlfwWindow> _glfwWindow;
 	};
 }
-
-#endif // !GRAPHIC_ENGINE_WINDOW_GLFW_VULKAN_HPP
-

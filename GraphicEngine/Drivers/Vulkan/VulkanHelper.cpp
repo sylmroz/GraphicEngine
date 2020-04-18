@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <iostream>
 #include <map>
+#include <numeric>
 #include <set>
 
 #undef max
@@ -417,7 +418,6 @@ void GraphicEngine::Vulkan::updateDescriptorSets(const vk::UniqueDevice& device,
 	const std::vector<vk::UniqueDescriptorSet>& descriptorSets, const std::vector<std::vector<std::shared_ptr<BufferData>>>& uniformBuffers, const std::vector<std::pair<vk::UniqueImageView, vk::UniqueSampler>>& imageUniforms)
 {
 	std::vector<vk::DescriptorSetLayout> layouts(layoutCount, descriptorSetLayout.get());
-	vk::DescriptorSetAllocateInfo descriptorSetAllocateInfo(descriptorPool.get(), static_cast<uint32_t>(layouts.size()), layouts.data());
 
 	for (uint32_t i{ 0 }; i < descriptorSets.size(); ++i)
 	{
@@ -447,10 +447,9 @@ void GraphicEngine::Vulkan::updateDescriptorSets(const vk::UniqueDevice& device,
 
 vk::Format GraphicEngine::Vulkan::findSupportedFormat(const vk::PhysicalDevice& physicalDevice, std::vector<vk::Format> candidates, vk::ImageTiling tiling, vk::FormatFeatureFlags formatFeatures)
 {
-	vk::FormatProperties props;
 	for (const vk::Format& format : candidates)
 	{
-		props = physicalDevice.getFormatProperties(format);
+		vk::FormatProperties props = physicalDevice.getFormatProperties(format);
 		if ((tiling == vk::ImageTiling::eLinear) && ((props.linearTilingFeatures & formatFeatures) == formatFeatures))
 			return format;
 		if ((tiling == vk::ImageTiling::eOptimal) && ((props.optimalTilingFeatures & formatFeatures) == formatFeatures))

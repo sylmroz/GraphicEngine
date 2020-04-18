@@ -1,11 +1,9 @@
-#ifndef GRAPHIC_ENGINE_COMMON_VERTEX_HPP
-#define GRAPHIC_ENGINE_COMMON_VERTEX_HPP
+#pragma once
 
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 
-#include <map>
 #include <vector>
 
 namespace GraphicEngine::Common
@@ -139,6 +137,3 @@ namespace GraphicEngine::Common
 		}
 	};
 }
-
-#endif // !GRAPHIC_ENGINE_COMMON_VERTEX_HPP
-

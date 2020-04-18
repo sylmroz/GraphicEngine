@@ -1,5 +1,4 @@
-#ifndef GRAPHIC_ENGINE_RENDERING_ENGINE_HPP
-#define GRAPHIC_ENGINE_RENDERING_ENGINE_HPP
+#pragma once
 
 #include "../Core/EventManager.hpp"
 #include "Vertex.hpp"
@@ -12,8 +11,8 @@ namespace GraphicEngine
 	public:
 		RenderingEngine(std::shared_ptr<Common::Camera> camera,
 			std::shared_ptr<Core::EventManager> eventManager) :
-			_camera(camera),
-			_eventManager(eventManager)
+			m_camera(camera),
+			m_eventManager(eventManager)
 		{}
 
 		virtual bool drawFrame() = 0;
@@ -21,11 +20,11 @@ namespace GraphicEngine
 		virtual void resizeFrameBuffer(size_t width, size_t height) = 0;
 		virtual void cleanup() = 0;
 
-		void setCamera(std::shared_ptr<Common::Camera> camera) { _camera = camera; }
+		void setCamera(std::shared_ptr<Common::Camera> camera) { m_camera = camera; }
 	protected:
-		std::shared_ptr<Common::Camera> _camera;
+		std::shared_ptr<Common::Camera> m_camera;
 
-		std::shared_ptr<Core::EventManager> _eventManager;
+		std::shared_ptr<Core::EventManager> m_eventManager;
 		
 		std::vector<Common::VertexPC> vertices =
 		{
@@ -44,4 +43,3 @@ namespace GraphicEngine
 	};
 }
 
-#endif // !GRAPHIC_ENGINE_RENDERING_ENGINE_HPP

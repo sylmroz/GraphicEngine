@@ -1,7 +1,4 @@
-#ifndef GRAPHIC_ENGINE_DRIVERS_OPENGL_HELPER_HPP
-#define GRAPHIC_ENGINE_DRIVERS_OPENGL_HELPER_HPP
-
-#include  "../../Common/Vertex.hpp"
+#pragma once
 
 #include <GL/glew.h>
 
@@ -105,31 +102,28 @@ namespace GraphicEngine::OpenGL
 	public:
 		VertexBuffer(const std::vector<_Vertex>& vertices)
 		{
-			data = std::unique_ptr<_VertexBuffer>(new _VertexBuffer(vertices));
+			m_data = std::unique_ptr<_VertexBuffer>(new _VertexBuffer(vertices));
 		}
 		VertexBuffer(const std::vector<_Vertex>& vertices, const std::vector<uint32_t>& indices)
 		{
-			data = std::unique_ptr<_VertexBuffer>(new _VertexBufferWithElements(vertices, indices));
+			m_data = std::unique_ptr<_VertexBuffer>(new _VertexBufferWithElements(vertices, indices));
 		}
 
 		void bind() const
 		{
-			data->bind();
+			m_data->bind();
 		}
 
 		virtual void draw()
 		{
-			data->draw();
+			m_data->draw();
 		}
 
 		void unbind() const
 		{
-			data->unbind();
+			m_data->unbind();
 		}
 	private:
-		std::unique_ptr<_VertexBuffer> data;
+		std::unique_ptr<_VertexBuffer> m_data;
 	};
 }
-
-#endif // !GRAPHIC_ENGINE_DRIVERS_OPENGL_HELPER_HPP
-

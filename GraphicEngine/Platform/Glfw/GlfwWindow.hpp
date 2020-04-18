@@ -1,5 +1,4 @@
-#ifndef GRAPHIC_ENGINE_WINDOW_GLFW_HPP
-#define GRAPHIC_ENGINE_WINDOW_GLFW_HPP
+#pragma once
 
 #include <GLFW/glfw3.h>
 
@@ -9,7 +8,7 @@
 
 namespace GraphicEngine::GLFW
 {
-	enum class GLFWWindowProfile
+	enum class WindowGlfwProfile
 	{
 		OpenGL,
 		Vulkan,
@@ -32,19 +31,20 @@ namespace GraphicEngine::GLFW
 		glm::vec2 getScrollValue() override;
 
 	private:
-		struct WindowGLFWApi
+		struct WindowGlfwApi
 		{
+			virtual ~WindowGlfwApi() = default;
 			virtual void init() = 0;
 			virtual void swapBuffers(GLFWwindow* window) = 0;
 		};
 
-		struct WindowGLFWOpenGl : WindowGLFWApi
+		struct WindowGlfwOpenGL final : WindowGlfwApi
 		{
 			virtual void init() override;
 			virtual void swapBuffers(GLFWwindow* window) override;
 		};
 
-		struct WindowGLFWVulkan : WindowGLFWApi
+		struct WindowGlfwVulkan final : WindowGlfwApi
 		{
 			virtual void init() override;
 			virtual void swapBuffers(GLFWwindow* window) override;
@@ -54,7 +54,7 @@ namespace GraphicEngine::GLFW
 
 		virtual ~GlfwWindow();
 
-		void setGLFWWindowProfile(GLFWWindowProfile windowProfile) { _windowProfile = windowProfile; };
+		void setWindowGlfwProfile(const WindowGlfwProfile windowProfile) { m_windowProfile = windowProfile; };
 
 		// Inherited via Window
 		virtual void swapBuffer() override;
@@ -69,12 +69,9 @@ namespace GraphicEngine::GLFW
 		std::shared_ptr<GLFWwindow> getGlfwWindow();
 
 	protected:
-		std::shared_ptr<GLFWwindow> _glfwWindow;
-		GLFWWindowProfile _windowProfile = GLFWWindowProfile::None;
+		std::shared_ptr<GLFWwindow> m_glfwWindow;
+		WindowGlfwProfile m_windowProfile = WindowGlfwProfile::None;
 
-		std::shared_ptr<WindowGLFWApi> _specialApi;
+		std::shared_ptr<WindowGlfwApi> m_specialApi;
 	};
 }
-
-#endif // !GRAPHIC_ENGINE_WINDOW_GLFW_HPP
-

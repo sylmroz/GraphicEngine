@@ -1,6 +1,4 @@
-#ifndef GRAPHIC_ENGINE_WINDOW_GLFW_OPENGL_HPP
-#define GRAPHIC_ENGINE_WINDOW_GLFW_OPENGL_HPP
-
+#pragma once
 
 #include "../GlfwWindow.hpp"
 
@@ -12,6 +10,4 @@ namespace GraphicEngine::GLFW
 		GlfwOpenGLWindow();
 	};
 }
-
-#endif // !GRAPHIC_ENGINE_WINDOW_GLFW_OPENGL_HPP
 
