@@ -120,6 +120,9 @@
     <ClCompile Include="Platform\Glfw\OpenGL\GlfwOpenGLWindow.cpp">
       <Filter>Platform\Glfw\OpenGL</Filter>
     </ClCompile>
+    <ClCompile Include="Platform\Glfw\Vulkan\GlfwVulkanWindowContext.cpp">
+      <Filter>Platform\Glfw\Vulkan</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Input\Keyboard\KeyboardEnumKeys.hpp">
@@ -214,6 +217,15 @@
     </ClInclude>
     <ClInclude Include="Platform\Glfw\OpenGL\GlfwOpenGLWindow.hpp">
       <Filter>Platform\Glfw\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Glfw\Vulkan\GlfwVulkanWindowContext.hpp">
+      <Filter>Platform\Glfw\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Glfw\OpenGL\GlfwOpenGLInjector.hpp">
+      <Filter>Platform\Glfw\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Glfw\Vulkan\GlfwVulkanInjector.hpp">
+      <Filter>Platform\Glfw\Vulkan</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

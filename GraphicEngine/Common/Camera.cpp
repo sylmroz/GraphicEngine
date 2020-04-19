@@ -84,15 +84,15 @@ GraphicEngine::Common::Camera::Camera()
 	setCameraPerspectiveProperties(perspectiveParameters);
 }
 
-GraphicEngine::Common::Camera::Camera(PerspectiveParameters_s perspectiveParameters)
-{
-	setCameraPerspectiveProperties(perspectiveParameters);
-}
+//GraphicEngine::Common::Camera::Camera(PerspectiveParameters_s perspectiveParameters)
+//{
+//	setCameraPerspectiveProperties(perspectiveParameters);
+//}
 
-GraphicEngine::Common::Camera::Camera(OrthogonalParameters orthogonalParameters)
-{
-	setCameraOrthogonalProperties(orthogonalParameters);
-}
+//GraphicEngine::Common::Camera::Camera(OrthogonalParameters orthogonalParameters)
+//{
+//	setCameraOrthogonalProperties(orthogonalParameters);
+//}
 
 void GraphicEngine::Common::Camera::rotate(const glm::vec2& offset)
 {

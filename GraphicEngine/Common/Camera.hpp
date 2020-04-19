@@ -47,8 +47,8 @@ namespace GraphicEngine::Common
 	public:
 
 		Camera();
-		BOOST_DI_INJECT(Camera, (named = PerspectiveParameters) PerspectiveParameters_s perspectiveParameters);
-		Camera(OrthogonalParameters ororthogonalParameter);
+		//BOOST_DI_INJECT(Camera, (named = PerspectiveParameters) PerspectiveParameters_s perspectiveParameters);
+		//Camera(OrthogonalParameters ororthogonalParameter);
 
 		void rotate(const glm::vec2& offset);
 		void move(const glm::vec2& offset);

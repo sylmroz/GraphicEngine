@@ -63,7 +63,7 @@ void GraphicEngine::GLFW::GlfwWindow::swapBuffer()
 void GraphicEngine::GLFW::GlfwWindow::initialize()
 {
 	glfwInit();
-	
+
 	if (m_windowProfile == WindowGlfwProfile::OpenGL)
 	{
 		m_specialApi = std::shared_ptr<WindowGlfwApi>(new WindowGlfwOpenGL);
@@ -76,8 +76,8 @@ void GraphicEngine::GLFW::GlfwWindow::initialize()
 	m_specialApi->init();
 
 	m_glfwWindow = std::shared_ptr<GLFWwindow>(
-		glfwCreateWindow(m_width, m_height, "Graphic Engine", nullptr, nullptr), 
-		[](GLFWwindow* window) 
+		glfwCreateWindow(m_width, m_height, "Graphic Engine", nullptr, nullptr),
+		[](GLFWwindow* window)
 		{
 			glfwDestroyWindow(window);
 		});

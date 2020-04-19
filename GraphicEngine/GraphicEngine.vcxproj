@@ -108,14 +108,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\libs\glm;C:\VulkanSDK\1.2.131.2\Include;C:\libs\assimp\include\;C:\libs\opencv-4.2\include;C:\libs\glew-2.1.0\include;C:\libs\di\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\libs\glm;C:\VulkanSDK\1.2.135.0\Include;C:\libs\assimp\include\;C:\libs\opencv-4.2\include;C:\libs\glew-2.1.0\include;C:\libs\di\include;C:\libs\di\extension\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\libs\assimp\lib\x64;C:\VulkanSDK\1.2.131.2\Lib;C:\libs\opencv-4.2\lib;C:\libs\glew-2.1.0\lib\Release\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\libs\assimp\lib\x64;C:\VulkanSDK\1.2.135.0\Lib;C:\libs\opencv-4.2\lib;C:\libs\glew-2.1.0\lib\Release\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>assimp-vc140-mt.lib;vulkan-1.lib;VkLayer_utils.lib;shaderc_combined.lib;opencv_world420d.lib;opengl32.lib;glew32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -180,6 +180,7 @@
     <ClCompile Include="Platform\Glfw\GlfwWindow.cpp" />
     <ClCompile Include="Platform\Glfw\OpenGL\GlfwOpenGLWindow.cpp" />
     <ClCompile Include="Platform\Glfw\Vulkan\GlfwVulkanWindow.cpp" />
+    <ClCompile Include="Platform\Glfw\Vulkan\GlfwVulkanWindowContext.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common\Camera.hpp" />
@@ -211,8 +212,11 @@
     <ClInclude Include="Main\Application.hpp" />
     <ClInclude Include="Main\Engine.hpp" />
     <ClInclude Include="Platform\Glfw\GlfwWindow.hpp" />
+    <ClInclude Include="Platform\Glfw\OpenGL\GlfwOpenGLInjector.hpp" />
     <ClInclude Include="Platform\Glfw\OpenGL\GlfwOpenGLWindow.hpp" />
+    <ClInclude Include="Platform\Glfw\Vulkan\GlfwVulkanInjector.hpp" />
     <ClInclude Include="Platform\Glfw\Vulkan\GlfwVulkanWindow.hpp" />
+    <ClInclude Include="Platform\Glfw\Vulkan\GlfwVulkanWindowContext.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
