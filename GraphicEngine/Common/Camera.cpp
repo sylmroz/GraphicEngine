@@ -98,26 +98,36 @@ GraphicEngine::Common::Camera::Camera()
 void GraphicEngine::Common::Camera::rotate(const glm::vec2& offset)
 {
 	m_yawPitchOffset = (offset * m_sensitivity);
-	float oldPitch = m_yawPitch.y;
+	float oldPitch = m_yawPitch.x;
 	m_yawPitch += m_yawPitchOffset;
 
-	if (m_yawPitch.x > 360.0f || m_yawPitch.x < -360.0)
-		m_yawPitch.x = 0.0f;
-
-	if (m_yawPitch.y > 89.0f || m_yawPitch.y < -89.0)
-	{
-		m_yawPitch.y = oldPitch;
-		m_yawPitchOffset.y = 0.0f;
-	}
+	//if (m_yawPitch.x > 89.0f)
+	//{
+	//	m_yawPitch.x = oldPitch;
+	//	m_yawPitchOffset.x = 0.0f;
+	//}
+	//
+	//if (m_yawPitch.x < -89.0)
+	//{
+	//	m_yawPitch.x = oldPitch;
+	//	m_yawPitchOffset.x = 0.0f;
+	//}
+	
 	m_shouldUpdateView = true;
 }
 
 void GraphicEngine::Common::Camera::move(const glm::vec2& offset)
 {
-	if (offset.x != 0)
+	/*if (offset.x != 0)
 		m_position = m_position + (m_direction * offset.x * m_speed);
 	if (offset.y != 0)
 		m_position = m_position + (glm::normalize(glm::cross(m_direction, glm::vec3(0.0f, 0.0f, 1.0f))) * offset.y * m_speed);
+	m_shouldUpdateView = true;*/
+
+	if (offset.x != 0)
+		m_position = m_position + (m_new_direction * offset.x * m_speed);
+	if (offset.y != 0)
+		m_position = m_position + (glm::normalize(glm::cross(m_new_direction, glm::vec3(0.0f, 0.0f, 1.0f))) * offset.y * m_speed);
 	m_shouldUpdateView = true;
 }
 
@@ -133,7 +143,7 @@ glm::mat4 GraphicEngine::Common::Camera::calculateOrthogonal()
 
 void GraphicEngine::Common::Camera::updateViewMatrix()
 {
-	glm::vec3 up = glm::vec3(0.0, 0.0, 1.0);
+	/*glm::vec3 up = glm::vec3(0.0, 0.0, 1.0);
 	glm::vec3 right = glm::normalize(glm::cross(m_direction, up));
 	glm::quat yawQuat = glm::angleAxis(glm::radians(m_yawPitchOffset.x), up);
 	glm::quat pitchQuat = glm::angleAxis(glm::radians(m_yawPitchOffset.y), right);
@@ -143,8 +153,29 @@ void GraphicEngine::Common::Camera::updateViewMatrix()
 		m_direction = glm::normalize(glm::rotate(rot, m_direction));
 		m_up = glm::normalize(glm::cross(right, m_direction));
 	}
-
 	m_viewMatrix = glm::lookAt(m_position, m_position + m_direction, m_up);
+	*/
+
+	/*glm::vec3 direction;
+	direction.x = cos(glm::radians(m_yawPitch.x)) * cos(glm::radians(m_yawPitch.y));
+	direction.y = sin(glm::radians(m_yawPitch.y));
+	direction.z = sin(glm::radians(m_yawPitch.x)) * cos(glm::radians(m_yawPitch.y));
+	m_direction = direction;
+	glm::vec3 up = glm::vec3(0.0, 0.0, 1.0);
+	glm::vec3 right = glm::normalize(glm::cross(m_direction, up));
+	m_up = glm::normalize(glm::cross(right, m_direction));*/
+
+	glm::vec3 up = glm::vec3(0.0, 0.0, 1.0);
+	glm::vec3 right = glm::normalize(glm::cross(m_direction, up));
+	glm::quat yawQuat = glm::angleAxis(glm::radians(m_yawPitch.x), up);
+	glm::quat pitchQuat = glm::angleAxis(glm::radians(m_yawPitch.y), right);
+	if (yawQuat != glm::quat(1.0, 0.0, 0.0, 0.0) && pitchQuat != glm::quat(1.0, 0.0, 0.0, 0.0))
+	{
+		glm::quat rot = glm::normalize(glm::cross(yawQuat, pitchQuat));
+		m_new_direction = glm::normalize(glm::rotate(rot, m_direction));
+	}
+	m_viewMatrix = glm::lookAt(m_position, m_position + m_new_direction, up);
+	
 
 	m_yawPitchOffset = glm::vec2(0.0f, 0.0f);
 	m_shouldUpdateView = false;
@@ -208,29 +239,29 @@ void GraphicEngine::Common::CameraController::rotate(glm::vec2 pos, const std::v
 {
 	glm::vec2 newOffset = m_prevMousePosition - pos;
 
-	if(newOffset.x > 0)
-	{
-		newOffset.x = 1;
-	}
+	//if(newOffset.x > 0)
+	//{
+	//	newOffset.x = 1;
+	//}
 
-	else if (newOffset.x < 0)
-	{
-		newOffset.x = -1;
-	}
+	//else if (newOffset.x < 0)
+	//{
+	//	newOffset.x = -1;
+	//}
 
-	if (newOffset.y > 0)
-	{
-		newOffset.y = 1;
-	}
+	//if (newOffset.y > 0)
+	//{
+	//	newOffset.y = 1;
+	//}
 
-	else if (newOffset.y < 0)
-	{
-		newOffset.y = -1;
-	}
+	//else if (newOffset.y < 0)
+	//{
+	//	newOffset.y = -1;
+	//}
 
 	if (m_rotateButton == Core::Inputs::MouseButton::buttonNone || std::find(std::begin(buttons), std::end(buttons), m_rotateButton) != std::end(buttons))
 	{
-		m_camera->rotate(newOffset * m_dt);
+		m_camera->rotate(newOffset /** m_dt*/);
 	}
 
 	m_prevMousePosition = pos;

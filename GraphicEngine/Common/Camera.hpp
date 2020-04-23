@@ -88,6 +88,7 @@ namespace GraphicEngine::Common
 
 		glm::vec3 m_position = glm::vec3(2.0, 2.0, 2.0);
 		glm::vec3 m_direction = glm::normalize(glm::vec3(-1.0, -1.0, -1.0));
+		glm::vec3 m_new_direction = glm::normalize(glm::vec3(-1.0, -1.0, -1.0));
 		glm::vec3 m_up = glm::vec3(0.0, 0.0, 1.0);
 
 		glm::vec2 m_yawPitch = glm::vec2(0.0, 0.0);
@@ -102,7 +103,7 @@ namespace GraphicEngine::Common
 		bool m_shouldUpdateProjection{ true };
 		CameraType m_cameraType = CameraType::Perspective;
 		float m_speed{ 1.0f };
-		float m_sensitivity{ 250.0f };
+		float m_sensitivity{ 0.25f };
 	};
 
 	class CameraController
@@ -138,4 +139,3 @@ namespace GraphicEngine::Common
 		Core::Inputs::MouseButton m_rotateButton = Core::Inputs::MouseButton::buttonLeft;
 	};
 }
-
