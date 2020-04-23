@@ -1,5 +1,4 @@
-#ifndef GRAPGIC_ENGINE_COMMON_KEYBOARD_HPP
-#define GRAPGIC_ENGINE_COMMON_KEYBOARD_HPP
+#pragma once
 
 #include "../Core/Input/Keyboard/KeyboardEnumKeys.hpp"
 
@@ -13,10 +12,8 @@ namespace GraphicEngine::Common
 	public:
 		virtual ~Keyboard() = default;
 		virtual std::vector<Core::Inputs::KeyboardKey> getPressedKeys() = 0;
-		
+
 	protected:
 		std::vector<Core::Inputs::KeyboardKey> _keys;
 	};
 }
-
-#endif // !GRAPGIC_ENGINE_COMMON_KEYBOARD_HPP

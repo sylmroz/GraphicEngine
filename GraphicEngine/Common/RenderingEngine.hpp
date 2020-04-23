@@ -1,22 +1,18 @@
-#ifndef GRAPHIC_ENGINE_RENDERING_ENGINE_HPP
-#define GRAPHIC_ENGINE_RENDERING_ENGINE_HPP
+#pragma once
 
 #include "../Core/EventManager.hpp"
-#include "Window.hpp"
 #include "Vertex.hpp"
-#include "WindowKeyboardMouse.hpp"
+#include "Camera.hpp"
 
 namespace GraphicEngine
 {
 	class RenderingEngine
 	{
 	public:
-		RenderingEngine(std::shared_ptr<Common::WindowKeyboardMouse> window,
-			std::shared_ptr<Common::Camera> camera,
+		RenderingEngine(std::shared_ptr<Common::Camera> camera,
 			std::shared_ptr<Core::EventManager> eventManager) :
-			_window(window),
-			_camera(camera),
-			_eventManager(eventManager)
+			m_camera(camera),
+			m_eventManager(eventManager)
 		{}
 
 		virtual bool drawFrame() = 0;
@@ -24,14 +20,12 @@ namespace GraphicEngine
 		virtual void resizeFrameBuffer(size_t width, size_t height) = 0;
 		virtual void cleanup() = 0;
 
-		void setCamera(std::shared_ptr<Common::Camera> camera) { _camera = camera; }
+		void setCamera(std::shared_ptr<Common::Camera> camera) { m_camera = camera; }
 	protected:
-		std::shared_ptr<Common::WindowKeyboardMouse> _window;
+		std::shared_ptr<Common::Camera> m_camera;
 
-		std::shared_ptr<Common::Camera> _camera;
+		std::shared_ptr<Core::EventManager> m_eventManager;
 
-		std::shared_ptr<Core::EventManager> _eventManager;
-		
 		std::vector<Common::VertexPC> vertices =
 		{
 			{glm::vec3(0.5f,  0.5f, 0.0f), glm::vec3(0,0,1)},
@@ -45,8 +39,7 @@ namespace GraphicEngine
 			0,1,3,
 			1,2,3
 		};
-		
+
 	};
 }
 
-#endif // !GRAPHIC_ENGINE_RENDERING_ENGINE_HPP

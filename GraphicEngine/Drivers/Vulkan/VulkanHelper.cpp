@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <iostream>
 #include <map>
+#include <numeric>
 #include <set>
 
 #undef max
@@ -375,7 +376,7 @@ vk::UniquePipeline GraphicEngine::Vulkan::createGraphicPipeline(const vk::Unique
 
 std::vector<vk::VertexInputAttributeDescription> GraphicEngine::Vulkan::createVertexInputAttributeDescriptions(const std::vector<std::pair<uint32_t, uint32_t>>& vertexSizeOffset)
 {
-	
+
 	std::vector<vk::VertexInputAttributeDescription> attributeDescriptions;
 
 	std::map<uint32_t, vk::Format> dataFormatTypes = {
@@ -389,7 +390,7 @@ std::vector<vk::VertexInputAttributeDescription> GraphicEngine::Vulkan::createVe
 	{
 		attributeDescriptions.emplace_back(
 			vk::VertexInputAttributeDescription(i, 0, dataFormatTypes[vertexSizeOffset[i].first],
-			                                    vertexSizeOffset[i].second));
+				vertexSizeOffset[i].second));
 	}
 
 	return attributeDescriptions;
@@ -417,7 +418,6 @@ void GraphicEngine::Vulkan::updateDescriptorSets(const vk::UniqueDevice& device,
 	const std::vector<vk::UniqueDescriptorSet>& descriptorSets, const std::vector<std::vector<std::shared_ptr<BufferData>>>& uniformBuffers, const std::vector<std::pair<vk::UniqueImageView, vk::UniqueSampler>>& imageUniforms)
 {
 	std::vector<vk::DescriptorSetLayout> layouts(layoutCount, descriptorSetLayout.get());
-	vk::DescriptorSetAllocateInfo descriptorSetAllocateInfo(descriptorPool.get(), static_cast<uint32_t>(layouts.size()), layouts.data());
 
 	for (uint32_t i{ 0 }; i < descriptorSets.size(); ++i)
 	{
@@ -447,10 +447,9 @@ void GraphicEngine::Vulkan::updateDescriptorSets(const vk::UniqueDevice& device,
 
 vk::Format GraphicEngine::Vulkan::findSupportedFormat(const vk::PhysicalDevice& physicalDevice, std::vector<vk::Format> candidates, vk::ImageTiling tiling, vk::FormatFeatureFlags formatFeatures)
 {
-	vk::FormatProperties props;
 	for (const vk::Format& format : candidates)
 	{
-		props = physicalDevice.getFormatProperties(format);
+		vk::FormatProperties props = physicalDevice.getFormatProperties(format);
 		if ((tiling == vk::ImageTiling::eLinear) && ((props.linearTilingFeatures & formatFeatures) == formatFeatures))
 			return format;
 		if ((tiling == vk::ImageTiling::eOptimal) && ((props.optimalTilingFeatures & formatFeatures) == formatFeatures))
@@ -495,7 +494,7 @@ void GraphicEngine::Vulkan::SwapChainData::createSwapChainData(const vk::Physica
 	vk::ImageSubresourceRange subResourceRange(vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1);
 	for (auto& image : images)
 	{
-		vk::ImageViewCreateInfo createInfo(vk::ImageViewCreateFlags() , image, vk::ImageViewType::e2D, this->format, componentMapping, subResourceRange);
+		vk::ImageViewCreateInfo createInfo(vk::ImageViewCreateFlags(), image, vk::ImageViewType::e2D, this->format, componentMapping, subResourceRange);
 		imageViews.emplace_back(device->createImageViewUnique(createInfo));
 	}
 }

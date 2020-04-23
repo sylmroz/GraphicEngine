@@ -1,14 +1,10 @@
-#ifndef GRAPHIC_ENGINE_COMMON_VERTEX_BUFFER_HPP
-#define GRAPHIC_ENGINE_COMMON_VERTEX_BUFFER_HPP
+#pragma once
 
 namespace GraphicEngine::Common
 {
 	class VertexBuffer
 	{
 	public:
-		
+
 	};
 }
-
-#endif //!GRAPHIC_ENGINE_COMMON_VERTEX_BUFFER_HPP
-

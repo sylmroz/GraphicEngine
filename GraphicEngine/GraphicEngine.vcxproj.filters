@@ -64,6 +64,12 @@
     <Filter Include="Platform\Glfw">
       <UniqueIdentifier>{95b5fe9e-8a29-46cc-9d68-5918b3c15405}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Platform\Glfw\Vulkan">
+      <UniqueIdentifier>{71227eb0-ddcf-4036-a490-e842b588f410}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Glfw\OpenGL">
+      <UniqueIdentifier>{042488d5-4ae9-42fa-a4aa-495392d278f7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -107,6 +113,15 @@
     </ClCompile>
     <ClCompile Include="Platform\Glfw\GlfwWindow.cpp">
       <Filter>Platform\Glfw</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform\Glfw\Vulkan\GlfwVulkanWindowContext.cpp">
+      <Filter>Platform\Glfw\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform\Glfw\Vulkan\GlfwVulkanWindow.cpp">
+      <Filter>Platform\Glfw\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform\Glfw\OpenGL\GlfwOpenGLWindow.cpp">
+      <Filter>Platform\Glfw\OpenGL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -196,6 +211,21 @@
     </ClInclude>
     <ClInclude Include="Drivers\Vulkan\VulkanWindowContext.hpp">
       <Filter>Drivers\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Glfw\Vulkan\GlfwVulkanWindowContext.hpp">
+      <Filter>Platform\Glfw\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Glfw\Vulkan\GlfwVulkanWindow.hpp">
+      <Filter>Platform\Glfw\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Glfw\Vulkan\GlfwVulkanInjector.hpp">
+      <Filter>Platform\Glfw\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Glfw\OpenGL\GlfwOpenGLInjector.hpp">
+      <Filter>Platform\Glfw\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Glfw\OpenGL\GlfwOpenGLWindow.hpp">
+      <Filter>Platform\Glfw\OpenGL</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

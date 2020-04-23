@@ -1,10 +1,7 @@
-#ifndef GRAPHIC_ENGINE_WINDOW_HPP
-#define GRAPHIC_ENGINE_WINDOW_HPP
+#pragma once
 
 #include "../Core/Subject.hpp"
-#include "../Core/Input/Keyboard/KeyboardEventProxy.hpp"
 #include "../Core/Input/Mouse/MouseEventProxy.hpp"
-#include "../Common/Camera.hpp"
 
 #include <exception>
 #include <utility>
@@ -16,12 +13,12 @@ namespace GraphicEngine
 	public:
 		virtual void init(size_t width, size_t height)
 		{
-			_width = width;
-			_height = height;
+			m_width = width;
+			m_height = height;
 			try
 			{
 				initialize();
-				_resizeSubject.subscribe([&](size_t width, size_t height) 
+				m_resizeSubject.subscribe([&](size_t width, size_t height)
 					{
 						setWidth(width);
 						setHeight(height);
@@ -39,33 +36,29 @@ namespace GraphicEngine
 
 		virtual void poolEvents() = 0;
 
-		virtual std::vector<std::string> getRequiredExtensions() = 0;
-
 		virtual std::pair<uint32_t, uint32_t> getFrameBufferSize() = 0;
 
 		virtual void addResizeCallbackListener(std::function<void(size_t, size_t)> resizeListener)
 		{
-			_resizeSubject.subscribe(std::move(resizeListener));
+			m_resizeSubject.subscribe(std::move(resizeListener));
 		}
 
-		virtual bool windowShouldBeClosed() { return _shouldClose; }
+		virtual bool windowShouldBeClosed() { return m_shouldClose; }
 
-		size_t getWidth() { return _width; }
-		void setWidth(size_t width) { _width = width; }
+		size_t getWidth() const { return m_width; }
+		void setWidth(size_t width) { m_width = width; }
 
-		size_t getHeight() { return _height; }
-		void setHeight(size_t height) { _height = height; }
+		size_t getHeight() const { return m_height; }
+		void setHeight(size_t height) { m_height = height; }
 
-	protected:
 		virtual void initialize() = 0;
+
 	protected:
-		size_t _width{ 0 };
-		size_t _height{ 0 };
+		size_t m_width{ 0 };
+		size_t m_height{ 0 };
 
-		bool _shouldClose{ false };
+		bool m_shouldClose{ false };
 
-		GraphicEngine::Core::Subject<size_t,size_t> _resizeSubject;
+		Core::Subject<size_t, size_t> m_resizeSubject;
 	};
 }
-
-#endif // !GRAPHIC_ENGINE_WINDOW_HPP

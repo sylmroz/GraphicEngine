@@ -1,9 +1,7 @@
-#ifndef GRAPHIC_ENGINE_UTILS_VULKAN_HELPER_HPP
-#define GRAPHIC_ENGINE_UTILS_VULKAN_HELPER_HPP
+#pragma once
 
 #include <array>
 #include <iostream>
-#include <numeric>
 #include <optional>
 #include <string>
 #include <vector>
@@ -40,7 +38,7 @@ namespace GraphicEngine::Vulkan
 				vk::CommandBufferAllocateInfo(commandPool.get(), vk::CommandBufferLevel::ePrimary, 1)).front());
 		singleTimeCommand(commandBuffer, commandPool, graphicQueue, fun, args...);
 	}
-	
+
 	struct QueueFamilyIndices
 	{
 		std::optional<uint32_t> graphicsFamily;
@@ -75,7 +73,7 @@ namespace GraphicEngine::Vulkan
 		std::vector<vk::UniqueFence> inFlightFences;
 		std::vector<vk::Fence> imagesInFlight;
 	};
-	
+
 	class SwapChainData
 	{
 	public:
@@ -125,7 +123,7 @@ namespace GraphicEngine::Vulkan
 		vk::UniqueImageView imageView;
 	};
 
-	class DepthBufferData : public ImageData 
+	class DepthBufferData : public ImageData
 	{
 	public:
 		DepthBufferData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::Extent3D extent, vk::Format format, vk::SampleCountFlagBits numOfSamples);
@@ -133,7 +131,7 @@ namespace GraphicEngine::Vulkan
 
 	class TextureData : public ImageData
 	{
-		
+
 		// TODO
 	};
 
@@ -145,19 +143,19 @@ namespace GraphicEngine::Vulkan
 		{
 			for (uint32_t i{ 0 }; i < count; ++i)
 			{
-				_bufferData.emplace_back(std::make_shared<BufferData>(physicalDevice, device, vk::BufferUsageFlagBits::eUniformBuffer,
+				bufferData.emplace_back(std::make_shared<BufferData>(physicalDevice, device, vk::BufferUsageFlagBits::eUniformBuffer,
 					vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent, sizeof(T)));
 			}
 		}
-		
+
 		void setValue(T value)
 		{
-			_value = value;
+			m_value = value;
 		}
 
 		void update(const vk::UniqueDevice& device, uint32_t bufferIndex)
 		{
-			copyMemoryToDevice<T>(device, _bufferData[bufferIndex]->memory, &_value, 1);
+			copyMemoryToDevice<T>(device, bufferData[bufferIndex]->memory, &m_value, 1);
 		}
 
 		void updateAndSet(const vk::UniqueDevice& device, T value, uint32_t bufferIndex)
@@ -166,10 +164,10 @@ namespace GraphicEngine::Vulkan
 			update(device, bufferIndex);
 		}
 
-		std::vector<std::shared_ptr<BufferData>> _bufferData;
-		
+		std::vector<std::shared_ptr<BufferData>> bufferData;
+
 	private:
-		T _value;
+		T m_value;
 	};
 
 	template <typename T>
@@ -179,7 +177,7 @@ namespace GraphicEngine::Vulkan
 		DeviceBufferData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, const vk::UniqueCommandPool& commandPool, vk::Queue queue,
 			const vk::BufferUsageFlags& usageFlags, const T* data, uint32_t size)
 		{
-			BufferData stagingBuffer(physicalDevice, device, vk::BufferUsageFlagBits::eTransferSrc, vk::MemoryPropertyFlagBits::eHostVisible|vk::MemoryPropertyFlagBits::eHostCoherent, sizeof(T) * size);
+			BufferData stagingBuffer(physicalDevice, device, vk::BufferUsageFlagBits::eTransferSrc, vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent, sizeof(T) * size);
 			copyMemoryToDevice<T>(device, stagingBuffer.memory, data, size);
 			buffer = std::make_unique<BufferData>(physicalDevice, device, usageFlags, vk::MemoryPropertyFlagBits::eDeviceLocal, sizeof(T) * size);
 			singleTimeCommand(device, commandPool, queue, [&](const vk::UniqueCommandBuffer& commandBuffer)
@@ -198,8 +196,8 @@ namespace GraphicEngine::Vulkan
 	public:
 		IndicesDeviceBuffer(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, const vk::UniqueCommandPool& commandPool, vk::Queue queue,
 			const std::vector<uint32_t>& indices) :
-			DeviceBufferData(physicalDevice, device, commandPool, queue, 
-				vk::BufferUsageFlagBits::eIndexBuffer | vk::BufferUsageFlagBits::eTransferDst, indices.data(), indices.size()){}
+			DeviceBufferData(physicalDevice, device, commandPool, queue,
+				vk::BufferUsageFlagBits::eIndexBuffer | vk::BufferUsageFlagBits::eTransferDst, indices.data(), indices.size()) {}
 	};
 
 	template <typename _Vertex>
@@ -239,12 +237,12 @@ namespace GraphicEngine::Vulkan
 			uint32_t _size;
 		};
 
-		
+
 		class _VertexBufferWithIndices : public _VertexBuffer
 		{
 		public:
 			_VertexBufferWithIndices(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, const vk::UniqueCommandPool& commandPool, vk::Queue queue, const std::vector<_Vertex>& vertices, const std::vector<uint32_t>& indices) :
-			_VertexBuffer(physicalDevice, device, commandPool, queue, vertices)
+				_VertexBuffer(physicalDevice, device, commandPool, queue, vertices)
 			{
 				this->_size = indices.size();
 				_indicesDeviceBuffer = std::make_unique<IndicesDeviceBuffer>(physicalDevice, device, commandPool, queue, indices);
@@ -262,7 +260,7 @@ namespace GraphicEngine::Vulkan
 			}
 
 			virtual ~_VertexBufferWithIndices() = default;
-			
+
 		private:
 			std::unique_ptr<IndicesDeviceBuffer> _indicesDeviceBuffer;
 		};
@@ -348,6 +346,3 @@ namespace GraphicEngine::Vulkan
 		const std::vector<vk::UniqueDescriptorSet>& descriptorSets, const std::vector<std::vector<std::shared_ptr<BufferData>>>& uniformBuffers, const std::vector<std::pair<vk::UniqueImageView, vk::UniqueSampler>>& imageUniforms);
 
 }
-
-#endif // !GRAPHIC_ENGINE_UTILS_VULKAN_HELPER_HPP
-
