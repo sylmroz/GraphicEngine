@@ -17,7 +17,7 @@ void Application::exec()
 {
 	try
 	{
-		std::string engineType = "vulkan";
+		std::string engineType = "opengl";
 
 		auto createEngine = [](const auto& injector) -> std::unique_ptr<GraphicEngine::Engine>
 		{

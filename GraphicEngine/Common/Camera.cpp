@@ -6,6 +6,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
+#include <iostream>
 
 glm::mat4 GraphicEngine::Common::Camera::getViewProjectionMatrix()
 {
@@ -206,6 +207,26 @@ bool GraphicEngine::Common::CameraController::isCameraActivated()
 void GraphicEngine::Common::CameraController::rotate(glm::vec2 pos, const std::vector<Core::Inputs::MouseButton>& buttons)
 {
 	glm::vec2 newOffset = m_prevMousePosition - pos;
+
+	if(newOffset.x > 0)
+	{
+		newOffset.x = 1;
+	}
+
+	else if (newOffset.x < 0)
+	{
+		newOffset.x = -1;
+	}
+
+	if (newOffset.y > 0)
+	{
+		newOffset.y = 1;
+	}
+
+	else if (newOffset.y < 0)
+	{
+		newOffset.y = -1;
+	}
 
 	if (m_rotateButton == Core::Inputs::MouseButton::buttonNone || std::find(std::begin(buttons), std::end(buttons), m_rotateButton) != std::end(buttons))
 	{

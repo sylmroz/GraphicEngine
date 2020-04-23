@@ -227,5 +227,8 @@
     <ClInclude Include="Platform\Glfw\OpenGL\GlfwOpenGLWindow.hpp">
       <Filter>Platform\Glfw\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="Drivers\OpenGL\OpenGLUniformBuffer.hpp">
+      <Filter>Drivers\OpenGL</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

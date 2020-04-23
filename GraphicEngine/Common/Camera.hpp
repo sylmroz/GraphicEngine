@@ -102,7 +102,7 @@ namespace GraphicEngine::Common
 		bool m_shouldUpdateProjection{ true };
 		CameraType m_cameraType = CameraType::Perspective;
 		float m_speed{ 1.0f };
-		float m_sensitivity{ 180.0f };
+		float m_sensitivity{ 250.0f };
 	};
 
 	class CameraController

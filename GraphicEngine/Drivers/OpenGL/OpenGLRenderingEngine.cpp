@@ -14,6 +14,7 @@ bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	m_program->use();
+	m_uniformBufferMatrix->update(m_camera->getViewProjectionMatrix());
 	m_vertexBuffer->bind();
 	m_vertexBuffer->draw();
 	return false;
@@ -28,9 +29,10 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 	}
 	glViewport(0, 0, width, height);
 
-	OpenGLVertexShader vert(readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Glsl/basicPC.vert"));
-	OpenGLFragmentShader frag(readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Glsl/basicPC.frag"));
-	m_program = std::unique_ptr<OpenGLShaderProgram>(new OpenGLShaderProgram({ vert, frag }));
+	OpenGLVertexShader vert(readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Glsl/basicPCVP.vert"));
+	OpenGLFragmentShader frag(readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Glsl/basicPCVP.frag"));
+	m_program = std::shared_ptr<OpenGLShaderProgram>(new OpenGLShaderProgram({ vert, frag }));
+	m_uniformBufferMatrix = std::make_shared<UniformBufferMatrix>(m_program, "MVP");
 	m_vertexBuffer = std::unique_ptr<VertexBuffer<GraphicEngine::Common::VertexPC>>(new VertexBuffer<GraphicEngine::Common::VertexPC>(vertices, indices));
 }
 

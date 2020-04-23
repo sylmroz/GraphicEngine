@@ -4,6 +4,7 @@
 
 #include "OpenGLHelper.hpp"
 #include "OpenGLShader.hpp"
+#include "OpenGLUniformBuffer.hpp"
 
 namespace GraphicEngine::OpenGL
 {
@@ -16,7 +17,8 @@ namespace GraphicEngine::OpenGL
 		virtual void resizeFrameBuffer(size_t width, size_t height) override;
 		virtual void cleanup() override;
 	private:
-		std::unique_ptr<OpenGLShaderProgram> m_program;
+		std::shared_ptr<OpenGLShaderProgram> m_program;
+		std::shared_ptr<UniformBufferMatrix> m_uniformBufferMatrix;
 		std::unique_ptr<VertexBuffer<Common::VertexPC>> m_vertexBuffer;
 	};
 }
