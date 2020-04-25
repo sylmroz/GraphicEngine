@@ -18,7 +18,7 @@ namespace GraphicEngine::OpenGL
 		virtual void cleanup() override;
 	private:
 		std::shared_ptr<OpenGLShaderProgram> m_program;
-		std::shared_ptr<UniformBufferMatrix> m_uniformBufferMatrix;
+		std::shared_ptr<UniformBuffer<glm::mat4>> m_uniformBufferMatrix;
 		std::unique_ptr<VertexBuffer<Common::VertexPC>> m_vertexBuffer;
 	};
 }
