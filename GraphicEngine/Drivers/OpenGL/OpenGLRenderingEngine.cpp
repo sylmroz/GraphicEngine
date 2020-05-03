@@ -4,9 +4,12 @@
 
 GraphicEngine::OpenGL::OpenGLRenderingEngine::OpenGLRenderingEngine(
 	std::shared_ptr<Common::Camera> camera,
-	std::shared_ptr<Core::EventManager> eventManager) :
+	std::shared_ptr<Core::EventManager> eventManager,
+	std::unique_ptr<GameEngine::Core::Logger<OpenGLRenderingEngine>> logger) :
+	m_logger(std::move(logger)),
 	RenderingEngine(camera, eventManager)
 {
+	m_logger->info(__FILE__, __LINE__, __FUNCTION__, "Create OpenGL rendering engine instance.");
 }
 
 bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
@@ -23,6 +26,7 @@ bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 
 void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t height)
 {
+	m_logger->info(__FILE__, __LINE__, __FUNCTION__, "Initialize OpenGL rendering engine instance.");
 	using namespace GraphicEngine::Core::IO;
 	if (glewInit() != GLEW_OK)
 	{
@@ -30,13 +34,24 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 	}
 	glViewport(0, 0, width, height);
 
-	OpenGLVertexShader vert(readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Glsl/basicPCVP.vert"));
-	OpenGLFragmentShader frag(readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Glsl/basicPCVP.frag"));
-	m_program = std::shared_ptr<OpenGLShaderProgram>(new OpenGLShaderProgram({ vert, frag }));
-	auto uniformIndex = glGetUniformBlockIndex(m_program->getShaderProgramId(),"MVP");
-	glUniformBlockBinding(m_program->getShaderProgramId(), uniformIndex, 0);
-	m_uniformBufferMatrix = std::make_shared<UniformBuffer<glm::mat4>>();
-	m_vertexBuffer = std::unique_ptr<VertexBuffer<GraphicEngine::Common::VertexPC>>(new VertexBuffer<GraphicEngine::Common::VertexPC>(vertices, indices));
+	try
+	{
+		OpenGLVertexShader vert(readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Glsl/basicPCVP.vert"));
+		OpenGLFragmentShader frag(readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Glsl/basicPCVP.frag"));
+		OpenGLFragmentShader frag2(readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Glsl/basicPCVP2.frag"));
+
+		m_program = std::shared_ptr<OpenGLShaderProgram>(new OpenGLShaderProgram({ vert, frag }));
+		auto uniformIndex = glGetUniformBlockIndex(m_program->getShaderProgramId(), "MVP");
+		glUniformBlockBinding(m_program->getShaderProgramId(), uniformIndex, 0);
+		m_uniformBufferMatrix = std::make_shared<UniformBuffer<glm::mat4>>();
+		m_vertexBuffer = std::unique_ptr<VertexBuffer<GraphicEngine::Common::VertexPC>>(new VertexBuffer<GraphicEngine::Common::VertexPC>(vertices, indices));
+	}
+
+	catch (std::runtime_error& err)
+	{
+		m_logger->error(__FILE__, __LINE__, __FUNCTION__, err.what());
+		throw (err);
+	}
 }
 
 void GraphicEngine::OpenGL::OpenGLRenderingEngine::resizeFrameBuffer(size_t width, size_t height)

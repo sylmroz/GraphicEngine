@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Core/EventManager.hpp"
+#include "../Core/Logger.hpp"
 #include "Vertex.hpp"
 #include "Camera.hpp"
 
@@ -21,6 +22,8 @@ namespace GraphicEngine
 		virtual void cleanup() = 0;
 
 		void setCamera(std::shared_ptr<Common::Camera> camera) { m_camera = camera; }
+
+		virtual ~RenderingEngine() = default;
 	protected:
 		std::shared_ptr<Common::Camera> m_camera;
 

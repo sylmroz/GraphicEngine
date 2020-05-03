@@ -10,12 +10,16 @@ namespace GraphicEngine::Vulkan
 	class VulkanRenderingEngine : public RenderingEngine
 	{
 	public:
-		VulkanRenderingEngine(std::shared_ptr<VulkanWindowContext> vulkanWindowContext, std::shared_ptr<Common::Camera> camera, std::shared_ptr<Core::EventManager> eventManager);
+		VulkanRenderingEngine(std::shared_ptr<VulkanWindowContext> vulkanWindowContext,
+			std::shared_ptr<Common::Camera> camera,
+			std::shared_ptr<Core::EventManager> eventManager,
+			std::unique_ptr<GameEngine::Core::Logger<VulkanRenderingEngine>> logger);
 		virtual bool drawFrame() override;
 		virtual void init(size_t width, size_t height) override;
 		virtual void resizeFrameBuffer(size_t width, size_t height) override;
 		virtual void cleanup() override;
 
+		virtual ~VulkanRenderingEngine() = default;
 	private:
 		uint32_t calculateNextIndex();
 		void buildCommandBuffers();

@@ -108,15 +108,15 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\libs\glm;C:\VulkanSDK\1.2.135.0\Include;C:\libs\assimp\include\;C:\libs\opencv-4.2\include;C:\libs\glew-2.1.0\include;C:\libs\di\include;C:\libs\di\extension\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\libs\glm;C:\VulkanSDK\1.2.135.0\Include;C:\libs\assimp\include\;C:\libs\opencv-4.2\include;C:\libs\glew-2.1.0\include;C:\libs\di\include;C:\libs\di\extension\include;C:\libs\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\libs\assimp\lib\x64;C:\VulkanSDK\1.2.135.0\Lib;C:\libs\opencv-4.2\lib;C:\libs\glew-2.1.0\lib\Release\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>assimp-vc140-mt.lib;vulkan-1.lib;VkLayer_utils.lib;shaderc_combined.lib;opencv_world420d.lib;opengl32.lib;glew32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\libs\assimp\lib\x64;C:\VulkanSDK\1.2.135.0\Lib;C:\libs\opencv-4.2\lib;C:\libs\glew-2.1.0\lib\Release\x64;C:\libs\spdlog\build\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc140-mt.lib;vulkan-1.lib;VkLayer_utils.lib;shaderc_combined.lib;opencv_world420d.lib;opengl32.lib;glew32.lib;glew32s.lib;spdlogd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
