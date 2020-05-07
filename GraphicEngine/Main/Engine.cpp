@@ -6,19 +6,22 @@ GraphicEngine::Engine::Engine(std::shared_ptr<Common::WindowKeyboardMouse> windo
 	std::shared_ptr<Core::Inputs::KeyboardEventProxy> keyboard,
 	std::shared_ptr<Core::Inputs::MouseEventProxy> mouse,
 	std::shared_ptr<Common::CameraController> cameraController,
-	std::shared_ptr<Core::EventManager> eventManager) :
+	std::shared_ptr<Core::EventManager> eventManager,
+	std::unique_ptr<Core::Logger<Engine>> logger) :
 	m_window(window),
 	m_renderingEngine(renderingEngine),
 	m_keyboard(keyboard),
 	m_mouse(mouse),
 	m_cameraController(cameraController),
-	m_eventManager(eventManager)
+	m_eventManager(eventManager),
+	m_logger(std::move(logger))
 
 {
 }
 
 void GraphicEngine::Engine::initialize()
 {
+	m_logger->debug(__FILE__, __LINE__, __FUNCTION__, "Initialize Engine");
 	m_window->init(640, 480);
 
 	m_cameraController->setInitialMousePosition(glm::vec2(m_window->getWidth() / 2, m_window->getHeight() / 2));
@@ -42,6 +45,7 @@ void GraphicEngine::Engine::initialize()
 
 void GraphicEngine::Engine::run()
 {
+	m_logger->debug(__FILE__, __LINE__, __FUNCTION__, "Run Engine");
 	Core::Timer timer;
 	timer.start();
 	while (!m_window->windowShouldBeClosed() && !shutdown)
@@ -54,4 +58,9 @@ void GraphicEngine::Engine::run()
 		m_eventManager->call();
 	}
 	m_renderingEngine->cleanup();
+}
+
+GraphicEngine::Engine::~Engine()
+{
+	m_logger->debug(__FILE__, __LINE__, __FUNCTION__, "Shutdown Engine");
 }

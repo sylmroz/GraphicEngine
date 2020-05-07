@@ -17,7 +17,7 @@ void Application::exec()
 {
 	try
 	{
-		std::string engineType = "vulkan";
+		std::string engineType = "opengl";
 
 		auto createEngine = [](const auto& injector) -> std::unique_ptr<GraphicEngine::Engine>
 		{
@@ -34,13 +34,13 @@ void Application::exec()
 
 	catch (std::runtime_error& err)
 	{
-		GameEngine::Core::Logger<Application> logger;
+		GraphicEngine::Core::Logger<Application> logger;
 		logger.error(__FILE__, __LINE__, __FUNCTION__, err.what());
 	}
 	
 	catch (std::exception ex)
 	{
-		GameEngine::Core::Logger<Application> logger;
+		GraphicEngine::Core::Logger<Application> logger;
 		logger.warn(__FILE__, __LINE__, __FUNCTION__, ex.what());
 	}
 }

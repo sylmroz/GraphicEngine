@@ -170,6 +170,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Common\Camera.cpp" />
+    <ClCompile Include="Core\LoggerCore\SourceFormatter.cpp" />
     <ClCompile Include="Drivers\OpenGL\OpenGLRenderingEngine.cpp" />
     <ClCompile Include="Drivers\OpenGL\OpenGLShader.cpp" />
     <ClCompile Include="Drivers\Vulkan\VulkanHelper.cpp" />
@@ -199,6 +200,8 @@
     <ClInclude Include="Core\Input\Mouse\MouseEnumButton.hpp" />
     <ClInclude Include="Core\IO\FileReader.hpp" />
     <ClInclude Include="Core\Logger.hpp" />
+    <ClInclude Include="Core\LoggerCore\LoggerName.hpp" />
+    <ClInclude Include="Core\LoggerCore\SourceFormatter.hpp" />
     <ClInclude Include="Core\Ranges.hpp" />
     <ClInclude Include="Core\Subject.hpp" />
     <ClInclude Include="Core\Timer.hpp" />

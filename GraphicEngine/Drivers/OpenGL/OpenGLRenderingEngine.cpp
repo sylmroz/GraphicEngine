@@ -5,7 +5,7 @@
 GraphicEngine::OpenGL::OpenGLRenderingEngine::OpenGLRenderingEngine(
 	std::shared_ptr<Common::Camera> camera,
 	std::shared_ptr<Core::EventManager> eventManager,
-	std::unique_ptr<GameEngine::Core::Logger<OpenGLRenderingEngine>> logger) :
+	std::unique_ptr<Core::Logger<OpenGLRenderingEngine>> logger) :
 	m_logger(std::move(logger)),
 	RenderingEngine(camera, eventManager)
 {
@@ -38,7 +38,6 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 	{
 		OpenGLVertexShader vert(readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Glsl/basicPCVP.vert"));
 		OpenGLFragmentShader frag(readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Glsl/basicPCVP.frag"));
-		OpenGLFragmentShader frag2(readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Glsl/basicPCVP2.frag"));
 
 		m_program = std::shared_ptr<OpenGLShaderProgram>(new OpenGLShaderProgram({ vert, frag }));
 		auto uniformIndex = glGetUniformBlockIndex(m_program->getShaderProgramId(), "MVP");

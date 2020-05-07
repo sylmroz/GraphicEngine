@@ -70,6 +70,9 @@
     <Filter Include="Platform\Glfw\OpenGL">
       <UniqueIdentifier>{042488d5-4ae9-42fa-a4aa-495392d278f7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\LoggerCore">
+      <UniqueIdentifier>{293ad93e-89c0-4751-a79c-21abb4ddd10f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -122,6 +125,9 @@
     </ClCompile>
     <ClCompile Include="Platform\Glfw\OpenGL\GlfwOpenGLWindow.cpp">
       <Filter>Platform\Glfw\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\LoggerCore\SourceFormatter.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -229,6 +235,12 @@
     </ClInclude>
     <ClInclude Include="Drivers\OpenGL\OpenGLUniformBuffer.hpp">
       <Filter>Drivers\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\LoggerCore\SourceFormatter.hpp">
+      <Filter>Core\LoggerCore</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\LoggerCore\LoggerName.hpp">
+      <Filter>Core\LoggerCore</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
