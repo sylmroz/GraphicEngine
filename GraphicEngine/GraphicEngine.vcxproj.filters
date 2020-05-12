@@ -248,5 +248,11 @@
     <ClInclude Include="Core\Utils\GetClassName.hpp">
       <Filter>Core\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Core\ServiceManager.hpp">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Drivers\OpenGL\OpenGLUniformData.hpp">
+      <Filter>Drivers\OpenGL</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

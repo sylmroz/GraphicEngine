@@ -203,6 +203,7 @@
     <ClInclude Include="Core\LoggerCore\LoggerName.hpp" />
     <ClInclude Include="Core\LoggerCore\SourceFormatter.hpp" />
     <ClInclude Include="Core\Ranges.hpp" />
+    <ClInclude Include="Core\ServiceManager.hpp" />
     <ClInclude Include="Core\Subject.hpp" />
     <ClInclude Include="Core\Timer.hpp" />
     <ClInclude Include="Core\Utils\GetClassName.hpp" />
@@ -210,6 +211,7 @@
     <ClInclude Include="Drivers\OpenGL\OpenGLRenderingEngine.hpp" />
     <ClInclude Include="Drivers\OpenGL\OpenGLShader.hpp" />
     <ClInclude Include="Drivers\OpenGL\OpenGLUniformBuffer.hpp" />
+    <ClInclude Include="Drivers\OpenGL\OpenGLUniformData.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanShader.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanHelper.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanRenderingEngine.hpp" />
