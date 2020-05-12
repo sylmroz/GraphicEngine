@@ -1,5 +1,4 @@
-#ifndef GAME_ENGINE_RANGES_CORE
-#define GAME_ENGINE_RANGES_CORE
+#pragma once
 
 namespace GameEngine::Core::Ranges
 {
@@ -17,6 +16,3 @@ namespace GameEngine::Core::Ranges
 		return retContainer;
 	}
 }
-
-#endif // !GAME_ENGINE_RANGES_CORE
-

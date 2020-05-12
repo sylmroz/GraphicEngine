@@ -1,5 +1,4 @@
-#ifndef GRAPHIC_ENGINE_CORE_TIMER_HPP
-#define GRAPHIC_ENGINE_CORE_TIMER_HPP
+#pragma once
 
 #include <chrono>
 
@@ -30,5 +29,3 @@ namespace GraphicEngine::Core
 		std::chrono::duration<double> _interval;
 	};
 }
-
-#endif //!GRAPHIC_ENGINE_CORE_TIMER_HPP

@@ -1,5 +1,4 @@
-#ifndef GRAPHIC_ENGINE_HID_KEYBOARD_HPP
-#define GRAPHIC_ENGINE_HID_KEYBOARD_HPP
+#pragma once
 
 #include "KeyboardEnumKeys.hpp"
 
@@ -13,6 +12,3 @@ namespace GraphicEngine::Core::Inputs
 	{
 	};
 }
-
-#endif // !GRAPHIC_ENGINE_HID_KEYBOARD_HPP
-

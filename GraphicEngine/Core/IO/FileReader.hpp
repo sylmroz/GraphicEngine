@@ -1,5 +1,4 @@
-#ifndef GRAPHIC_ENGINE_CORE_IO_FILE_READER_HPP
-#define GRAPHIC_ENGINE_CORE_IO_FILE_READER_HPP
+#pragma once
 
 #include <fstream>
 
@@ -24,6 +23,3 @@ namespace GraphicEngine::Core::IO
 		return _data;
 	}
 }
-
-#endif // !GRAPHIC_ENGINE_CORE_IO_FILE_READER_HPP
-

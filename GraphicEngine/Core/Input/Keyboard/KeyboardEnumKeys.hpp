@@ -1,5 +1,4 @@
-#ifndef GRAPHIC_ENGINE_HID_KEYBOARD_ENUM_KEYS_HPP
-#define GRAPHIC_ENGINE_HID_KEYBOARD_ENUM_KEYS_HPP
+#pragma once
 
 namespace GraphicEngine::Core::Inputs
 {
@@ -127,5 +126,3 @@ namespace GraphicEngine::Core::Inputs
 		KEY_RIGHT_SUPER = 347
 	};
 }
-
-#endif //!GRAPHIC_ENGINE_HID_KEYBOARD_ENUM_KEYS_HPP

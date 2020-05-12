@@ -1,5 +1,4 @@
-#ifndef GRAPHIC_ENGINE_HID_MOUSE_HPP
-#define GRAPHIC_ENGINE_HID_MOUSE_HPP
+#pragma once
 
 #include "MouseEnumButton.hpp"
 
@@ -54,5 +53,3 @@ namespace GraphicEngine::Core::Inputs
 		MouseButtonPositionScrollEventHandler _buttonPositionScrollEventHandler;
 	};
 }
-
-#endif // !GRAPHIC_ENGINE_HID_MOUSE_HPP

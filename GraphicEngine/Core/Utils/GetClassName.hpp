@@ -1,4 +1,5 @@
 #pragma once
+
 #define GCC_COMPILER (defined(__GNUC__) && !defined(__clang__))
 
 #include <string>
@@ -6,6 +7,7 @@
 #if GCC_COMPILER
 #include <cxxabi.h>
 #endif
+
 namespace GraphicEngine::Core::Utils
 {
 	template <typename T>
@@ -17,5 +19,5 @@ namespace GraphicEngine::Core::Utils
 #else
 		return typeid(T).name();
 #endif
-}
+	}
 }

@@ -1,5 +1,4 @@
-#ifndef GRAPHIC_ENGINE_UTILS_SUBJECT_HPP
-#define GRAPHIC_ENGINE_UTILS_SUBJECT_HPP
+#pragma once
 
 #include <functional>
 #include <vector>
@@ -27,6 +26,3 @@ namespace GraphicEngine::Core
 		std::vector<std::function<void(Args...)>> functions;
 	};
 }
-
-#endif // !GRAPHIC_ENGINE_UTILS_SUBJECT_HPP
-

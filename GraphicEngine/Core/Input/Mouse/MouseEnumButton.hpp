@@ -1,5 +1,4 @@
-#ifndef GRAPHIC_ENGINE_HID_MOUSE_ENUM_KEYS_HPP
-#define GRAPHIC_ENGINE_HID_MOUSE_ENUM_KEYS_HPP
+#pragma once
 
 namespace GraphicEngine::Core::Inputs
 {
@@ -11,5 +10,3 @@ namespace GraphicEngine::Core::Inputs
 		buttonRight,
 	};
 }
-
-#endif // !GRAPHIC_ENGINE_HID_MOUSE_ENUM_KEYS_HPP
