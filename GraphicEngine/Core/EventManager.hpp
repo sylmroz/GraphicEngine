@@ -1,5 +1,4 @@
-#ifndef GRAPHIC_ENGINE_CORE_EVENT_MANAGER_HPP
-#define GRAPHIC_ENGINE_CORE_EVENT_MANAGER_HPP
+#pragma once
 
 #include "Subject.hpp"
 
@@ -32,17 +31,6 @@ namespace GraphicEngine::Core
 			Subject _subject;
 		};
 	public:
-		//template <typename Subject, typename... ArgumentFunction>
-		//void addSubject(Subject subject, ArgumentFunction... argFunction)
-		//{
-		//	_notifiers.emplace_back(std::make_shared<NotifierBase>(new Notifier(
-		//		[_subject = std::move(subject), _argFunction = std::move(argFunction...)]
-		//		//[&]
-		//	() mutable
-		//	{
-		//		_subject(_argFunction()...);
-		//	})));
-		//}
 
 		template <typename Subject, typename... Args>
 		void addSubject(Subject&& subject, Args... args)
@@ -77,6 +65,3 @@ namespace GraphicEngine::Core
 		std::vector<std::shared_ptr<NotifierBase>> _notifiers;
 	};
 }
-
-#endif // !GRAPHIC_ENGINE_CORE_EVENT_MANAGER_HPP
-

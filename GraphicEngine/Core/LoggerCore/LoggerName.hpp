@@ -1,6 +1,6 @@
 #pragma once
 
-#include <string>
+#include "../Utils/GetClassName.hpp"
 
 namespace GraphicEngine::Core::LoggerCore
 {
@@ -10,7 +10,7 @@ namespace GraphicEngine::Core::LoggerCore
 	public:
 		auto operator()()
 		{
-			std::string loggerName = typeid(T).name();
+			std::string loggerName = Utils::getClassName<T>();
 			auto lastDoubeDot = loggerName.find_last_of(':');
 			return lastDoubeDot != std::string::npos ? loggerName.substr(lastDoubeDot + 1) : loggerName;
 		}

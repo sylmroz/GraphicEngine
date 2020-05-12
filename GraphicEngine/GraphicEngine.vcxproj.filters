@@ -73,6 +73,9 @@
     <Filter Include="Core\LoggerCore">
       <UniqueIdentifier>{293ad93e-89c0-4751-a79c-21abb4ddd10f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\Utils">
+      <UniqueIdentifier>{2235d332-398d-44e2-b440-01e08c472e28}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -127,7 +130,7 @@
       <Filter>Platform\Glfw\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="Core\LoggerCore\SourceFormatter.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Core\LoggerCore</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -241,6 +244,9 @@
     </ClInclude>
     <ClInclude Include="Core\LoggerCore\LoggerName.hpp">
       <Filter>Core\LoggerCore</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Utils\GetClassName.hpp">
+      <Filter>Core\Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
