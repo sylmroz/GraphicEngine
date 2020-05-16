@@ -108,7 +108,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\libs\glm;C:\VulkanSDK\1.2.135.0\Include;C:\libs\assimp\include\;C:\libs\opencv-4.2\include;C:\libs\glew-2.1.0\include;C:\libs\di\include;C:\libs\di\extension\include;C:\libs\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\libs\glm;C:\VulkanSDK\1.2.135.0\Include;C:\libs\assimp\include\;C:\libs\opencv-4.2\include;C:\libs\glew-2.1.0\include;C:\libs\di\include;C:\libs\di\extension\include;C:\libs\spdlog\include;C:\libs\json\single_include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
@@ -162,6 +162,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="AppSettings.json" />
     <None Include="Assets\Shaders\Glsl\basic.frag" />
     <None Include="Assets\Shaders\Glsl\basic.vert" />
     <None Include="Assets\Shaders\Spv\basic.frag.spv" />
@@ -170,6 +171,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Common\Camera.cpp" />
+    <ClCompile Include="Core\Configuration.cpp" />
     <ClCompile Include="Core\LoggerCore\SourceFormatter.cpp" />
     <ClCompile Include="Drivers\OpenGL\OpenGLRenderingEngine.cpp" />
     <ClCompile Include="Drivers\OpenGL\OpenGLShader.cpp" />
@@ -193,6 +195,7 @@
     <ClInclude Include="Common\VertexBuffer.hpp" />
     <ClInclude Include="Common\Window.hpp" />
     <ClInclude Include="Common\WindowKeyboardMouse.hpp" />
+    <ClInclude Include="Core\Configuration.hpp" />
     <ClInclude Include="Core\EventManager.hpp" />
     <ClInclude Include="Core\Input\Keyboard\KeyboardEventProxy.hpp" />
     <ClInclude Include="Core\Input\Keyboard\KeyboardEnumKeys.hpp" />
@@ -224,6 +227,11 @@
     <ClInclude Include="Platform\Glfw\Vulkan\GlfwVulkanInjector.hpp" />
     <ClInclude Include="Platform\Glfw\Vulkan\GlfwVulkanWindow.hpp" />
     <ClInclude Include="Platform\Glfw\Vulkan\GlfwVulkanWindowContext.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\UtilityLib\UtilityLib\UtilityLib.vcxproj">
+      <Project>{11d1cb1f-14a3-41f4-b9b9-40e27a2c3808}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

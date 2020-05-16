@@ -91,6 +91,7 @@
     <None Include="Assets\Shaders\Spv\basic.vert.spv">
       <Filter>Assets\Shaders\Spv</Filter>
     </None>
+    <None Include="AppSettings.json" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Drivers\OpenGL\OpenGLRenderingEngine.cpp">
@@ -131,6 +132,9 @@
     </ClCompile>
     <ClCompile Include="Core\LoggerCore\SourceFormatter.cpp">
       <Filter>Core\LoggerCore</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Configuration.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -253,6 +257,9 @@
     </ClInclude>
     <ClInclude Include="Drivers\OpenGL\OpenGLUniformData.hpp">
       <Filter>Drivers\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Configuration.hpp">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

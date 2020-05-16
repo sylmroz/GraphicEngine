@@ -3,6 +3,7 @@
 
 #include "../Platform/Glfw/OpenGL/GlfwOpenGLInjector.hpp"
 #include "../Platform/Glfw/Vulkan/GlfwVulkanInjector.hpp"
+#include "../Core/Configuration.hpp"
 
 #include <exception>
 #include <iostream>
@@ -17,7 +18,9 @@ void Application::exec()
 {
 	try
 	{
-		std::string engineType = "opengl";
+		std::shared_ptr<GraphicEngine::Core::Configuration> cfg = std::make_shared<GraphicEngine::Core::Configuration>();
+		
+		std::string engineType = cfg->getProperty<std::string>("engine");
 
 		auto createEngine = [](const auto& injector) -> std::unique_ptr<GraphicEngine::Engine>
 		{
