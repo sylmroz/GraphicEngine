@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../Core/Configuration.hpp"
 #include "../Core/Subject.hpp"
 #include "../Core/Input/Mouse/MouseEventProxy.hpp"
 
@@ -11,10 +12,11 @@ namespace GraphicEngine
 	class Window
 	{
 	public:
-		virtual void init(size_t width, size_t height)
+		Window(std::shared_ptr<Core::Configuration> cfg) :m_cfg(cfg) {}
+		virtual void init()
 		{
-			m_width = width;
-			m_height = height;
+			m_width = m_cfg->getProperty<int>("window:width");
+			m_height = m_cfg->getProperty<int>("window:height");
 			try
 			{
 				initialize();
@@ -60,5 +62,7 @@ namespace GraphicEngine
 		bool m_shouldClose{ false };
 
 		Core::Subject<size_t, size_t> m_resizeSubject;
+
+		std::shared_ptr<Core::Configuration> m_cfg;
 	};
 }

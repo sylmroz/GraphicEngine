@@ -6,5 +6,9 @@
 
 namespace GraphicEngine::Common
 {
-	class WindowKeyboardMouse : public Window, public Keyboard, public Mouse {};
+	class WindowKeyboardMouse : public Window, public Keyboard, public Mouse 
+	{
+	public:
+		WindowKeyboardMouse(std::shared_ptr<Core::Configuration> cfg) :Window(cfg) {}
+	};
 }

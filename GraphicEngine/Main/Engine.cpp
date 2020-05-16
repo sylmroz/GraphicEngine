@@ -22,7 +22,7 @@ GraphicEngine::Engine::Engine(std::shared_ptr<Common::WindowKeyboardMouse> windo
 void GraphicEngine::Engine::initialize()
 {
 	m_logger->debug(__FILE__, __LINE__, __FUNCTION__, "Initialize Engine");
-	m_window->init(640, 480);
+	m_window->init();
 
 	m_cameraController->setInitialMousePosition(glm::vec2(m_window->getWidth() / 2, m_window->getHeight() / 2));
 

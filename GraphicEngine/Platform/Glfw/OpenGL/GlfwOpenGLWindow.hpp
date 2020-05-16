@@ -7,7 +7,7 @@ namespace GraphicEngine::GLFW
 	class GlfwOpenGLWindow : public GlfwWindow
 	{
 	public:
-		GlfwOpenGLWindow();
+		GlfwOpenGLWindow(std::shared_ptr<Core::Configuration> cfg);
 	};
 }
 

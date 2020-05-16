@@ -18,9 +18,9 @@ void Application::exec()
 {
 	try
 	{
-		std::shared_ptr<GraphicEngine::Core::Configuration> cfg = std::make_shared<GraphicEngine::Core::Configuration>();
+		GraphicEngine::Core::Configuration cfg;
 		
-		std::string engineType = cfg->getProperty<std::string>("engine");
+		std::string engineType = cfg.getProperty<std::string>("engine");
 
 		auto createEngine = [](const auto& injector) -> std::unique_ptr<GraphicEngine::Engine>
 		{

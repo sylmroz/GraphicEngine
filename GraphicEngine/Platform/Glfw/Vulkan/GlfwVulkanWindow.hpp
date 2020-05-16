@@ -9,6 +9,6 @@ namespace GraphicEngine::GLFW
 	class GlfwVulkanWindow : public GlfwWindow
 	{
 	public:
-		GlfwVulkanWindow();
+		GlfwVulkanWindow(std::shared_ptr<Core::Configuration> cfg);
 	};
 }

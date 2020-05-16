@@ -18,6 +18,7 @@ namespace GraphicEngine::GLFW
 	class GlfwWindow : public Common::WindowKeyboardMouse
 	{
 	public:
+		GlfwWindow(std::shared_ptr<Core::Configuration> cfg) :WindowKeyboardMouse(cfg) {}
 		//From Keyboard interface
 		std::vector<Core::Inputs::KeyboardKey> getPressedKeys() override;
 
