@@ -39,8 +39,18 @@ void GraphicEngine::Engine::initialize()
 			m_keyboard->notify(m_window->getPressedKeys());
 		});
 
+	m_window->addResizeCallbackListener([&](size_t width, size_t height) 
+		{
+			m_renderingEngine->resizeFrameBuffer(width, height); 
+		});
+	m_window->addResizeCallbackListener([&](size_t width, size_t height) 
+		{
+			if (width == 0 || height == 0)
+				return;
+			m_cameraController->getCamera()->setAspectRatio(static_cast<float>(width) / static_cast<float>(height)); 
+		});
+
 	m_renderingEngine->init(m_window->getWidth(), m_window->getHeight());
-	m_window->addResizeCallbackListener([&](size_t width, size_t height) {m_renderingEngine->resizeFrameBuffer(width, height); });
 }
 
 void GraphicEngine::Engine::run()

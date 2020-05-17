@@ -19,7 +19,7 @@ void Application::exec()
 	try
 	{
 		GraphicEngine::Core::Configuration cfg;
-		
+
 		std::string engineType = cfg.getProperty<std::string>("engine");
 
 		auto createEngine = [](const auto& injector) -> std::unique_ptr<GraphicEngine::Engine>
@@ -40,7 +40,7 @@ void Application::exec()
 		GraphicEngine::Core::Logger<Application> logger;
 		logger.error(__FILE__, __LINE__, __FUNCTION__, err.what());
 	}
-	
+
 	catch (std::exception ex)
 	{
 		GraphicEngine::Core::Logger<Application> logger;

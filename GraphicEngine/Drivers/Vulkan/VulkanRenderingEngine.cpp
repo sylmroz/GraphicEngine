@@ -5,7 +5,7 @@
 #undef max
 
 GraphicEngine::Vulkan::VulkanRenderingEngine::VulkanRenderingEngine(std::shared_ptr<VulkanWindowContext> vulkanWindowContext,
-	std::shared_ptr<Common::Camera> camera, 
+	std::shared_ptr<Common::Camera> camera,
 	std::shared_ptr<Core::EventManager> eventManager,
 	std::unique_ptr<Core::Logger<VulkanRenderingEngine>> logger) :
 	m_vulkanWindowContext(vulkanWindowContext),
@@ -15,50 +15,64 @@ GraphicEngine::Vulkan::VulkanRenderingEngine::VulkanRenderingEngine(std::shared_
 
 bool GraphicEngine::Vulkan::VulkanRenderingEngine::drawFrame()
 {
-	m_device->waitForFences(1, &(m_renderingBarriers->inFlightFences[m_currentFrameIndex].get()), true, std::numeric_limits<uint64_t>::max());
-	vk::ResultValue<uint32_t> imageIndex = m_device->acquireNextImageKHR(m_swapChainData.swapChain.get(), std::numeric_limits<uint64_t>::max(), m_renderingBarriers->imageAvailableSemaphores[m_currentFrameIndex].get(), vk::Fence());
+	try
+	{
+		m_device->waitForFences(1, &(m_renderingBarriers->inFlightFences[m_currentFrameIndex].get()), true, std::numeric_limits<uint64_t>::max());
+		vk::ResultValue<uint32_t> imageIndex = m_device->acquireNextImageKHR(m_swapChainData.swapChain.get(), std::numeric_limits<uint64_t>::max(), m_renderingBarriers->imageAvailableSemaphores[m_currentFrameIndex].get(), vk::Fence());
 
-	if (imageIndex.result == vk::Result::eErrorOutOfDateKHR)
+		if (imageIndex.result == vk::Result::eErrorOutOfDateKHR)
+		{
+			// Should recreate swapchain
+			return false;
+		}
+
+		else if (imageIndex.result != vk::Result::eSuccess && imageIndex.result != vk::Result::eSuboptimalKHR)
+		{
+			throw std::runtime_error("Failed to acquire next image!");
+		}
+
+		if (m_renderingBarriers->imagesInFlight[imageIndex.value] != vk::Fence())
+			m_device->waitForFences(1, &(m_renderingBarriers->imagesInFlight[imageIndex.value]), true, std::numeric_limits<uint64_t>::max());
+
+		m_renderingBarriers->imagesInFlight[imageIndex.value] = m_renderingBarriers->inFlightFences[m_currentFrameIndex].get();
+
+		vk::Semaphore waitSemaphore(m_renderingBarriers->imageAvailableSemaphores[m_currentFrameIndex].get());
+		vk::Semaphore signalSemaphore(m_renderingBarriers->renderFinishedSemaphores[m_currentFrameIndex].get());
+		vk::PipelineStageFlags pipelineStageFlags(vk::PipelineStageFlagBits::eColorAttachmentOutput);
+
+		vk::SubmitInfo submitInfo(1, &waitSemaphore, &pipelineStageFlags, 1, &(m_commandBuffers[imageIndex.value].get()), 1, &signalSemaphore);
+
+		m_device->resetFences(1, &(m_renderingBarriers->inFlightFences[m_currentFrameIndex].get()));
+
+		m_uniformBuffer->updateAndSet(m_device, m_camera->getViewProjectionMatrix(), imageIndex.value);
+
+		vk::Result submitResult = m_graphicQueue.submit(1, &submitInfo, m_renderingBarriers->inFlightFences[m_currentFrameIndex].get());
+		if (submitResult != vk::Result::eSuccess)
+		{
+			throw std::runtime_error("Failed to submit draw command buffer!");
+		}
+
+		vk::SwapchainKHR sp(m_swapChainData.swapChain.get());
+
+		vk::PresentInfoKHR presentInfo(1, &signalSemaphore, 1, &sp, &imageIndex.value);
+
+		vk::Result presentResult = m_presentQueue.presentKHR(presentInfo);
+
+		if (presentResult == vk::Result::eErrorOutOfDateKHR || presentResult == vk::Result::eSuboptimalKHR)
+		{
+			// Should recreate swapchain
+			return false;
+		}
+		else if (imageIndex.result != vk::Result::eSuccess)
+		{
+			throw std::runtime_error("failed to present swap chain image!");
+		}
+	}
+
+	catch (vk::OutOfDateKHRError err)
 	{
 		// Should recreate swapchain
 		return false;
-	}
-
-	else if (imageIndex.result != vk::Result::eSuccess && imageIndex.result != vk::Result::eSuboptimalKHR)
-	{
-		throw std::runtime_error("Failed to acquire next image!");
-	}
-
-	if (m_renderingBarriers->imagesInFlight[imageIndex.value] != vk::Fence())
-		m_device->waitForFences(1, &(m_renderingBarriers->imagesInFlight[imageIndex.value]), true, std::numeric_limits<uint64_t>::max());
-
-	m_renderingBarriers->imagesInFlight[imageIndex.value] = m_renderingBarriers->inFlightFences[m_currentFrameIndex].get();
-
-	vk::Semaphore waitSemaphore(m_renderingBarriers->imageAvailableSemaphores[m_currentFrameIndex].get());
-	vk::Semaphore signalSemaphore(m_renderingBarriers->renderFinishedSemaphores[m_currentFrameIndex].get());
-	vk::PipelineStageFlags pipelineStageFlags(vk::PipelineStageFlagBits::eColorAttachmentOutput);
-
-	vk::SubmitInfo submitInfo(1, &waitSemaphore, &pipelineStageFlags, 1, &(m_commandBuffers[imageIndex.value].get()), 1, &signalSemaphore);
-
-	m_device->resetFences(1, &(m_renderingBarriers->inFlightFences[m_currentFrameIndex].get()));
-
-	m_uniformBuffer->updateAndSet(m_device, m_camera->getViewProjectionMatrix(), imageIndex.value);
-
-	vk::Result submitResult = m_graphicQueue.submit(1, &submitInfo, m_renderingBarriers->inFlightFences[m_currentFrameIndex].get());
-	if (submitResult != vk::Result::eSuccess)
-	{
-		throw std::runtime_error("Failed to submit draw command buffer!");
-	}
-
-	vk::SwapchainKHR sp(m_swapChainData.swapChain.get());
-
-	vk::PresentInfoKHR presentInfo(1, &signalSemaphore, 1, &sp, &imageIndex.value);
-	vk::Result presentResult = m_presentQueue.presentKHR(presentInfo);
-
-	if (presentResult == vk::Result::eErrorOutOfDateKHR || presentResult == vk::Result::eSuboptimalKHR || m_frameBufferResized)
-	{
-		m_frameBufferResized = false;
-		// Should recreate swapchain
 	}
 
 	m_currentFrameIndex = calculateNextIndex();
@@ -122,8 +136,6 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 			ShaderInfo{ m_fragmentShader->shaderModule.get(),vk::SpecializationInfo() }, createVertexInputAttributeDescriptions(Common::VertexPC::getSizeAndOffsets()),
 			vk::VertexInputBindingDescription(0, Common::VertexPC::getStride()), true, vk::FrontFace::eClockwise, m_pipelineLayout, m_renderPass, m_msaaSamples);
 
-
-
 		buildCommandBuffers();
 	}
 
@@ -145,6 +157,39 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 
 void GraphicEngine::Vulkan::VulkanRenderingEngine::resizeFrameBuffer(size_t width, size_t height)
 {
+	if (width == 0 || height == 0)
+		return;
+
+	m_device->waitIdle();
+	vk::Extent2D frameBufferSize(width, height);
+	m_swapChainData = SwapChainData(m_physicalDevice, m_device, m_surface, m_indices, frameBufferSize, m_swapChainData.swapChain, vk::ImageUsageFlagBits::eColorAttachment);
+	m_commandBuffers = m_device->allocateCommandBuffersUnique(vk::CommandBufferAllocateInfo(m_commandPool.get(), vk::CommandBufferLevel::ePrimary, m_maxFrames));
+
+	m_depthBuffer = std::unique_ptr<DepthBufferData>(new DepthBufferData(m_physicalDevice, m_device, vk::Extent3D(frameBufferSize, 1), findDepthFormat(m_physicalDevice), m_msaaSamples));
+	m_renderPass = createRenderPass(m_device, m_swapChainData.format, m_depthBuffer->format, m_msaaSamples);
+	m_image = std::unique_ptr<ImageData>(new ImageData(m_physicalDevice, m_device,
+		vk::Extent3D(m_swapChainData.extent, 1), m_swapChainData.format, m_msaaSamples,
+		vk::MemoryPropertyFlagBits::eDeviceLocal, vk::ImageUsageFlagBits::eColorAttachment | vk::ImageUsageFlagBits::eTransientAttachment,
+		vk::ImageTiling::eOptimal, 1, vk::ImageLayout::eUndefined, vk::ImageAspectFlagBits::eColor));
+	m_frameBuffers = createFrameBuffers(m_device, m_renderPass, m_swapChainData.extent, 1, m_image->imageView, m_depthBuffer->imageView, m_swapChainData.imageViews);
+
+	/*m_uniformBuffer = std::make_unique<UniformBuffer<glm::mat4>>(m_physicalDevice, m_device, m_maxFrames);
+	m_descriptorSetLayout = createDescriptorSetLayout(m_device, { {vk::DescriptorType::eUniformBuffer,1,vk::ShaderStageFlagBits::eVertex} }, vk::DescriptorSetLayoutCreateFlags());
+	m_descriptorPool = createDescriptorPool(m_device, { vk::DescriptorPoolSize(vk::DescriptorType::eUniformBuffer, m_maxFrames) });
+	std::vector<vk::DescriptorSetLayout> layouts(m_maxFrames, m_descriptorSetLayout.get());
+	m_descriptorSets = m_device->allocateDescriptorSetsUnique(vk::DescriptorSetAllocateInfo(m_descriptorPool.get(), m_maxFrames, layouts.data()));
+	std::vector<std::vector<std::shared_ptr<BufferData>>> uniformBuffers;
+	uniformBuffers.emplace_back(m_uniformBuffer->bufferData);
+	updateDescriptorSets(m_device, m_descriptorPool, m_descriptorSetLayout, m_maxFrames, m_descriptorSets, uniformBuffers, {});
+
+	m_pipelineLayout = m_device->createPipelineLayoutUnique(vk::PipelineLayoutCreateInfo(vk::PipelineLayoutCreateFlags(), 1, &m_descriptorSetLayout.get()));
+
+	m_pipelineCache = m_device->createPipelineCacheUnique(vk::PipelineCacheCreateInfo());
+	m_graphicPipeline = createGraphicPipeline(m_device, m_pipelineCache, ShaderInfo{ m_vertexShader->shaderModule.get(),vk::SpecializationInfo() },
+		ShaderInfo{ m_fragmentShader->shaderModule.get(),vk::SpecializationInfo() }, createVertexInputAttributeDescriptions(Common::VertexPC::getSizeAndOffsets()),
+		vk::VertexInputBindingDescription(0, Common::VertexPC::getStride()), true, vk::FrontFace::eClockwise, m_pipelineLayout, m_renderPass, m_msaaSamples);*/
+
+	buildCommandBuffers();
 }
 
 void GraphicEngine::Vulkan::VulkanRenderingEngine::cleanup()

@@ -294,3 +294,8 @@ void GraphicEngine::Common::CameraController::move(std::vector<Core::Inputs::Key
 void GraphicEngine::Common::CameraController::zoom(double offset)
 {
 }
+
+std::shared_ptr<GraphicEngine::Common::Camera> GraphicEngine::Common::CameraController::getCamera()
+{
+	return m_camera;
+}

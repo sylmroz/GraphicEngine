@@ -129,6 +129,8 @@ namespace GraphicEngine::Common
 
 		void zoom(double offset);
 
+		std::shared_ptr<Camera> getCamera();
+
 	private:
 		std::shared_ptr<Camera> m_camera;
 		std::shared_ptr<WindowKeyboardMouse> m_window;

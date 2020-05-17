@@ -57,7 +57,6 @@ namespace GraphicEngine::Vulkan
 		uint32_t m_maxFrames{ 1 };
 		uint32_t m_currentFrameIndex{ 0 };
 		QueueFamilyIndices m_indices;
-		bool m_frameBufferResized{ false };
 
 		std::shared_ptr<VulkanWindowContext> m_vulkanWindowContext;
 
