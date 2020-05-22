@@ -115,7 +115,7 @@ namespace GraphicEngine::Vulkan
 	public:
 		ImageData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::Extent3D extent, vk::Format format, vk::SampleCountFlagBits numOfSamples,
 			vk::MemoryPropertyFlags memoryProperty, vk::ImageUsageFlags imageUsage, vk::ImageTiling tiling,
-			uint32_t mipLevel, vk::ImageLayout layout, vk::ImageAspectFlags aspectFlags);
+			uint32_t mipLevel, vk::ImageLayout layout, vk::ImageAspectFlags aspectFlags, vk::ImageType imageType = vk::ImageType::e2D);
 
 		vk::Format format;
 		vk::UniqueDeviceMemory deviceMemory;

@@ -10,11 +10,6 @@
 
 #include <glm/glm.hpp>
 
-#include <boost/di.hpp>
-
-
-namespace di = boost::di;
-
 inline auto PerspectiveParameters = []() {};
 
 namespace GraphicEngine::Common
@@ -45,10 +40,7 @@ namespace GraphicEngine::Common
 	class Camera
 	{
 	public:
-
 		Camera();
-		//BOOST_DI_INJECT(Camera, (named = PerspectiveParameters) PerspectiveParameters_s perspectiveParameters);
-		//Camera(OrthogonalParameters ororthogonalParameter);
 
 		void rotate(const glm::vec2& offset);
 		void move(const glm::vec2& offset);

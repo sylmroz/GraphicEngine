@@ -573,11 +573,11 @@ GraphicEngine::Vulkan::SwapChainSupportDetails::SwapChainSupportDetails(vk::Surf
 
 GraphicEngine::Vulkan::ImageData::ImageData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::Extent3D extent, vk::Format format, vk::SampleCountFlagBits numOfSamples,
 	vk::MemoryPropertyFlags memoryProperty, vk::ImageUsageFlags imageUsage, vk::ImageTiling tiling,
-	uint32_t mipLevel, vk::ImageLayout layout, vk::ImageAspectFlags aspectFlags)
+	uint32_t mipLevel, vk::ImageLayout layout, vk::ImageAspectFlags aspectFlags, vk::ImageType imageType)
 {
 	this->format = format;
 
-	vk::ImageCreateInfo imageCreateInfo(vk::ImageCreateFlags(), vk::ImageType::e2D, format, extent, mipLevel, 1, numOfSamples, tiling, imageUsage, vk::SharingMode::eExclusive, 0, nullptr, layout);
+	vk::ImageCreateInfo imageCreateInfo(vk::ImageCreateFlags(), imageType, format, extent, mipLevel, 1, numOfSamples, tiling, imageUsage, vk::SharingMode::eExclusive, 0, nullptr, layout);
 
 	this->image = device->createImageUnique(imageCreateInfo);
 	this->deviceMemory = allocateMemory(physicalDevice, device, memoryProperty, device->getImageMemoryRequirements(image.get()));
