@@ -136,6 +136,9 @@
     <ClCompile Include="Core\Configuration.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="Common\Texture.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Input\Keyboard\KeyboardEnumKeys.hpp">
@@ -260,6 +263,9 @@
     </ClInclude>
     <ClInclude Include="Core\Configuration.hpp">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Texture.hpp">
+      <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

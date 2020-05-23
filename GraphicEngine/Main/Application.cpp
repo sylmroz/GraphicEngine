@@ -5,6 +5,8 @@
 #include "../Platform/Glfw/Vulkan/GlfwVulkanInjector.hpp"
 #include "../Core/Configuration.hpp"
 
+#include "../Common/Texture.hpp"
+
 #include <exception>
 #include <iostream>
 

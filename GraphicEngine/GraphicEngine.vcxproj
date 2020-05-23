@@ -106,9 +106,9 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;USE_STB_IMAGE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\libs\glm;C:\VulkanSDK\1.2.135.0\Include;C:\libs\assimp\include\;C:\libs\opencv-4.2\include;C:\libs\glew-2.1.0\include;C:\libs\di\include;C:\libs\di\extension\include;C:\libs\spdlog\include;C:\libs\json\single_include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\libs\glm;C:\VulkanSDK\1.2.135.0\Include;C:\libs\assimp\include\;C:\libs\opencv-4.2\include;C:\libs\glew-2.1.0\include;C:\libs\di\include;C:\libs\di\extension\include;C:\libs\spdlog\include;C:\libs\json\single_include;C:\libs\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
@@ -171,6 +171,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Common\Camera.cpp" />
+    <ClCompile Include="Common\Texture.cpp" />
     <ClCompile Include="Core\Configuration.cpp" />
     <ClCompile Include="Core\LoggerCore\SourceFormatter.cpp" />
     <ClCompile Include="Drivers\OpenGL\OpenGLRenderingEngine.cpp" />
@@ -191,6 +192,7 @@
     <ClInclude Include="Common\Mouse.hpp" />
     <ClInclude Include="Common\RenderingEngine.hpp" />
     <ClInclude Include="Common\Shader.hpp" />
+    <ClInclude Include="Common\Texture.hpp" />
     <ClInclude Include="Common\Vertex.hpp" />
     <ClInclude Include="Common\VertexBuffer.hpp" />
     <ClInclude Include="Common\Window.hpp" />
