@@ -136,8 +136,11 @@
     <ClCompile Include="Core\Configuration.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Common\Texture.cpp">
+    <ClCompile Include="Common\TextureReader.cpp">
       <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Drivers\OpenGL\OpenGLTexture.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -264,7 +267,10 @@
     <ClInclude Include="Core\Configuration.hpp">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Common\Texture.hpp">
+    <ClInclude Include="Drivers\OpenGL\OpenGLTexture.hpp">
+      <Filter>Drivers\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\TextureReader.hpp">
       <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>

@@ -114,7 +114,7 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 
 		m_renderingBarriers = std::unique_ptr<RenderingBarriers>(new RenderingBarriers(m_device, m_maxFrames));
 
-		m_vertexBuffer = std::make_unique<VertexBuffer<GraphicEngine::Common::VertexPC>>(m_physicalDevice, m_device, m_commandPool, m_graphicQueue, vertices, RenderingEngine::indices);
+		m_vertexBuffer = std::make_unique<VertexBuffer<GraphicEngine::Common::VertexPCTc>>(m_physicalDevice, m_device, m_commandPool, m_graphicQueue, vertices, RenderingEngine::indices);
 
 		m_vertexShader = std::make_unique<VulkanShader>(m_device, Core::IO::readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Spv/basicPCVP.vert.spv"));
 		m_fragmentShader = std::make_unique<VulkanShader>(m_device, Core::IO::readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Spv/basicPCVP.frag.spv"));

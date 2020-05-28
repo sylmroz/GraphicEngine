@@ -171,11 +171,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Common\Camera.cpp" />
-    <ClCompile Include="Common\Texture.cpp" />
+    <ClCompile Include="Common\TextureReader.cpp" />
     <ClCompile Include="Core\Configuration.cpp" />
     <ClCompile Include="Core\LoggerCore\SourceFormatter.cpp" />
     <ClCompile Include="Drivers\OpenGL\OpenGLRenderingEngine.cpp" />
     <ClCompile Include="Drivers\OpenGL\OpenGLShader.cpp" />
+    <ClCompile Include="Drivers\OpenGL\OpenGLTexture.cpp" />
     <ClCompile Include="Drivers\Vulkan\VulkanHelper.cpp" />
     <ClCompile Include="Drivers\Vulkan\VulkanRenderingEngine.cpp" />
     <ClCompile Include="Main\Application.cpp" />
@@ -192,7 +193,7 @@
     <ClInclude Include="Common\Mouse.hpp" />
     <ClInclude Include="Common\RenderingEngine.hpp" />
     <ClInclude Include="Common\Shader.hpp" />
-    <ClInclude Include="Common\Texture.hpp" />
+    <ClInclude Include="Common\TextureReader.hpp" />
     <ClInclude Include="Common\Vertex.hpp" />
     <ClInclude Include="Common\VertexBuffer.hpp" />
     <ClInclude Include="Common\Window.hpp" />
@@ -215,6 +216,7 @@
     <ClInclude Include="Drivers\OpenGL\OpenGLHelper.hpp" />
     <ClInclude Include="Drivers\OpenGL\OpenGLRenderingEngine.hpp" />
     <ClInclude Include="Drivers\OpenGL\OpenGLShader.hpp" />
+    <ClInclude Include="Drivers\OpenGL\OpenGLTexture.hpp" />
     <ClInclude Include="Drivers\OpenGL\OpenGLUniformBuffer.hpp" />
     <ClInclude Include="Drivers\OpenGL\OpenGLUniformData.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanShader.hpp" />

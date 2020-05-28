@@ -19,6 +19,7 @@ bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 	m_program->use();
 	auto v = m_camera->getViewProjectionMatrix();
 	m_uniformBufferMatrix->update(&v);
+	m_texture->use(0);
 	m_vertexBuffer->bind();
 	m_vertexBuffer->draw();
 	return false;
@@ -36,14 +37,19 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 
 	try
 	{
-		OpenGLVertexShader vert(readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Glsl/basicPCVP.vert"));
-		OpenGLFragmentShader frag(readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Glsl/basicPCVP.frag"));
+		OpenGLVertexShader vert(readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Glsl/basicPCTVP.vert"));
+		OpenGLFragmentShader frag(readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Glsl/basicPCTVP.frag"));
 
 		m_program = std::shared_ptr<OpenGLShaderProgram>(new OpenGLShaderProgram({ vert, frag }));
+		
 		auto uniformIndex = glGetUniformBlockIndex(m_program->getShaderProgramId(), "MVP");
 		glUniformBlockBinding(m_program->getShaderProgramId(), uniformIndex, 0);
+		auto textureIndex = glGetUniformLocation(m_program->getShaderProgramId(), "texture1");
+		glUniform1i(textureIndex, 0);
+
 		m_uniformBufferMatrix = std::make_shared<UniformBuffer<glm::mat4>>();
-		m_vertexBuffer = std::unique_ptr<VertexBuffer<GraphicEngine::Common::VertexPC>>(new VertexBuffer<GraphicEngine::Common::VertexPC>(vertices, indices));
+		m_vertexBuffer = std::unique_ptr<VertexBuffer<GraphicEngine::Common::VertexPCTc>>(new VertexBuffer<GraphicEngine::Common::VertexPCTc>(vertices, indices));
+		m_texture = std::make_unique<Texture2D>("C:/rem.png");
 	}
 
 	catch (std::runtime_error& err)
