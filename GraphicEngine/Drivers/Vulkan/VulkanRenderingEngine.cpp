@@ -1,6 +1,8 @@
 #include "VulkanRenderingEngine.hpp"
 
 #include "../../Core/IO/FileReader.hpp"
+#include "../../Core/Math.hpp"
+#include "../../Common/TextureReader.hpp"
 
 #undef max
 
@@ -116,25 +118,35 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 
 		m_vertexBuffer = std::make_unique<VertexBuffer<GraphicEngine::Common::VertexPCTc>>(m_physicalDevice, m_device, m_commandPool, m_graphicQueue, vertices, RenderingEngine::indices);
 
-		m_vertexShader = std::make_unique<VulkanShader>(m_device, Core::IO::readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Spv/basicPCVP.vert.spv"));
-		m_fragmentShader = std::make_unique<VulkanShader>(m_device, Core::IO::readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Spv/basicPCVP.frag.spv"));
+		m_vertexShader = std::make_unique<VulkanShader>(m_device, Core::IO::readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Spv/basicPCTVP.vert.spv"));
+		m_fragmentShader = std::make_unique<VulkanShader>(m_device, Core::IO::readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Spv/basicPCTVP.frag.spv"));
+
+		Common::TextureReader textureReader("C:/rem.png");
+		auto [data, width, height, channels] = textureReader();
+		m_texture = std::make_shared<Texture2D>(m_physicalDevice, m_device, m_commandPool, m_graphicQueue, vk::Format::eR8G8B8A8Srgb,1 /*Core::calculateMipLevels(width, height)*/, width, height, channels, data);
 
 
 		m_uniformBuffer = std::make_unique<UniformBuffer<glm::mat4>>(m_physicalDevice, m_device, m_maxFrames);
-		m_descriptorSetLayout = createDescriptorSetLayout(m_device, { {vk::DescriptorType::eUniformBuffer,1,vk::ShaderStageFlagBits::eVertex} }, vk::DescriptorSetLayoutCreateFlags());
-		m_descriptorPool = createDescriptorPool(m_device, { vk::DescriptorPoolSize(vk::DescriptorType::eUniformBuffer, m_maxFrames) });
+		m_descriptorSetLayout = createDescriptorSetLayout(m_device, 
+			{ {vk::DescriptorType::eUniformBuffer,1,vk::ShaderStageFlagBits::eVertex}, {vk::DescriptorType::eCombinedImageSampler, 1, vk::ShaderStageFlagBits::eFragment} },
+			vk::DescriptorSetLayoutCreateFlags());
+		m_descriptorPool = createDescriptorPool(m_device, 
+			{ vk::DescriptorPoolSize(vk::DescriptorType::eUniformBuffer, m_maxFrames),
+			vk::DescriptorPoolSize(vk::DescriptorType::eCombinedImageSampler, m_maxFrames)});
 		std::vector<vk::DescriptorSetLayout> layouts(m_maxFrames, m_descriptorSetLayout.get());
 		m_descriptorSets = m_device->allocateDescriptorSetsUnique(vk::DescriptorSetAllocateInfo(m_descriptorPool.get(), m_maxFrames, layouts.data()));
 		std::vector<std::vector<std::shared_ptr<BufferData>>> uniformBuffers;
 		uniformBuffers.emplace_back(m_uniformBuffer->bufferData);
-		updateDescriptorSets(m_device, m_descriptorPool, m_descriptorSetLayout, m_maxFrames, m_descriptorSets, uniformBuffers, {});
+		std::vector<std::shared_ptr<Texture2D>> textures;
+		textures.emplace_back(m_texture);
+		updateDescriptorSets(m_device, m_descriptorPool, m_descriptorSetLayout, m_maxFrames, m_descriptorSets, uniformBuffers, textures);
 
 		m_pipelineLayout = m_device->createPipelineLayoutUnique(vk::PipelineLayoutCreateInfo(vk::PipelineLayoutCreateFlags(), 1, &m_descriptorSetLayout.get()));
 
 		m_pipelineCache = m_device->createPipelineCacheUnique(vk::PipelineCacheCreateInfo());
 		m_graphicPipeline = createGraphicPipeline(m_device, m_pipelineCache, ShaderInfo{ m_vertexShader->shaderModule.get(),vk::SpecializationInfo() },
-			ShaderInfo{ m_fragmentShader->shaderModule.get(),vk::SpecializationInfo() }, createVertexInputAttributeDescriptions(Common::VertexPC::getSizeAndOffsets()),
-			vk::VertexInputBindingDescription(0, Common::VertexPC::getStride()), true, vk::FrontFace::eClockwise, m_pipelineLayout, m_renderPass, m_msaaSamples);
+			ShaderInfo{ m_fragmentShader->shaderModule.get(),vk::SpecializationInfo() }, createVertexInputAttributeDescriptions(Common::VertexPCTc::getSizeAndOffsets()),
+			vk::VertexInputBindingDescription(0, Common::VertexPCTc::getStride()), true, vk::FrontFace::eClockwise, m_pipelineLayout, m_renderPass, m_msaaSamples);
 
 		buildCommandBuffers();
 	}
@@ -172,22 +184,6 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::resizeFrameBuffer(size_t widt
 		vk::MemoryPropertyFlagBits::eDeviceLocal, vk::ImageUsageFlagBits::eColorAttachment | vk::ImageUsageFlagBits::eTransientAttachment,
 		vk::ImageTiling::eOptimal, 1, vk::ImageLayout::eUndefined, vk::ImageAspectFlagBits::eColor));
 	m_frameBuffers = createFrameBuffers(m_device, m_renderPass, m_swapChainData.extent, 1, m_image->imageView, m_depthBuffer->imageView, m_swapChainData.imageViews);
-
-	/*m_uniformBuffer = std::make_unique<UniformBuffer<glm::mat4>>(m_physicalDevice, m_device, m_maxFrames);
-	m_descriptorSetLayout = createDescriptorSetLayout(m_device, { {vk::DescriptorType::eUniformBuffer,1,vk::ShaderStageFlagBits::eVertex} }, vk::DescriptorSetLayoutCreateFlags());
-	m_descriptorPool = createDescriptorPool(m_device, { vk::DescriptorPoolSize(vk::DescriptorType::eUniformBuffer, m_maxFrames) });
-	std::vector<vk::DescriptorSetLayout> layouts(m_maxFrames, m_descriptorSetLayout.get());
-	m_descriptorSets = m_device->allocateDescriptorSetsUnique(vk::DescriptorSetAllocateInfo(m_descriptorPool.get(), m_maxFrames, layouts.data()));
-	std::vector<std::vector<std::shared_ptr<BufferData>>> uniformBuffers;
-	uniformBuffers.emplace_back(m_uniformBuffer->bufferData);
-	updateDescriptorSets(m_device, m_descriptorPool, m_descriptorSetLayout, m_maxFrames, m_descriptorSets, uniformBuffers, {});
-
-	m_pipelineLayout = m_device->createPipelineLayoutUnique(vk::PipelineLayoutCreateInfo(vk::PipelineLayoutCreateFlags(), 1, &m_descriptorSetLayout.get()));
-
-	m_pipelineCache = m_device->createPipelineCacheUnique(vk::PipelineCacheCreateInfo());
-	m_graphicPipeline = createGraphicPipeline(m_device, m_pipelineCache, ShaderInfo{ m_vertexShader->shaderModule.get(),vk::SpecializationInfo() },
-		ShaderInfo{ m_fragmentShader->shaderModule.get(),vk::SpecializationInfo() }, createVertexInputAttributeDescriptions(Common::VertexPC::getSizeAndOffsets()),
-		vk::VertexInputBindingDescription(0, Common::VertexPC::getStride()), true, vk::FrontFace::eClockwise, m_pipelineLayout, m_renderPass, m_msaaSamples);*/
 
 	buildCommandBuffers();
 }

@@ -6,8 +6,8 @@
 
 #include "OpenGLHelper.hpp"
 #include "OpenGLShader.hpp"
-#include "OpenGLUniformBuffer.hpp"
 #include "OpenGLTexture.hpp"
+#include "OpenGLUniformBuffer.hpp"
 
 namespace GraphicEngine::OpenGL
 {

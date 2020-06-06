@@ -129,12 +129,6 @@ namespace GraphicEngine::Vulkan
 		DepthBufferData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::Extent3D extent, vk::Format format, vk::SampleCountFlagBits numOfSamples);
 	};
 
-	class TextureData : public ImageData
-	{
-
-		// TODO
-	};
-
 	template <typename T>
 	class UniformBuffer
 	{
@@ -288,6 +282,8 @@ namespace GraphicEngine::Vulkan
 		std::unique_ptr<_VertexBuffer> _data;
 	};
 
+	class Texture2D;
+
 	std::vector<const char*> getDeviceExtension();
 
 	std::optional<uint32_t> getGraphicQueueFamilyIndex(const vk::PhysicalDevice& physicalDevice);
@@ -343,6 +339,12 @@ namespace GraphicEngine::Vulkan
 		const std::vector<std::tuple<vk::DescriptorType, uint32_t, vk::ShaderStageFlags>>& bindingData, vk::DescriptorSetLayoutCreateFlags flags);
 
 	void updateDescriptorSets(const vk::UniqueDevice& device, const vk::UniqueDescriptorPool& descriptorPool, const vk::UniqueDescriptorSetLayout& descriptorSetLayout, uint32_t layoutCount,
-		const std::vector<vk::UniqueDescriptorSet>& descriptorSets, const std::vector<std::vector<std::shared_ptr<BufferData>>>& uniformBuffers, const std::vector<std::pair<vk::UniqueImageView, vk::UniqueSampler>>& imageUniforms);
+		const std::vector<vk::UniqueDescriptorSet>& descriptorSets, const std::vector<std::vector<std::shared_ptr<BufferData>>>& uniformBuffers, const std::vector<std::shared_ptr<Texture2D>>& imageUniforms);
 
+	void transitionImageLayout(const vk::UniqueDevice& device, const vk::UniqueCommandPool& commandPool, const vk::Queue& graphicQueue, 
+		vk::UniqueImage& image, vk::Format format, vk::ImageLayout oldLayout, vk::ImageLayout newLayout, uint32_t mipLevels);
+
+	void generateMipmaps(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device,
+		const vk::UniqueCommandPool& commandPool, const vk::Queue& queue,
+		vk::UniqueImage& image, vk::Format format, int32_t width, int32_t height, int32_t mipLevels);
 }

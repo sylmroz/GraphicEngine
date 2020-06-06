@@ -140,7 +140,13 @@
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="Drivers\OpenGL\OpenGLTexture.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Drivers\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Drivers\Vulkan\VulkanTexture.cpp">
+      <Filter>Drivers\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Math.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -272,6 +278,12 @@
     </ClInclude>
     <ClInclude Include="Common\TextureReader.hpp">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Drivers\Vulkan\VulkanTexture.hpp">
+      <Filter>Drivers\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Math.hpp">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

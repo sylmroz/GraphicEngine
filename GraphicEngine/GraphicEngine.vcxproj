@@ -174,11 +174,13 @@
     <ClCompile Include="Common\TextureReader.cpp" />
     <ClCompile Include="Core\Configuration.cpp" />
     <ClCompile Include="Core\LoggerCore\SourceFormatter.cpp" />
+    <ClCompile Include="Core\Math.cpp" />
     <ClCompile Include="Drivers\OpenGL\OpenGLRenderingEngine.cpp" />
     <ClCompile Include="Drivers\OpenGL\OpenGLShader.cpp" />
     <ClCompile Include="Drivers\OpenGL\OpenGLTexture.cpp" />
     <ClCompile Include="Drivers\Vulkan\VulkanHelper.cpp" />
     <ClCompile Include="Drivers\Vulkan\VulkanRenderingEngine.cpp" />
+    <ClCompile Include="Drivers\Vulkan\VulkanTexture.cpp" />
     <ClCompile Include="Main\Application.cpp" />
     <ClCompile Include="Main\Engine.cpp" />
     <ClCompile Include="Main\main.cpp" />
@@ -208,6 +210,7 @@
     <ClInclude Include="Core\Logger.hpp" />
     <ClInclude Include="Core\LoggerCore\LoggerName.hpp" />
     <ClInclude Include="Core\LoggerCore\SourceFormatter.hpp" />
+    <ClInclude Include="Core\Math.hpp" />
     <ClInclude Include="Core\Ranges.hpp" />
     <ClInclude Include="Core\ServiceManager.hpp" />
     <ClInclude Include="Core\Subject.hpp" />
@@ -222,6 +225,7 @@
     <ClInclude Include="Drivers\Vulkan\VulkanShader.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanHelper.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanRenderingEngine.hpp" />
+    <ClInclude Include="Drivers\Vulkan\VulkanTexture.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanWindowContext.hpp" />
     <ClInclude Include="Main\Application.hpp" />
     <ClInclude Include="Main\Engine.hpp" />

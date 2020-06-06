@@ -4,6 +4,7 @@
 #include "VulkanShader.hpp"
 #include "VulkanHelper.hpp"
 #include "VulkanWindowContext.hpp"
+#include "VulkanTexture.hpp"
 
 namespace GraphicEngine::Vulkan
 {
@@ -50,6 +51,8 @@ namespace GraphicEngine::Vulkan
 		vk::UniqueDescriptorPool m_descriptorPool;
 		vk::UniqueDescriptorSetLayout m_descriptorSetLayout;
 		std::vector<vk::UniqueDescriptorSet> m_descriptorSets;
+
+		std::shared_ptr<Texture2D> m_texture;
 
 
 	private:

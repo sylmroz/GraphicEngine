@@ -1,4 +1,5 @@
-#include "VulkanHelper.hpp"
+#include "VulkanTexture.hpp"
+
 #include <iomanip>
 #include <iostream>
 #include <map>
@@ -415,7 +416,7 @@ vk::UniqueDescriptorSetLayout GraphicEngine::Vulkan::createDescriptorSetLayout(c
 }
 
 void GraphicEngine::Vulkan::updateDescriptorSets(const vk::UniqueDevice& device, const vk::UniqueDescriptorPool& descriptorPool, const vk::UniqueDescriptorSetLayout& descriptorSetLayout, uint32_t layoutCount,
-	const std::vector<vk::UniqueDescriptorSet>& descriptorSets, const std::vector<std::vector<std::shared_ptr<BufferData>>>& uniformBuffers, const std::vector<std::pair<vk::UniqueImageView, vk::UniqueSampler>>& imageUniforms)
+	const std::vector<vk::UniqueDescriptorSet>& descriptorSets, const std::vector<std::vector<std::shared_ptr<BufferData>>>& uniformBuffers, const std::vector<std::shared_ptr<Texture2D>>& imageUniforms)
 {
 	std::vector<vk::DescriptorSetLayout> layouts(layoutCount, descriptorSetLayout.get());
 
@@ -436,13 +437,115 @@ void GraphicEngine::Vulkan::updateDescriptorSets(const vk::UniqueDevice& device,
 		{
 			for (auto& imageUniform : imageUniforms)
 			{
-				vk::DescriptorImageInfo imageInfo(imageUniform.second.get(), imageUniform.first.get(), vk::ImageLayout::eShaderReadOnlyOptimal);
-				writeDescriptorSets.emplace_back(descriptorSets[i].get(), dstBinding++, 0, 1, vk::DescriptorType::eCombinedImageSampler, &imageInfo, nullptr, nullptr);
+				vk::DescriptorImageInfo imageInfo(imageUniform->sampler.get(), imageUniform->imageView.get(), vk::ImageLayout::eShaderReadOnlyOptimal);
+				writeDescriptorSets.emplace_back(descriptorSets[i].get(), dstBinding, 0, 1, vk::DescriptorType::eCombinedImageSampler, &imageInfo, nullptr, nullptr);
 			}
 		}
 
 		device->updateDescriptorSets(static_cast<uint32_t>(writeDescriptorSets.size()), writeDescriptorSets.data(), 0, nullptr);
 	}
+}
+
+void GraphicEngine::Vulkan::transitionImageLayout(const vk::UniqueDevice& device, const vk::UniqueCommandPool& commandPool, const vk::Queue& graphicQueue,
+	vk::UniqueImage& image, vk::Format format, vk::ImageLayout oldLayout, vk::ImageLayout newLayout, uint32_t mipLevels)
+{
+	singleTimeCommand(device, commandPool, graphicQueue, [&](const vk::UniqueCommandBuffer& commandBuffer)
+		{
+			vk::ImageSubresourceRange subresourceRange(vk::ImageAspectFlagBits::eColor, 0, mipLevels, 0, 1);
+			vk::ImageMemoryBarrier memoryBarrier({}, {}, oldLayout, newLayout, VK_QUEUE_FAMILY_IGNORED, VK_QUEUE_FAMILY_IGNORED, image.get(), subresourceRange);
+
+			vk::PipelineStageFlags sourceStage;
+			vk::PipelineStageFlags destinationStage;
+
+			if (oldLayout == vk::ImageLayout::eUndefined && newLayout == vk::ImageLayout::eTransferDstOptimal) 
+			{
+				memoryBarrier.srcAccessMask = {};
+				memoryBarrier.dstAccessMask = vk::AccessFlagBits::eTransferWrite;
+
+				sourceStage = vk::PipelineStageFlagBits::eTopOfPipe;
+				destinationStage = vk::PipelineStageFlagBits::eTransfer;
+			}
+
+			else if (oldLayout == vk::ImageLayout::eTransferDstOptimal && newLayout == vk::ImageLayout::eShaderReadOnlyOptimal)
+			{
+				memoryBarrier.srcAccessMask = vk::AccessFlagBits::eTransferWrite;
+				memoryBarrier.dstAccessMask = vk::AccessFlagBits::eShaderRead;
+
+				sourceStage = vk::PipelineStageFlagBits::eTransfer;
+				destinationStage = vk::PipelineStageFlagBits::eFragmentShader;
+			}
+
+			else
+			{
+				throw std::invalid_argument("Unsupported layout transition!");
+			}
+
+			commandBuffer->pipelineBarrier(sourceStage, destinationStage, {}, 0, nullptr, 0, nullptr, 1, &memoryBarrier);
+		}
+	);
+}
+
+void GraphicEngine::Vulkan::generateMipmaps(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device,
+	const vk::UniqueCommandPool& commandPool, const vk::Queue& queue,
+	vk::UniqueImage& image, vk::Format format, int32_t width, int32_t height, int32_t mipLevels)
+{
+	auto formatProperties = physicalDevice.getFormatProperties(format);
+	if (!(formatProperties.optimalTilingFeatures & vk::FormatFeatureFlagBits::eSampledImageFilterLinear))
+	{
+		throw std::runtime_error("Texture image format does not support linear blitting!");
+	}
+
+	singleTimeCommand(device, commandPool, queue, [&](const vk::UniqueCommandBuffer& commandBuffer)
+		{
+			vk::ImageSubresourceRange subresourceRange(vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1);
+			vk::ImageMemoryBarrier memoryBarrier(vk::AccessFlagBits::eTransferWrite, vk::AccessFlagBits::eTransferRead, 
+				vk::ImageLayout::eTransferDstOptimal, vk::ImageLayout::eTransferSrcOptimal,
+				VK_QUEUE_FAMILY_IGNORED, VK_QUEUE_FAMILY_IGNORED, image.get(), subresourceRange);
+			
+			auto mipWidth{ width };
+			auto mipHeight{ height };
+
+			for (uint32_t i{ 1 }; i < mipLevels; ++i)
+			{
+				memoryBarrier.subresourceRange.baseMipLevel = i - 1;
+				memoryBarrier.oldLayout = vk::ImageLayout::eTransferDstOptimal;
+				memoryBarrier.newLayout = vk::ImageLayout::eTransferSrcOptimal;
+				memoryBarrier.srcAccessMask = vk::AccessFlagBits::eTransferWrite;
+				memoryBarrier.dstAccessMask = vk::AccessFlagBits::eTransferRead;
+
+				commandBuffer->pipelineBarrier(vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eTransfer, {}, 0, nullptr, 0, nullptr, 1, &memoryBarrier);
+				vk::ImageSubresourceLayers srcSubresource(vk::ImageAspectFlagBits::eColor, i - 1, 0, 1);
+				vk::ImageSubresourceLayers dstSubresource(vk::ImageAspectFlagBits::eColor, i, 0, 1);
+				std::array<vk::Offset3D, 2> srcOffset = {{{ 0, 0, 0 }, { mipWidth, mipHeight, 1 }}};
+				std::array<vk::Offset3D, 2> dstOffset = {{{ 0,0,0 }, { mipWidth > 1 ? mipWidth / 2 : 1, mipHeight > 1 ? mipHeight / 2 : 1, 1 }}};
+				vk::ImageBlit imageBlit(srcSubresource, srcOffset, dstSubresource, dstOffset);
+				commandBuffer->blitImage(image.get(), vk::ImageLayout::eTransferSrcOptimal,
+					image.get(), vk::ImageLayout::eTransferDstOptimal,
+					1, &imageBlit, vk::Filter::eLinear);
+
+				memoryBarrier.oldLayout = vk::ImageLayout::eTransferSrcOptimal;
+				memoryBarrier.newLayout = vk::ImageLayout::eShaderReadOnlyOptimal;
+				memoryBarrier.srcAccessMask = vk::AccessFlagBits::eTransferRead;
+				memoryBarrier.dstAccessMask = vk::AccessFlagBits::eShaderRead;
+
+				commandBuffer->pipelineBarrier(vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eFragmentShader, {}, 0, nullptr, 0, nullptr, 1, &memoryBarrier);
+
+				if (mipWidth > 1)
+					mipWidth /= 2;
+
+				if (mipHeight > 1)
+					mipHeight /= 2;
+			}
+
+			memoryBarrier.subresourceRange.baseMipLevel = mipLevels - 1;
+			memoryBarrier.oldLayout = vk::ImageLayout::eTransferDstOptimal;
+			memoryBarrier.newLayout = vk::ImageLayout::eShaderReadOnlyOptimal;
+			memoryBarrier.srcAccessMask = vk::AccessFlagBits::eTransferWrite;
+			memoryBarrier.dstAccessMask = vk::AccessFlagBits::eShaderRead;
+
+			commandBuffer->pipelineBarrier(vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eFragmentShader, {}, 0, nullptr, 0, nullptr, 1, &memoryBarrier);
+		}
+	);
 }
 
 vk::Format GraphicEngine::Vulkan::findSupportedFormat(const vk::PhysicalDevice& physicalDevice, std::vector<vk::Format> candidates, vk::ImageTiling tiling, vk::FormatFeatureFlags formatFeatures)
@@ -585,7 +688,7 @@ GraphicEngine::Vulkan::ImageData::ImageData(const vk::PhysicalDevice& physicalDe
 	device->bindImageMemory(image.get(), deviceMemory.get(), 0);
 
 	vk::ComponentMapping componentMapping(vk::ComponentSwizzle::eR, vk::ComponentSwizzle::eG, vk::ComponentSwizzle::eB, vk::ComponentSwizzle::eA);
-	vk::ImageSubresourceRange subResourceRange(aspectFlags, 0, 1, 0, 1);
+	vk::ImageSubresourceRange subResourceRange(aspectFlags, 0, mipLevel, 0, 1);
 	vk::ImageViewCreateInfo createInfo(vk::ImageViewCreateFlags(), image.get(), vk::ImageViewType::e2D, this->format, componentMapping, subResourceRange);
 	imageView = device->createImageViewUnique(createInfo);
 }
