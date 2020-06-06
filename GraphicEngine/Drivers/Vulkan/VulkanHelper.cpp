@@ -433,13 +433,16 @@ void GraphicEngine::Vulkan::updateDescriptorSets(const vk::UniqueDevice& device,
 			}
 		}
 
+		std::vector<vk::DescriptorImageInfo> imageInfos;
 		if (!imageUniforms.empty())
 		{
 			for (auto& imageUniform : imageUniforms)
 			{
 				vk::DescriptorImageInfo imageInfo(imageUniform->sampler.get(), imageUniform->imageView.get(), vk::ImageLayout::eShaderReadOnlyOptimal);
-				writeDescriptorSets.emplace_back(descriptorSets[i].get(), dstBinding, 0, 1, vk::DescriptorType::eCombinedImageSampler, &imageInfo, nullptr, nullptr);
+				imageInfos.push_back(imageInfo);
 			}
+
+			writeDescriptorSets.emplace_back(descriptorSets[i].get(), dstBinding, 0, static_cast<uint32_t>(imageInfos.size()), vk::DescriptorType::eCombinedImageSampler, imageInfos.data(), nullptr, nullptr);
 		}
 
 		device->updateDescriptorSets(static_cast<uint32_t>(writeDescriptorSets.size()), writeDescriptorSets.data(), 0, nullptr);
