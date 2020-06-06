@@ -10,7 +10,7 @@ GraphicEngine::Vulkan::Texture2D::Texture2D(const vk::PhysicalDevice& physicalDe
 	BufferData stagingBuffer(physicalDevice, device, vk::BufferUsageFlagBits::eTransferSrc, 
 		vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent, sizeof(uint8_t) * size);
 	copyMemoryToDevice<uint8_t>(device, stagingBuffer.memory, data, size);
-	transitionImageLayout(device, commandPool, queue, image, format, vk::ImageLayout::eUndefined, vk::ImageLayout::eTransferDstOptimal, 1);
+	transitionImageLayout(device, commandPool, queue, image, format, vk::ImageLayout::eUndefined, vk::ImageLayout::eTransferDstOptimal, mipLevel);
 	singleTimeCommand(device, commandPool, queue, [&](const vk::UniqueCommandBuffer& commandBuffer)
 		{
 			vk::ImageSubresourceLayers imageSubresource(vk::ImageAspectFlagBits::eColor, 0, 0, 1);
