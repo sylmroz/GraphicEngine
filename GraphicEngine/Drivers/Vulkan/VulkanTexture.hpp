@@ -8,11 +8,19 @@ namespace GraphicEngine::Vulkan
 	{
 	public:
 		Texture2D(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::UniqueCommandPool& commandPool, vk::Queue queue,
-			vk::Format format, int mipLevel, int width, int height, int channels, const uint8_t* data);
+			int mipLevel, int width, int height, int channels, const uint8_t* data);
 
 		vk::UniqueSampler sampler;
 
 		virtual ~Texture2D() = default;
+
+		static auto getFormat(int channels)
+		{
+			return internalFormats.at(static_cast<size_t>(channels) - 1);
+		}
+
+	private:
+		static constexpr std::array<vk::Format, 4> internalFormats = { {vk::Format::eR8Srgb, vk::Format::eR8G8Srgb, vk::Format::eR8G8B8Srgb, vk::Format::eR8G8B8A8Srgb} };
 	};
 }
 
