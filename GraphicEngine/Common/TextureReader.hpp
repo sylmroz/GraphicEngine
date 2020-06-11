@@ -73,7 +73,6 @@ namespace GraphicEngine::Common
 		private:
 			cv::Mat image;
 		};
-		using Texture = Details::TextureMixin<Details::OpenCVTexture>;
 #endif // USE_OPENCV
 
 #ifdef USE_STB_IMAGE
@@ -89,7 +88,7 @@ namespace GraphicEngine::Common
 	}
 
 #ifdef USE_OPENCV
-	using Texture = Details::TextureMixin<Details::OpenCVTexture>;
+	using TextureReader = Details::TextureMixin<Details::OpenCVTextureReder>;
 #endif // USE_OPENCV
 #ifdef USE_STB_IMAGE
 	using TextureReader = Details::TextureMixin<Details::StbTextureReader>;

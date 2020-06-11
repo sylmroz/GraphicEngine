@@ -195,6 +195,7 @@
     <ClInclude Include="Common\Mouse.hpp" />
     <ClInclude Include="Common\RenderingEngine.hpp" />
     <ClInclude Include="Common\Shader.hpp" />
+    <ClInclude Include="Common\TextureFactory.hpp" />
     <ClInclude Include="Common\TextureReader.hpp" />
     <ClInclude Include="Common\Vertex.hpp" />
     <ClInclude Include="Common\VertexBuffer.hpp" />
@@ -220,12 +221,14 @@
     <ClInclude Include="Drivers\OpenGL\OpenGLRenderingEngine.hpp" />
     <ClInclude Include="Drivers\OpenGL\OpenGLShader.hpp" />
     <ClInclude Include="Drivers\OpenGL\OpenGLTexture.hpp" />
+    <ClInclude Include="Drivers\OpenGL\OpenGLTextureFactory.hpp" />
     <ClInclude Include="Drivers\OpenGL\OpenGLUniformBuffer.hpp" />
     <ClInclude Include="Drivers\OpenGL\OpenGLUniformData.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanShader.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanHelper.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanRenderingEngine.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanTexture.hpp" />
+    <ClInclude Include="Drivers\Vulkan\VulkanTextureFactory.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanWindowContext.hpp" />
     <ClInclude Include="Main\Application.hpp" />
     <ClInclude Include="Main\Engine.hpp" />

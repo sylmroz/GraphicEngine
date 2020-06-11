@@ -8,7 +8,7 @@ namespace GraphicEngine::Vulkan
 	{
 	public:
 		Texture2D(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::UniqueCommandPool& commandPool, vk::Queue queue,
-			int mipLevel, int width, int height, int channels, const uint8_t* data);
+			const uint8_t* data, int width, int height, int channels);
 
 		vk::UniqueSampler sampler;
 

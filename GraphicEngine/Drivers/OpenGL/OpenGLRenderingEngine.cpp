@@ -1,7 +1,7 @@
 #include "OpenGLRenderingEngine.hpp"
 
 #include "../../Core/IO/FileReader.hpp"
-#include "../../Common/TextureReader.hpp"
+#include "OpenGLTextureFactory.hpp"
 
 GraphicEngine::OpenGL::OpenGLRenderingEngine::OpenGLRenderingEngine(
 	std::shared_ptr<Common::Camera> camera,
@@ -50,9 +50,8 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 
 		m_uniformBufferMatrix = std::make_shared<UniformBuffer<glm::mat4>>();
 		m_vertexBuffer = std::unique_ptr<VertexBuffer<GraphicEngine::Common::VertexPCTc>>(new VertexBuffer<GraphicEngine::Common::VertexPCTc>(vertices, indices));
-		Common::TextureReader textureReader("C:/rem.png");
-		auto [data, width, height, channels] = textureReader();
-		m_texture = std::make_unique<Texture2D>(data, width, height, channels);
+		
+		m_texture = TextureFactory::produceTexture("C:/rem.png");
 	}
 
 	catch (std::runtime_error& err)

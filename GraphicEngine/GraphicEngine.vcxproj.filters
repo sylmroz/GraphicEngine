@@ -285,5 +285,14 @@
     <ClInclude Include="Core\Math.hpp">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="Common\TextureFactory.hpp">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Drivers\OpenGL\OpenGLTextureFactory.hpp">
+      <Filter>Drivers\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Drivers\Vulkan\VulkanTextureFactory.hpp">
+      <Filter>Drivers\Vulkan</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

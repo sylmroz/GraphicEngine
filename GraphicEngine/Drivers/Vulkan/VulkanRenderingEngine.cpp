@@ -1,8 +1,8 @@
 #include "VulkanRenderingEngine.hpp"
 
 #include "../../Core/IO/FileReader.hpp"
-#include "../../Core/Math.hpp"
-#include "../../Common/TextureReader.hpp"
+
+#include "VulkanTextureFactory.hpp"
 
 #undef max
 
@@ -121,9 +121,7 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 		m_vertexShader = std::make_unique<VulkanShader>(m_device, Core::IO::readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Spv/basicPCTVP.vert.spv"));
 		m_fragmentShader = std::make_unique<VulkanShader>(m_device, Core::IO::readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Spv/basicPCTVP.frag.spv"));
 
-		Common::TextureReader textureReader("C:/rem.png");
-		auto [data, width, height, channels] = textureReader();
-		m_texture = std::make_shared<Texture2D>(m_physicalDevice, m_device, m_commandPool, m_graphicQueue, Core::calculateMipLevels(width, height), width, height, channels, data);
+		m_texture = TextureFactory::produceTexture("C:/rem.png", m_physicalDevice, m_device, m_commandPool, m_graphicQueue);
 
 
 		m_uniformBuffer = std::make_unique<UniformBuffer<glm::mat4>>(m_physicalDevice, m_device, m_maxFrames);
