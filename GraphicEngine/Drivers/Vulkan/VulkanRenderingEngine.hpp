@@ -5,6 +5,7 @@
 #include "VulkanHelper.hpp"
 #include "VulkanWindowContext.hpp"
 #include "VulkanTexture.hpp"
+#include "VulkanVertexBuffer.hpp"
 
 namespace GraphicEngine::Vulkan
 {

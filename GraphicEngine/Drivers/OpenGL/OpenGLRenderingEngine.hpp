@@ -4,7 +4,7 @@
 
 #include "../../Core/Logger.hpp"
 
-#include "OpenGLHelper.hpp"
+#include "OpenGLVertexBuffer.hpp"
 #include "OpenGLShader.hpp"
 #include "OpenGLTexture.hpp"
 #include "OpenGLUniformBuffer.hpp"

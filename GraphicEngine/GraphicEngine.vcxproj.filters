@@ -207,9 +207,6 @@
     <ClInclude Include="Common\Vertex.hpp">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="Drivers\OpenGL\OpenGLHelper.hpp">
-      <Filter>Drivers\OpenGL</Filter>
-    </ClInclude>
     <ClInclude Include="Common\VertexBuffer.hpp">
       <Filter>Common</Filter>
     </ClInclude>
@@ -292,6 +289,12 @@
       <Filter>Drivers\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="Drivers\Vulkan\VulkanTextureFactory.hpp">
+      <Filter>Drivers\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Drivers\OpenGL\OpenGLVertexBuffer.hpp">
+      <Filter>Drivers\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Drivers\Vulkan\VulkanVertexBuffer.hpp">
       <Filter>Drivers\Vulkan</Filter>
     </ClInclude>
   </ItemGroup>

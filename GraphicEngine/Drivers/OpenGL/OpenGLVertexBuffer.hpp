@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../../Common/VertexBuffer.hpp"
+
 #include <GL/glew.h>
 
 #include <memory>
@@ -8,7 +10,7 @@
 namespace GraphicEngine::OpenGL
 {
 	template <typename _Vertex>
-	class VertexBuffer
+	class VertexBuffer : public Common::VertexBuffer<OpenGL::VertexBuffer<_Vertex>, _Vertex>
 	{
 		class _VertexBuffer
 		{
@@ -114,7 +116,7 @@ namespace GraphicEngine::OpenGL
 			m_data->bind();
 		}
 
-		virtual void draw()
+		void draw()
 		{
 			m_data->draw();
 		}

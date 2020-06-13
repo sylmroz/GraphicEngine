@@ -217,7 +217,7 @@
     <ClInclude Include="Core\Subject.hpp" />
     <ClInclude Include="Core\Timer.hpp" />
     <ClInclude Include="Core\Utils\GetClassName.hpp" />
-    <ClInclude Include="Drivers\OpenGL\OpenGLHelper.hpp" />
+    <ClInclude Include="Drivers\OpenGL\OpenGLVertexBuffer.hpp" />
     <ClInclude Include="Drivers\OpenGL\OpenGLRenderingEngine.hpp" />
     <ClInclude Include="Drivers\OpenGL\OpenGLShader.hpp" />
     <ClInclude Include="Drivers\OpenGL\OpenGLTexture.hpp" />
@@ -229,6 +229,7 @@
     <ClInclude Include="Drivers\Vulkan\VulkanRenderingEngine.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanTexture.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanTextureFactory.hpp" />
+    <ClInclude Include="Drivers\Vulkan\VulkanVertexBuffer.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanWindowContext.hpp" />
     <ClInclude Include="Main\Application.hpp" />
     <ClInclude Include="Main\Engine.hpp" />
