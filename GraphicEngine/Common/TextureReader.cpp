@@ -33,4 +33,8 @@ void GraphicEngine::Common::Details::StbTextureReader::read(const std::string& p
 		throw std::runtime_error(err);
 	}
 }
+GraphicEngine::Common::Details::StbTextureReader::~StbTextureReader()
+{
+	stbi_image_free(data);
+}
 #endif // USE_STB_IMAGE

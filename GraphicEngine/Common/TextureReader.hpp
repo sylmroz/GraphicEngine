@@ -44,15 +44,7 @@ namespace GraphicEngine::Common
 				static_cast<TextureReader*>(this)->read(path);
 			}
 
-			virtual ~TextureCRTP()
-			{
-#ifdef USE_STB_IMAGE
-				if (data != nullptr)
-				{
-					delete data;
-				}
-#endif // USE_STB_IMAGE
-			}
+			virtual ~TextureCRTP() = default;
 		protected:
 			unsigned char* data{ nullptr };
 			int width{ 0 };
@@ -83,6 +75,8 @@ namespace GraphicEngine::Common
 			StbTextureReader(const std::string& path) : TextureCRTP(path) {}
 
 			void read(const std::string& path);
+
+			virtual ~StbTextureReader();
 		};
 #endif // USE_STB_IMAGE
 	}

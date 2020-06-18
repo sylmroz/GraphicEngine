@@ -173,8 +173,9 @@
     <ClCompile Include="Common\Camera.cpp" />
     <ClCompile Include="Common\TextureReader.cpp" />
     <ClCompile Include="Core\Configuration.cpp" />
+    <ClCompile Include="Core\IO\FileSystem.cpp" />
     <ClCompile Include="Core\LoggerCore\SourceFormatter.cpp" />
-    <ClCompile Include="Core\Math.cpp" />
+    <ClCompile Include="Core\Math\Math.cpp" />
     <ClCompile Include="Drivers\OpenGL\OpenGLRenderingEngine.cpp" />
     <ClCompile Include="Drivers\OpenGL\OpenGLShader.cpp" />
     <ClCompile Include="Drivers\OpenGL\OpenGLTexture.cpp" />
@@ -208,10 +209,11 @@
     <ClInclude Include="Core\Input\Mouse\MouseEventProxy.hpp" />
     <ClInclude Include="Core\Input\Mouse\MouseEnumButton.hpp" />
     <ClInclude Include="Core\IO\FileReader.hpp" />
+    <ClInclude Include="Core\IO\FileSystem.hpp" />
     <ClInclude Include="Core\Logger.hpp" />
     <ClInclude Include="Core\LoggerCore\LoggerName.hpp" />
     <ClInclude Include="Core\LoggerCore\SourceFormatter.hpp" />
-    <ClInclude Include="Core\Math.hpp" />
+    <ClInclude Include="Core\Math\Math.hpp" />
     <ClInclude Include="Core\Ranges.hpp" />
     <ClInclude Include="Core\ServiceManager.hpp" />
     <ClInclude Include="Core\Subject.hpp" />

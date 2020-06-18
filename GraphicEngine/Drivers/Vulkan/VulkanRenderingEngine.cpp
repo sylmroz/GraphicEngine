@@ -1,6 +1,7 @@
 #include "VulkanRenderingEngine.hpp"
 
 #include "../../Core/IO/FileReader.hpp"
+#include "../../Core/IO/FileSystem.hpp"
 
 #include "VulkanTextureFactory.hpp"
 
@@ -118,8 +119,8 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 
 		m_vertexBuffer = std::make_unique<VertexBuffer<GraphicEngine::Common::VertexPCTc>>(m_physicalDevice, m_device, m_commandPool, m_graphicQueue, vertices, RenderingEngine::indices);
 
-		m_vertexShader = std::make_unique<VulkanShader>(m_device, Core::IO::readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Spv/basicPCTVP.vert.spv"));
-		m_fragmentShader = std::make_unique<VulkanShader>(m_device, Core::IO::readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Spv/basicPCTVP.frag.spv"));
+		m_vertexShader = std::make_unique<VulkanShader>(m_device, Core::IO::readFile<std::string>(Core::FileSystem::getVulkanShaderPath("basicPCTVP.vert.spv").string()));
+		m_fragmentShader = std::make_unique<VulkanShader>(m_device, Core::IO::readFile<std::string>(Core::FileSystem::getVulkanShaderPath("basicPCTVP.frag.spv").string()));
 
 		m_texture = TextureFactory::produceTexture("C:/rem.png", m_physicalDevice, m_device, m_commandPool, m_graphicQueue);
 

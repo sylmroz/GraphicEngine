@@ -1,6 +1,8 @@
 #include "OpenGLRenderingEngine.hpp"
 
 #include "../../Core/IO/FileReader.hpp"
+#include "../../Core/IO/FileSystem.hpp"
+
 #include "OpenGLTextureFactory.hpp"
 
 GraphicEngine::OpenGL::OpenGLRenderingEngine::OpenGLRenderingEngine(
@@ -38,8 +40,8 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 
 	try
 	{
-		OpenGLVertexShader vert(readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Glsl/basicPCTVP.vert"));
-		OpenGLFragmentShader frag(readFile<std::string>("C:/Projects/GraphicEngine/GraphicEngine/Assets/Shaders/Glsl/basicPCTVP.frag"));
+		OpenGLVertexShader vert(readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("basicPCTVP.vert").string()));
+		OpenGLFragmentShader frag(readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("basicPCTVP.frag").string()));
 
 		m_program = std::shared_ptr<OpenGLShaderProgram>(new OpenGLShaderProgram({ vert, frag }));
 		

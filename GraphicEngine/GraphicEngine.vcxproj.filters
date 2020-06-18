@@ -76,6 +76,9 @@
     <Filter Include="Core\Utils">
       <UniqueIdentifier>{2235d332-398d-44e2-b440-01e08c472e28}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\Math">
+      <UniqueIdentifier>{f0da0055-286e-4007-ba48-19704744bb71}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -145,8 +148,11 @@
     <ClCompile Include="Drivers\Vulkan\VulkanTexture.cpp">
       <Filter>Drivers\Vulkan</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Math.cpp">
-      <Filter>Core</Filter>
+    <ClCompile Include="Core\Math\Math.cpp">
+      <Filter>Core\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\IO\FileSystem.cpp">
+      <Filter>Core\IO</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -279,9 +285,6 @@
     <ClInclude Include="Drivers\Vulkan\VulkanTexture.hpp">
       <Filter>Drivers\Vulkan</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Math.hpp">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="Common\TextureFactory.hpp">
       <Filter>Common</Filter>
     </ClInclude>
@@ -296,6 +299,12 @@
     </ClInclude>
     <ClInclude Include="Drivers\Vulkan\VulkanVertexBuffer.hpp">
       <Filter>Drivers\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Math\Math.hpp">
+      <Filter>Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\IO\FileSystem.hpp">
+      <Filter>Core\IO</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
