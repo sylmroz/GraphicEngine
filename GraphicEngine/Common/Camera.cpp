@@ -32,6 +32,10 @@ void GraphicEngine::Common::Camera::setCameraPerspectiveProperties(PerspectivePa
 	m_perspectiveParameters = perspectiveParameters;
 	m_cameraType = CameraType::Perspective;
 	m_shouldUpdateProjection = true;
+	calculateProjectionMatrix = [&]()->glm::mat4
+	{
+		return caclulatePerspective();
+	};
 }
 
 void GraphicEngine::Common::Camera::setCameraOrthogonalProperties(OrthogonalParameters orthogonalParameters)
@@ -39,6 +43,10 @@ void GraphicEngine::Common::Camera::setCameraOrthogonalProperties(OrthogonalPara
 	m_orthogonalParameters = orthogonalParameters;
 	m_cameraType = CameraType::Orthogonal;
 	m_shouldUpdateProjection = true;
+	calculateProjectionMatrix = [&]()->glm::mat4
+	{
+		return calculateOrthogonal();
+	};
 }
 
 void GraphicEngine::Common::Camera::setSpeed(float speed)
@@ -81,8 +89,10 @@ void GraphicEngine::Common::Camera::setCameraType(CameraType cameraType)
 
 GraphicEngine::Common::Camera::Camera()
 {
-	PerspectiveParameters_s perspectiveParameters;
-	setCameraPerspectiveProperties(perspectiveParameters);
+	OrthogonalParameters orthogonalParameters;
+	setCameraOrthogonalProperties(orthogonalParameters);
+	//PerspectiveParameters_s perspectiveParameters;
+	//setCameraPerspectiveProperties(perspectiveParameters);
 }
 
 //GraphicEngine::Common::Camera::Camera(PerspectiveParameters_s perspectiveParameters)
@@ -100,30 +110,12 @@ void GraphicEngine::Common::Camera::rotate(const glm::vec2& offset)
 	m_yawPitchOffset = (offset * m_sensitivity);
 	float oldPitch = m_yawPitch.x;
 	m_yawPitch += m_yawPitchOffset;
-
-	//if (m_yawPitch.x > 89.0f)
-	//{
-	//	m_yawPitch.x = oldPitch;
-	//	m_yawPitchOffset.x = 0.0f;
-	//}
-	//
-	//if (m_yawPitch.x < -89.0)
-	//{
-	//	m_yawPitch.x = oldPitch;
-	//	m_yawPitchOffset.x = 0.0f;
-	//}
 	
 	m_shouldUpdateView = true;
 }
 
 void GraphicEngine::Common::Camera::move(const glm::vec2& offset)
 {
-	/*if (offset.x != 0)
-		m_position = m_position + (m_direction * offset.x * m_speed);
-	if (offset.y != 0)
-		m_position = m_position + (glm::normalize(glm::cross(m_direction, glm::vec3(0.0f, 0.0f, 1.0f))) * offset.y * m_speed);
-	m_shouldUpdateView = true;*/
-
 	if (offset.x != 0)
 		m_position = m_position + (m_new_direction * offset.x * m_speed);
 	if (offset.y != 0)
@@ -176,7 +168,6 @@ void GraphicEngine::Common::Camera::updateViewMatrix()
 	}
 	m_viewMatrix = glm::lookAt(m_position, m_position + m_new_direction, up);
 	
-
 	m_yawPitchOffset = glm::vec2(0.0f, 0.0f);
 	m_shouldUpdateView = false;
 }
@@ -190,7 +181,8 @@ void GraphicEngine::Common::Camera::updateProjectionMatrix()
 GraphicEngine::Common::CameraController::CameraController(std::shared_ptr<Camera> camera, std::shared_ptr<WindowKeyboardMouse> window, std::shared_ptr<Core::EventManager> eventManager) :
 	m_camera(camera),
 	m_window(window),
-	m_eventManager(eventManager)
+	m_eventManager(eventManager),
+	m_prevMousePosition(glm::vec2(0.0f, 0.0f))
 {
 	m_eventManager->addSubject([&]()
 		{
@@ -202,7 +194,6 @@ GraphicEngine::Common::CameraController::CameraController(std::shared_ptr<Camera
 					m_window->getPressedButtons(),
 					m_window->getPressedKeys()
 				);
-				//_window->setCursorPosition(glm::vec2(_window->getWidth() / 2, _window->getHeight() / 2));
 			}
 		});
 }
