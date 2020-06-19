@@ -30,10 +30,12 @@ namespace GraphicEngine::Common
 
 	struct OrthogonalParameters
 	{
-		float left{ 10.0f };
-		float right{ 10.0f };
-		float bottom{ 10.0f };
-		float top{ 10.0f };
+		float left{ -5.0f };
+		float right{ 5.0f };
+		float bottom{ -5.0f };
+		float top{ 5.0f };
+		float zNear{ -10.0f };
+		float zFar{ 10.0f };
 	};
 
 
@@ -82,6 +84,10 @@ namespace GraphicEngine::Common
 		glm::vec3 m_direction = glm::normalize(glm::vec3(-1.0, -1.0, -1.0));
 		glm::vec3 m_new_direction = glm::normalize(glm::vec3(-1.0, -1.0, -1.0));
 		glm::vec3 m_up = glm::vec3(0.0, 0.0, 1.0);
+		/*glm::vec3 m_position = glm::vec3(0.0, 0.0, 2.0);
+		glm::vec3 m_direction = glm::normalize(glm::vec3(0.0, 0.0, -1.0));
+		glm::vec3 m_new_direction = glm::normalize(glm::vec3(0.0, 0.0, -1.0));
+		glm::vec3 m_up = glm::vec3(0.0, 1.0, 0.0);*/
 
 		glm::vec2 m_yawPitch = glm::vec2(0.0, 0.0);
 		glm::vec2 m_yawPitchOffset = glm::vec2(0.0, 0.0);
