@@ -17,25 +17,15 @@ namespace GraphicEngine::Common
 	enum class CameraType
 	{
 		Perspective,
-		Orthogonal
+		Orthographic
 	};
 
-	struct PerspectiveParameters_s
+	struct CameraParameters
 	{
 		float fov{ 45.0f };
 		float aspectRatio{ 1920.0f / 1080.0f }; // Typical full hd resolution
 		float zNear{ 0.001f };
 		float zFar{ 100.0f };
-	};
-
-	struct OrthogonalParameters
-	{
-		float left{ -5.0f };
-		float right{ 5.0f };
-		float bottom{ -5.0f };
-		float top{ 5.0f };
-		float zNear{ -10.0f };
-		float zFar{ 10.0f };
 	};
 
 
@@ -51,8 +41,8 @@ namespace GraphicEngine::Common
 		glm::mat4 getViewMatrix();
 		glm::mat4 getProjectionMatrix();
 
-		void setCameraPerspectiveProperties(PerspectiveParameters_s perspectiveParameters);
-		void setCameraOrthogonalProperties(OrthogonalParameters orthogonalParameters);
+		void setCameraPerspectiveProperties(CameraParameters cameraParameters);
+		void setCameraOrthographicProperties(CameraParameters cameraParameters);
 
 		void setSpeed(float speed);
 		float getSpeed();
@@ -65,7 +55,7 @@ namespace GraphicEngine::Common
 
 	private:
 		glm::mat4 caclulatePerspective();
-		glm::mat4 calculateOrthogonal();
+		glm::mat4 calculateOrthographic();
 
 		void updateViewMatrix();
 		void updateProjectionMatrix();
@@ -81,20 +71,15 @@ namespace GraphicEngine::Common
 		glm::mat4 m_viewProjectionMatrix = glm::mat4();
 
 		glm::vec3 m_position = glm::vec3(2.0, 2.0, 2.0);
+		glm::vec2 m_positionOffset = m_position;
 		glm::vec3 m_direction = glm::normalize(glm::vec3(-1.0, -1.0, -1.0));
-		glm::vec3 m_new_direction = glm::normalize(glm::vec3(-1.0, -1.0, -1.0));
+		glm::vec3 m_new_direction = m_direction;
 		glm::vec3 m_up = glm::vec3(0.0, 0.0, 1.0);
-		/*glm::vec3 m_position = glm::vec3(0.0, 0.0, 2.0);
-		glm::vec3 m_direction = glm::normalize(glm::vec3(0.0, 0.0, -1.0));
-		glm::vec3 m_new_direction = glm::normalize(glm::vec3(0.0, 0.0, -1.0));
-		glm::vec3 m_up = glm::vec3(0.0, 1.0, 0.0);*/
-
+		
 		glm::vec2 m_yawPitch = glm::vec2(0.0, 0.0);
 		glm::vec2 m_yawPitchOffset = glm::vec2(0.0, 0.0);
 
-		PerspectiveParameters_s m_perspectiveParameters;
-
-		OrthogonalParameters m_orthogonalParameters;
+		CameraParameters m_cameraParameters;
 
 	private:
 		bool m_shouldUpdateView{ true };

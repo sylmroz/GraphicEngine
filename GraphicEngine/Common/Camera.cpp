@@ -27,9 +27,9 @@ glm::mat4 GraphicEngine::Common::Camera::getProjectionMatrix()
 	return m_projectionMatrix;
 }
 
-void GraphicEngine::Common::Camera::setCameraPerspectiveProperties(PerspectiveParameters_s perspectiveParameters)
+void GraphicEngine::Common::Camera::setCameraPerspectiveProperties(CameraParameters cameraParameters)
 {
-	m_perspectiveParameters = perspectiveParameters;
+	m_cameraParameters = cameraParameters;
 	m_cameraType = CameraType::Perspective;
 	m_shouldUpdateProjection = true;
 	calculateProjectionMatrix = [&]()->glm::mat4
@@ -38,14 +38,14 @@ void GraphicEngine::Common::Camera::setCameraPerspectiveProperties(PerspectivePa
 	};
 }
 
-void GraphicEngine::Common::Camera::setCameraOrthogonalProperties(OrthogonalParameters orthogonalParameters)
+void GraphicEngine::Common::Camera::setCameraOrthographicProperties(CameraParameters cameraParameters)
 {
-	m_orthogonalParameters = orthogonalParameters;
-	m_cameraType = CameraType::Orthogonal;
+	m_cameraParameters = cameraParameters;
+	m_cameraType = CameraType::Orthographic;
 	m_shouldUpdateProjection = true;
 	calculateProjectionMatrix = [&]()->glm::mat4
 	{
-		return calculateOrthogonal();
+		return calculateOrthographic();
 	};
 }
 
@@ -71,13 +71,13 @@ float GraphicEngine::Common::Camera::getSensitivity()
 
 void GraphicEngine::Common::Camera::setFOV(float fov)
 {
-	m_perspectiveParameters.fov = fov;
+	m_cameraParameters.fov = fov;
 	m_shouldUpdateProjection = true;
 }
 
 void GraphicEngine::Common::Camera::setAspectRatio(float aspectRatio)
 {
-	m_perspectiveParameters.aspectRatio = aspectRatio;
+	m_cameraParameters.aspectRatio = aspectRatio;
 	m_shouldUpdateProjection = true;
 }
 
@@ -89,10 +89,7 @@ void GraphicEngine::Common::Camera::setCameraType(CameraType cameraType)
 
 GraphicEngine::Common::Camera::Camera()
 {
-	OrthogonalParameters orthogonalParameters;
-	setCameraOrthogonalProperties(orthogonalParameters);
-	//PerspectiveParameters_s perspectiveParameters;
-	//setCameraPerspectiveProperties(perspectiveParameters);
+	setCameraOrthographicProperties(CameraParameters{});
 }
 
 //GraphicEngine::Common::Camera::Camera(PerspectiveParameters_s perspectiveParameters)
@@ -117,22 +114,30 @@ void GraphicEngine::Common::Camera::rotate(const glm::vec2& offset)
 void GraphicEngine::Common::Camera::move(const glm::vec2& offset)
 {
 	if (offset.x != 0)
+	{
 		m_position = m_position + (m_new_direction * offset.x * m_speed);
+	}
 	if (offset.y != 0)
+	{
 		m_position = m_position + (glm::normalize(glm::cross(m_new_direction, glm::vec3(0.0f, 0.0f, 1.0f))) * offset.y * m_speed);
+	}
+
+	m_positionOffset -= offset;
 	m_shouldUpdateView = true;
 }
 
 glm::mat4 GraphicEngine::Common::Camera::caclulatePerspective()
 {
-	return glm::perspective(glm::radians(m_perspectiveParameters.fov), m_perspectiveParameters.aspectRatio, m_perspectiveParameters.zNear, m_perspectiveParameters.zFar);
+	return glm::perspective(glm::radians(m_cameraParameters.fov), m_cameraParameters.aspectRatio, 
+		m_cameraParameters.zNear, m_cameraParameters.zFar);
 }
 
-glm::mat4 GraphicEngine::Common::Camera::calculateOrthogonal()
+glm::mat4 GraphicEngine::Common::Camera::calculateOrthographic()
 {
-	return glm::ortho(m_orthogonalParameters.left * m_position.x, m_orthogonalParameters.right * m_position.x,
-		m_orthogonalParameters.bottom * m_position.x, m_orthogonalParameters.top * m_position.x,
-		m_orthogonalParameters.zNear, m_orthogonalParameters.zFar);
+	float orthoBoundary = m_positionOffset.x * glm::radians(m_cameraParameters.fov);
+	return glm::ortho(-orthoBoundary * m_cameraParameters.aspectRatio, orthoBoundary * m_cameraParameters.aspectRatio,
+		-orthoBoundary, orthoBoundary,
+		-m_cameraParameters.zFar, m_cameraParameters.zFar);
 }
 
 void GraphicEngine::Common::Camera::updateViewMatrix()
@@ -150,7 +155,7 @@ void GraphicEngine::Common::Camera::updateViewMatrix()
 	
 	m_yawPitchOffset = glm::vec2(0.0f, 0.0f);
 	m_shouldUpdateView = false;
-	if (m_cameraType == CameraType::Orthogonal)
+	if (m_cameraType == CameraType::Orthographic)
 	{
 		m_shouldUpdateProjection = true;
 	}
