@@ -30,23 +30,13 @@ glm::mat4 GraphicEngine::Common::Camera::getProjectionMatrix()
 void GraphicEngine::Common::Camera::setCameraPerspectiveProperties(CameraParameters cameraParameters)
 {
 	m_cameraParameters = cameraParameters;
-	m_cameraType = CameraType::Perspective;
-	m_shouldUpdateProjection = true;
-	calculateProjectionMatrix = [&]()->glm::mat4
-	{
-		return caclulatePerspective();
-	};
+	setCameraType(CameraType::Perspective);
 }
 
 void GraphicEngine::Common::Camera::setCameraOrthographicProperties(CameraParameters cameraParameters)
 {
 	m_cameraParameters = cameraParameters;
-	m_cameraType = CameraType::Orthographic;
-	m_shouldUpdateProjection = true;
-	calculateProjectionMatrix = [&]()->glm::mat4
-	{
-		return calculateOrthographic();
-	};
+	setCameraType(CameraType::Orthographic);
 }
 
 void GraphicEngine::Common::Camera::setSpeed(float speed)
@@ -85,6 +75,12 @@ void GraphicEngine::Common::Camera::setCameraType(CameraType cameraType)
 {
 	m_cameraType = cameraType;
 	m_shouldUpdateProjection = true;
+	calculateProjectionMatrix = m_projectionMatrixCalculators[m_cameraType];
+}
+
+GraphicEngine::Common::CameraType GraphicEngine::Common::Camera::getCameraType()
+{
+	return m_cameraType;
 }
 
 GraphicEngine::Common::Camera::Camera()
@@ -230,7 +226,7 @@ void GraphicEngine::Common::CameraController::rotate(glm::vec2 pos, const std::v
 void GraphicEngine::Common::CameraController::move(std::vector<Core::Inputs::KeyboardKey> keys)
 {
 	using namespace Core::Inputs;
-	std::vector<KeyboardKey> basicMovementKeys{ KeyboardKey::KEY_W, KeyboardKey::KEY_A, KeyboardKey::KEY_S, KeyboardKey::KEY_D };
+	std::vector<KeyboardKey> basicMovementKeys{ KeyboardKey::KEY_W, KeyboardKey::KEY_A, KeyboardKey::KEY_S, KeyboardKey::KEY_D, KeyboardKey::KEY_C};
 	std::vector<KeyboardKey> filteredKeys = GameEngine::Core::Ranges::filter(keys, [&](KeyboardKey key)
 		{
 			return std::find(std::begin(basicMovementKeys), std::end(basicMovementKeys), key) != std::end(basicMovementKeys);
@@ -246,6 +242,8 @@ void GraphicEngine::Common::CameraController::move(std::vector<Core::Inputs::Key
 			movementOffset.y -= m_dt;
 		else if (key == KeyboardKey::KEY_D)
 			movementOffset.y += m_dt;
+		else if (key == KeyboardKey::KEY_C)
+			switchCameraType();
 	}
 
 	m_camera->move(movementOffset);
@@ -258,4 +256,12 @@ void GraphicEngine::Common::CameraController::zoom(double offset)
 std::shared_ptr<GraphicEngine::Common::Camera> GraphicEngine::Common::CameraController::getCamera()
 {
 	return m_camera;
+}
+
+void GraphicEngine::Common::CameraController::switchCameraType()
+{
+	auto camType = m_camera->getCameraType();
+	camType == CameraType::Perspective ?
+		m_camera->setCameraType(CameraType::Orthographic) :
+		m_camera->setCameraType(CameraType::Perspective);
 }

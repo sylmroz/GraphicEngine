@@ -52,6 +52,7 @@ namespace GraphicEngine::Common
 		void setAspectRatio(float aspectRatio);
 
 		void setCameraType(CameraType cameraType);
+		CameraType getCameraType();
 
 	private:
 		glm::mat4 caclulatePerspective();
@@ -60,10 +61,7 @@ namespace GraphicEngine::Common
 		void updateViewMatrix();
 		void updateProjectionMatrix();
 
-		std::function<glm::mat4(void)> calculateProjectionMatrix = [&]()->glm::mat4
-		{
-			return caclulatePerspective();
-		};
+		std::function<glm::mat4(void)> calculateProjectionMatrix;
 
 	private:
 		glm::mat4 m_viewMatrix = glm::mat4();
@@ -87,6 +85,12 @@ namespace GraphicEngine::Common
 		CameraType m_cameraType = CameraType::Perspective;
 		float m_speed{ 1.0f };
 		float m_sensitivity{ 0.25f };
+
+		std::map<CameraType, std::function<glm::mat4()>> m_projectionMatrixCalculators
+		{
+			{CameraType::Perspective, [&]()->glm::mat4 { return caclulatePerspective(); }},
+			{CameraType::Orthographic, [&]()->glm::mat4 { return calculateOrthographic(); }}
+		};
 	};
 
 	class CameraController
@@ -113,6 +117,8 @@ namespace GraphicEngine::Common
 		void zoom(double offset);
 
 		std::shared_ptr<Camera> getCamera();
+
+		void switchCameraType();
 
 	private:
 		std::shared_ptr<Camera> m_camera;

@@ -16,6 +16,8 @@ std::vector<KeyboardKey> GraphicEngine::GLFW::GlfwWindow::getPressedKeys()
 		_keys.push_back(KeyboardKey::KEY_S);
 	if (glfwGetKey(m_glfwWindow.get(), GLFW_KEY_D) == GLFW_PRESS)
 		_keys.push_back(KeyboardKey::KEY_D);
+	if (glfwGetKey(m_glfwWindow.get(), GLFW_KEY_C) == GLFW_PRESS)
+		_keys.push_back(KeyboardKey::KEY_C);
 
 	// Implement more if needed
 	return std::move(_keys);
