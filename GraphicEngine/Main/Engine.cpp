@@ -26,13 +26,19 @@ void GraphicEngine::Engine::initialize()
 
 	m_cameraController->setInitialMousePosition(glm::vec2(m_window->getWidth() / 2, m_window->getHeight() / 2));
 
-	m_keyboard->subscribe([&](std::vector<Core::Inputs::KeyboardKey> keys)
+	m_keyboard->onKeyDown([&](Core::Inputs::KeyboardKey key)
 		{
-			const auto escKey = std::find(std::begin(keys), std::end(keys), Core::Inputs::KeyboardKey::KEY_ESCAPE);
-			if (escKey != std::end(keys))
+			if (key == Core::Inputs::KeyboardKey::KEY_ESCAPE)
 				shutdown = true;
-		}
-	);
+		});
+
+	//m_keyboard->subscribe([&](std::vector<Core::Inputs::KeyboardKey> keys)
+	//	{
+	//		const auto escKey = std::find(std::begin(keys), std::end(keys), Core::Inputs::KeyboardKey::KEY_ESCAPE);
+	//		if (escKey != std::end(keys))
+	//			shutdown = true;
+	//	}
+	//);
 
 	m_eventManager->addSubject([&]()
 		{

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Core/Input/Keyboard/KeyboardEnumKeys.hpp"
+#include "../Core/Input/Keyboard/KeyboardEventProxy.hpp"
 #include "../Core/Input/Mouse/MouseEnumButton.hpp"
 
 #include "../Core/EventManager.hpp"
@@ -96,7 +96,8 @@ namespace GraphicEngine::Common
 	class CameraController
 	{
 	public:
-		CameraController(std::shared_ptr<Camera> camera, std::shared_ptr<WindowKeyboardMouse> window, std::shared_ptr<Core::EventManager> eventManager);
+		CameraController(std::shared_ptr<Camera> camera, std::shared_ptr<WindowKeyboardMouse> window, 
+			std::shared_ptr<Core::EventManager> eventManager, std::shared_ptr<Core::Inputs::KeyboardEventProxy> keyboard);
 
 		void setCameraType(CameraType cameraType);
 
@@ -124,6 +125,7 @@ namespace GraphicEngine::Common
 		std::shared_ptr<Camera> m_camera;
 		std::shared_ptr<WindowKeyboardMouse> m_window;
 		std::shared_ptr<Core::EventManager> m_eventManager;
+		std::shared_ptr<Core::Inputs::KeyboardEventProxy> m_keyboard;
 
 		float m_dt{ 0.0f };
 		glm::vec2 m_prevMousePosition;

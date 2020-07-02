@@ -204,6 +204,7 @@
     <ClInclude Include="Common\WindowKeyboardMouse.hpp" />
     <ClInclude Include="Core\Configuration.hpp" />
     <ClInclude Include="Core\EventManager.hpp" />
+    <ClInclude Include="Core\Input\GenericClickEvent.hpp" />
     <ClInclude Include="Core\Input\Keyboard\KeyboardEventProxy.hpp" />
     <ClInclude Include="Core\Input\Keyboard\KeyboardEnumKeys.hpp" />
     <ClInclude Include="Core\Input\Mouse\MouseEventProxy.hpp" />

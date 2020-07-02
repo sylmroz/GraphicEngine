@@ -306,5 +306,8 @@
     <ClInclude Include="Core\IO\FileSystem.hpp">
       <Filter>Core\IO</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Input\GenericClickEvent.hpp">
+      <Filter>Core\Inputs</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace GameEngine::Core::Ranges
+namespace GraphicEngine::Core::Ranges
 {
 	template<typename _Container, typename _Predict>
 	_Container filter(_Container container, _Predict predict)
