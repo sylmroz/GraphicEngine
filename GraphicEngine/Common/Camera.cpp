@@ -1,5 +1,6 @@
 #include "Camera.hpp"
 #include "../Core/Ranges.hpp"
+#include "../Core/Utils/ObjectConverter.hpp"
 
 #include <algorithm>
 
@@ -83,9 +84,31 @@ GraphicEngine::Common::CameraType GraphicEngine::Common::Camera::getCameraType()
 	return m_cameraType;
 }
 
-GraphicEngine::Common::Camera::Camera()
+GraphicEngine::Common::Camera::Camera(std::shared_ptr<Core::Configuration> cfg):
+	m_cfg{cfg}
 {
-	setCameraPerspectiveProperties(CameraParameters{});
+	CameraParameters param
+	{
+		m_cfg->getProperty<float>("camera:parameters:fov"),
+		m_cfg->getProperty<float>("camera:parameters:aspect ratio"),
+		m_cfg->getProperty<float>("camera:parameters:z-near"),
+		m_cfg->getProperty<float>("camera:parameters:z-far"),
+	};
+
+	if (m_cfg->getProperty<std::string>("camera:type") == "perspective")
+	{
+		setCameraPerspectiveProperties(param);
+	}
+
+	else
+	{
+		setCameraOrthographicProperties(param);
+	}
+
+	m_position = Core::Utils::Converter::fromArrayToObject<glm::vec3, std::vector<float>, 3>(m_cfg->getProperty<std::vector<float>>("camera:position"));
+	m_direction = glm::normalize(Core::Utils::Converter::fromArrayToObject<glm::vec3, std::vector<float>, 3>(m_cfg->getProperty<std::vector<float>>("camera:direction")));
+	m_up = Core::Utils::Converter::fromArrayToObject<glm::vec3, std::vector<float>, 3>(m_cfg->getProperty<std::vector<float>>("camera:up"));
+	m_speed = m_cfg->getProperty<float>("camera:speed");
 }
 
 //GraphicEngine::Common::Camera::Camera(PerspectiveParameters_s perspectiveParameters)
@@ -191,6 +214,8 @@ GraphicEngine::Common::CameraController::CameraController(std::shared_ptr<Camera
 				switchCameraType();
 			}
 		});
+
+	m_camera->setSensitivity(m_window->getSensitivity());
 }
 
 void GraphicEngine::Common::CameraController::setCameraType(CameraType cameraType)

@@ -171,6 +171,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Common\Camera.cpp" />
+    <ClCompile Include="Common\Mouse.cpp" />
     <ClCompile Include="Common\TextureReader.cpp" />
     <ClCompile Include="Core\Configuration.cpp" />
     <ClCompile Include="Core\IO\FileSystem.cpp" />
@@ -219,6 +220,7 @@
     <ClInclude Include="Core\ServiceManager.hpp" />
     <ClInclude Include="Core\Subject.hpp" />
     <ClInclude Include="Core\Timer.hpp" />
+    <ClInclude Include="Core\Utils\ObjectConverter.hpp" />
     <ClInclude Include="Core\Utils\GetClassName.hpp" />
     <ClInclude Include="Drivers\OpenGL\OpenGLVertexBuffer.hpp" />
     <ClInclude Include="Drivers\OpenGL\OpenGLRenderingEngine.hpp" />

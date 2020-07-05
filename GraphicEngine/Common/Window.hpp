@@ -17,6 +17,7 @@ namespace GraphicEngine
 		{
 			m_width = m_cfg->getProperty<int>("window:width");
 			m_height = m_cfg->getProperty<int>("window:height");
+			m_title = m_cfg->getProperty<std::string>("window:title");
 			try
 			{
 				initialize();
@@ -58,6 +59,7 @@ namespace GraphicEngine
 	protected:
 		size_t m_width{ 0 };
 		size_t m_height{ 0 };
+		std::string m_title;
 
 		bool m_shouldClose{ false };
 

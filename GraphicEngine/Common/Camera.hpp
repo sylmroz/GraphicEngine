@@ -4,6 +4,7 @@
 #include "../Core/Input/Mouse/MouseEnumButton.hpp"
 
 #include "../Core/EventManager.hpp"
+#include "../Core/Configuration.hpp"
 #include "WindowKeyboardMouse.hpp"
 
 #include <functional>
@@ -32,7 +33,7 @@ namespace GraphicEngine::Common
 	class Camera
 	{
 	public:
-		Camera();
+		Camera(std::shared_ptr<Core::Configuration> cfg);
 
 		void rotate(const glm::vec2& offset);
 		void move(const glm::vec2& offset);
@@ -91,6 +92,8 @@ namespace GraphicEngine::Common
 			{CameraType::Perspective, [&]()->glm::mat4 { return caclulatePerspective(); }},
 			{CameraType::Orthographic, [&]()->glm::mat4 { return calculateOrthographic(); }}
 		};
+
+		std::shared_ptr<Core::Configuration> m_cfg;
 	};
 
 	class CameraController

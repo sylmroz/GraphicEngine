@@ -25,31 +25,31 @@ std::vector<KeyboardKey> GraphicEngine::GLFW::GlfwWindow::getPressedKeys()
 
 std::vector<MouseButton> GraphicEngine::GLFW::GlfwWindow::getPressedButtons()
 {
-	_pressedButtons.clear();
+	m_pressedButtons.clear();
 	if (glfwGetMouseButton(m_glfwWindow.get(), GLFW_MOUSE_BUTTON_LEFT))
-		_pressedButtons.push_back(MouseButton::buttonLeft);
+		m_pressedButtons.push_back(MouseButton::buttonLeft);
 	if (glfwGetMouseButton(m_glfwWindow.get(), GLFW_MOUSE_BUTTON_MIDDLE))
-		_pressedButtons.push_back(MouseButton::butonMiddle);
+		m_pressedButtons.push_back(MouseButton::butonMiddle);
 	if (glfwGetMouseButton(m_glfwWindow.get(), GLFW_MOUSE_BUTTON_RIGHT))
-		_pressedButtons.push_back(MouseButton::buttonRight);
+		m_pressedButtons.push_back(MouseButton::buttonRight);
 
-	return std::move(_pressedButtons);
+	return std::move(m_pressedButtons);
 }
 
 void GraphicEngine::GLFW::GlfwWindow::setCursorPosition(const glm::vec2& pos)
 {
 	glfwSetCursorPos(m_glfwWindow.get(), pos.x, pos.y);
-	_cursorPosition = pos;
+	m_cursorPosition = pos;
 }
 
 glm::vec2 GraphicEngine::GLFW::GlfwWindow::getCursorPosition()
 {
-	return _cursorPosition;
+	return m_cursorPosition;
 }
 
 glm::vec2 GraphicEngine::GLFW::GlfwWindow::getScrollValue()
 {
-	return _scrollValues;
+	return m_scrollValues;
 }
 
 GraphicEngine::GLFW::GlfwWindow::~GlfwWindow()
@@ -78,7 +78,7 @@ void GraphicEngine::GLFW::GlfwWindow::initialize()
 	m_specialApi->init();
 
 	m_glfwWindow = std::shared_ptr<GLFWwindow>(
-		glfwCreateWindow(m_width, m_height, "Graphic Engine", nullptr, nullptr),
+		glfwCreateWindow(m_width, m_height, m_title.c_str(), nullptr, nullptr),
 		[](GLFWwindow* window)
 		{
 			glfwDestroyWindow(window);
@@ -100,13 +100,13 @@ void GraphicEngine::GLFW::GlfwWindow::initialize()
 	auto scrollFun = [](GLFWwindow* window, double xOffset, double yOffset)
 	{
 		auto app = reinterpret_cast<GlfwWindow*>(glfwGetWindowUserPointer(window));
-		app->_scrollValues = glm::vec2(xOffset, yOffset);
+		app->m_scrollValues = glm::vec2(xOffset, yOffset);
 	};
 
 	auto positionFun = [](GLFWwindow* window, double xPos, double yPos)
 	{
 		auto app = reinterpret_cast<GlfwWindow*>(glfwGetWindowUserPointer(window));
-		app->_cursorPosition = glm::vec2(xPos, yPos);
+		app->m_cursorPosition = glm::vec2(xPos, yPos);
 	};
 
 	glfwSetScrollCallback(m_glfwWindow.get(), scrollFun);
