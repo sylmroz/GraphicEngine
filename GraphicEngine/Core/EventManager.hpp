@@ -39,19 +39,20 @@ namespace GraphicEngine::Core
 				[_subject = std::move(subject), _largs = std::tuple(std::forward<Args>(args)...)]
 			() mutable
 			{
-				std::apply(std::move(_subject),std::move(_largs));
+				std::apply(std::move(_subject), std::move(_largs));
 			})));
 		}
 
 		template <typename Subject>
 		void addSubject(Subject& subject)
 		{
-			_notifiers.emplace_back(std::shared_ptr<NotifierBase>(new Notifier(
-				[&]
+			std::shared_ptr<NotifierBase> instance = std::make_shared<Notifier>([&]
 			() mutable
-			{
-				subject();
-			})));
+				{
+					subject();
+				}
+			);
+			_notifiers.emplace_back(instance);
 		}
 
 		void call()

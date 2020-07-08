@@ -9,7 +9,7 @@ namespace GraphicEngine::Core
 	class ServiceManager
 	{
 	public:
-		template <typename  S>
+		template <typename S>
 		S& addService()
 		{
 			try

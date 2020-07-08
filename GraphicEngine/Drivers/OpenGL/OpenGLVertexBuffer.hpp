@@ -57,8 +57,8 @@ namespace GraphicEngine::OpenGL
 			virtual ~_VertexBuffer() = default;
 
 		protected:
-			GLuint _vbo, _vao;
-			GLsizei _size;
+			GLuint _vbo{ 0 }, _vao{ 0 };
+			GLsizei _size{ 0 };
 		};
 
 		class _VertexBufferWithElements : public _VertexBuffer
@@ -104,11 +104,11 @@ namespace GraphicEngine::OpenGL
 	public:
 		VertexBuffer(const std::vector<_Vertex>& vertices)
 		{
-			m_data = std::unique_ptr<_VertexBuffer>(new _VertexBuffer(vertices));
+			m_data = std::make_unique<_VertexBuffer>(vertices);
 		}
 		VertexBuffer(const std::vector<_Vertex>& vertices, const std::vector<uint32_t>& indices)
 		{
-			m_data = std::unique_ptr<_VertexBuffer>(new _VertexBufferWithElements(vertices, indices));
+			m_data = std::make_unique<_VertexBufferWithElements>(vertices, indices);
 		}
 
 		void bind() const

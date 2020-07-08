@@ -104,18 +104,19 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 		m_commandPool = createUniqueCommandPool(m_device, m_indices);
 		m_commandBuffers = m_device->allocateCommandBuffersUnique(vk::CommandBufferAllocateInfo(m_commandPool.get(), vk::CommandBufferLevel::ePrimary, m_maxFrames));
 
-		m_depthBuffer = std::unique_ptr<DepthBufferData>(new DepthBufferData(m_physicalDevice, m_device, vk::Extent3D(frameBufferSize, 1), findDepthFormat(m_physicalDevice), m_msaaSamples));
+		m_depthBuffer = std::make_unique<DepthBufferData>(m_physicalDevice, m_device, vk::Extent3D(frameBufferSize, 1), findDepthFormat(m_physicalDevice), m_msaaSamples);
 		m_renderPass = createRenderPass(m_device, m_swapChainData.format, m_depthBuffer->format, m_msaaSamples);
-		m_image = std::unique_ptr<ImageData>(new ImageData(m_physicalDevice, m_device,
+		m_image = std::make_unique<ImageData>(m_physicalDevice, m_device,
 			vk::Extent3D(m_swapChainData.extent, 1), m_swapChainData.format, m_msaaSamples,
 			vk::MemoryPropertyFlagBits::eDeviceLocal, vk::ImageUsageFlagBits::eColorAttachment | vk::ImageUsageFlagBits::eTransientAttachment,
-			vk::ImageTiling::eOptimal, 1, vk::ImageLayout::eUndefined, vk::ImageAspectFlagBits::eColor));
+			vk::ImageTiling::eOptimal, 1, vk::ImageLayout::eUndefined, vk::ImageAspectFlagBits::eColor);
+
 		m_frameBuffers = createFrameBuffers(m_device, m_renderPass, m_swapChainData.extent, 1, m_image->imageView, m_depthBuffer->imageView, m_swapChainData.imageViews);
 
 		m_graphicQueue = m_device->getQueue(m_indices.graphicsFamily.value(), 0);
 		m_presentQueue = m_device->getQueue(m_indices.presentFamily.value(), 0);
 
-		m_renderingBarriers = std::unique_ptr<RenderingBarriers>(new RenderingBarriers(m_device, m_maxFrames));
+		m_renderingBarriers = std::make_unique<RenderingBarriers>(m_device, m_maxFrames);
 
 		m_vertexBuffer = std::make_unique<VertexBuffer<GraphicEngine::Common::VertexPCTc>>(m_physicalDevice, m_device, m_commandPool, m_graphicQueue, vertices, RenderingEngine::indices);
 
@@ -177,12 +178,12 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::resizeFrameBuffer(size_t widt
 	m_swapChainData = SwapChainData(m_physicalDevice, m_device, m_surface, m_indices, frameBufferSize, m_swapChainData.swapChain, vk::ImageUsageFlagBits::eColorAttachment);
 	m_commandBuffers = m_device->allocateCommandBuffersUnique(vk::CommandBufferAllocateInfo(m_commandPool.get(), vk::CommandBufferLevel::ePrimary, m_maxFrames));
 
-	m_depthBuffer = std::unique_ptr<DepthBufferData>(new DepthBufferData(m_physicalDevice, m_device, vk::Extent3D(frameBufferSize, 1), findDepthFormat(m_physicalDevice), m_msaaSamples));
+	m_depthBuffer = std::make_unique<DepthBufferData>(m_physicalDevice, m_device, vk::Extent3D(frameBufferSize, 1), findDepthFormat(m_physicalDevice), m_msaaSamples);
 	m_renderPass = createRenderPass(m_device, m_swapChainData.format, m_depthBuffer->format, m_msaaSamples);
-	m_image = std::unique_ptr<ImageData>(new ImageData(m_physicalDevice, m_device,
+	m_image = std::make_unique<ImageData>(m_physicalDevice, m_device,
 		vk::Extent3D(m_swapChainData.extent, 1), m_swapChainData.format, m_msaaSamples,
 		vk::MemoryPropertyFlagBits::eDeviceLocal, vk::ImageUsageFlagBits::eColorAttachment | vk::ImageUsageFlagBits::eTransientAttachment,
-		vk::ImageTiling::eOptimal, 1, vk::ImageLayout::eUndefined, vk::ImageAspectFlagBits::eColor));
+		vk::ImageTiling::eOptimal, 1, vk::ImageLayout::eUndefined, vk::ImageAspectFlagBits::eColor);
 	m_frameBuffers = createFrameBuffers(m_device, m_renderPass, m_swapChainData.extent, 1, m_image->imageView, m_depthBuffer->imageView, m_swapChainData.imageViews);
 
 	buildCommandBuffers();

@@ -43,7 +43,7 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 		OpenGLVertexShader vert(readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("basicPCTVP.vert").string()));
 		OpenGLFragmentShader frag(readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("basicPCTVP.frag").string()));
 
-		m_program = std::shared_ptr<OpenGLShaderProgram>(new OpenGLShaderProgram({ vert, frag }));
+		m_program = std::make_shared<OpenGLShaderProgram>(std::vector<OpenGLShader>{ vert, frag });
 		
 		auto uniformIndex = glGetUniformBlockIndex(m_program->getShaderProgramId(), "MVP");
 		glUniformBlockBinding(m_program->getShaderProgramId(), uniformIndex, 0);
@@ -51,7 +51,9 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 		glUniform1i(textureIndex, 0);
 
 		m_uniformBufferMatrix = std::make_shared<UniformBuffer<glm::mat4>>();
-		m_vertexBuffer = std::unique_ptr<VertexBuffer<GraphicEngine::Common::VertexPCTc>>(new VertexBuffer<GraphicEngine::Common::VertexPCTc>(vertices, indices));
+		m_vertexBuffer = std::make_unique<VertexBuffer<GraphicEngine::Common::VertexPCTc>>(vertices, indices);  //std::unique_ptr<VertexBuffer<GraphicEngine::Common::VertexPCTc>>(new VertexBuffer<GraphicEngine::Common::VertexPCTc>(vertices, indices));
+		vertices.clear();
+		indices.clear();
 		
 		m_texture = TextureFactory::produceTexture("C:/rem.png");
 	}
