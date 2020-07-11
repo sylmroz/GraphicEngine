@@ -244,6 +244,8 @@
     <ClInclude Include="Platform\Glfw\Vulkan\GlfwVulkanInjector.hpp" />
     <ClInclude Include="Platform\Glfw\Vulkan\GlfwVulkanWindow.hpp" />
     <ClInclude Include="Platform\Glfw\Vulkan\GlfwVulkanWindowContext.hpp" />
+    <ClInclude Include="Scene\Resources\Mesh.hpp" />
+    <ClInclude Include="Scene\Resources\Model.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\UtilityLib\UtilityLib\UtilityLib.vcxproj">

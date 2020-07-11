@@ -79,6 +79,39 @@
     <Filter Include="Core\Math">
       <UniqueIdentifier>{f0da0055-286e-4007-ba48-19704744bb71}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{43fd5151-4d41-472c-8ad2-1b8696e1e3f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\2D">
+      <UniqueIdentifier>{c1c68c75-4ca5-44ab-af2a-c259f082516b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\3D">
+      <UniqueIdentifier>{a6cf49eb-db09-4a2a-8040-cd90327e1438}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Resources">
+      <UniqueIdentifier>{81974dec-e756-43f1-a81c-80ce8f31fde7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{f645841a-6f61-4693-98e9-dde7d4b192ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Audio">
+      <UniqueIdentifier>{b6520981-1b50-41cf-9366-5ddb0633a9ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Rendering">
+      <UniqueIdentifier>{fcf65b0b-656a-4929-8a42-7f5a6d2220a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphic">
+      <UniqueIdentifier>{087d5b30-7d97-4d72-8841-682813b6afcd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphic\2D">
+      <UniqueIdentifier>{338617a3-97a2-43de-9db7-adee2665f29c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphic\3D">
+      <UniqueIdentifier>{95e62889-4301-4011-93d4-10f168935bc5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Physics">
+      <UniqueIdentifier>{d8b88829-e36e-45b3-ad31-e0f0a5c77dce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -314,6 +347,12 @@
     </ClInclude>
     <ClInclude Include="Core\Utils\ObjectConverter.hpp">
       <Filter>Core\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Resources\Mesh.hpp">
+      <Filter>Scene\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Resources\Model.hpp">
+      <Filter>Scene\Resources</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
