@@ -4,6 +4,7 @@
 #include "../../Core/IO/FileSystem.hpp"
 
 #include "VulkanTextureFactory.hpp"
+#include "VulkanVertexBufferFactory.hpp"
 
 #undef max
 
@@ -117,8 +118,8 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 		m_presentQueue = m_device->getQueue(m_indices.presentFamily.value(), 0);
 
 		m_renderingBarriers = std::make_unique<RenderingBarriers>(m_device, m_maxFrames);
-
-		m_vertexBuffer = std::make_unique<VertexBuffer<GraphicEngine::Common::VertexPCTc>>(m_physicalDevice, m_device, m_commandPool, m_graphicQueue, vertices, RenderingEngine::indices);
+		// const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, const vk::UniqueCommandPool& commandPool, vk::Queue queue,
+		m_vertexBuffer = m_mesh->compile<VertexBufferFactory<Common::VertexPCTc>, VertexBuffer<Common::VertexPCTc>>(m_physicalDevice, m_device, m_commandPool, m_graphicQueue); //std::make_unique<VertexBuffer<GraphicEngine::Common::VertexPCTc>>(m_physicalDevice, m_device, m_commandPool, m_graphicQueue, vertices, RenderingEngine::indices);
 
 		m_vertexShader = std::make_unique<VulkanShader>(m_device, Core::IO::readFile<std::string>(Core::FileSystem::getVulkanShaderPath("basicPCTVP.vert.spv").string()));
 		m_fragmentShader = std::make_unique<VulkanShader>(m_device, Core::IO::readFile<std::string>(Core::FileSystem::getVulkanShaderPath("basicPCTVP.frag.spv").string()));
@@ -221,7 +222,6 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::buildCommandBuffers()
 		commandBuffer->bindPipeline(vk::PipelineBindPoint::eGraphics, m_graphicPipeline.get());
 
 		commandBuffer->bindDescriptorSets(vk::PipelineBindPoint::eGraphics, m_pipelineLayout.get(), 0, 1, &m_descriptorSets[i].get(), 0, nullptr);
-
 		m_vertexBuffer->bind(commandBuffer);
 		m_vertexBuffer->draw(commandBuffer);
 

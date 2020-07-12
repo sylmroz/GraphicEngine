@@ -14,7 +14,9 @@ namespace GraphicEngine::Common
 		{
 			position = pos;
 		}
+
 		glm::vec3 position = glm::vec3(0.0f);
+
 		static std::vector<std::pair<uint32_t, uint32_t>> getSizeAndOffsets()
 		{
 			std::vector<std::pair<uint32_t, uint32_t>> offsets;
@@ -32,6 +34,7 @@ namespace GraphicEngine::Common
 	{
 		glm::vec3 position = glm::vec3(0.0f);
 		glm::vec3 color = glm::vec3(0.0f);
+
 		static std::vector<std::pair<uint32_t, uint32_t>> getSizeAndOffsets()
 		{
 			std::vector<std::pair<uint32_t, uint32_t>> offsets;

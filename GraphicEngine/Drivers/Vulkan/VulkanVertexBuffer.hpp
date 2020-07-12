@@ -46,7 +46,7 @@ namespace GraphicEngine::Vulkan
 	};
 
 	template <typename _Vertex>
-	class VertexBuffer : public Common::VertexBuffer<VertexBuffer<_Vertex>, _Vertex, vk::UniqueCommandPool&>
+	class VertexBuffer : public Common::VertexBuffer<VertexBuffer<_Vertex>, vk::UniqueCommandPool&>
 	{
 		class _VertexBuffer
 		{

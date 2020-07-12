@@ -2,11 +2,9 @@
 
 namespace GraphicEngine::Common
 {
-	template <typename BasicVertexBuffer, typename Vertex, typename... Args>
+	template <typename BasicVertexBuffer, typename... Args>
 	class VertexBuffer
 	{
-	public:
-		using VertexType = Vertex;
 	public:
 		void bind(Args... args)
 		{

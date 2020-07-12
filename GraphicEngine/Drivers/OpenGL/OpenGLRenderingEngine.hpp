@@ -26,7 +26,7 @@ namespace GraphicEngine::OpenGL
 	private:
 		std::shared_ptr<OpenGLShaderProgram> m_program;
 		std::shared_ptr<UniformBuffer<glm::mat4>> m_uniformBufferMatrix;
-		std::unique_ptr<VertexBuffer<Common::VertexPCTc>> m_vertexBuffer;
+		std::shared_ptr<VertexBuffer<Common::VertexPCTc>> m_vertexBuffer;
 		std::shared_ptr<Texture2D> m_texture;
 
 		std::unique_ptr<Core::Logger<OpenGLRenderingEngine>> m_logger;

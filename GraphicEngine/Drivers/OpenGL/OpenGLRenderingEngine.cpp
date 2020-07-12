@@ -4,6 +4,7 @@
 #include "../../Core/IO/FileSystem.hpp"
 
 #include "OpenGLTextureFactory.hpp"
+#include "OpenGLVertexBufferFactory.hpp"
 
 GraphicEngine::OpenGL::OpenGLRenderingEngine::OpenGLRenderingEngine(
 	std::shared_ptr<Common::Camera> camera,
@@ -51,9 +52,7 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 		glUniform1i(textureIndex, 0);
 
 		m_uniformBufferMatrix = std::make_shared<UniformBuffer<glm::mat4>>();
-		m_vertexBuffer = std::make_unique<VertexBuffer<GraphicEngine::Common::VertexPCTc>>(vertices, indices);  //std::unique_ptr<VertexBuffer<GraphicEngine::Common::VertexPCTc>>(new VertexBuffer<GraphicEngine::Common::VertexPCTc>(vertices, indices));
-		vertices.clear();
-		indices.clear();
+		m_vertexBuffer = m_mesh->compile<VertexBufferFactory<Common::VertexPCTc>, VertexBuffer<Common::VertexPCTc>>(); //std::make_unique<VertexBuffer<GraphicEngine::Common::VertexPCTc>>(vertices, indices);
 		
 		m_texture = TextureFactory::produceTexture("C:/rem.png");
 	}

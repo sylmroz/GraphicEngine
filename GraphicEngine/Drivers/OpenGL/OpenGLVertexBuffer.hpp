@@ -10,7 +10,7 @@
 namespace GraphicEngine::OpenGL
 {
 	template <typename _Vertex>
-	class VertexBuffer : public Common::VertexBuffer<OpenGL::VertexBuffer<_Vertex>, _Vertex>
+	class VertexBuffer : public Common::VertexBuffer<OpenGL::VertexBuffer<_Vertex>>
 	{
 		class _VertexBuffer
 		{

@@ -354,5 +354,14 @@
     <ClInclude Include="Scene\Resources\Model.hpp">
       <Filter>Scene\Resources</Filter>
     </ClInclude>
+    <ClInclude Include="Common\VertexBufferFactory.hpp">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Drivers\Vulkan\VulkanVertexBufferFactory.hpp">
+      <Filter>Drivers\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Drivers\OpenGL\OpenGLVertexBufferFactory.hpp">
+      <Filter>Drivers\OpenGL</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
