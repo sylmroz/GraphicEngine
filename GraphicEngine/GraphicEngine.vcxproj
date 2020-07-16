@@ -241,6 +241,7 @@
     <ClInclude Include="Drivers\Vulkan\VulkanWindowContext.hpp" />
     <ClInclude Include="Main\Application.hpp" />
     <ClInclude Include="Main\Engine.hpp" />
+    <ClInclude Include="ModelReader.hpp" />
     <ClInclude Include="Platform\Glfw\GlfwWindow.hpp" />
     <ClInclude Include="Platform\Glfw\OpenGL\GlfwOpenGLInjector.hpp" />
     <ClInclude Include="Platform\Glfw\OpenGL\GlfwOpenGLWindow.hpp" />

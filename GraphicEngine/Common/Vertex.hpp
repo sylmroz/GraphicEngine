@@ -8,6 +8,18 @@
 
 namespace GraphicEngine::Common
 {
+	enum VertexType
+	{
+		Position = 0x0000001,
+		Color = 0x0000002,
+		TexCoord = 0x0000004,
+		Normal = 0x0000008,
+		Tangent = 0x0000010,
+		BiTangent = 0x0000020,
+		Bone = 0x0000040,
+		Weight = 0x0000080,
+	};
+
 	struct VertexP
 	{
 		VertexP(glm::vec3 pos)
@@ -27,6 +39,11 @@ namespace GraphicEngine::Common
 		static uint32_t getStride()
 		{
 			return sizeof(VertexP);
+		}
+
+		static int getType()
+		{
+			return VertexType::Position;
 		}
 	};
 
@@ -48,6 +65,11 @@ namespace GraphicEngine::Common
 		{
 			return sizeof(VertexPC);
 		}
+
+		static int getType()
+		{
+			return (VertexType::Position | VertexType::Color);
+		}
 	};
 
 	struct VertexPTc
@@ -67,6 +89,11 @@ namespace GraphicEngine::Common
 		static uint32_t getStride()
 		{
 			return sizeof(VertexPTc);
+		}
+
+		static int getType()
+		{
+			return (VertexType::Position | VertexType::TexCoord);
 		}
 	};
 
@@ -90,6 +117,11 @@ namespace GraphicEngine::Common
 		{
 			return sizeof(VertexPCTc);
 		}
+
+		static int getType()
+		{
+			return (VertexType::Position | VertexType::Color | VertexType::TexCoord);
+		}
 	};
 
 	struct VertexPTcN
@@ -111,6 +143,11 @@ namespace GraphicEngine::Common
 		static uint32_t getStride()
 		{
 			return sizeof(VertexPTcN);
+		}
+
+		static int getType()
+		{
+			return (VertexType::Position | VertexType::TexCoord | VertexType::Normal);
 		}
 	};
 
@@ -137,6 +174,11 @@ namespace GraphicEngine::Common
 		static uint32_t getStride()
 		{
 			return sizeof(VertexPTcNTB);
+		}
+
+		static int getType()
+		{
+			return (VertexType::Position | VertexType::TexCoord | VertexType::Normal | VertexType::Tangent | VertexType::BiTangent);
 		}
 	};
 }

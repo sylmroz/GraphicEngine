@@ -363,5 +363,8 @@
     <ClInclude Include="Drivers\OpenGL\OpenGLVertexBufferFactory.hpp">
       <Filter>Drivers\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="ModelReader.hpp">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
