@@ -194,6 +194,7 @@
   <ItemGroup>
     <ClInclude Include="Common\Camera.hpp" />
     <ClInclude Include="Common\Keyboard.hpp" />
+    <ClInclude Include="Common\ModelImporter.hpp" />
     <ClInclude Include="Common\Mouse.hpp" />
     <ClInclude Include="Common\RenderingEngine.hpp" />
     <ClInclude Include="Common\Shader.hpp" />
@@ -241,7 +242,7 @@
     <ClInclude Include="Drivers\Vulkan\VulkanWindowContext.hpp" />
     <ClInclude Include="Main\Application.hpp" />
     <ClInclude Include="Main\Engine.hpp" />
-    <ClInclude Include="ModelReader.hpp" />
+    <ClInclude Include="Modules\Assimp\AssimpModelImporter.hpp" />
     <ClInclude Include="Platform\Glfw\GlfwWindow.hpp" />
     <ClInclude Include="Platform\Glfw\OpenGL\GlfwOpenGLInjector.hpp" />
     <ClInclude Include="Platform\Glfw\OpenGL\GlfwOpenGLWindow.hpp" />

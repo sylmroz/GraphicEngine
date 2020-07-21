@@ -112,6 +112,12 @@
     <Filter Include="Engine\Physics">
       <UniqueIdentifier>{d8b88829-e36e-45b3-ad31-e0f0a5c77dce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Modules">
+      <UniqueIdentifier>{68b515de-8162-48d5-9da6-a7ceaf39d813}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules\Assimp">
+      <UniqueIdentifier>{edf0558a-0bc1-4419-99d1-9b05d06e9a33}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -363,7 +369,10 @@
     <ClInclude Include="Drivers\OpenGL\OpenGLVertexBufferFactory.hpp">
       <Filter>Drivers\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="ModelReader.hpp">
+    <ClInclude Include="Modules\Assimp\AssimpModelImporter.hpp">
+      <Filter>Modules\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\ModelImporter.hpp">
       <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>

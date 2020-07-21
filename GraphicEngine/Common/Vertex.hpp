@@ -22,6 +22,7 @@ namespace GraphicEngine::Common
 
 	struct VertexP
 	{
+		VertexP() {}
 		VertexP(glm::vec3 pos)
 		{
 			position = pos;
@@ -69,6 +70,31 @@ namespace GraphicEngine::Common
 		static int getType()
 		{
 			return (VertexType::Position | VertexType::Color);
+		}
+	};
+
+	struct VertexPN
+	{
+		glm::vec3 position = glm::vec3(0.0f);
+		glm::vec3 normal = glm::vec3(0.0f);
+
+		static std::vector<std::pair<uint32_t, uint32_t>> getSizeAndOffsets()
+		{
+			std::vector<std::pair<uint32_t, uint32_t>> offsets;
+			offsets.reserve(2);
+			offsets.push_back(std::pair(sizeof(position) / sizeof(position[0]), offsetof(VertexPN, position)));
+			offsets.push_back(std::pair(sizeof(normal) / sizeof(normal[0]), offsetof(VertexPN, normal)));
+			return offsets;
+		}
+
+		static uint32_t getStride()
+		{
+			return sizeof(VertexPC);
+		}
+
+		static int getType()
+		{
+			return (VertexType::Position | VertexType::Normal);
 		}
 	};
 
