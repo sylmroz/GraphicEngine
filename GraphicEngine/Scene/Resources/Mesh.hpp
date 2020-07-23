@@ -29,7 +29,7 @@ namespace GraphicEngine::Scene
 
 		void resizeVertices(uint32_t size)
 		{
-			m_Vertices.resize(size);
+			m_Vertices.reserve(size);
 		}
 
 		void addIndex(uint32_t index)
@@ -39,7 +39,7 @@ namespace GraphicEngine::Scene
 
 		void resizeIndices(uint32_t size)
 		{
-			m_Indices.resize(size);
+			m_Indices.reserve(size);
 		}
 
 		std::vector<Vertex>& getVertices() const 

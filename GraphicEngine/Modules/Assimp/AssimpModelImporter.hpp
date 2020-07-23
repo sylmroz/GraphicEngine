@@ -12,7 +12,7 @@
 namespace GraphicEngine::Modules
 {
 	template <typename Vertex>
-	class AssimpModelImporter : Common::ModelImporter<AssimpModelImporter<Vertex>, Vertex>
+	class AssimpModelImporter : public Common::ModelImporter<AssimpModelImporter<Vertex>, Vertex>
 	{
 	public:
 		std::tuple<std::vector<std::shared_ptr<Scene::Mesh<Vertex>>>, std::string> read(const std::string& path)
@@ -31,7 +31,7 @@ namespace GraphicEngine::Modules
 
 			processNode(scene->mRootNode, scene, meshes);
 
-			return std::make_tuple(meshes, std::string());
+			return std::make_tuple(std::move(meshes), std::string());
 		}
 
 	private:
@@ -50,9 +50,9 @@ namespace GraphicEngine::Modules
 
 		std::shared_ptr<Scene::Mesh<Vertex>> processMesh(aiMesh* mesh)
 		{
-			std::vector<Vertex> vertices;
-			vertices.reserve(mesh->mNumVertices);
-			std::vector<uint32_t> indices;
+			std::shared_ptr<Scene::Mesh<Vertex>> outMesh = std::make_shared<Scene::Mesh<Vertex>>();
+
+			outMesh->resizeVertices(mesh->mNumVertices);
 
 			uint32_t numIndices{ 0 };
 			for (uint32_t i{ 0 }; i < mesh->mNumFaces; ++i)
@@ -60,13 +60,13 @@ namespace GraphicEngine::Modules
 				numIndices += mesh->mFaces[i].mNumIndices;
 			}
 
-			indices.reserve(numIndices);
+			outMesh->resizeIndices(numIndices);
 
 			for (uint32_t i{ 0 }; i < mesh->mNumFaces; ++i)
 			{
 				for (uint32_t j{ 0 }; j < mesh->mFaces[i].mNumIndices; ++j)
 				{
-					indices.emplace_back(mesh->mFaces[i].mIndices[j]);
+					outMesh->addIndex(mesh->mFaces[i].mIndices[j]);
 				}
 			}
 
@@ -135,7 +135,7 @@ namespace GraphicEngine::Modules
 					}
 				}
 
-				vertices.emplace_back(vertex);
+				outMesh->addVertex(vertex);
 			}
 
 			if (mesh->HasBones() && Vertex::getType() & Common::VertexType::Bone)
@@ -143,7 +143,7 @@ namespace GraphicEngine::Modules
 				// TODO process bones
 			}
 
-			return std::make_shared<Scene::Mesh<Vertex>>(vertices, indices);
+			return outMesh;
 		}
 	};
 }
