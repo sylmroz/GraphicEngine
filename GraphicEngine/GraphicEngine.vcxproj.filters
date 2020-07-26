@@ -196,6 +196,9 @@
     <ClCompile Include="Common\Mouse.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Math\Geometry.cpp">
+      <Filter>Core\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Input\Keyboard\KeyboardEnumKeys.hpp">
@@ -374,6 +377,12 @@
     </ClInclude>
     <ClInclude Include="Common\ModelImporter.hpp">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Math\Geometry.hpp">
+      <Filter>Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Resources\Face.hpp">
+      <Filter>Scene\Resources</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

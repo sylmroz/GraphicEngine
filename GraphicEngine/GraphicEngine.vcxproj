@@ -176,6 +176,7 @@
     <ClCompile Include="Core\Configuration.cpp" />
     <ClCompile Include="Core\IO\FileSystem.cpp" />
     <ClCompile Include="Core\LoggerCore\SourceFormatter.cpp" />
+    <ClCompile Include="Core\Math\Geometry.cpp" />
     <ClCompile Include="Core\Math\Math.cpp" />
     <ClCompile Include="Drivers\OpenGL\OpenGLRenderingEngine.cpp" />
     <ClCompile Include="Drivers\OpenGL\OpenGLShader.cpp" />
@@ -217,6 +218,7 @@
     <ClInclude Include="Core\Logger.hpp" />
     <ClInclude Include="Core\LoggerCore\LoggerName.hpp" />
     <ClInclude Include="Core\LoggerCore\SourceFormatter.hpp" />
+    <ClInclude Include="Core\Math\Geometry.hpp" />
     <ClInclude Include="Core\Math\Math.hpp" />
     <ClInclude Include="Core\Ranges.hpp" />
     <ClInclude Include="Core\ServiceManager.hpp" />
@@ -249,6 +251,7 @@
     <ClInclude Include="Platform\Glfw\Vulkan\GlfwVulkanInjector.hpp" />
     <ClInclude Include="Platform\Glfw\Vulkan\GlfwVulkanWindow.hpp" />
     <ClInclude Include="Platform\Glfw\Vulkan\GlfwVulkanWindowContext.hpp" />
+    <ClInclude Include="Scene\Resources\Face.hpp" />
     <ClInclude Include="Scene\Resources\Mesh.hpp" />
     <ClInclude Include="Scene\Resources\Model.hpp" />
   </ItemGroup>

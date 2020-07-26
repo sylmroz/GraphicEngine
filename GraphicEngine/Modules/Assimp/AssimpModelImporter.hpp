@@ -54,22 +54,7 @@ namespace GraphicEngine::Modules
 
 			outMesh->resizeVertices(mesh->mNumVertices);
 
-			uint32_t numIndices{ 0 };
-			for (uint32_t i{ 0 }; i < mesh->mNumFaces; ++i)
-			{
-				numIndices += mesh->mFaces[i].mNumIndices;
-			}
-
-			outMesh->resizeIndices(numIndices);
-
-			for (uint32_t i{ 0 }; i < mesh->mNumFaces; ++i)
-			{
-				for (uint32_t j{ 0 }; j < mesh->mFaces[i].mNumIndices; ++j)
-				{
-					outMesh->addIndex(mesh->mFaces[i].mIndices[j]);
-				}
-			}
-
+			int generateResources = Common::VertexType::Position;
 			for (uint32_t i{ 0 }; i < mesh->mNumVertices; ++i)
 			{
 				Vertex vertex;
@@ -83,11 +68,11 @@ namespace GraphicEngine::Modules
 					vertex.position = position;
 				}
 
-				if (mesh->HasNormals())
+				if constexpr (std::is_same_v<Vertex, Common::VertexPN> ||
+					std::is_same_v<Vertex, Common::VertexPTcN> ||
+					std::is_same_v<Vertex, Common::VertexPTcNTB>)
 				{
-					if constexpr (std::is_same_v<Vertex, Common::VertexPN> &&
-						std::is_same_v<Vertex, Common::VertexPTcN> &&
-						std::is_same_v<Vertex, Common::VertexPTcNTB>)
+					if (mesh->HasNormals())
 					{
 						glm::vec3 normal;
 						normal.x = mesh->mNormals[i].x;
@@ -95,12 +80,17 @@ namespace GraphicEngine::Modules
 						normal.z = mesh->mNormals[i].z;
 						vertex.normal = normal;
 					}
+
+					else
+					{
+						generateResources = generateResources | Common::VertexType::Normal;
+					}
 				}
 
-				if (mesh->HasVertexColors(0))
+				if constexpr (std::is_same_v<Vertex, Common::VertexPC> ||
+					std::is_same_v<Vertex, Common::VertexPCTc>)
 				{
-					if constexpr (std::is_same_v<Vertex, Common::VertexPC> &&
-						std::is_same_v<Vertex, Common::VertexPCTc>)
+					if (mesh->HasVertexColors(0))
 					{
 						glm::vec3 color;
 						color.x = mesh->mColors[i]->r;
@@ -110,22 +100,22 @@ namespace GraphicEngine::Modules
 					}
 				}
 
-				if (mesh->HasTextureCoords(0) && mesh->mTextureCoords[0])
+				if constexpr (std::is_same_v<Vertex, Common::VertexPTc> ||
+					std::is_same_v<Vertex, Common::VertexPCTc> ||
+					std::is_same_v<Vertex, Common::VertexPTcNTB>)
 				{
-					if constexpr (std::is_same_v<Vertex, Common::VertexPTc> &&
-						std::is_same_v<Vertex, Common::VertexPCTc> && 
-						std::is_same_v<Vertex, Common::VertexPTcNTB>)
+					if (mesh->HasTextureCoords(0) && mesh->mTextureCoords[0])
 					{
-						glm::vec2 color;
-						color.x = mesh->mTextureCoords[0][i].x;
-						color.y = mesh->mTextureCoords[0][i].y;
-						vertex.texCoord = color;
+						glm::vec2 texCoord;
+						texCoord.x = mesh->mTextureCoords[0][i].x;
+						texCoord.y = mesh->mTextureCoords[0][i].y;
+						vertex.texCoord = texCoord;
 					}
 				}
 
-				if (mesh->HasTangentsAndBitangents())
+				if constexpr (std::is_same_v<Vertex, Common::VertexPTcNTB>)
 				{
-					if constexpr (std::is_same_v<Vertex, Common::VertexPTcNTB>)
+					if (mesh->HasTangentsAndBitangents())
 					{
 						glm::vec3 tangent;
 						tangent.x = mesh->mNormals[i].x;
@@ -133,15 +123,30 @@ namespace GraphicEngine::Modules
 						tangent.z = mesh->mNormals[i].z;
 						vertex.tangent = tangent;
 					}
+
+					else
+					{
+						generateResources = generateResources | Common::VertexType::Tangent;
+					}
 				}
 
 				outMesh->addVertex(vertex);
 			}
 
-			if (mesh->HasBones() && Vertex::getType() & Common::VertexType::Bone)
+			outMesh->resizeFaces(mesh->mNumFaces);
+
+			for (uint32_t i{ 0 }; i < mesh->mNumFaces; ++i)
 			{
-				// TODO process bones
+				Scene::Face face;
+				face.indices.reserve(mesh->mFaces[i].mNumIndices);
+				for (uint32_t j{ 0 }; j < mesh->mFaces[i].mNumIndices; ++j)
+				{
+					face.indices.push_back(mesh->mFaces[i].mIndices[j]);
+				}
+				outMesh->addFace(face);
 			}
+
+			outMesh->generate(static_cast<Common::VertexType>(generateResources));
 
 			return outMesh;
 		}

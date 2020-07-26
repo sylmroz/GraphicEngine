@@ -154,7 +154,7 @@ namespace GraphicEngine::Common
 	{
 		glm::vec3 position = glm::vec3(0.0f);
 		glm::vec2 texCoord = glm::vec2(0.0f);
-		glm::vec3 normals = glm::vec3(0.0f);
+		glm::vec3 normal = glm::vec3(0.0f);
 
 		static std::vector<std::pair<uint32_t, uint32_t>> getSizeAndOffsets()
 		{
@@ -162,7 +162,7 @@ namespace GraphicEngine::Common
 			offsets.reserve(3);
 			offsets.push_back(std::pair(sizeof(position) / sizeof(position[0]), offsetof(VertexPTcN, position)));
 			offsets.push_back(std::pair(sizeof(texCoord) / sizeof(texCoord[0]), offsetof(VertexPTcN, texCoord)));
-			offsets.push_back(std::pair(sizeof(normals) / sizeof(normals[0]), offsetof(VertexPTcN, normals)));
+			offsets.push_back(std::pair(sizeof(normal) / sizeof(normal[0]), offsetof(VertexPTcN, normal)));
 			return offsets;
 		}
 
@@ -181,7 +181,7 @@ namespace GraphicEngine::Common
 	{
 		glm::vec3 position = glm::vec3(0.0f);
 		glm::vec2 texCoord = glm::vec2(0.0f);
-		glm::vec3 normals = glm::vec3(0.0f);
+		glm::vec3 normal = glm::vec3(0.0f);
 		glm::vec3 tangent = glm::vec3(0.0f);
 		glm::vec3 bitangent = glm::vec3(0.0f);
 
@@ -191,7 +191,7 @@ namespace GraphicEngine::Common
 			offsets.reserve(5);
 			offsets.push_back(std::pair(sizeof(position) / sizeof(position[0]), offsetof(VertexPTcNTB, position)));
 			offsets.push_back(std::pair(sizeof(texCoord) / sizeof(texCoord[0]), offsetof(VertexPTcNTB, texCoord)));
-			offsets.push_back(std::pair(sizeof(normals) / sizeof(normals[0]), offsetof(VertexPTcNTB, normals)));
+			offsets.push_back(std::pair(sizeof(normal) / sizeof(normal[0]), offsetof(VertexPTcNTB, normal)));
 			offsets.push_back(std::pair(sizeof(tangent) / sizeof(tangent[0]), offsetof(VertexPTcNTB, tangent)));
 			offsets.push_back(std::pair(sizeof(bitangent) / sizeof(bitangent[0]), offsetof(VertexPTcNTB, bitangent)));
 			return offsets;

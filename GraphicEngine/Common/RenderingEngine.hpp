@@ -25,13 +25,13 @@ namespace GraphicEngine
 				{glm::vec3(-0.5f,  0.5f, 0.0f),glm::vec3(1,1,0), glm::vec2(0.0f, 1.0f)}
 			};
 
-			std::vector<uint32_t> indices =
+			std::vector<Scene::Face> faces =
 			{
-				0,1,3,
-				1,2,3
+				Scene::Face({0,1,3}),
+				Scene::Face({1,2,3})
 			};
 
-			m_mesh = std::make_shared<Scene::Mesh<Common::VertexPCTc>>(vertices, indices);
+			m_mesh = std::make_shared<Scene::Mesh<Common::VertexPCTc>>(vertices, faces);
 		}
 
 		virtual bool drawFrame() = 0;
