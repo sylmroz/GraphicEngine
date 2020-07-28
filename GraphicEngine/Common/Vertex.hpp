@@ -48,9 +48,12 @@ namespace GraphicEngine::Common
 		}
 	};
 
-	struct VertexPC
+	struct VertexPC : VertexP
 	{
-		glm::vec3 position = glm::vec3(0.0f);
+		VertexPC() {}
+		VertexPC(glm::vec3 position, glm::vec3 color) :
+			VertexP(position), color(color) {}
+
 		glm::vec3 color = glm::vec3(0.0f);
 
 		static std::vector<std::pair<uint32_t, uint32_t>> getSizeAndOffsets()
@@ -73,9 +76,12 @@ namespace GraphicEngine::Common
 		}
 	};
 
-	struct VertexPN
+	struct VertexPN : VertexP
 	{
-		glm::vec3 position = glm::vec3(0.0f);
+		VertexPN() {}
+		VertexPN(glm::vec3 position, glm::vec3 normal) :
+			VertexP(position), normal(normal) {}
+
 		glm::vec3 normal = glm::vec3(0.0f);
 
 		static std::vector<std::pair<uint32_t, uint32_t>> getSizeAndOffsets()
@@ -98,9 +104,12 @@ namespace GraphicEngine::Common
 		}
 	};
 
-	struct VertexPTc
+	struct VertexPTc : VertexP
 	{
-		glm::vec3 position = glm::vec3(0.0f);
+		VertexPTc() {}
+		VertexPTc(glm::vec3 position, glm::vec2 texCoord) :
+			VertexP(position), texCoord(texCoord) {}
+
 		glm::vec2 texCoord = glm::vec2(0.0f);
 
 		static std::vector<std::pair<uint32_t, uint32_t>> getSizeAndOffsets()
@@ -123,10 +132,12 @@ namespace GraphicEngine::Common
 		}
 	};
 
-	struct VertexPCTc
+	struct VertexPCTc : VertexPC
 	{
-		glm::vec3 position = glm::vec3(0.0f);
-		glm::vec3 color = glm::vec3(0.0f);
+		VertexPCTc() {}
+		VertexPCTc(glm::vec3 position, glm::vec3 color, glm::vec2 texCoord) :
+			VertexPC(position, color), texCoord(texCoord) {}
+
 		glm::vec2 texCoord = glm::vec2(0.0f);
 
 		static std::vector<std::pair<uint32_t, uint32_t>> getSizeAndOffsets()
@@ -150,10 +161,42 @@ namespace GraphicEngine::Common
 		}
 	};
 
-	struct VertexPTcN
+	struct VertexPCN : VertexPC
 	{
-		glm::vec3 position = glm::vec3(0.0f);
-		glm::vec2 texCoord = glm::vec2(0.0f);
+		VertexPCN() {}
+		VertexPCN(glm::vec3 position, glm::vec3 color, glm::vec3 normal) :
+			VertexPC(position, color), normal(normal) {}
+
+		glm::vec3 normal = glm::vec3(0.0f);
+
+		static std::vector<std::pair<uint32_t, uint32_t>> getSizeAndOffsets()
+		{
+			std::vector<std::pair<uint32_t, uint32_t>> offsets;
+			offsets.reserve(3);
+			offsets.push_back(std::pair(sizeof(position) / sizeof(position[0]), offsetof(VertexPCN, position)));
+			offsets.push_back(std::pair(sizeof(color) / sizeof(color[0]), offsetof(VertexPCN, color)));
+			offsets.push_back(std::pair(sizeof(normal) / sizeof(normal[0]), offsetof(VertexPCN, normal)));
+			return offsets;
+		}
+
+		static uint32_t getStride()
+		{
+			return sizeof(VertexPCTc);
+		}
+
+		static int getType()
+		{
+			return (VertexType::Position | VertexType::Color | VertexType::TexCoord);
+		}
+	};
+
+	struct VertexPTcN : VertexPTc
+	{
+		VertexPTcN() {}
+		VertexPTcN(glm::vec3 position, glm::vec2 texCoord, glm::vec3 normal) :
+			VertexPTc(position, texCoord), normal(normal) {}
+		
+
 		glm::vec3 normal = glm::vec3(0.0f);
 
 		static std::vector<std::pair<uint32_t, uint32_t>> getSizeAndOffsets()
@@ -177,11 +220,12 @@ namespace GraphicEngine::Common
 		}
 	};
 
-	struct VertexPTcNTB
+	struct VertexPTcNTB : VertexPTcN
 	{
-		glm::vec3 position = glm::vec3(0.0f);
-		glm::vec2 texCoord = glm::vec2(0.0f);
-		glm::vec3 normal = glm::vec3(0.0f);
+		VertexPTcNTB() {}
+		VertexPTcNTB(glm::vec3 position, glm::vec2 texCoord, glm::vec3 normal, glm::vec3 tangent, glm::vec3 bitangent) :
+			VertexPTcN(position, texCoord, normal), tangent(tangent), bitangent(bitangent) {}
+
 		glm::vec3 tangent = glm::vec3(0.0f);
 		glm::vec3 bitangent = glm::vec3(0.0f);
 
@@ -206,5 +250,11 @@ namespace GraphicEngine::Common
 		{
 			return (VertexType::Position | VertexType::TexCoord | VertexType::Normal | VertexType::Tangent | VertexType::BiTangent);
 		}
+	};
+
+	template<typename Vertex>
+	struct VertexHasPosition
+	{
+		static constexpr bool value = std::is_same_v<Vertex, VertexP>::value;
 	};
 }
