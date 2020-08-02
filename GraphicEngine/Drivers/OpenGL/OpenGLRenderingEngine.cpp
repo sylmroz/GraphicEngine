@@ -19,13 +19,24 @@ GraphicEngine::OpenGL::OpenGLRenderingEngine::OpenGLRenderingEngine(
 bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 {
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	m_program->use();
 	auto v = m_camera->getViewProjectionMatrix();
 	m_uniformBufferMatrix->update(&v);
-	m_texture->use(0);
-	m_vertexBuffer->bind();
-	m_vertexBuffer->draw();
+
+	light.eyePosition = m_camera->getPosition();
+	m_lightUniformBuffer->update(&light);
+	
+	//m_texture->use(0);
+	/*m_vertexBuffer->bind();
+	m_vertexBuffer->draw();*/
+
+	for (auto& vb : m_vertexBuffers)
+	{
+		vb->bind();
+		vb->draw();
+	}
+
 	return false;
 }
 
@@ -41,20 +52,28 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 
 	try
 	{
-		OpenGLVertexShader vert(readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("basicPCTVP.vert").string()));
-		OpenGLFragmentShader frag(readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("basicPCTVP.frag").string()));
+		/*OpenGLVertexShader vert(readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("basicPCTVP.vert").string()));
+		OpenGLFragmentShader frag(readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("basicPCTVP.frag").string()));*/
+
+		OpenGLVertexShader vert(readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("diffuse.vert").string()));
+		OpenGLFragmentShader frag(readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("diffuse.frag").string()));
 
 		m_program = std::make_shared<OpenGLShaderProgram>(std::vector<OpenGLShader>{ vert, frag });
 		
 		auto uniformIndex = glGetUniformBlockIndex(m_program->getShaderProgramId(), "MVP");
 		glUniformBlockBinding(m_program->getShaderProgramId(), uniformIndex, 0);
-		auto textureIndex = glGetUniformLocation(m_program->getShaderProgramId(), "texture1");
-		glUniform1i(textureIndex, 0);
+		/*auto textureIndex = glGetUniformLocation(m_program->getShaderProgramId(), "texture1");
+		glUniform1i(textureIndex, 0);*/
 
 		m_uniformBufferMatrix = std::make_shared<UniformBuffer<glm::mat4>>();
-		m_vertexBuffer = m_mesh->compile<VertexBufferFactory<Common::VertexPCTc>, VertexBuffer<Common::VertexPCTc>>(); //std::make_unique<VertexBuffer<GraphicEngine::Common::VertexPCTc>>(vertices, indices);
+		m_lightUniformBuffer = std::make_shared<UniformBuffer<Light>>(1);
+		//m_vertexBuffer = m_mesh->compile<VertexBufferFactory<Common::VertexPCTc>, VertexBuffer<Common::VertexPCTc>>();
+		m_vertexBuffers = m_model->compile<VertexBufferFactory, VertexBuffer>();
 		
-		m_texture = TextureFactory::produceTexture("C:/rem.png");
+		//m_texture = TextureFactory::produceTexture("C:/rem.png");
+
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LESS);
 	}
 
 	catch (std::runtime_error& err)

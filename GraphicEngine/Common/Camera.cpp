@@ -84,6 +84,11 @@ GraphicEngine::Common::CameraType GraphicEngine::Common::Camera::getCameraType()
 	return m_cameraType;
 }
 
+glm::vec3 GraphicEngine::Common::Camera::getPosition()
+{
+	return m_position;
+}
+
 GraphicEngine::Common::Camera::Camera(std::shared_ptr<Core::Configuration> cfg):
 	m_cfg{cfg}
 {

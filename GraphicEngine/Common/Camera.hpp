@@ -55,6 +55,8 @@ namespace GraphicEngine::Common
 		void setCameraType(CameraType cameraType);
 		CameraType getCameraType();
 
+		glm::vec3 getPosition();
+
 	private:
 		glm::mat4 caclulatePerspective();
 		glm::mat4 calculateOrthographic();

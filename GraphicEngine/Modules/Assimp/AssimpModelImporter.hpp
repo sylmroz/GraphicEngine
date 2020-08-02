@@ -19,7 +19,11 @@ namespace GraphicEngine::Modules
 		{
 			Assimp::Importer importer;
 
-			uint32_t flags = aiProcess_Triangulate | aiProcess_FlipUVs;
+			uint32_t flags = aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_FindInvalidData | aiProcess_FindDegenerates;
+			if (Vertex::getType() & Common::VertexType::Normal)
+			{
+				flags |= (aiProcess_GenNormals | aiProcess_FixInfacingNormals);
+			}
 			if (Vertex::getType() & Common::VertexType::Tangent)
 			{
 				flags |= aiProcess_CalcTangentSpace;

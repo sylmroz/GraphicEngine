@@ -95,7 +95,7 @@ namespace GraphicEngine::Common
 
 		static uint32_t getStride()
 		{
-			return sizeof(VertexPC);
+			return sizeof(VertexPN);
 		}
 
 		static int getType()
