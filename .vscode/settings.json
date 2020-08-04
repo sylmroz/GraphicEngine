@@ -1,6 +1,6 @@
 {
     "C_Cpp.errorSquiggles": "Disabled",
-    "glsllint.glslangValidatorPath": "C:/Repos/glslang/bin",
+    "glsllint.glslangValidatorPath": "C:/Repos/glslang/bin/glslangValidator.exe",
     "glsllint.additionalStageAssociations": {
       ".frag": "frag",
       ".vert": "vert",
