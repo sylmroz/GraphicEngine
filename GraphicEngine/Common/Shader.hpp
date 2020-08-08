@@ -14,7 +14,7 @@ namespace GraphicEngine
 			m_data = code;
 		}
 
-		template <typename Reader>
+		template <typename Reader, std::enable_if_t<std::is_function_v<Reader>, int> = 0>
 		Shader(Reader reader, const std::string& path)
 		{
 			m_data = reader(path);
