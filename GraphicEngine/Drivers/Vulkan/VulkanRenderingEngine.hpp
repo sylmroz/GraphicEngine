@@ -50,12 +50,13 @@ namespace GraphicEngine::Vulkan
 		std::unique_ptr<VulkanShader> m_vertexShader;
 		std::unique_ptr<VulkanShader> m_fragmentShader;
 		std::unique_ptr<UniformBuffer<glm::mat4>> m_uniformBuffer;
+		std::unique_ptr<UniformBuffer<Light>> m_lightUniformBuffer;
 
 		vk::UniqueDescriptorPool m_descriptorPool;
 		vk::UniqueDescriptorSetLayout m_descriptorSetLayout;
 		std::vector<vk::UniqueDescriptorSet> m_descriptorSets;
 
-		std::shared_ptr<Texture2D> m_texture;
+		//std::shared_ptr<Texture2D> m_texture;
 
 
 	private:

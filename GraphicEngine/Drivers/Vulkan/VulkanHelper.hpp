@@ -161,7 +161,7 @@ namespace GraphicEngine::Vulkan
 		std::vector<std::shared_ptr<BufferData>> bufferData;
 
 	private:
-		T m_value;
+		T m_value{};
 	};
 
 	class Texture2D;
@@ -210,7 +210,7 @@ namespace GraphicEngine::Vulkan
 	vk::UniquePipeline createGraphicPipeline(const vk::UniqueDevice& device, const vk::UniquePipelineCache& pipeliceCache, const ShaderInfo& vertexShaderInfo, const ShaderInfo& fragmentShaderInfo,
 		std::vector<vk::VertexInputAttributeDescription> attributeDescriptions, const vk::VertexInputBindingDescription& bindingDescription,
 		bool depthBuffered, const vk::FrontFace& frontFace, const vk::UniquePipelineLayout& pipelineLayout,
-		const vk::UniqueRenderPass& renderPass, vk::SampleCountFlagBits msaaSample, bool depthBoundsTestEnable = false,
+		const vk::UniqueRenderPass& renderPass, vk::SampleCountFlagBits msaaSample, vk::CullModeFlags cullMode = vk::CullModeFlagBits::eNone, bool depthBoundsTestEnable = false,
 		bool stencilTestEnable = false);
 
 	std::vector<vk::VertexInputAttributeDescription> createVertexInputAttributeDescriptions(const std::vector<std::pair<uint32_t, uint32_t>>& vertexSizeOffset);

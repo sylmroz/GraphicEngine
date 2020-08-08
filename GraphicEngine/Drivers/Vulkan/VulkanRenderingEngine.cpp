@@ -49,6 +49,8 @@ bool GraphicEngine::Vulkan::VulkanRenderingEngine::drawFrame()
 		m_device->resetFences(1, &(m_renderingBarriers->inFlightFences[m_currentFrameIndex].get()));
 
 		m_uniformBuffer->updateAndSet(m_device, m_camera->getViewProjectionMatrix(), imageIndex.value);
+		light.eyePosition = m_camera->getPosition();
+		m_lightUniformBuffer->updateAndSet(m_device, light, imageIndex.value);
 
 		vk::Result submitResult = m_graphicQueue.submit(1, &submitInfo, m_renderingBarriers->inFlightFences[m_currentFrameIndex].get());
 		if (submitResult != vk::Result::eSuccess)
@@ -118,38 +120,55 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 		m_presentQueue = m_device->getQueue(m_indices.presentFamily.value(), 0);
 
 		m_renderingBarriers = std::make_unique<RenderingBarriers>(m_device, m_maxFrames);
-		// const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, const vk::UniqueCommandPool& commandPool, vk::Queue queue,
 		//m_vertexBuffer = m_mesh->compile<VertexBufferFactory<Common::VertexPCTc>, VertexBuffer<Common::VertexPCTc>>(m_physicalDevice, m_device, m_commandPool, m_graphicQueue);
 		m_vertexBuffers = m_model->compile<VertexBufferFactory, VertexBuffer>(m_physicalDevice, m_device, m_commandPool, m_graphicQueue);
 
-		m_vertexShader = std::make_unique<VulkanShader>(m_device, Core::IO::readFile<std::string>(Core::FileSystem::getVulkanShaderPath("basicPCTVP.vert.spv").string()));
-		m_fragmentShader = std::make_unique<VulkanShader>(m_device, Core::IO::readFile<std::string>(Core::FileSystem::getVulkanShaderPath("basicPCTVP.frag.spv").string()));
+		/*m_vertexShader = std::make_unique<VulkanShader>(m_device, Core::IO::readFile<std::string>(Core::FileSystem::getVulkanShaderPath("basicPCTVP.vert.spv").string()));
+		m_fragmentShader = std::make_unique<VulkanShader>(m_device, Core::IO::readFile<std::string>(Core::FileSystem::getVulkanShaderPath("basicPCTVP.frag.spv").string()));*/
+		m_vertexShader = std::make_unique<VulkanShader>(m_device, Core::IO::readFile<std::string>(Core::FileSystem::getVulkanShaderPath("diffuse.vert.spv").string()));
+		m_fragmentShader = std::make_unique<VulkanShader>(m_device, Core::IO::readFile<std::string>(Core::FileSystem::getVulkanShaderPath("diffuse.frag.spv").string()));
 
-		m_texture = TextureFactory::produceTexture("C:/rem.png", m_physicalDevice, m_device, m_commandPool, m_graphicQueue);
+		//m_texture = TextureFactory::produceTexture("C:/rem.png", m_physicalDevice, m_device, m_commandPool, m_graphicQueue);
 
 
 		m_uniformBuffer = std::make_unique<UniformBuffer<glm::mat4>>(m_physicalDevice, m_device, m_maxFrames);
-		m_descriptorSetLayout = createDescriptorSetLayout(m_device, 
+		m_lightUniformBuffer = std::make_unique<UniformBuffer<Light>>(m_physicalDevice, m_device, m_maxFrames);
+		/*m_descriptorSetLayout = createDescriptorSetLayout(m_device, 
 			{ {vk::DescriptorType::eUniformBuffer,1,vk::ShaderStageFlagBits::eVertex}, {vk::DescriptorType::eCombinedImageSampler, 1, vk::ShaderStageFlagBits::eFragment} },
 			vk::DescriptorSetLayoutCreateFlags());
 		m_descriptorPool = createDescriptorPool(m_device, 
 			{ vk::DescriptorPoolSize(vk::DescriptorType::eUniformBuffer, m_maxFrames),
-			vk::DescriptorPoolSize(vk::DescriptorType::eCombinedImageSampler, m_maxFrames)});
+			vk::DescriptorPoolSize(vk::DescriptorType::eCombinedImageSampler, m_maxFrames)});*/
+		m_descriptorSetLayout = createDescriptorSetLayout(m_device,
+			{ {vk::DescriptorType::eUniformBuffer, 1, vk::ShaderStageFlagBits::eVertex}, 
+			{vk::DescriptorType::eUniformBuffer, 1, vk::ShaderStageFlagBits::eFragment} },
+			vk::DescriptorSetLayoutCreateFlags());
+
+		m_descriptorPool = createDescriptorPool(m_device,
+			{ vk::DescriptorPoolSize(vk::DescriptorType::eUniformBuffer, m_maxFrames),
+			vk::DescriptorPoolSize(vk::DescriptorType::eUniformBuffer, m_maxFrames)});
+
 		std::vector<vk::DescriptorSetLayout> layouts(m_maxFrames, m_descriptorSetLayout.get());
-		m_descriptorSets = m_device->allocateDescriptorSetsUnique(vk::DescriptorSetAllocateInfo(m_descriptorPool.get(), m_maxFrames, layouts.data()));
-		std::vector<std::vector<std::shared_ptr<BufferData>>> uniformBuffers;
-		uniformBuffers.emplace_back(m_uniformBuffer->bufferData);
+
+		m_descriptorSets = m_device->allocateDescriptorSetsUnique(vk::DescriptorSetAllocateInfo(m_descriptorPool.get(), layouts.size(), layouts.data()));
+
+		std::vector<std::vector<std::shared_ptr<BufferData>>> uniformBuffers{ {m_uniformBuffer->bufferData, m_lightUniformBuffer->bufferData} };
+		//uniformBuffers.emplace_back(m_uniformBuffer->bufferData);
 		
-		std::vector<std::shared_ptr<Texture2D>> textures;
-		textures.emplace_back(m_texture);
-		updateDescriptorSets(m_device, m_descriptorPool, m_descriptorSetLayout, m_maxFrames, m_descriptorSets, uniformBuffers, textures);
+		/*std::vector<std::shared_ptr<Texture2D>> textures;
+		textures.emplace_back(m_texture);*/
+		//updateDescriptorSets(m_device, m_descriptorPool, m_descriptorSetLayout, m_maxFrames, m_descriptorSets, uniformBuffers, textures);
+		updateDescriptorSets(m_device, m_descriptorPool, m_descriptorSetLayout, m_maxFrames, m_descriptorSets, uniformBuffers, {});
 
 		m_pipelineLayout = m_device->createPipelineLayoutUnique(vk::PipelineLayoutCreateInfo(vk::PipelineLayoutCreateFlags(), 1, &m_descriptorSetLayout.get()));
 
 		m_pipelineCache = m_device->createPipelineCacheUnique(vk::PipelineCacheCreateInfo());
-		m_graphicPipeline = createGraphicPipeline(m_device, m_pipelineCache, ShaderInfo{ m_vertexShader->shaderModule.get(),vk::SpecializationInfo() },
+		/*m_graphicPipeline = createGraphicPipeline(m_device, m_pipelineCache, ShaderInfo{ m_vertexShader->shaderModule.get(),vk::SpecializationInfo() },
 			ShaderInfo{ m_fragmentShader->shaderModule.get(),vk::SpecializationInfo() }, createVertexInputAttributeDescriptions(Common::VertexPCTc::getSizeAndOffsets()),
-			vk::VertexInputBindingDescription(0, Common::VertexPCTc::getStride()), true, vk::FrontFace::eClockwise, m_pipelineLayout, m_renderPass, m_msaaSamples);
+			vk::VertexInputBindingDescription(0, Common::VertexPCTc::getStride()), true, vk::FrontFace::eClockwise, m_pipelineLayout, m_renderPass, m_msaaSamples);*/
+		m_graphicPipeline = createGraphicPipeline(m_device, m_pipelineCache, ShaderInfo{ m_vertexShader->shaderModule.get(),vk::SpecializationInfo() },
+			ShaderInfo{ m_fragmentShader->shaderModule.get(),vk::SpecializationInfo() }, createVertexInputAttributeDescriptions(Common::VertexPN::getSizeAndOffsets()),
+			vk::VertexInputBindingDescription(0, Common::VertexPN::getStride()), true, vk::FrontFace::eClockwise, m_pipelineLayout, m_renderPass, m_msaaSamples, vk::CullModeFlagBits::eNone);
 
 		buildCommandBuffers();
 	}
@@ -214,7 +233,8 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::buildCommandBuffers()
 	{
 		commandBuffer->begin(vk::CommandBufferBeginInfo(vk::CommandBufferUsageFlags()));
 
-		commandBuffer->setViewport(0, vk::Viewport(0.0f, 0.0f, static_cast<float>(m_swapChainData.extent.width), static_cast<float>(m_swapChainData.extent.height), 0.0f, 1.0f));
+		commandBuffer->setViewport(0, vk::Viewport(0.0f, static_cast<float>(m_swapChainData.extent.height), 
+			static_cast<float>(m_swapChainData.extent.width), -static_cast<float>(m_swapChainData.extent.height), 0.0f, 1.0f));
 		commandBuffer->setScissor(0, vk::Rect2D(vk::Offset2D(0, 0), m_swapChainData.extent));
 
 		vk::RenderPassBeginInfo renderPassBeginInfo(m_renderPass.get(), m_frameBuffers[i].get(), vk::Rect2D(vk::Offset2D(0, 0), m_swapChainData.extent), static_cast<uint32_t>(clearValues.size()), clearValues.data());

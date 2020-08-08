@@ -329,7 +329,7 @@ std::vector<vk::UniqueFramebuffer> GraphicEngine::Vulkan::createFrameBuffers(con
 	return frameBuffers;
 }
 
-vk::UniquePipeline GraphicEngine::Vulkan::createGraphicPipeline(const vk::UniqueDevice& device, const vk::UniquePipelineCache& pipeliceCache, const ShaderInfo& vertexShaderInfo, const ShaderInfo& fragmentShaderInfo, std::vector<vk::VertexInputAttributeDescription> attributeDescriptions, const vk::VertexInputBindingDescription& bindingDescription, bool depthBuffered, const vk::FrontFace& frontFace, const vk::UniquePipelineLayout& pipelineLayout, const vk::UniqueRenderPass& renderPass, vk::SampleCountFlagBits msaaSample, bool depthBoundsTestEnable, bool stencilTestEnable)
+vk::UniquePipeline GraphicEngine::Vulkan::createGraphicPipeline(const vk::UniqueDevice& device, const vk::UniquePipelineCache& pipeliceCache, const ShaderInfo& vertexShaderInfo, const ShaderInfo& fragmentShaderInfo, std::vector<vk::VertexInputAttributeDescription> attributeDescriptions, const vk::VertexInputBindingDescription& bindingDescription, bool depthBuffered, const vk::FrontFace& frontFace, const vk::UniquePipelineLayout& pipelineLayout, const vk::UniqueRenderPass& renderPass, vk::SampleCountFlagBits msaaSample, vk::CullModeFlags cullMode, bool depthBoundsTestEnable, bool stencilTestEnable)
 {
 	std::array<vk::PipelineShaderStageCreateInfo, 2> pipelineShaderCreateInfos =
 	{
@@ -346,7 +346,7 @@ vk::UniquePipeline GraphicEngine::Vulkan::createGraphicPipeline(const vk::Unique
 	vk::PipelineViewportStateCreateInfo pipelineViewportCreateInfo(vk::PipelineViewportStateCreateFlags(), 1, nullptr, 1, nullptr);
 
 	vk::PipelineRasterizationStateCreateInfo pipelineRasterizationStateCreateInfo(vk::PipelineRasterizationStateCreateFlags(), false, false,
-		vk::PolygonMode::eFill, vk::CullModeFlagBits::eBack, frontFace, false, 0, 0, 0, 1);
+		vk::PolygonMode::eFill, cullMode, frontFace, false, 0, 0, 0, 1);
 
 	vk::PipelineMultisampleStateCreateInfo pipelineMultisampleState(vk::PipelineMultisampleStateCreateFlags(), msaaSample, true, 0.2f, nullptr, false, false);
 
@@ -424,12 +424,15 @@ void GraphicEngine::Vulkan::updateDescriptorSets(const vk::UniqueDevice& device,
 	{
 		uint32_t dstBinding{ 0 };
 		std::vector<vk::WriteDescriptorSet> writeDescriptorSets;
+		writeDescriptorSets.reserve(uniformBuffers.size() + imageUniforms.empty() ? 0 : 1);
+		std::vector<vk::DescriptorBufferInfo> bufferInfos;
+		bufferInfos.reserve(uniformBuffers.size());
 		if (!uniformBuffers.empty())
 		{
 			for (auto& uniformBuffer : uniformBuffers)
 			{
-				vk::DescriptorBufferInfo bufferInfo(uniformBuffer[i]->buffer.get(), 0, VK_WHOLE_SIZE);
-				writeDescriptorSets.emplace_back(descriptorSets[i].get(), dstBinding++, 0, 1, vk::DescriptorType::eUniformBuffer, nullptr, &bufferInfo, nullptr);
+				bufferInfos.push_back(vk::DescriptorBufferInfo(uniformBuffer[i]->buffer.get(), 0, VK_WHOLE_SIZE));
+				writeDescriptorSets.push_back(vk::WriteDescriptorSet(descriptorSets[i].get(), dstBinding++, 0, 1, vk::DescriptorType::eUniformBuffer, nullptr, &bufferInfos.back(), nullptr));
 			}
 		}
 
@@ -442,7 +445,9 @@ void GraphicEngine::Vulkan::updateDescriptorSets(const vk::UniqueDevice& device,
 				imageInfos.push_back(imageInfo);
 			}
 
-			writeDescriptorSets.emplace_back(descriptorSets[i].get(), dstBinding, 0, static_cast<uint32_t>(imageInfos.size()), vk::DescriptorType::eCombinedImageSampler, imageInfos.data(), nullptr, nullptr);
+			writeDescriptorSets.push_back(
+				vk::WriteDescriptorSet(
+					descriptorSets[i].get(), dstBinding, 0, static_cast<uint32_t>(imageInfos.size()), vk::DescriptorType::eCombinedImageSampler, imageInfos.data(), nullptr, nullptr));
 		}
 
 		device->updateDescriptorSets(static_cast<uint32_t>(writeDescriptorSets.size()), writeDescriptorSets.data(), 0, nullptr);
