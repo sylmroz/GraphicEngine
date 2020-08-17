@@ -40,18 +40,16 @@ bool GraphicEngine::Vulkan::VulkanRenderingEngine::drawFrame()
 
 		m_renderingBarriers->imagesInFlight[imageIndex.value] = m_renderingBarriers->inFlightFences[m_currentFrameIndex].get();
 
-		vk::Semaphore waitSemaphore(m_renderingBarriers->imageAvailableSemaphores[m_currentFrameIndex].get());
-		vk::Semaphore signalSemaphore(m_renderingBarriers->renderFinishedSemaphores[m_currentFrameIndex].get());
-		vk::PipelineStageFlags pipelineStageFlags(vk::PipelineStageFlagBits::eColorAttachmentOutput);
-
-		vk::SubmitInfo submitInfo(1, &waitSemaphore, &pipelineStageFlags, 1, &(m_commandBuffers[imageIndex.value].get()), 1, &signalSemaphore);
-
 		m_device->resetFences(1, &(m_renderingBarriers->inFlightFences[m_currentFrameIndex].get()));
 
 		m_uniformBuffer->updateAndSet(m_device, m_camera->getViewProjectionMatrix(), imageIndex.value);
 		light.eyePosition = m_camera->getPosition();
 		m_lightUniformBuffer->updateAndSet(m_device, light, imageIndex.value);
 
+		vk::Semaphore waitSemaphore(m_renderingBarriers->imageAvailableSemaphores[m_currentFrameIndex].get());
+		vk::Semaphore signalSemaphore(m_renderingBarriers->renderFinishedSemaphores[m_currentFrameIndex].get());
+		vk::PipelineStageFlags pipelineStageFlags(vk::PipelineStageFlagBits::eColorAttachmentOutput);
+		vk::SubmitInfo submitInfo(1, &waitSemaphore, &pipelineStageFlags, 1, &(m_commandBuffers[imageIndex.value].get()), 1, &signalSemaphore);
 		vk::Result submitResult = m_graphicQueue.submit(1, &submitInfo, m_renderingBarriers->inFlightFences[m_currentFrameIndex].get());
 		if (submitResult != vk::Result::eSuccess)
 		{
@@ -89,7 +87,7 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 {
 	try
 	{
-		m_instance = createUniqueInstance("Graphic Engine", "Vulkan Base", m_validationLayers, m_vulkanWindowContext->getRequiredExtensions(), VK_API_VERSION_1_0);
+		m_instance = createUniqueInstance("Graphic Engine", "Vulkan Base", m_validationLayers, m_vulkanWindowContext->getRequiredExtensions(), VK_API_VERSION_1_1);
 		{
 			auto surface = m_vulkanWindowContext->createSurface(m_instance);
 			vk::ObjectDestroy<vk::Instance, VULKAN_HPP_DEFAULT_DISPATCHER_TYPE> _deleter(m_instance.get());
@@ -99,15 +97,22 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 		m_device = getUniqueLogicalDevice(m_physicalDevice, m_surface);
 		m_indices = findGraphicAndPresentQueueFamilyIndices(m_physicalDevice, m_surface);
 
+		m_graphicQueue = m_device->getQueue(m_indices.graphicsFamily.value(), 0);
+		m_presentQueue = m_device->getQueue(m_indices.presentFamily.value(), 0);
+
 		vk::Extent2D frameBufferSize(width, height);
 		m_swapChainData = SwapChainData(m_physicalDevice, m_device, m_surface, m_indices, frameBufferSize, vk::UniqueSwapchainKHR(), vk::ImageUsageFlagBits::eColorAttachment);
 
 		m_maxFrames = m_swapChainData.images.size();
 
+		m_uniformBuffer = std::make_unique<UniformBuffer<glm::mat4>>(m_physicalDevice, m_device, m_maxFrames);
+		m_lightUniformBuffer = std::make_unique<UniformBuffer<Light>>(m_physicalDevice, m_device, m_maxFrames);
+
 		m_commandPool = createUniqueCommandPool(m_device, m_indices);
 		m_commandBuffers = m_device->allocateCommandBuffersUnique(vk::CommandBufferAllocateInfo(m_commandPool.get(), vk::CommandBufferLevel::ePrimary, m_maxFrames));
 
 		m_depthBuffer = std::make_unique<DepthBufferData>(m_physicalDevice, m_device, vk::Extent3D(frameBufferSize, 1), findDepthFormat(m_physicalDevice), m_msaaSamples);
+		
 		m_renderPass = createRenderPass(m_device, m_swapChainData.format, m_depthBuffer->format, m_msaaSamples);
 		m_image = std::make_unique<ImageData>(m_physicalDevice, m_device,
 			vk::Extent3D(m_swapChainData.extent, 1), m_swapChainData.format, m_msaaSamples,
@@ -115,9 +120,6 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 			vk::ImageTiling::eOptimal, 1, vk::ImageLayout::eUndefined, vk::ImageAspectFlagBits::eColor);
 
 		m_frameBuffers = createFrameBuffers(m_device, m_renderPass, m_swapChainData.extent, 1, m_image->imageView, m_depthBuffer->imageView, m_swapChainData.imageViews);
-
-		m_graphicQueue = m_device->getQueue(m_indices.graphicsFamily.value(), 0);
-		m_presentQueue = m_device->getQueue(m_indices.presentFamily.value(), 0);
 
 		m_renderingBarriers = std::make_unique<RenderingBarriers>(m_device, m_maxFrames);
 		//m_vertexBuffer = m_mesh->compile<VertexBufferFactory<Common::VertexPCTc>, VertexBuffer<Common::VertexPCTc>>(m_physicalDevice, m_device, m_commandPool, m_graphicQueue);
@@ -129,10 +131,6 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 		m_fragmentShader = std::make_unique<VulkanShader>(m_device, Core::IO::readFile<std::string>(Core::FileSystem::getVulkanShaderPath("diffuse.frag.spv").string()));
 
 		//m_texture = TextureFactory::produceTexture("C:/rem.png", m_physicalDevice, m_device, m_commandPool, m_graphicQueue);
-
-
-		m_uniformBuffer = std::make_unique<UniformBuffer<glm::mat4>>(m_physicalDevice, m_device, m_maxFrames);
-		m_lightUniformBuffer = std::make_unique<UniformBuffer<Light>>(m_physicalDevice, m_device, m_maxFrames);
 		/*m_descriptorSetLayout = createDescriptorSetLayout(m_device, 
 			{ {vk::DescriptorType::eUniformBuffer,1,vk::ShaderStageFlagBits::eVertex}, {vk::DescriptorType::eCombinedImageSampler, 1, vk::ShaderStageFlagBits::eFragment} },
 			vk::DescriptorSetLayoutCreateFlags());

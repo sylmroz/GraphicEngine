@@ -31,6 +31,9 @@ namespace GraphicEngine::Vulkan
 		vk::UniqueSurfaceKHR m_surface;
 		vk::UniqueDevice m_device;
 
+		vk::Queue m_graphicQueue;
+		vk::Queue m_presentQueue;
+
 		SwapChainData m_swapChainData;
 		vk::UniqueCommandPool m_commandPool;
 		std::vector<vk::UniqueCommandBuffer> m_commandBuffers;
@@ -39,8 +42,6 @@ namespace GraphicEngine::Vulkan
 		std::unique_ptr<ImageData> m_image;
 		std::vector<vk::UniqueFramebuffer> m_frameBuffers;
 		std::unique_ptr<RenderingBarriers> m_renderingBarriers;
-		vk::Queue m_graphicQueue;
-		vk::Queue m_presentQueue;
 		vk::UniquePipelineCache m_pipelineCache;
 		vk::UniquePipelineLayout m_pipelineLayout;
 		vk::UniquePipeline m_graphicPipeline;
