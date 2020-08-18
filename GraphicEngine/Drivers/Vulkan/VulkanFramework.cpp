@@ -30,3 +30,47 @@ GraphicEngine::Vulkan::VulkanFramework& GraphicEngine::Vulkan::VulkanFramework::
 
 	return *this;
 }
+
+GraphicEngine::Vulkan::VulkanFramework& GraphicEngine::Vulkan::VulkanFramework::initializeFramebuffer(int width, int height)
+{
+	vk::Extent2D frameBufferSize(width, height);
+	this->m_width = width;
+	this->m_height = height;
+	
+	m_device->waitIdle();
+	vk::Extent2D frameBufferSize(width, height);
+	m_swapChainData = SwapChainData(m_physicalDevice, m_device, m_surface, m_indices, frameBufferSize, m_swapChainData.swapChain, vk::ImageUsageFlagBits::eColorAttachment);
+	m_maxFrames = m_swapChainData.images.size();
+
+	m_commandBuffers = m_device->allocateCommandBuffersUnique(vk::CommandBufferAllocateInfo(m_commandPool.get(), vk::CommandBufferLevel::ePrimary, m_maxFrames));
+
+	m_depthBuffer = std::make_unique<DepthBufferData>(m_physicalDevice, m_device, vk::Extent3D(frameBufferSize, 1), findDepthFormat(m_physicalDevice), m_msaaSamples);
+	m_renderPass = createRenderPass(m_device, m_swapChainData.format, m_depthBuffer->format, m_msaaSamples);
+	m_image = std::make_unique<ImageData>(m_physicalDevice, m_device,
+		vk::Extent3D(m_swapChainData.extent, 1), m_swapChainData.format, m_msaaSamples,
+		vk::MemoryPropertyFlagBits::eDeviceLocal, vk::ImageUsageFlagBits::eColorAttachment | vk::ImageUsageFlagBits::eTransientAttachment,
+		vk::ImageTiling::eOptimal, 1, vk::ImageLayout::eUndefined, vk::ImageAspectFlagBits::eColor);
+	m_frameBuffers = createFrameBuffers(m_device, m_renderPass, m_swapChainData.extent, 1, m_image->imageView, m_depthBuffer->imageView, m_swapChainData.imageViews);
+
+	return *this;
+}
+
+GraphicEngine::Vulkan::VulkanFramework& GraphicEngine::Vulkan::VulkanFramework::initializeFramebuffer()
+{
+	return this->initializeFramebuffer(m_width, m_height);
+}
+
+GraphicEngine::Vulkan::VulkanFramework& GraphicEngine::Vulkan::VulkanFramework::initializeCommandBuffer()
+{
+	m_commandPool = createUniqueCommandPool(m_device, m_indices);
+	m_commandBuffers = m_device->allocateCommandBuffersUnique(vk::CommandBufferAllocateInfo(m_commandPool.get(), vk::CommandBufferLevel::ePrimary, m_maxFrames));
+
+	return *this;
+}
+
+GraphicEngine::Vulkan::VulkanFramework& GraphicEngine::Vulkan::VulkanFramework::initalizeRenderingBarriers()
+{
+	m_renderingBarriers = std::make_unique<RenderingBarriers>(m_device, m_maxFrames);
+
+	return *this;
+}

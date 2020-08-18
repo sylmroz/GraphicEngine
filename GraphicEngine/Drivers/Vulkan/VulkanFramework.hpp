@@ -17,6 +17,16 @@ namespace GraphicEngine::Vulkan
 			const std::string& engineName, int width, int height, vk::SampleCountFlagBits msaaSamples,
 			const std::vector<std::string>& validationLayers);
 
+		VulkanFramework& initializeFramebuffer(int width, int height);
+		VulkanFramework& initializeFramebuffer();
+
+		VulkanFramework& initializeCommandBuffer();
+		
+		VulkanFramework& initalizeRenderingBarriers();
+
+		template <typename T>
+		std::unique_ptr<UniformBuffer<T>> getUniformBuffer();
+
 		virtual ~VulkanFramework() = default;
 	protected:
 	private:
@@ -28,6 +38,17 @@ namespace GraphicEngine::Vulkan
 		vk::UniqueDevice m_device;
 		vk::Queue m_graphicQueue;
 		vk::Queue m_presentQueue;
+
+		SwapChainData m_swapChainData;
+		std::unique_ptr<DepthBufferData> m_depthBuffer;
+		vk::UniqueRenderPass m_renderPass;
+		std::unique_ptr<ImageData> m_image;
+		std::vector<vk::UniqueFramebuffer> m_frameBuffers;
+
+		vk::UniqueCommandPool m_commandPool;
+		std::vector<vk::UniqueCommandBuffer> m_commandBuffers;
+
+		std::unique_ptr<RenderingBarriers> m_renderingBarriers;
 
 	private:
 		std::string m_appName;

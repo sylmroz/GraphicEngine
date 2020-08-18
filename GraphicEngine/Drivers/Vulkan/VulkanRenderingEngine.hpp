@@ -2,7 +2,7 @@
 
 #include "../../Common/RenderingEngine.hpp"
 #include "VulkanShader.hpp"
-#include "VulkanHelper.hpp"
+#include "VulkanFramework.hpp"
 #include "VulkanWindowContext.hpp"
 #include "VulkanTexture.hpp"
 #include "VulkanVertexBuffer.hpp"

@@ -199,6 +199,9 @@
     <ClCompile Include="Core\Math\Geometry.cpp">
       <Filter>Core\Math</Filter>
     </ClCompile>
+    <ClCompile Include="Drivers\Vulkan\VulkanFramework.cpp">
+      <Filter>Drivers\Vulkan</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Input\Keyboard\KeyboardEnumKeys.hpp">
@@ -383,6 +386,9 @@
     </ClInclude>
     <ClInclude Include="Scene\Resources\Face.hpp">
       <Filter>Scene\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Drivers\Vulkan\VulkanFramework.hpp">
+      <Filter>Drivers\Vulkan</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
