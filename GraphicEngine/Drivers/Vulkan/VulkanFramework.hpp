@@ -5,8 +5,13 @@
 
 namespace GraphicEngine::Vulkan
 {
+	template <typename T>
+	class UniformBuffer;
+
 	class VulkanFramework
 	{
+		template <typename T>
+		friend class UniformBuffer;
 	public:
 		VulkanFramework() = default;
 		VulkanFramework(std::shared_ptr<VulkanWindowContext> vulkanWindowsContext, const std::string& appName, 
@@ -24,12 +29,22 @@ namespace GraphicEngine::Vulkan
 		
 		VulkanFramework& initalizeRenderingBarriers();
 
+		bool acquireFrame();
+		bool submitFrame();
+
 		template <typename T>
-		std::unique_ptr<UniformBuffer<T>> getUniformBuffer();
+		std::unique_ptr<UniformBuffer<T>> getUniformBuffer()
+		{
+			return std::make_unique<UniformBuffer<T>>(this);
+		}
 
 		virtual ~VulkanFramework() = default;
 	protected:
+
 	private:
+		uint32_t calculateNextIndex();
+
+	public:
 		std::shared_ptr<VulkanWindowContext> m_vulkanWindowContext;
 
 		vk::UniqueInstance m_instance;
@@ -56,13 +71,13 @@ namespace GraphicEngine::Vulkan
 		int m_width;
 		int m_height;
 
-	private:
+	public:
 		vk::SampleCountFlagBits m_msaaSamples;
 		uint32_t m_maxFrames{ 1 };
 		uint32_t m_currentFrameIndex{ 0 };
 		QueueFamilyIndices m_indices;
+		vk::ResultValue<uint32_t> m_imageIndex{ {}, 0 };
 
-		std::shared_ptr<VulkanWindowContext> m_vulkanWindowContext;
 	private:
 		std::vector<std::string> m_validationLayers;
 	};

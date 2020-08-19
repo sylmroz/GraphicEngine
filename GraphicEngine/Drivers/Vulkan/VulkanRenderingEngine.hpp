@@ -23,25 +23,10 @@ namespace GraphicEngine::Vulkan
 
 		virtual ~VulkanRenderingEngine() = default;
 	private:
-		uint32_t calculateNextIndex();
 		void buildCommandBuffers();
 	private:
-		vk::UniqueInstance m_instance;
-		vk::PhysicalDevice m_physicalDevice;
-		vk::UniqueSurfaceKHR m_surface;
-		vk::UniqueDevice m_device;
+		std::unique_ptr<VulkanFramework> m_framework;
 
-		vk::Queue m_graphicQueue;
-		vk::Queue m_presentQueue;
-
-		SwapChainData m_swapChainData;
-		vk::UniqueCommandPool m_commandPool;
-		std::vector<vk::UniqueCommandBuffer> m_commandBuffers;
-		std::unique_ptr<DepthBufferData> m_depthBuffer;
-		vk::UniqueRenderPass m_renderPass;
-		std::unique_ptr<ImageData> m_image;
-		std::vector<vk::UniqueFramebuffer> m_frameBuffers;
-		std::unique_ptr<RenderingBarriers> m_renderingBarriers;
 		vk::UniquePipelineCache m_pipelineCache;
 		vk::UniquePipelineLayout m_pipelineLayout;
 		vk::UniquePipeline m_graphicPipeline;
@@ -61,16 +46,8 @@ namespace GraphicEngine::Vulkan
 
 
 	private:
-		vk::SampleCountFlagBits m_msaaSamples = vk::SampleCountFlagBits::e2;
-		uint32_t m_maxFrames{ 1 };
-		uint32_t m_currentFrameIndex{ 0 };
-		QueueFamilyIndices m_indices;
-
 		std::shared_ptr<VulkanWindowContext> m_vulkanWindowContext;
 
 	private:
-		const std::vector<std::string> m_validationLayers = {
-			"VK_LAYER_KHRONOS_validation"
-		};
 	};
 }

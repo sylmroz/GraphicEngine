@@ -129,41 +129,6 @@ namespace GraphicEngine::Vulkan
 		DepthBufferData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::Extent3D extent, vk::Format format, vk::SampleCountFlagBits numOfSamples);
 	};
 
-	template <typename T>
-	class UniformBuffer
-	{
-	public:
-		UniformBuffer(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, uint32_t count)
-		{
-			for (uint32_t i{ 0 }; i < count; ++i)
-			{
-				bufferData.emplace_back(std::make_shared<BufferData>(physicalDevice, device, vk::BufferUsageFlagBits::eUniformBuffer,
-					vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent, sizeof(T)));
-			}
-		}
-
-		void setValue(T value)
-		{
-			m_value = value;
-		}
-
-		void update(const vk::UniqueDevice& device, uint32_t bufferIndex)
-		{
-			copyMemoryToDevice<T>(device, bufferData[bufferIndex]->memory, &m_value, 1);
-		}
-
-		void updateAndSet(const vk::UniqueDevice& device, T value, uint32_t bufferIndex)
-		{
-			setValue(value);
-			update(device, bufferIndex);
-		}
-
-		std::vector<std::shared_ptr<BufferData>> bufferData;
-
-	private:
-		T m_value{};
-	};
-
 	class Texture2D;
 
 	std::vector<const char*> getDeviceExtension();

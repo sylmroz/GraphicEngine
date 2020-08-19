@@ -241,6 +241,7 @@
     <ClInclude Include="Drivers\Vulkan\VulkanRenderingEngine.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanTexture.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanTextureFactory.hpp" />
+    <ClInclude Include="Drivers\Vulkan\VulkanUniformBuffer.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanVertexBuffer.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanVertexBufferFactory.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanWindowContext.hpp" />

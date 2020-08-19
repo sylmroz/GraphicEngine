@@ -390,5 +390,8 @@
     <ClInclude Include="Drivers\Vulkan\VulkanFramework.hpp">
       <Filter>Drivers\Vulkan</Filter>
     </ClInclude>
+    <ClInclude Include="Drivers\Vulkan\VulkanUniformBuffer.hpp">
+      <Filter>Drivers\Vulkan</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
