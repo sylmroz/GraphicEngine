@@ -22,27 +22,6 @@ bool GraphicEngine::Vulkan::VulkanRenderingEngine::drawFrame()
 {
 	try
 	{
-		//m_device->waitForFences(1, &(m_renderingBarriers->inFlightFences[m_currentFrameIndex].get()), true, std::numeric_limits<uint64_t>::max());
-		//vk::ResultValue<uint32_t> imageIndex = m_device->acquireNextImageKHR(m_swapChainData.swapChain.get(), std::numeric_limits<uint64_t>::max(), m_renderingBarriers->imageAvailableSemaphores[m_currentFrameIndex].get(), vk::Fence());
-
-		//if (imageIndex.result == vk::Result::eErrorOutOfDateKHR)
-		//{
-		//	// Should recreate swapchain
-		//	return false;
-		//}
-
-		//else if (imageIndex.result != vk::Result::eSuccess && imageIndex.result != vk::Result::eSuboptimalKHR)
-		//{
-		//	throw std::runtime_error("Failed to acquire next image!");
-		//}
-
-		//if (m_renderingBarriers->imagesInFlight[imageIndex.value] != vk::Fence())
-		//	m_device->waitForFences(1, &(m_renderingBarriers->imagesInFlight[imageIndex.value]), true, std::numeric_limits<uint64_t>::max());
-
-		//m_renderingBarriers->imagesInFlight[imageIndex.value] = m_renderingBarriers->inFlightFences[m_currentFrameIndex].get();
-
-		//m_device->resetFences(1, &(m_renderingBarriers->inFlightFences[m_currentFrameIndex].get()));
-
 		m_framework->acquireFrame();
 
 		m_uniformBuffer->updateAndSet(m_camera->getViewProjectionMatrix());
@@ -50,45 +29,13 @@ bool GraphicEngine::Vulkan::VulkanRenderingEngine::drawFrame()
 		m_lightUniformBuffer->updateAndSet(light);
 
 		m_framework->submitFrame();
-
-		/*m_uniformBuffer->updateAndSet(m_device, m_camera->getViewProjectionMatrix(), imageIndex.value);
-		light.eyePosition = m_camera->getPosition();
-		m_lightUniformBuffer->updateAndSet(m_device, light, imageIndex.value);*/
-
-		//vk::Semaphore waitSemaphore(m_renderingBarriers->imageAvailableSemaphores[m_currentFrameIndex].get());
-		//vk::Semaphore signalSemaphore(m_renderingBarriers->renderFinishedSemaphores[m_currentFrameIndex].get());
-		//vk::PipelineStageFlags pipelineStageFlags(vk::PipelineStageFlagBits::eColorAttachmentOutput);
-		//vk::SubmitInfo submitInfo(1, &waitSemaphore, &pipelineStageFlags, 1, &(m_commandBuffers[imageIndex.value].get()), 1, &signalSemaphore);
-		//vk::Result submitResult = m_graphicQueue.submit(1, &submitInfo, m_renderingBarriers->inFlightFences[m_currentFrameIndex].get());
-		//if (submitResult != vk::Result::eSuccess)
-		//{
-		//	throw std::runtime_error("Failed to submit draw command buffer!");
-		//}
-
-		//vk::SwapchainKHR sp(m_swapChainData.swapChain.get());
-
-		//vk::PresentInfoKHR presentInfo(1, &signalSemaphore, 1, &sp, &imageIndex.value);
-
-		//vk::Result presentResult = m_presentQueue.presentKHR(presentInfo);
-
-		//if (presentResult == vk::Result::eErrorOutOfDateKHR || presentResult == vk::Result::eSuboptimalKHR)
-		//{
-		//	// Should recreate swapchain
-		//	return false;
-		//}
-		//else if (imageIndex.result != vk::Result::eSuccess)
-		//{
-		//	throw std::runtime_error("failed to present swap chain image!");
-		//}
 	}
 
 	catch (vk::OutOfDateKHRError err)
 	{
-		// Should recreate swapchain
 		return false;
 	}
 
-	//m_currentFrameIndex = calculateNextIndex();
 	return true;
 }
 
@@ -96,32 +43,6 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 {
 	try
 	{
-		//m_vertexBuffer = m_mesh->compile<VertexBufferFactory<Common::VertexPCTc>, VertexBuffer<Common::VertexPCTc>>(m_physicalDevice, m_device, m_commandPool, m_graphicQueue);
-
-		/*m_vertexShader = std::make_unique<VulkanShader>(m_device, Core::IO::readFile<std::string>(Core::FileSystem::getVulkanShaderPath("basicPCTVP.vert.spv").string()));
-		m_fragmentShader = std::make_unique<VulkanShader>(m_device, Core::IO::readFile<std::string>(Core::FileSystem::getVulkanShaderPath("basicPCTVP.frag.spv").string()));*/
-
-		//m_texture = TextureFactory::produceTexture("C:/rem.png", m_physicalDevice, m_device, m_commandPool, m_graphicQueue);
-		/*m_descriptorSetLayout = createDescriptorSetLayout(m_device, 
-			{ {vk::DescriptorType::eUniformBuffer,1,vk::ShaderStageFlagBits::eVertex}, {vk::DescriptorType::eCombinedImageSampler, 1, vk::ShaderStageFlagBits::eFragment} },
-			vk::DescriptorSetLayoutCreateFlags());
-		m_descriptorPool = createDescriptorPool(m_device, 
-			{ vk::DescriptorPoolSize(vk::DescriptorType::eUniformBuffer, m_maxFrames),
-			vk::DescriptorPoolSize(vk::DescriptorType::eCombinedImageSampler, m_maxFrames)});*/
-
-		//uniformBuffers.emplace_back(m_uniformBuffer->bufferData);
-		
-		/*std::vector<std::shared_ptr<Texture2D>> textures;
-		textures.emplace_back(m_texture);*/
-		//updateDescriptorSets(m_device, m_descriptorPool, m_descriptorSetLayout, m_maxFrames, m_descriptorSets, uniformBuffers, textures);
-
-		//m_pipelineLayout = m_device->createPipelineLayoutUnique(vk::PipelineLayoutCreateInfo(vk::PipelineLayoutCreateFlags(), 1, &m_descriptorSetLayout.get()));
-
-		//m_pipelineCache = m_device->createPipelineCacheUnique(vk::PipelineCacheCreateInfo());
-		///*m_graphicPipeline = createGraphicPipeline(m_device, m_pipelineCache, ShaderInfo{ m_vertexShader->shaderModule.get(),vk::SpecializationInfo() },
-		//	ShaderInfo{ m_fragmentShader->shaderModule.get(),vk::SpecializationInfo() }, createVertexInputAttributeDescriptions(Common::VertexPCTc::getSizeAndOffsets()),
-		//	vk::VertexInputBindingDescription(0, Common::VertexPCTc::getStride()), true, vk::FrontFace::eClockwise, m_pipelineLayout, m_renderPass, m_msaaSamples);*/
-
 		m_framework = std::make_unique<VulkanFramework>();
 		m_framework->
 			initialize(m_vulkanWindowContext, "Graphic Engine", "Vulkan Base", width, height, vk::SampleCountFlagBits::e2, { "VK_LAYER_KHRONOS_validation" })
@@ -218,8 +139,7 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::buildCommandBuffers()
 		commandBuffer->bindPipeline(vk::PipelineBindPoint::eGraphics, m_graphicPipeline.get());
 
 		commandBuffer->bindDescriptorSets(vk::PipelineBindPoint::eGraphics, m_pipelineLayout.get(), 0, 1, &m_descriptorSets[i].get(), 0, nullptr);
-		/*m_vertexBuffer->bind(commandBuffer);
-		m_vertexBuffer->draw(commandBuffer);*/
+
 		for (auto& vb : m_vertexBuffers)
 		{
 			vb->bind(commandBuffer);
