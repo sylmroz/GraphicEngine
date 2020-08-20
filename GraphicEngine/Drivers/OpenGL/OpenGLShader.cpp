@@ -21,3 +21,17 @@ void GraphicEngine::OpenGL::OpenGLShader::compile()
 		throw std::runtime_error(infoLog);
 	}
 }
+
+GraphicEngine::ShaderType GraphicEngine::OpenGL::GetShaderType(int shaderType)
+{
+	std::map<int, ShaderType> shaderTypeMap =
+	{
+		{ GL_VERTEX_SHADER, ShaderType::Vertex },
+		{ GL_FRAGMENT_SHADER, ShaderType::Fragment },
+		{ GL_GEOMETRY_SHADER, ShaderType::Geometry },
+		{ GL_TESS_CONTROL_SHADER, ShaderType::TessalationControll },
+		{ GL_TESS_EVALUATION_SHADER, ShaderType::TessalationEvaluation }
+	};
+
+	return shaderTypeMap[shaderType];
+};

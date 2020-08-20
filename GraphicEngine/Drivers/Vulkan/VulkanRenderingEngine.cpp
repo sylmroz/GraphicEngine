@@ -54,8 +54,9 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 		m_lightUniformBuffer = m_framework->getUniformBuffer<Light>();
 
 		m_vertexBuffers = m_model->compile<VertexBufferFactory, VertexBuffer>(m_framework->m_physicalDevice, m_framework->m_device, m_framework->m_commandPool, m_framework->m_graphicQueue);
-		m_vertexShader = std::make_unique<VulkanShader>(m_framework->m_device, Core::IO::readFile<std::string>(Core::FileSystem::getVulkanShaderPath("diffuse.vert.spv").string()));
-		m_fragmentShader = std::make_unique<VulkanShader>(m_framework->m_device, Core::IO::readFile<std::string>(Core::FileSystem::getVulkanShaderPath("diffuse.frag.spv").string()));
+		
+		m_vertexShader = std::make_unique<VulkanVertexShader>(m_framework->m_device, Core::IO::readFile<std::string>(Core::FileSystem::getVulkanShaderPath("diffuse.vert.spv").string()));
+		m_fragmentShader = std::make_unique<VulkanFragmentShader>(m_framework->m_device, Core::IO::readFile<std::string>(Core::FileSystem::getVulkanShaderPath("diffuse.frag.spv").string()));
 
 		m_descriptorSetLayout = createDescriptorSetLayout(m_framework->m_device,
 			{ {vk::DescriptorType::eUniformBuffer, 1, vk::ShaderStageFlagBits::eVertex},

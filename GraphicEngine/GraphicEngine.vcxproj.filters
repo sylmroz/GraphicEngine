@@ -202,6 +202,9 @@
     <ClCompile Include="Drivers\Vulkan\VulkanFramework.cpp">
       <Filter>Drivers\Vulkan</Filter>
     </ClCompile>
+    <ClCompile Include="Drivers\Vulkan\VulkanShader.cpp">
+      <Filter>Drivers\Vulkan</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Input\Keyboard\KeyboardEnumKeys.hpp">

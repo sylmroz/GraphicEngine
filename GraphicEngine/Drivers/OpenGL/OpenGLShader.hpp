@@ -3,17 +3,20 @@
 #include "../../Common/Shader.hpp"
 
 #include <GL/glew.h>
-#include <string>
 
+#include <map>
+#include <string>
 #include <vector>
 
 namespace GraphicEngine::OpenGL
 {
+	ShaderType GetShaderType(int shaderType);
+
 	class OpenGLShader : public Shader
 	{
 	public:
 		OpenGLShader(const std::string& code, const uint32_t shaderType) :
-			Shader(code)
+			Shader(code, GetShaderType(shaderType))
 		{
 			_shaderType = shaderType;
 			OpenGLShader::compile();
@@ -21,7 +24,7 @@ namespace GraphicEngine::OpenGL
 
 		template <typename Reader>
 		OpenGLShader(Reader reader, const std::string& path, const uint32_t shaderType) :
-			Shader(reader, path)
+			Shader(reader, path, GetShaderType(shaderType))
 		{
 			_shaderType = shaderType;
 			OpenGLShader::compile();
@@ -91,6 +94,18 @@ namespace GraphicEngine::OpenGL
 		template <typename Reader>
 		OpenGLTesselationControlShader(Reader reader, const std::string& path) :
 			OpenGLShader(reader, path, GL_TESS_CONTROL_SHADER) {}
+	};
+
+	class OpenGLTesselationEvaluationShader : public OpenGLShader
+	{
+	public:
+		OpenGLTesselationEvaluationShader(const std::string& code) :
+			OpenGLShader(code, GL_TESS_EVALUATION_SHADER)
+		{}
+
+		template <typename Reader>
+		OpenGLTesselationEvaluationShader(Reader reader, const std::string& path) :
+			OpenGLShader(reader, path, GL_TESS_EVALUATION_SHADER) {}
 	};
 
 	class OpenGLShaderProgram

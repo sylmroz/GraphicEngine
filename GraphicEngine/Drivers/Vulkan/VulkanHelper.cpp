@@ -377,7 +377,6 @@ vk::UniquePipeline GraphicEngine::Vulkan::createGraphicPipeline(const vk::Unique
 
 std::vector<vk::VertexInputAttributeDescription> GraphicEngine::Vulkan::createVertexInputAttributeDescriptions(const std::vector<std::pair<uint32_t, uint32_t>>& vertexSizeOffset)
 {
-
 	std::vector<vk::VertexInputAttributeDescription> attributeDescriptions;
 
 	std::map<uint32_t, vk::Format> dataFormatTypes = {

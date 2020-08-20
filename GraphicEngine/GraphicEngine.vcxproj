@@ -184,6 +184,7 @@
     <ClCompile Include="Drivers\Vulkan\VulkanFramework.cpp" />
     <ClCompile Include="Drivers\Vulkan\VulkanHelper.cpp" />
     <ClCompile Include="Drivers\Vulkan\VulkanRenderingEngine.cpp" />
+    <ClCompile Include="Drivers\Vulkan\VulkanShader.cpp" />
     <ClCompile Include="Drivers\Vulkan\VulkanTexture.cpp" />
     <ClCompile Include="Main\Application.cpp" />
     <ClCompile Include="Main\Engine.cpp" />

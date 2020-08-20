@@ -7,19 +7,21 @@
 
 namespace GraphicEngine::Vulkan
 {
+	ShaderType GetShaderType(vk::ShaderStageFlags shaderType);
+	
 	class VulkanShader : public Shader
 	{
 	public:
-		VulkanShader(const vk::UniqueDevice& device, const std::string& code) :
-			Shader(code)
+		VulkanShader(const vk::UniqueDevice& device, const std::string& code, vk::ShaderStageFlags shaderType) :
+			Shader{ code, GetShaderType(shaderType) }, m_shaderType{ shaderType }
 		{
 			m_device = device.get();
 			compile();
 		}
 
 		template <typename Reader>
-		VulkanShader(const vk::UniqueDevice& device, Reader reader, const std::string& path) :
-			Shader(reader, path)
+		VulkanShader(const vk::UniqueDevice& device, Reader reader, const std::string& path, vk::ShaderStageFlags shaderType) :
+			Shader{ reader, path, GetShaderType(shaderType) }, m_shaderType{ shaderType }
 		{
 			m_device = device.get();
 			compile();
@@ -29,12 +31,80 @@ namespace GraphicEngine::Vulkan
 		vk::UniqueShaderModule shaderModule;
 
 	protected:
-		virtual void compile()
+		virtual void compile() override
 		{
-			shaderModule = m_device.createShaderModuleUnique(vk::ShaderModuleCreateInfo(vk::ShaderModuleCreateFlags(), static_cast<uint32_t>(m_data.size()), reinterpret_cast<uint32_t*>(m_data.data())));
+			shaderModule = m_device.createShaderModuleUnique(vk::ShaderModuleCreateInfo(vk::ShaderModuleCreateFlags(),
+				static_cast<uint32_t>(m_data.size()), reinterpret_cast<uint32_t*>(m_data.data())));
 		}
+
 	protected:
 		vk::Device m_device;
+		vk::ShaderStageFlags m_shaderType;
+	};
+
+	class VulkanVertexShader : public VulkanShader
+	{
+	public:
+		VulkanVertexShader(const vk::UniqueDevice& device, const std::string& code) :
+			VulkanShader{ device, code, vk::ShaderStageFlagBits::eVertex } 
+		{}
+
+		template <typename Reader>
+		VulkanVertexShader(const vk::UniqueDevice& device, Reader reader, const std::string& path):
+			VulkanShader{ device, reader, path, vk::ShaderStageFlagBits::eVertex }
+		{}
+	};
+
+	class VulkanFragmentShader : public VulkanShader
+	{
+	public:
+		VulkanFragmentShader(const vk::UniqueDevice& device, const std::string& code) :
+			VulkanShader{ device, code, vk::ShaderStageFlagBits::eFragment }
+		{}
+
+		template <typename Reader>
+		VulkanFragmentShader(const vk::UniqueDevice& device, Reader reader, const std::string& path) :
+			VulkanShader{ device, reader, path, vk::ShaderStageFlagBits::eFragment }
+		{}
+	};
+
+	class VulkanGeometryShader : public VulkanShader
+	{
+	public:
+		VulkanGeometryShader(const vk::UniqueDevice& device, const std::string& code) :
+			VulkanShader{ device, code, vk::ShaderStageFlagBits::eGeometry }
+		{}
+
+		template <typename Reader>
+		VulkanGeometryShader(const vk::UniqueDevice& device, Reader reader, const std::string& path) :
+			VulkanShader{ device, reader, path, vk::ShaderStageFlagBits::eGeometry }
+		{}
+	};
+
+	class VulkanTessellationControlShader : public VulkanShader
+	{
+	public:
+		VulkanTessellationControlShader(const vk::UniqueDevice& device, const std::string& code) :
+			VulkanShader{ device, code, vk::ShaderStageFlagBits::eTessellationControl }
+		{}
+
+		template <typename Reader>
+		VulkanTessellationControlShader(const vk::UniqueDevice& device, Reader reader, const std::string& path) :
+			VulkanShader{ device, reader, path, vk::ShaderStageFlagBits::eTessellationControl }
+		{}
+	};
+
+	class VulkanTessellationEvaluationShader : public VulkanShader
+	{
+	public:
+		VulkanTessellationEvaluationShader(const vk::UniqueDevice& device, const std::string& code) :
+			VulkanShader{ device, code, vk::ShaderStageFlagBits::eTessellationEvaluation }
+		{}
+
+		template <typename Reader>
+		VulkanTessellationEvaluationShader(const vk::UniqueDevice& device, Reader reader, const std::string& path) :
+			VulkanShader{ device, reader, path, vk::ShaderStageFlagBits::eTessellationEvaluation }
+		{}
 	};
 }
 
