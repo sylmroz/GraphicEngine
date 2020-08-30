@@ -9,9 +9,10 @@
 GraphicEngine::OpenGL::OpenGLRenderingEngine::OpenGLRenderingEngine(
 	std::shared_ptr<Common::Camera> camera,
 	std::shared_ptr<Core::EventManager> eventManager,
+	std::shared_ptr<Core::Configuration> cfg,
 	std::unique_ptr<Core::Logger<OpenGLRenderingEngine>> logger) :
 	m_logger(std::move(logger)),
-	RenderingEngine(camera, eventManager)
+	RenderingEngine(camera, eventManager, cfg)
 {
 	m_logger->info(__FILE__, __LINE__, __FUNCTION__, "Create OpenGL rendering engine instance.");
 }
@@ -31,10 +32,13 @@ bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 	/*m_vertexBuffer->bind();
 	m_vertexBuffer->draw();*/
 
-	for (auto& vb : m_vertexBuffers)
+	for (auto& vbs : m_vertexBuffers)
 	{
-		vb->bind();
-		vb->draw();
+		for (auto& vb : vbs)
+		{
+			vb->bind();
+			vb->draw();
+		}
 	}
 
 	return false;
@@ -68,7 +72,10 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 		m_uniformBufferMatrix = std::make_shared<UniformBuffer<glm::mat4>>();
 		m_lightUniformBuffer = std::make_shared<UniformBuffer<Light>>(1);
 		//m_vertexBuffer = m_mesh->compile<VertexBufferFactory<Common::VertexPCTc>, VertexBuffer<Common::VertexPCTc>>();
-		m_vertexBuffers = m_model->compile<VertexBufferFactory, VertexBuffer>();
+		for (auto& model : m_models)
+		{
+			m_vertexBuffers.push_back(model->compile<VertexBufferFactory, VertexBuffer>());
+		}
 		
 		//m_texture = TextureFactory::produceTexture("C:/rem.png");
 

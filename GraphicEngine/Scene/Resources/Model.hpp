@@ -1,23 +1,73 @@
 #pragma once
 
 #include "Mesh.hpp"
-#include "../../Common/ModelImporter.hpp"
 
 namespace GraphicEngine::Scene
 {
-	template <template<typename> typename ModelImporterImpl, typename Vertex>
+	template <typename Vertex>
 	class Model
 	{
 	public:
 		Model() {}
-		Model(const std::string& path)
+		Model(std::vector<std::shared_ptr<Mesh<Vertex>>>& meshes, const std::string& name = "")
 		{
-			read(path);
+			setMeshes(meshes, name);
 		}
 
-		void read(const std::string& path)
+		void setMeshes(std::vector<std::shared_ptr<Mesh<Vertex>>>& meshes, const std::string& name = "")
 		{
-			std::tie(m_meshes, m_name) = std::move(Common::ModelImporter<ModelImporterImpl<Vertex>, Vertex>{}(path));
+			m_meshes = std::move(meshes);
+			m_name = name;
+		}
+
+		void setName(const std::string& name)
+		{
+			m_name = name;
+		}
+
+		std::string getName()
+		{
+			return m_name;
+		}
+
+		void addMesh(std::shared_ptr<Mesh<Vertex>> mesh)
+		{
+			m_meshes.push_back(mesh);
+		}
+
+		void reserveMeshes(uint32_t size)
+		{
+			m_meshes.reserve(size);
+		}
+
+		void setId(int32_t id)
+		{
+			m_id = id;
+		}
+
+		int32_t getId()
+		{
+			return m_id;
+		}
+
+		void addChildrenId(int32_t id)
+		{
+			m_childrens.push_back(id);
+		}
+
+		std::vector<int32_t> getChildrensId()
+		{
+			return m_childrens;
+		}
+
+		void setParentId(int32_t id)
+		{
+			m_parentId = id;
+		}
+
+		int32_t getParentId()
+		{
+			return m_parentId;
 		}
 
 		template <template<typename> typename VertexBufferFactory, template<typename> typename VertexBuffer, typename... Args>
@@ -36,5 +86,9 @@ namespace GraphicEngine::Scene
 	protected:
 		std::vector<std::shared_ptr<Mesh<Vertex>>> m_meshes;
 		std::string m_name;
+
+		int32_t m_id{ -1 };
+		std::vector<int32_t> m_childrens;
+		int32_t m_parentId{ -1 };
 	};
 }

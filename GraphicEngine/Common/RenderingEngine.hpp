@@ -22,9 +22,11 @@ namespace GraphicEngine
 	{
 	public:
 		RenderingEngine(std::shared_ptr<Common::Camera> camera,
-			std::shared_ptr<Core::EventManager> eventManager) :
+			std::shared_ptr<Core::EventManager> eventManager,
+			std::shared_ptr<Core::Configuration> cfg) :
 			m_camera(camera),
-			m_eventManager(eventManager)
+			m_eventManager(eventManager),
+			m_cfg(cfg)
 		{
 			// TO DO
 			/*std::vector<Common::VertexPCTc> vertices =
@@ -43,7 +45,7 @@ namespace GraphicEngine
 
 			m_mesh = std::make_shared<Scene::Mesh<Common::VertexPCTc>>(vertices, faces);*/
 
-			m_model = std::make_shared<Scene::Model<Modules::AssimpModelImporter, Common::VertexPN>>("C:/teapot.obj");
+			m_models = Modules::AssimpModelImporter<Common::VertexPN>{}.read(m_cfg->getProperty<std::string>("scene:object"));
 			light.lightPosition = glm::vec3(100.0, 100.0, 100.0);
 		}
 
@@ -57,12 +59,10 @@ namespace GraphicEngine
 		virtual ~RenderingEngine() = default;
 	protected:
 		std::shared_ptr<Common::Camera> m_camera;
-
 		std::shared_ptr<Core::EventManager> m_eventManager;
+		std::shared_ptr<Core::Configuration> m_cfg;
 
-		//std::shared_ptr<Scene::Mesh<Common::VertexPCTc>> m_mesh;
-
-		std::shared_ptr<Scene::Model<Modules::AssimpModelImporter, Common::VertexPN>> m_model;
+		std::vector<std::shared_ptr<Scene::Model<Common::VertexPN>>> m_models;
 		Light light;
 	};
 }

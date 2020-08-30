@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "../Scene/Resources/Mesh.hpp"
+#include "../Scene/Resources/Model.hpp"
 
 namespace GraphicEngine::Common
 {
@@ -12,17 +12,17 @@ namespace GraphicEngine::Common
 		ModelImporter() {}
 		ModelImporter(const std::string& path) :m_path{path} {}
 
-		std::tuple<std::vector<std::shared_ptr<Scene::Mesh<Vertex>>>, std::string> operator()()
+		std::vector<std::shared_ptr<Scene::Model<Vertex>>> operator()()
 		{
 			return read(m_path);
 		}
 
-		std::tuple<std::vector<std::shared_ptr<Scene::Mesh<Vertex>>>, std::string> operator()(const std::string& path)
+		std::vector<std::shared_ptr<Scene::Model<Vertex>>> operator()(const std::string& path)
 		{
 			return read(path);
 		}
 
-		std::tuple<std::vector<std::shared_ptr<Scene::Mesh<Vertex>>>, std::string> read(const std::string& path)
+		std::vector<std::shared_ptr<Scene::Model<Vertex>>> read(const std::string& path)
 		{
 			return static_cast<ModelReaderImpl*>(this)->read(path);
 		}

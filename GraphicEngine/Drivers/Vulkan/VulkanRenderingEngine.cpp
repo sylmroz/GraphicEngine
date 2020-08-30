@@ -12,9 +12,10 @@
 GraphicEngine::Vulkan::VulkanRenderingEngine::VulkanRenderingEngine(std::shared_ptr<VulkanWindowContext> vulkanWindowContext,
 	std::shared_ptr<Common::Camera> camera,
 	std::shared_ptr<Core::EventManager> eventManager,
+	std::shared_ptr<Core::Configuration> cfg,
 	std::unique_ptr<Core::Logger<VulkanRenderingEngine>> logger) :
 	m_vulkanWindowContext(vulkanWindowContext),
-	RenderingEngine(camera, eventManager)
+	RenderingEngine(camera, eventManager, cfg)
 {
 }
 
@@ -53,7 +54,10 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 		m_uniformBuffer = m_framework->getUniformBuffer<glm::mat4>();
 		m_lightUniformBuffer = m_framework->getUniformBuffer<Light>();
 
-		m_vertexBuffers = m_model->compile<VertexBufferFactory, VertexBuffer>(m_framework->m_physicalDevice, m_framework->m_device, m_framework->m_commandPool, m_framework->m_graphicQueue);
+		for (auto& model : m_models)
+		{
+			m_vertexBuffers.push_back(model->compile<VertexBufferFactory, VertexBuffer>(m_framework->m_physicalDevice, m_framework->m_device, m_framework->m_commandPool, m_framework->m_graphicQueue));
+		}
 		
 		m_vertexShader = std::make_unique<VulkanVertexShader>(m_framework->m_device, Core::IO::readFile<std::string>(Core::FileSystem::getVulkanShaderPath("diffuse.vert.spv").string()));
 		m_fragmentShader = std::make_unique<VulkanFragmentShader>(m_framework->m_device, Core::IO::readFile<std::string>(Core::FileSystem::getVulkanShaderPath("diffuse.frag.spv").string()));
@@ -141,10 +145,13 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::buildCommandBuffers()
 
 		commandBuffer->bindDescriptorSets(vk::PipelineBindPoint::eGraphics, m_pipelineLayout.get(), 0, 1, &m_descriptorSets[i].get(), 0, nullptr);
 
-		for (auto& vb : m_vertexBuffers)
+		for (auto& vbs : m_vertexBuffers)
 		{
-			vb->bind(commandBuffer);
-			vb->draw(commandBuffer);
+			for (auto& vb : vbs)
+			{
+				vb->bind(commandBuffer);
+				vb->draw(commandBuffer);
+			}
 		}
 
 		commandBuffer->endRenderPass();

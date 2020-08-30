@@ -16,6 +16,7 @@ namespace GraphicEngine::OpenGL
 	public:
 		OpenGLRenderingEngine(std::shared_ptr<Common::Camera> camera, 
 			std::shared_ptr<Core::EventManager> eventManager,
+			std::shared_ptr<Core::Configuration> cfg,
 			std::unique_ptr<Core::Logger<OpenGLRenderingEngine>> logger);
 		virtual bool drawFrame() override;
 		virtual void init(size_t width, size_t height) override;
@@ -28,7 +29,7 @@ namespace GraphicEngine::OpenGL
 		std::shared_ptr<UniformBuffer<glm::mat4>> m_uniformBufferMatrix;
 		std::shared_ptr<UniformBuffer<Light>> m_lightUniformBuffer;
 
-		std::vector<std::shared_ptr<VertexBuffer<Common::VertexPN>>> m_vertexBuffers;
+		std::vector<std::vector<std::shared_ptr<VertexBuffer<Common::VertexPN>>>> m_vertexBuffers;
 		//std::shared_ptr<VertexBuffer<Common::VertexPCTc>> m_vertexBuffer;
 		//std::shared_ptr<Texture2D> m_texture;
 

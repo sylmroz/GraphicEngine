@@ -15,7 +15,7 @@ namespace GraphicEngine::Modules
 	class AssimpModelImporter : public Common::ModelImporter<AssimpModelImporter<Vertex>, Vertex>
 	{
 	public:
-		std::tuple<std::vector<std::shared_ptr<Scene::Mesh<Vertex>>>, std::string> read(const std::string& path)
+		std::vector<std::shared_ptr<Scene::Model<Vertex>>> read(const std::string& path)
 		{
 			Assimp::Importer importer;
 
@@ -31,24 +31,36 @@ namespace GraphicEngine::Modules
 
 			auto scene = importer.ReadFile(path, flags);
 
-			std::vector<std::shared_ptr<Scene::Mesh<Vertex>>> meshes;
+			std::vector<std::shared_ptr<Scene::Model<Vertex>>> models;
 
-			processNode(scene->mRootNode, scene, meshes);
+			processNode(scene->mRootNode, scene, models, -1);
 
-			return std::make_tuple(std::move(meshes), std::string());
+			return std::move(models);
 		}
 
 	private:
-		void processNode(aiNode* node, const aiScene* scene, std::vector<std::shared_ptr<Scene::Mesh<Vertex>>>& meshes)
+		void processNode(aiNode* node, const aiScene* scene, std::vector<std::shared_ptr<Scene::Model<Vertex>>>& models, int32_t parentId)
 		{
+			std::vector<std::shared_ptr<Scene::Mesh<Vertex>>> meshes;
+			meshes.reserve(node->mNumMeshes);
 			for (uint32_t i{ 0 }; i < node->mNumMeshes; ++i)
 			{
 				meshes.push_back(processMesh(scene->mMeshes[node->mMeshes[i]]));
 			}
 
+			if (meshes.size() > 0)
+			{
+				models.push_back(std::make_shared<Scene::Model<Vertex>>(meshes, node->mName.C_Str()));
+				models.back()->setId(models.size() - 1);
+				if (parentId > -1)
+				{
+					models[parentId]->addChildrenId(models.back()->getId());
+				}
+			}
+
 			for (uint32_t i{ 0 }; i < node->mNumChildren; ++i)
 			{
-				processNode(node->mChildren[i], scene, meshes);
+				processNode(node->mChildren[i], scene, models, models.size() > 0 ? models.back()->getId() : parentId);
 			}
 		}
 
