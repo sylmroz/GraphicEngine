@@ -6,9 +6,9 @@
 #include "../Core/Logger.hpp"
 #include "Vertex.hpp"
 #include "Camera.hpp"
-//#include "../Scene/Resources/Mesh.hpp"
 #include "../Scene/Resources/Model.hpp"
 #include "../Modules/Assimp/AssimpModelImporter.hpp"
+#include "../Core/Utils/ObjectConverter.hpp"
 
 namespace GraphicEngine
 {
@@ -45,7 +45,11 @@ namespace GraphicEngine
 
 			m_mesh = std::make_shared<Scene::Mesh<Common::VertexPCTc>>(vertices, faces);*/
 
-			m_models = Modules::AssimpModelImporter<Common::VertexPN>{}.read(m_cfg->getProperty<std::string>("scene:object"));
+			m_models = Modules::AssimpModelImporter<Common::VertexPN>{}.read(m_cfg->getProperty<std::string>("scene:object:path"));
+			m_models.front()->setScale(m_cfg->getProperty<float>("scene:object:scale"));
+			m_models.front()->setRotate(Core::Utils::Converter::fromArrayToObject<glm::vec3, std::vector<float>, 3>(m_cfg->getProperty<std::vector<float>>("scene:object:rotate")));
+			m_models.front()->setPosition(Core::Utils::Converter::fromArrayToObject<glm::vec3, std::vector<float>, 3>(m_cfg->getProperty<std::vector<float>>("scene:object:position")));
+
 			light.lightPosition = glm::vec3(100.0, 100.0, 100.0);
 		}
 

@@ -10,6 +10,11 @@ layout (std140, binding = 0) uniform MVP
     mat4 vp; 
 } mvp;
 
+layout(std140, binding = 2) uniform ModelMatrix
+{
+    mat4 m; 
+} modelMatrix;
+
 layout (location = 0) out vec3 outNormal;
 layout (location = 1) out vec3 fragPosition;
 
@@ -17,5 +22,5 @@ void main()
 {
     outNormal = normalize(inNormal);
     fragPosition = inPosition;
-    gl_Position = mvp.vp * vec4(inPosition, 1.0);
+    gl_Position = mvp.vp * modelMatrix.m * vec4(inPosition, 1.0);
 }
