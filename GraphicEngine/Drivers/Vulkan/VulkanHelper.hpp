@@ -130,6 +130,7 @@ namespace GraphicEngine::Vulkan
 	};
 
 	class Texture2D;
+	class IUniformBuffer;
 
 	std::vector<const char*> getDeviceExtension();
 
@@ -186,7 +187,7 @@ namespace GraphicEngine::Vulkan
 		const std::vector<std::tuple<vk::DescriptorType, uint32_t, vk::ShaderStageFlags>>& bindingData, vk::DescriptorSetLayoutCreateFlags flags);
 
 	void updateDescriptorSets(const vk::UniqueDevice& device, const vk::UniqueDescriptorPool& descriptorPool, const vk::UniqueDescriptorSetLayout& descriptorSetLayout, uint32_t layoutCount,
-		const std::vector<vk::UniqueDescriptorSet>& descriptorSets, const std::vector<std::vector<std::shared_ptr<BufferData>>>& uniformBuffers, const std::vector<std::shared_ptr<Texture2D>>& imageUniforms);
+		const std::vector<vk::UniqueDescriptorSet>& descriptorSets, const std::vector<std::shared_ptr<IUniformBuffer>>& uniformBuffers, const std::vector<std::shared_ptr<Texture2D>>& imageUniforms);
 
 	void transitionImageLayout(const vk::UniqueDevice& device, const vk::UniqueCommandPool& commandPool, const vk::Queue& graphicQueue, 
 		vk::UniqueImage& image, vk::Format format, vk::ImageLayout oldLayout, vk::ImageLayout newLayout, uint32_t mipLevels);

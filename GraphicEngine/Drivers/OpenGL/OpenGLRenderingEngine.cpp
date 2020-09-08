@@ -27,10 +27,19 @@ bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 
 	light.eyePosition = m_camera->getPosition();
 	m_lightUniformBuffer->update(&light);
-	
-	//m_texture->use(0);
-	/*m_vertexBuffer->bind();
-	m_vertexBuffer->draw();*/
+	auto m = m_models.front()->getModelMatrix();
+	m_modelMatrix->update(&m);
+
+	for (auto& vbs : m_vertexBuffers)
+	{
+		for (auto& vb : vbs)
+		{
+			vb->bind();
+			vb->draw();
+		}
+	}
+	m = glm::identity<glm::mat4>();
+	m_modelMatrix->update(&m);
 
 	for (auto& vbs : m_vertexBuffers)
 	{
@@ -69,8 +78,9 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 		/*auto textureIndex = glGetUniformLocation(m_program->getShaderProgramId(), "texture1");
 		glUniform1i(textureIndex, 0);*/
 
-		m_uniformBufferMatrix = std::make_shared<UniformBuffer<glm::mat4>>();
+		m_uniformBufferMatrix = std::make_shared<UniformBuffer<glm::mat4>>(0);
 		m_lightUniformBuffer = std::make_shared<UniformBuffer<Light>>(1);
+		m_modelMatrix = std::make_shared<UniformBuffer<glm::mat4>>(2);
 		//m_vertexBuffer = m_mesh->compile<VertexBufferFactory<Common::VertexPCTc>, VertexBuffer<Common::VertexPCTc>>();
 		for (auto& model : m_models)
 		{

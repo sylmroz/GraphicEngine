@@ -4,13 +4,34 @@
 
 namespace GraphicEngine::Vulkan
 {
-	template <typename T>
-	class UniformBuffer
+	class IUniformBuffer
 	{
 	public:
-		UniformBuffer(VulkanFramework* framework)
+		IUniformBuffer(VulkanFramework* framework, vk::DescriptorType descriptorType): 
+			m_descriptorType{descriptorType},
+			m_framework{framework}
+		{}
+
+		vk::DescriptorType getDescriptorType()
 		{
-			m_framework = framework;
+			return m_descriptorType;
+		}
+
+		virtual void update() = 0;
+
+		std::vector<std::shared_ptr<BufferData>> bufferData;
+
+	protected:
+		vk::DescriptorType m_descriptorType;
+		VulkanFramework* m_framework;
+	};
+
+	template <typename T>
+	class UniformBuffer : public IUniformBuffer
+	{
+	public:
+		UniformBuffer(VulkanFramework* framework) : IUniformBuffer(framework, vk::DescriptorType::eUniformBuffer)
+		{
 			for (uint32_t i{ 0 }; i < framework->m_maxFrames; ++i)
 			{
 				bufferData.emplace_back(std::make_shared<BufferData>(m_framework->m_physicalDevice, m_framework->m_device, vk::BufferUsageFlagBits::eUniformBuffer,
@@ -23,7 +44,7 @@ namespace GraphicEngine::Vulkan
 			m_value = value;
 		}
 
-		void update()
+		virtual void update() override
 		{
 			copyMemoryToDevice<T>(m_framework->m_device, bufferData[m_framework->m_imageIndex.value]->memory, &m_value, 1);
 		}
@@ -34,10 +55,41 @@ namespace GraphicEngine::Vulkan
 			update();
 		}
 
-		std::vector<std::shared_ptr<BufferData>> bufferData;
-
 	private:
 		T m_value{};
-		VulkanFramework* m_framework;
+	};
+
+	template <typename T>
+	class UniformBufferDynamic : public IUniformBuffer
+	{
+	public:
+		UniformBufferDynamic(VulkanFramework* framework, uint32_t instances) : IUniformBuffer(framework, vk::DescriptorType::eUniformBufferDynamic)
+		{
+			m_values.reserve(instances);
+			for (uint32_t i{ 0 }; i < framework->m_maxFrames; ++i)
+			{
+				bufferData.emplace_back(std::make_shared<BufferData>(m_framework->m_physicalDevice, m_framework->m_device, vk::BufferUsageFlagBits::eUniformBuffer,
+					vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent, instances * sizeof(T)));
+			}
+		}
+
+		void setValue(const std::vector<T>& values)
+		{
+			m_values = values;
+		}
+
+		virtual void update() override
+		{
+			copyMemoryToDevice<T>(m_framework->m_device, bufferData[m_framework->m_imageIndex.value]->memory, m_values.data(), m_values.size());
+		}
+
+		void updateAndSet(const std::vector<T>& values)
+		{
+			setValue(values);
+			update();
+		}
+
+	private:
+		std::vector<T> m_values;
 	};
 }

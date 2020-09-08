@@ -6,6 +6,7 @@
 #include "VulkanWindowContext.hpp"
 #include "VulkanTexture.hpp"
 #include "VulkanVertexBuffer.hpp"
+#include "VulkanUniformBuffer.hpp"
 
 namespace GraphicEngine::Vulkan
 {
@@ -36,9 +37,9 @@ namespace GraphicEngine::Vulkan
 		
 		std::unique_ptr<VulkanShader> m_vertexShader;
 		std::unique_ptr<VulkanShader> m_fragmentShader;
-		std::unique_ptr<UniformBuffer<glm::mat4>> m_uniformBuffer;
-		std::unique_ptr<UniformBuffer<Light>> m_lightUniformBuffer;
-		std::unique_ptr<UniformBuffer<glm::mat4>> m_modelMatrix;
+		std::shared_ptr<UniformBuffer<glm::mat4>> m_uniformBuffer;
+		std::shared_ptr<UniformBuffer<Light>> m_lightUniformBuffer;
+		std::shared_ptr<UniformBufferDynamic<glm::mat4>> m_modelMatrix;
 
 		vk::UniqueDescriptorPool m_descriptorPool;
 		vk::UniqueDescriptorSetLayout m_descriptorSetLayout;

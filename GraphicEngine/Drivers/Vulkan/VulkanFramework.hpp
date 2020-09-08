@@ -5,13 +5,9 @@
 
 namespace GraphicEngine::Vulkan
 {
-	template <typename T>
-	class UniformBuffer;
 
 	class VulkanFramework
 	{
-		template <typename T>
-		friend class UniformBuffer;
 	public:
 		VulkanFramework() = default;
 		VulkanFramework(std::shared_ptr<VulkanWindowContext> vulkanWindowsContext, const std::string& appName, 
@@ -32,10 +28,10 @@ namespace GraphicEngine::Vulkan
 		bool acquireFrame();
 		bool submitFrame();
 
-		template <typename T>
-		std::unique_ptr<UniformBuffer<T>> getUniformBuffer()
+		template <template <typename> typename UniformBuffer, typename T, typename... Args>
+		std::shared_ptr<UniformBuffer<T>> getUniformBuffer(Args... args)
 		{
-			return std::make_unique<UniformBuffer<T>>(this);
+			return std::make_shared<UniformBuffer<T>>(this, args...);
 		}
 
 		virtual ~VulkanFramework() = default;

@@ -1,4 +1,5 @@
 #include "VulkanTexture.hpp"
+#include "VulkanUniformBuffer.hpp"
 
 #include <iomanip>
 #include <iostream>
@@ -415,7 +416,7 @@ vk::UniqueDescriptorSetLayout GraphicEngine::Vulkan::createDescriptorSetLayout(c
 }
 
 void GraphicEngine::Vulkan::updateDescriptorSets(const vk::UniqueDevice& device, const vk::UniqueDescriptorPool& descriptorPool, const vk::UniqueDescriptorSetLayout& descriptorSetLayout, uint32_t layoutCount,
-	const std::vector<vk::UniqueDescriptorSet>& descriptorSets, const std::vector<std::vector<std::shared_ptr<BufferData>>>& uniformBuffers, const std::vector<std::shared_ptr<Texture2D>>& imageUniforms)
+	const std::vector<vk::UniqueDescriptorSet>& descriptorSets, const std::vector<std::shared_ptr<IUniformBuffer>>& uniformBuffers, const std::vector<std::shared_ptr<Texture2D>>& imageUniforms)
 {
 	std::vector<vk::DescriptorSetLayout> layouts(layoutCount, descriptorSetLayout.get());
 
@@ -430,8 +431,8 @@ void GraphicEngine::Vulkan::updateDescriptorSets(const vk::UniqueDevice& device,
 		{
 			for (auto& uniformBuffer : uniformBuffers)
 			{
-				bufferInfos.push_back(vk::DescriptorBufferInfo(uniformBuffer[i]->buffer.get(), 0, VK_WHOLE_SIZE));
-				writeDescriptorSets.push_back(vk::WriteDescriptorSet(descriptorSets[i].get(), dstBinding++, 0, 1, vk::DescriptorType::eUniformBuffer, nullptr, &bufferInfos.back(), nullptr));
+				bufferInfos.push_back(vk::DescriptorBufferInfo(uniformBuffer->bufferData[i]->buffer.get(), 0, VK_WHOLE_SIZE));
+				writeDescriptorSets.push_back(vk::WriteDescriptorSet(descriptorSets[i].get(), dstBinding++, 0, 1, uniformBuffer->getDescriptorType(), nullptr, &bufferInfos.back(), nullptr));
 			}
 		}
 

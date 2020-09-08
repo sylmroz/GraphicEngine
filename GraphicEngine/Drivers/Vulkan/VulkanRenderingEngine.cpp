@@ -5,7 +5,6 @@
 
 #include "VulkanTextureFactory.hpp"
 #include "VulkanVertexBufferFactory.hpp"
-#include "VulkanUniformBuffer.hpp"
 
 #undef max
 
@@ -28,7 +27,7 @@ bool GraphicEngine::Vulkan::VulkanRenderingEngine::drawFrame()
 		m_uniformBuffer->updateAndSet(m_camera->getViewProjectionMatrix());
 		light.eyePosition = m_camera->getPosition();
 		m_lightUniformBuffer->updateAndSet(light);
-		m_modelMatrix->updateAndSet(m_models.front()->getModelMatrix());
+		m_modelMatrix->updateAndSet({ m_models.front()->getModelMatrix(), glm::identity<glm::mat4>() });
 
 		m_framework->submitFrame();
 	}
@@ -52,9 +51,9 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 			.initializeFramebuffer()
 			.initalizeRenderingBarriers();
 
-		m_uniformBuffer = m_framework->getUniformBuffer<glm::mat4>();
-		m_lightUniformBuffer = m_framework->getUniformBuffer<Light>();
-		m_modelMatrix = m_framework->getUniformBuffer<glm::mat4>();
+		m_uniformBuffer = m_framework->getUniformBuffer<UniformBuffer, glm::mat4>();
+		m_lightUniformBuffer = m_framework->getUniformBuffer<UniformBuffer, Light>();
+		m_modelMatrix = m_framework->getUniformBuffer<UniformBufferDynamic, glm::mat4>(2);
 
 		for (auto& model : m_models)
 		{
@@ -65,21 +64,21 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 		m_fragmentShader = std::make_unique<VulkanFragmentShader>(m_framework->m_device, Core::IO::readFile<std::string>(Core::FileSystem::getVulkanShaderPath("diffuse.frag.spv").string()));
 
 		m_descriptorSetLayout = createDescriptorSetLayout(m_framework->m_device,
-			{ {vk::DescriptorType::eUniformBuffer, 1, vk::ShaderStageFlagBits::eVertex},
-			 {vk::DescriptorType::eUniformBuffer, 1, vk::ShaderStageFlagBits::eFragment},
-			 {vk::DescriptorType::eUniformBuffer, 1, vk::ShaderStageFlagBits::eVertex} },
+			{ {m_uniformBuffer->getDescriptorType(), 1, vk::ShaderStageFlagBits::eVertex},
+			 {m_lightUniformBuffer->getDescriptorType(), 1, vk::ShaderStageFlagBits::eFragment},
+			 {m_modelMatrix->getDescriptorType(), 1, vk::ShaderStageFlagBits::eVertex} },
 			vk::DescriptorSetLayoutCreateFlags());
 
 		m_descriptorPool = createDescriptorPool(m_framework->m_device,
-			{ vk::DescriptorPoolSize(vk::DescriptorType::eUniformBuffer, m_framework->m_maxFrames),
-			vk::DescriptorPoolSize(vk::DescriptorType::eUniformBuffer, m_framework->m_maxFrames),
-			vk::DescriptorPoolSize(vk::DescriptorType::eUniformBuffer, m_framework->m_maxFrames) });
+			{ vk::DescriptorPoolSize(m_uniformBuffer->getDescriptorType(), m_framework->m_maxFrames),
+			vk::DescriptorPoolSize(m_lightUniformBuffer->getDescriptorType(), m_framework->m_maxFrames),
+			vk::DescriptorPoolSize(m_modelMatrix->getDescriptorType(), m_framework->m_maxFrames) });
 
 		std::vector<vk::DescriptorSetLayout> layouts(m_framework->m_maxFrames, m_descriptorSetLayout.get());
 
 		m_descriptorSets = m_framework->m_device->allocateDescriptorSetsUnique(vk::DescriptorSetAllocateInfo(m_descriptorPool.get(), layouts.size(), layouts.data()));
 
-		std::vector<std::vector<std::shared_ptr<BufferData>>> uniformBuffers{ {m_uniformBuffer->bufferData, m_lightUniformBuffer->bufferData, m_modelMatrix->bufferData} };
+		std::vector<std::shared_ptr<IUniformBuffer>> uniformBuffers{ {m_uniformBuffer, m_lightUniformBuffer, m_modelMatrix} };
 
 		updateDescriptorSets(m_framework->m_device, m_descriptorPool, m_descriptorSetLayout, m_framework->m_maxFrames, m_descriptorSets, uniformBuffers, {});
 
@@ -147,7 +146,20 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::buildCommandBuffers()
 
 		commandBuffer->bindPipeline(vk::PipelineBindPoint::eGraphics, m_graphicPipeline.get());
 
-		commandBuffer->bindDescriptorSets(vk::PipelineBindPoint::eGraphics, m_pipelineLayout.get(), 0, 1, &m_descriptorSets[i].get(), 0, nullptr);
+		uint32_t offset{ 0 };
+		commandBuffer->bindDescriptorSets(vk::PipelineBindPoint::eGraphics, m_pipelineLayout.get(), 0, 1, &m_descriptorSets[i].get(), 1, &offset);
+
+		for (auto& vbs : m_vertexBuffers)
+		{
+			for (auto& vb : vbs)
+			{
+				vb->bind(commandBuffer);
+				vb->draw(commandBuffer);
+			}
+		}
+
+		offset = sizeof(glm::mat4);
+		commandBuffer->bindDescriptorSets(vk::PipelineBindPoint::eGraphics, m_pipelineLayout.get(), 0, 1, &m_descriptorSets[i].get(), 1, &offset);
 
 		for (auto& vbs : m_vertexBuffers)
 		{
