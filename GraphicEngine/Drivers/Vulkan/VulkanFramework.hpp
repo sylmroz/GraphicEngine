@@ -2,6 +2,7 @@
 
 #include "VulkanHelper.hpp"
 #include "VulkanWindowContext.hpp"
+#include "../../Core/Logger.hpp"
 
 namespace GraphicEngine::Vulkan
 {
@@ -12,11 +13,13 @@ namespace GraphicEngine::Vulkan
 		VulkanFramework() = default;
 		VulkanFramework(std::shared_ptr<VulkanWindowContext> vulkanWindowsContext, const std::string& appName, 
 			const std::string& engineName, int width, int height, vk::SampleCountFlagBits msaaSamples,
-			const std::vector<std::string>& validationLayers);
+			const std::vector<std::string>& validationLayers,
+			std::unique_ptr<Core::Logger<VulkanFramework>> logger);
 
 		VulkanFramework& initialize(std::shared_ptr<VulkanWindowContext> vulkanWindowsContext, const std::string& appName,
 			const std::string& engineName, int width, int height, vk::SampleCountFlagBits msaaSamples,
-			const std::vector<std::string>& validationLayers);
+			const std::vector<std::string>& validationLayers,
+			std::unique_ptr<Core::Logger<VulkanFramework>> logger);
 
 		VulkanFramework& initializeFramebuffer(int width, int height);
 		VulkanFramework& initializeFramebuffer();
@@ -76,5 +79,6 @@ namespace GraphicEngine::Vulkan
 
 	private:
 		std::vector<std::string> m_validationLayers;
+		std::unique_ptr<Core::Logger<VulkanFramework>> m_logger;
 	};
 }

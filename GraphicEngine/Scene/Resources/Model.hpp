@@ -19,6 +19,11 @@ namespace GraphicEngine::Scene
 		{
 			m_meshes = std::move(meshes);
 			m_name = name;
+			for (auto& m : m_meshes)
+			{
+				m_boudingBox.extendBox(m->getBoudingBox().getLeft());
+				m_boudingBox.extendBox(m->getBoudingBox().getRight());
+			}
 		}
 
 		void setName(const std::string& name)
@@ -147,10 +152,12 @@ namespace GraphicEngine::Scene
 		int32_t m_parentId{ -1 };
 
 	protected:
-		glm::vec3 m_centralPosition; // calculated as a averange of vertex positions
+		glm::vec3 m_centralPosition; // averange of vertex positions
 
 		glm::vec3 m_position{ 0.0f,0.0f,0.0f };
 		glm::vec3 m_rotation{ 0.0f,0.0f,0.0f };
 		glm::vec3 m_scale{ 1.0f,1.0f,1.0f };
+
+		Engines::Graphic::BoudingBox3D m_boudingBox;
 	};
 }

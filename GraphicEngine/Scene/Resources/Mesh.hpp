@@ -2,6 +2,7 @@
 
 #include "Face.hpp"
 #include "../../Core/Math/Geometry.hpp"
+#include "../../Engine/Graphic/3D/BoudingBox3D.hpp"
 
 #include <glm\geometric.hpp>
 
@@ -31,6 +32,7 @@ namespace GraphicEngine::Scene
 		void addVertex(Vertex& vertex)
 		{
 			m_vertices.push_back(std::move(vertex));
+			m_boudingBox.extendBox(vertex.position);
 		}
 
 		void resizeVertices(uint32_t size)
@@ -86,6 +88,8 @@ namespace GraphicEngine::Scene
 					std::is_same_v<Vertex, Common::VertexPTcN> ||
 					std::is_same_v<Vertex, Common::VertexPTcNTB>)
 				{
+					std::vector<std::pair<uint32_t, glm::vec3>> normals;
+					normals.resize(m_vertices.size());
 					for (auto& face : m_faces)
 					{
 						std::vector<glm::vec3> vertices;
@@ -94,12 +98,20 @@ namespace GraphicEngine::Scene
 						{
 							vertices.push_back(m_vertices[index].position);
 						}
-						m_vertices[face.indices[0]].normal += Core::Math::calculateNormalFromPolygon(vertices);
+
+						for (uint32_t i{ 0 }; i < face.indices.size(); ++i)
+						{
+							auto& normal = normals[face.indices[i]];
+							normal.first++;
+							normal.second += Core::Math::calculateNormalFromPolygon(vertices);
+						}
 					}
 
+					uint32_t i{ 0 };
 					for (auto& vertex : m_vertices)
 					{
-						vertex.normal = glm::normalize(vertex.normal);
+						vertex.normal = glm::normalize(normals[i].second / static_cast<float>(normals[i].first));
+						++i;
 					}
 				}
 			}
@@ -129,9 +141,16 @@ namespace GraphicEngine::Scene
 				}
 			}
 		}
+
+		Engines::Graphic::BoudingBox3D getBoudingBox()
+		{
+			return m_boudingBox;
+		}
 		
 	private:
 		std::vector<Vertex> m_vertices;
 		std::vector<Face> m_faces;
+
+		Engines::Graphic::BoudingBox3D m_boudingBox;
 	};
 }

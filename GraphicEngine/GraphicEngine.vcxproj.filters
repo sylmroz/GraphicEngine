@@ -1,18 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Core">
       <UniqueIdentifier>{c8a7268d-2162-4961-bc23-d31d1350cdcf}</UniqueIdentifier>
     </Filter>
@@ -91,32 +79,32 @@
     <Filter Include="Scene\Resources">
       <UniqueIdentifier>{81974dec-e756-43f1-a81c-80ce8f31fde7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine">
-      <UniqueIdentifier>{f645841a-6f61-4693-98e9-dde7d4b192ef}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Audio">
-      <UniqueIdentifier>{b6520981-1b50-41cf-9366-5ddb0633a9ce}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Rendering">
-      <UniqueIdentifier>{fcf65b0b-656a-4929-8a42-7f5a6d2220a7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphic">
-      <UniqueIdentifier>{087d5b30-7d97-4d72-8841-682813b6afcd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphic\2D">
-      <UniqueIdentifier>{338617a3-97a2-43de-9db7-adee2665f29c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphic\3D">
-      <UniqueIdentifier>{95e62889-4301-4011-93d4-10f168935bc5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Physics">
-      <UniqueIdentifier>{d8b88829-e36e-45b3-ad31-e0f0a5c77dce}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Modules">
       <UniqueIdentifier>{68b515de-8162-48d5-9da6-a7ceaf39d813}</UniqueIdentifier>
     </Filter>
     <Filter Include="Modules\Assimp">
       <UniqueIdentifier>{edf0558a-0bc1-4419-99d1-9b05d06e9a33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engines">
+      <UniqueIdentifier>{f645841a-6f61-4693-98e9-dde7d4b192ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engines\Audio">
+      <UniqueIdentifier>{b6520981-1b50-41cf-9366-5ddb0633a9ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engines\Rendering">
+      <UniqueIdentifier>{fcf65b0b-656a-4929-8a42-7f5a6d2220a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engines\Graphic">
+      <UniqueIdentifier>{087d5b30-7d97-4d72-8841-682813b6afcd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engines\Graphic\2D">
+      <UniqueIdentifier>{338617a3-97a2-43de-9db7-adee2665f29c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engines\Graphic\3D">
+      <UniqueIdentifier>{95e62889-4301-4011-93d4-10f168935bc5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engines\Physics">
+      <UniqueIdentifier>{d8b88829-e36e-45b3-ad31-e0f0a5c77dce}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -204,6 +192,9 @@
     </ClCompile>
     <ClCompile Include="Drivers\Vulkan\VulkanShader.cpp">
       <Filter>Drivers\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphic\3D\BoudingBox3D.cpp">
+      <Filter>Engines\Graphic\3D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -395,6 +386,12 @@
     </ClInclude>
     <ClInclude Include="Drivers\Vulkan\VulkanUniformBuffer.hpp">
       <Filter>Drivers\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphic\BoundingBox.hpp">
+      <Filter>Engines\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphic\3D\BoudingBox3D.hpp">
+      <Filter>Engines\Graphic\3D</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

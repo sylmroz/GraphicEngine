@@ -2,13 +2,14 @@
 
 #undef max
 
-GraphicEngine::Vulkan::VulkanFramework::VulkanFramework(std::shared_ptr<VulkanWindowContext> vulkanWindowsContext, const std::string& appName, const std::string& engineName, int width, int height, vk::SampleCountFlagBits msaaSamples, const std::vector<std::string>& validationLayers)
+GraphicEngine::Vulkan::VulkanFramework::VulkanFramework(std::shared_ptr<VulkanWindowContext> vulkanWindowsContext, const std::string& appName, const std::string& engineName, int width, int height, vk::SampleCountFlagBits msaaSamples, const std::vector<std::string>& validationLayers, std::unique_ptr<GraphicEngine::Core::Logger<VulkanFramework>> logger)
 {
-	initialize(vulkanWindowsContext, appName, engineName, width, height, msaaSamples, validationLayers);
+	initialize(vulkanWindowsContext, appName, engineName, width, height, msaaSamples, validationLayers, std::move(logger));
 }
 
-GraphicEngine::Vulkan::VulkanFramework& GraphicEngine::Vulkan::VulkanFramework::initialize(std::shared_ptr<VulkanWindowContext> vulkanWindowsContext, const std::string& appName, const std::string& engineName, int width, int height, vk::SampleCountFlagBits msaaSamples, const std::vector<std::string>& validationLayers)
+GraphicEngine::Vulkan::VulkanFramework& GraphicEngine::Vulkan::VulkanFramework::initialize(std::shared_ptr<VulkanWindowContext> vulkanWindowsContext, const std::string& appName, const std::string& engineName, int width, int height, vk::SampleCountFlagBits msaaSamples, const std::vector<std::string>& validationLayers, std::unique_ptr<Core::Logger<VulkanFramework>> logger)
 {
+	m_logger->debug(__FILE__, __LINE__, __FUNCTION__, "Initialize Vulkan Framework");
 	m_vulkanWindowContext = vulkanWindowsContext;
 	m_appName = appName;
 	m_engineName = engineName;
@@ -16,12 +17,14 @@ GraphicEngine::Vulkan::VulkanFramework& GraphicEngine::Vulkan::VulkanFramework::
 	m_height = height;
 	m_msaaSamples = msaaSamples;
 	m_validationLayers = validationLayers;
+	m_logger = std::move(logger);
 
 	m_instance = createUniqueInstance(m_appName, m_engineName, m_validationLayers, m_vulkanWindowContext->getRequiredExtensions(), VK_API_VERSION_1_1);
 	{
 		auto surface = m_vulkanWindowContext->createSurface(m_instance);
 		vk::ObjectDestroy<vk::Instance, VULKAN_HPP_DEFAULT_DISPATCHER_TYPE> _deleter(m_instance.get());
 		m_surface = vk::UniqueSurfaceKHR(surface, _deleter);
+		m_logger->debug(__FILE__, __LINE__, __FUNCTION__, "Create Surface Instance");
 	}
 	m_physicalDevice = getPhysicalDevice(m_instance, m_surface);
 	m_device = getUniqueLogicalDevice(m_physicalDevice, m_surface);
@@ -35,6 +38,7 @@ GraphicEngine::Vulkan::VulkanFramework& GraphicEngine::Vulkan::VulkanFramework::
 
 GraphicEngine::Vulkan::VulkanFramework& GraphicEngine::Vulkan::VulkanFramework::initializeFramebuffer(int width, int height)
 {
+	m_logger->debug(__FILE__, __LINE__, __FUNCTION__, "Initialize frame buffer. Width {0}, Height {1}", width, height);
 	vk::Extent2D frameBufferSize(width, height);
 	this->m_width = width;
 	this->m_height = height;
