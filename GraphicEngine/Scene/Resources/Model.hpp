@@ -21,8 +21,7 @@ namespace GraphicEngine::Scene
 			m_name = name;
 			for (auto& m : m_meshes)
 			{
-				m_boudingBox.extendBox(m->getBoudingBox().getLeft());
-				m_boudingBox.extendBox(m->getBoudingBox().getRight());
+				m_boudingBox.extendBox(m->getBoudingBox());
 			}
 		}
 

@@ -186,7 +186,7 @@
     <ClCompile Include="Drivers\Vulkan\VulkanRenderingEngine.cpp" />
     <ClCompile Include="Drivers\Vulkan\VulkanShader.cpp" />
     <ClCompile Include="Drivers\Vulkan\VulkanTexture.cpp" />
-    <ClCompile Include="Engine\Graphic\3D\BoudingBox3D.cpp" />
+    <ClCompile Include="Engines\Graphic\3D\BoudingBox3D.cpp" />
     <ClCompile Include="Main\Application.cpp" />
     <ClCompile Include="Main\Engine.cpp" />
     <ClCompile Include="Main\main.cpp" />
@@ -247,8 +247,8 @@
     <ClInclude Include="Drivers\Vulkan\VulkanVertexBuffer.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanVertexBufferFactory.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanWindowContext.hpp" />
-    <ClInclude Include="Engine\Graphic\3D\BoudingBox3D.hpp" />
-    <ClInclude Include="Engine\Graphic\BoundingBox.hpp" />
+    <ClInclude Include="Engines\Graphic\3D\BoudingBox3D.hpp" />
+    <ClInclude Include="Engines\Graphic\BoundingBox.hpp" />
     <ClInclude Include="Main\Application.hpp" />
     <ClInclude Include="Main\Engine.hpp" />
     <ClInclude Include="Modules\Assimp\AssimpModelImporter.hpp" />

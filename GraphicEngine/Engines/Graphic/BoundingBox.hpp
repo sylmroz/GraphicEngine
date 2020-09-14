@@ -37,6 +37,13 @@ namespace GraphicEngine::Engines::Graphic
 			static_cast<BoudingBoxImpl*>(this)->recalculate(p);
 		}
 
+
+		void extendBox(BoudingBoxImpl p)
+		{
+			static_cast<BoudingBoxImpl*>(this)->recalculate(p.m_left);
+			static_cast<BoudingBoxImpl*>(this)->recalculate(p.m_right);
+		}
+
 		Vec getCenter()
 		{
 			return (m_left + m_right) / 2.0f;

@@ -2,7 +2,7 @@
 
 #include "Face.hpp"
 #include "../../Core/Math/Geometry.hpp"
-#include "../../Engine/Graphic/3D/BoudingBox3D.hpp"
+#include "../../Engines/Graphic/3D/BoudingBox3D.hpp"
 
 #include <glm\geometric.hpp>
 

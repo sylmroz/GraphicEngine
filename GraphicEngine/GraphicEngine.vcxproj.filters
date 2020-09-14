@@ -193,7 +193,7 @@
     <ClCompile Include="Drivers\Vulkan\VulkanShader.cpp">
       <Filter>Drivers\Vulkan</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Graphic\3D\BoudingBox3D.cpp">
+    <ClCompile Include="Engines\Graphic\3D\BoudingBox3D.cpp">
       <Filter>Engines\Graphic\3D</Filter>
     </ClCompile>
   </ItemGroup>
@@ -387,10 +387,10 @@
     <ClInclude Include="Drivers\Vulkan\VulkanUniformBuffer.hpp">
       <Filter>Drivers\Vulkan</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Graphic\BoundingBox.hpp">
+    <ClInclude Include="Engines\Graphic\BoundingBox.hpp">
       <Filter>Engines\Graphic</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Graphic\3D\BoudingBox3D.hpp">
+    <ClInclude Include="Engines\Graphic\3D\BoudingBox3D.hpp">
       <Filter>Engines\Graphic\3D</Filter>
     </ClInclude>
   </ItemGroup>
