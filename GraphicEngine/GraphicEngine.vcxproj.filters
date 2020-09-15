@@ -196,6 +196,9 @@
     <ClCompile Include="Engines\Graphic\3D\BoudingBox3D.cpp">
       <Filter>Engines\Graphic\3D</Filter>
     </ClCompile>
+    <ClCompile Include="Engines\Graphic\3D\BoudingCube.cpp">
+      <Filter>Engines\Graphic\3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Input\Keyboard\KeyboardEnumKeys.hpp">
@@ -391,6 +394,9 @@
       <Filter>Engines\Graphic</Filter>
     </ClInclude>
     <ClInclude Include="Engines\Graphic\3D\BoudingBox3D.hpp">
+      <Filter>Engines\Graphic\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engines\Graphic\3D\BoudingCube.hpp">
       <Filter>Engines\Graphic\3D</Filter>
     </ClInclude>
   </ItemGroup>

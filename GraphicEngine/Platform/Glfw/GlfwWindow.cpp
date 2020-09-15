@@ -68,13 +68,11 @@ void GraphicEngine::GLFW::GlfwWindow::initialize()
 
 	if (m_windowProfile == WindowGlfwProfile::OpenGL)
 	{
-		//m_specialApi = std::make_shared<WindowGlfwOpenGL>();
-		m_specialApi = std::shared_ptr<WindowGlfwApi>(new WindowGlfwOpenGL);
+		m_specialApi = std::make_shared<WindowGlfwOpenGL>();
 	}
 	else if (m_windowProfile == WindowGlfwProfile::Vulkan)
 	{
-		m_specialApi = std::shared_ptr<WindowGlfwApi>(new WindowGlfwVulkan);
-		//m_specialApi = std::shared_ptr<WindowGlfwVulkan>();
+		m_specialApi = std::shared_ptr<WindowGlfwVulkan>();
 	}
 
 	m_specialApi->init();

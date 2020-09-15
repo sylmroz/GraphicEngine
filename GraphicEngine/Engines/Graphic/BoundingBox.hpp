@@ -10,7 +10,11 @@ namespace GraphicEngine::Engines::Graphic
 		BoundingBox(Vec left, Vec right):
 			m_left{left},
 			m_right{right}
-		{}
+		{
+			extendBox(left);
+			extendBox(right);
+			recalculateCenter();
+		}
 
 		Vec getLeft()
 		{
@@ -20,6 +24,7 @@ namespace GraphicEngine::Engines::Graphic
 		void setLeft(Vec left)
 		{
 			m_left = left;
+			recalculateCenter();
 		}
 
 		Vec getRight()
@@ -30,11 +35,13 @@ namespace GraphicEngine::Engines::Graphic
 		void setRight(Vec right)
 		{
 			m_right = right;
+			recalculateCenter();
 		}
 
 		void extendBox(Vec p)
 		{
 			static_cast<BoudingBoxImpl*>(this)->recalculate(p);
+			recalculateCenter();
 		}
 
 
@@ -42,15 +49,28 @@ namespace GraphicEngine::Engines::Graphic
 		{
 			static_cast<BoudingBoxImpl*>(this)->recalculate(p.m_left);
 			static_cast<BoudingBoxImpl*>(this)->recalculate(p.m_right);
+			recalculateCenter()
 		}
 
 		Vec getCenter()
 		{
-			return (m_left + m_right) / 2.0f;
+			return m_center;
+		}
+
+		void setCenter(Vec p)
+		{
+			m_center = p;
 		}
 
 	protected:
 		Vec m_left;
 		Vec m_right;
+		Vec m_center;
+
+	private:
+		void recalculateCenter()
+		{
+			m_center = (m_left + m_right) / 2.0f;
+		}
 	};
 }
