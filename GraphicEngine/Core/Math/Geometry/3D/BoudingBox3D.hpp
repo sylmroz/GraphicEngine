@@ -21,5 +21,9 @@ namespace GraphicEngine::Engines::Graphic
 		void recalculate(glm::vec3 p);
 
 		void transform(glm::mat4 modelMatrix);
+
+	protected:
+		glm::vec3 m_baseLeft;
+		glm::vec3 m_baseRight;
 	};
 }
