@@ -1,6 +1,6 @@
 #include "VulkanTexture.hpp"
 
-#include "../../Core/Math/Math.hpp"
+#include "../../Core/Math/ImageUtils.hpp"
 
 GraphicEngine::Vulkan::Texture2D::Texture2D(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::UniqueCommandPool& commandPool, vk::Queue queue,
 	const uint8_t* data, int width, int height, int channels) :

@@ -49,7 +49,7 @@ namespace GraphicEngine::Engines::Graphic
 		{
 			static_cast<BoudingBoxImpl*>(this)->recalculate(p.m_left);
 			static_cast<BoudingBoxImpl*>(this)->recalculate(p.m_right);
-			recalculateCenter()
+			recalculateCenter();
 		}
 
 		Vec getCenter()

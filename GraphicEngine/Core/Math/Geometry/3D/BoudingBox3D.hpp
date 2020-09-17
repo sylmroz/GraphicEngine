@@ -3,6 +3,7 @@
 #include "../BoundingBox.hpp"
 
 #include <glm/vec3.hpp>
+#include <glm/mat4x4.hpp>
 
 #include <algorithm>
 
@@ -18,5 +19,7 @@ namespace GraphicEngine::Engines::Graphic
 		BoudingBox3D(glm::vec3 left, glm::vec3 right);
 	
 		void recalculate(glm::vec3 p);
+
+		void transform(glm::mat4 modelMatrix);
 	};
 }

@@ -72,7 +72,7 @@ void GraphicEngine::GLFW::GlfwWindow::initialize()
 	}
 	else if (m_windowProfile == WindowGlfwProfile::Vulkan)
 	{
-		m_specialApi = std::shared_ptr<WindowGlfwVulkan>();
+		m_specialApi = std::make_shared<WindowGlfwVulkan>();
 	}
 
 	m_specialApi->init();

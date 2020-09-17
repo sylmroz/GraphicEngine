@@ -5,7 +5,7 @@ namespace GraphicEngine::Scene
 {
 	struct Face
 	{
-		Face() {}
+		Face() = default;
 		Face(const std::vector<uint32_t>& indices) : indices{ indices } {}
 		std::vector<uint32_t> indices;
 

@@ -176,8 +176,10 @@
     <ClCompile Include="Core\Configuration.cpp" />
     <ClCompile Include="Core\IO\FileSystem.cpp" />
     <ClCompile Include="Core\LoggerCore\SourceFormatter.cpp" />
-    <ClCompile Include="Core\Math\Geometry.cpp" />
-    <ClCompile Include="Core\Math\Math.cpp" />
+    <ClCompile Include="Core\Math\GeometryUtils.cpp" />
+    <ClCompile Include="Core\Math\Geometry\3D\BoudingBox3D.cpp" />
+    <ClCompile Include="Core\Math\Geometry\3D\BoudingCube.cpp" />
+    <ClCompile Include="Core\Math\ImageUtils.cpp" />
     <ClCompile Include="Drivers\OpenGL\OpenGLRenderingEngine.cpp" />
     <ClCompile Include="Drivers\OpenGL\OpenGLShader.cpp" />
     <ClCompile Include="Drivers\OpenGL\OpenGLTexture.cpp" />
@@ -186,8 +188,6 @@
     <ClCompile Include="Drivers\Vulkan\VulkanRenderingEngine.cpp" />
     <ClCompile Include="Drivers\Vulkan\VulkanShader.cpp" />
     <ClCompile Include="Drivers\Vulkan\VulkanTexture.cpp" />
-    <ClCompile Include="Engines\Graphic\3D\BoudingBox3D.cpp" />
-    <ClCompile Include="Engines\Graphic\3D\BoudingCube.cpp" />
     <ClCompile Include="Main\Application.cpp" />
     <ClCompile Include="Main\Engine.cpp" />
     <ClCompile Include="Main\main.cpp" />
@@ -222,8 +222,12 @@
     <ClInclude Include="Core\Logger.hpp" />
     <ClInclude Include="Core\LoggerCore\LoggerName.hpp" />
     <ClInclude Include="Core\LoggerCore\SourceFormatter.hpp" />
-    <ClInclude Include="Core\Math\Geometry.hpp" />
-    <ClInclude Include="Core\Math\Math.hpp" />
+    <ClInclude Include="Core\Math\GeometryUtils.hpp" />
+    <ClInclude Include="Core\Math\Geometry\3D\BoudingBox3D.hpp" />
+    <ClInclude Include="Core\Math\Geometry\3D\BoudingCube.hpp" />
+    <ClInclude Include="Core\Math\Geometry\3D\Octree.hpp" />
+    <ClInclude Include="Core\Math\Geometry\BoundingBox.hpp" />
+    <ClInclude Include="Core\Math\ImageUtils.hpp" />
     <ClInclude Include="Core\Ranges.hpp" />
     <ClInclude Include="Core\ServiceManager.hpp" />
     <ClInclude Include="Core\Subject.hpp" />
@@ -248,9 +252,6 @@
     <ClInclude Include="Drivers\Vulkan\VulkanVertexBuffer.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanVertexBufferFactory.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanWindowContext.hpp" />
-    <ClInclude Include="Engines\Graphic\3D\BoudingBox3D.hpp" />
-    <ClInclude Include="Engines\Graphic\3D\BoudingCube.hpp" />
-    <ClInclude Include="Engines\Graphic\BoundingBox.hpp" />
     <ClInclude Include="Main\Application.hpp" />
     <ClInclude Include="Main\Engine.hpp" />
     <ClInclude Include="Modules\Assimp\AssimpModelImporter.hpp" />

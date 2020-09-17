@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Face.hpp"
-#include "../../Core/Math/Geometry.hpp"
-#include "../../Engines/Graphic/3D/BoudingBox3D.hpp"
+#include "../../Core/Math/GeometryUtils.hpp"
+#include "../../Core/Math/Geometry/3D/BoudingBox3D.hpp"
 
 #include <glm\geometric.hpp>
 
