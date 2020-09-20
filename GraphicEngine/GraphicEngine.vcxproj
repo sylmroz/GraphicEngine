@@ -252,6 +252,9 @@
     <ClInclude Include="Drivers\Vulkan\VulkanVertexBuffer.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanVertexBufferFactory.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanWindowContext.hpp" />
+    <ClInclude Include="Engines\Graphic\3D\ObjectGenerator.hpp" />
+    <ClInclude Include="Engines\Graphic\3D\ObjectGenerators\IObjectGenerator.hpp" />
+    <ClInclude Include="Engines\Graphic\3D\ObjectGenerators\PlaneGenerator.hpp" />
     <ClInclude Include="Main\Application.hpp" />
     <ClInclude Include="Main\Engine.hpp" />
     <ClInclude Include="Modules\Assimp\AssimpModelImporter.hpp" />

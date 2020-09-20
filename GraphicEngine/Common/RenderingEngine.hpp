@@ -10,6 +10,8 @@
 #include "../Modules/Assimp/AssimpModelImporter.hpp"
 #include "../Core/Utils/ObjectConverter.hpp"
 
+#include "../Engines/Graphic/3D/ObjectGenerators/PlaneGenerator.hpp"
+
 namespace GraphicEngine
 {
 	struct Light
@@ -45,12 +47,16 @@ namespace GraphicEngine
 
 			m_mesh = std::make_shared<Scene::Mesh<Common::VertexPCTc>>(vertices, faces);*/
 
+			auto plane = Engines::Graphic::Generators::PlaneGenerator<Common::VertexPN>{}.getModel(glm::vec2(-10.0f), glm::vec2(10.0f), glm::ivec2(2), Engines::Graphic::GeneratingPosition::Corner, Engines::Graphic::TriangleDirection::CounterClockwise);
 			m_models = Modules::AssimpModelImporter<Common::VertexPN>{}.read(m_cfg->getProperty<std::string>("scene:object:path"));
 			m_models.front()->setScale(m_cfg->getProperty<float>("scene:object:scale"));
 			m_models.front()->setRotate(Core::Utils::Converter::fromArrayToObject<glm::vec3, std::vector<float>, 3>(m_cfg->getProperty<std::vector<float>>("scene:object:rotate")));
 			m_models.front()->setPosition(Core::Utils::Converter::fromArrayToObject<glm::vec3, std::vector<float>, 3>(m_cfg->getProperty<std::vector<float>>("scene:object:position")));
+			m_models.push_back(plane);
 
 			light.lightPosition = glm::vec3(100.0, 100.0, 100.0);
+
+			
 		}
 
 		virtual bool drawFrame() = 0;

@@ -112,6 +112,9 @@
     <Filter Include="Core\Math\Geometry\3D">
       <UniqueIdentifier>{71e2ec9e-53e6-4e2f-8566-c168badd5c53}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engines\Graphic\3D\ObjectGenerators">
+      <UniqueIdentifier>{a11e3833-dc4f-464c-ba99-dcf258d2111d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -407,6 +410,15 @@
     </ClInclude>
     <ClInclude Include="Core\Math\Geometry\3D\Octree.hpp">
       <Filter>Core\Math\Geometry\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engines\Graphic\3D\ObjectGenerator.hpp">
+      <Filter>Engines\Graphic\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engines\Graphic\3D\ObjectGenerators\PlaneGenerator.hpp">
+      <Filter>Engines\Graphic\3D\ObjectGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="Engines\Graphic\3D\ObjectGenerators\IObjectGenerator.hpp">
+      <Filter>Engines\Graphic\3D\ObjectGenerators</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
