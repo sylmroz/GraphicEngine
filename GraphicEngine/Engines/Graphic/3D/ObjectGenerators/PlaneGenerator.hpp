@@ -32,6 +32,7 @@ namespace GraphicEngine::Engines::Graphic::Generators
 			step.x /= scale.x;
 			step.y /= scale.y;
 
+			// Generate vertices
 			for (uint32_t x{ 0 }; x < scale.x + 1; ++x)
 			{
 				for (uint32_t y{ 0 }; y < scale.y + 1; ++y)
@@ -42,12 +43,23 @@ namespace GraphicEngine::Engines::Graphic::Generators
 				}
 			}
 
+			// Generate triangles from vertices.
+			//	  
+			//     __ __ __ __ 19
+			//   3| /| /| /| /|
+			//	  |/_|/_|/_|/_|
+			//   2| /| /| /| /|18
+			//    |/_|/_|/_|/_|
+			//   1| /| /| /| /|17
+			//    |/_|/_|/_|/_|
+			//   0   4  8  12 16
+
 			for (uint32_t x{ 0 }; x < scale.x; ++x)
 			{
 				for (uint32_t y{ 0 }; y < scale.y; ++y)
 				{
 					uint32_t point = y + (x * (scale.y + 1));
-					if (triangleDirection == TriangleDirection::Clockwise)
+					if (triangleDirection == TriangleDirection::CounterClockwise)
 					{	
 						faces.push_back(Scene::Face({ point, point + 1, point + 2 + scale.y }));
 						faces.push_back(Scene::Face({ point, point + 2 + scale.y, point + 1 + scale.y }));
