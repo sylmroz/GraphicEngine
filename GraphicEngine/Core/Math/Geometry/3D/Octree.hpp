@@ -191,18 +191,8 @@ namespace GraphicEngine::Engines::Graphic
 			{
 				std::shared_ptr<T> value = std::get<std::shared_ptr<T>>(node->element);
 				generateChildrens(node);
-				for (auto children : node->childrens)
-				{
-					if (children->aabb.isPointInside(point->position))
-					{
-						children->element = point;						
-					}
-
-					if (children->aabb.isPointInside(value->position))
-					{
-						children->element = value;
-					}
-				}
+				insertPoint(point);
+				insertPoint(value);
 			}
 
 			else
