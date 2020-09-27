@@ -31,3 +31,10 @@ void GraphicEngine::Engines::Graphic::BoudingBox3D::transform(glm::mat4 modelMat
 	m_left = boudingBox.m_left;
 	m_right = boudingBox.m_right;
 }
+
+bool GraphicEngine::Engines::Graphic::BoudingBox3D::isPointInside(glm::vec3 point)
+{
+	return ((point.x >= m_left.x && point.x <= m_right.x) &&
+		(point.y >= m_left.y && point.y <= m_right.y) &&
+		(point.z >= m_left.z && point.z <= m_right.z));
+}

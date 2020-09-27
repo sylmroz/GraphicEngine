@@ -22,6 +22,8 @@ namespace GraphicEngine::Engines::Graphic
 
 		void transform(glm::mat4 modelMatrix);
 
+		bool isPointInside(glm::vec3 point);
+
 	protected:
 		glm::vec3 m_baseLeft;
 		glm::vec3 m_baseRight;
