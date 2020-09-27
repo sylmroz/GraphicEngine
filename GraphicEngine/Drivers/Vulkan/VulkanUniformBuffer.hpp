@@ -1,6 +1,7 @@
 #pragma once
 
 #include "VulkanFramework.hpp"
+#include "../../Core/Utils/MememoryUtils.hpp"
 
 namespace GraphicEngine::Vulkan
 {
@@ -65,22 +66,23 @@ namespace GraphicEngine::Vulkan
 	public:
 		UniformBufferDynamic(VulkanFramework* framework, uint32_t instances) : IUniformBuffer(framework, vk::DescriptorType::eUniformBufferDynamic)
 		{
-			m_values.reserve(instances);
+			m_aligmentSize = getDynamicAligmentSize<T>(framework->m_physicalDevice);
+			m_values.resize(instances * m_aligmentSize);
 			for (uint32_t i{ 0 }; i < framework->m_maxFrames; ++i)
 			{
 				bufferData.emplace_back(std::make_shared<BufferData>(m_framework->m_physicalDevice, m_framework->m_device, vk::BufferUsageFlagBits::eUniformBuffer,
-					vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent, instances * sizeof(T)));
+					vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent, instances * m_aligmentSize));
 			}
 		}
 
 		void setValue(const std::vector<T>& values)
 		{
-			m_values = values;
+			Core::Utils::copyValuesToAlignedBuffer<std::vector, T>(values, m_values, m_aligmentSize);
 		}
 
 		virtual void update() override
 		{
-			copyMemoryToDevice<T>(m_framework->m_device, bufferData[m_framework->m_imageIndex.value]->memory, m_values.data(), m_values.size());
+			copyMemoryToDevice<char>(m_framework->m_device, bufferData[m_framework->m_imageIndex.value]->memory, m_values.data(), m_values.size());
 		}
 
 		void updateAndSet(const std::vector<T>& values)
@@ -90,6 +92,7 @@ namespace GraphicEngine::Vulkan
 		}
 
 	private:
-		std::vector<T> m_values;
+		std::vector<char> m_values;
+		uint32_t m_aligmentSize;
 	};
 }

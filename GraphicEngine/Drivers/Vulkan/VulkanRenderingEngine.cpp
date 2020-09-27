@@ -27,7 +27,8 @@ bool GraphicEngine::Vulkan::VulkanRenderingEngine::drawFrame()
 		m_uniformBuffer->updateAndSet(m_camera->getViewProjectionMatrix());
 		light.eyePosition = m_camera->getPosition();
 		m_lightUniformBuffer->updateAndSet(light);
-		m_modelMatrix->updateAndSet({ m_models.front()->getModelMatrix(), glm::identity<glm::mat4>() });
+		m_modelMatrix->updateAndSet({ Scene::ModelMartices(m_models.front()->getModelMatrix(), glm::transpose(glm::inverse(glm::mat3(m_camera->getViewMatrix() * m_models.front()->getModelMatrix())))),
+			 Scene::ModelMartices( glm::identity<glm::mat4>(), glm::transpose(glm::inverse(glm::mat3(m_camera->getViewMatrix())))) });
 
 		m_framework->submitFrame();
 	}
@@ -53,7 +54,7 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 
 		m_uniformBuffer = m_framework->getUniformBuffer<UniformBuffer, glm::mat4>();
 		m_lightUniformBuffer = m_framework->getUniformBuffer<UniformBuffer, Light>();
-		m_modelMatrix = m_framework->getUniformBuffer<UniformBufferDynamic, glm::mat4>(2);
+		m_modelMatrix = m_framework->getUniformBuffer<UniformBufferDynamic, Scene::ModelMartices>(2);
 
 		for (auto& model : m_models)
 		{
@@ -158,7 +159,7 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::buildCommandBuffers()
 			}
 		}
 
-		offset = sizeof(glm::mat4);
+		offset = getDynamicAligmentSize<Scene::ModelMartices>(m_framework->m_physicalDevice);
 		commandBuffer->bindDescriptorSets(vk::PipelineBindPoint::eGraphics, m_pipelineLayout.get(), 0, 1, &m_descriptorSets[i].get(), 1, &offset);
 
 		for (auto& vbs : m_vertexBuffers)

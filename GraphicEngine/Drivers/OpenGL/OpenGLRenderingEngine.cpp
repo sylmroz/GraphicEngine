@@ -27,7 +27,7 @@ bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 
 	light.eyePosition = m_camera->getPosition();
 	m_lightUniformBuffer->update(&light);
-	auto m = m_models.front()->getModelMatrix();
+	Scene::ModelMartices m (m_models.front()->getModelMatrix(), glm::transpose(glm::inverse(glm::mat3(m_camera->getViewMatrix()* m_models.front()->getModelMatrix()))));
 	m_modelMatrix->update(&m);
 
 	for (auto& vbs : m_vertexBuffers)
@@ -38,7 +38,8 @@ bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 			vb->draw();
 		}
 	}
-	m = glm::identity<glm::mat4>();
+	m.modelMatrix = glm::identity<glm::mat4>();
+	m.normalMatrix = glm::transpose(glm::inverse(glm::mat3(m_camera->getViewMatrix())));
 	m_modelMatrix->update(&m);
 
 	for (auto& vbs : m_vertexBuffers)
@@ -80,7 +81,7 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 
 		m_uniformBufferMatrix = std::make_shared<UniformBuffer<glm::mat4>>(0);
 		m_lightUniformBuffer = std::make_shared<UniformBuffer<Light>>(1);
-		m_modelMatrix = std::make_shared<UniformBuffer<glm::mat4>>(2);
+		m_modelMatrix = std::make_shared<UniformBuffer<Scene::ModelMartices>>(2);
 		//m_vertexBuffer = m_mesh->compile<VertexBufferFactory<Common::VertexPCTc>, VertexBuffer<Common::VertexPCTc>>();
 		for (auto& model : m_models)
 		{

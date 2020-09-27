@@ -420,5 +420,8 @@
     <ClInclude Include="Engines\Graphic\3D\ObjectGenerators\IObjectGenerator.hpp">
       <Filter>Engines\Graphic\3D\ObjectGenerators</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Utils\MememoryUtils.hpp">
+      <Filter>Core\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

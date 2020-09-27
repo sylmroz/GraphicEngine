@@ -7,20 +7,21 @@ layout (location = 1) in vec3 inNormal;
 
 layout (std140, binding = 0) uniform MVP
 {
-    mat4 vp; 
+    mat4 vp;
 } mvp;
 
-layout(std140, binding = 2) uniform ModelMatrix
+layout(std140, binding = 2) uniform ModelMatrixes
 {
-    mat4 m; 
-} modelMatrix;
+    mat4 m;
+    mat3 normalMatrix;
+} modelMatrixes;
 
 layout (location = 0) out vec3 outNormal;
 layout (location = 1) out vec3 fragPosition;
 
 void main()
 {
-    outNormal = normalize(inNormal);
+    outNormal = normalize(modelMatrixes.normalMatrix * inNormal);
     fragPosition = inPosition;
-    gl_Position = mvp.vp * modelMatrix.m * vec4(inPosition, 1.0);
+    gl_Position = mvp.vp * modelMatrixes.m * vec4(inPosition, 1.0);
 }

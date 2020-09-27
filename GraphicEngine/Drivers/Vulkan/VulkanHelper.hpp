@@ -39,6 +39,18 @@ namespace GraphicEngine::Vulkan
 		singleTimeCommand(commandBuffer, commandPool, graphicQueue, fun, args...);
 	}
 
+	template <typename T>
+	uint32_t getDynamicAligmentSize(const vk::PhysicalDevice& device)
+	{
+		uint32_t minUboAlignment = device.getProperties().limits.minUniformBufferOffsetAlignment;
+		uint32_t dynamicAlignment = sizeof(T);
+		if (minUboAlignment > 0) {
+			dynamicAlignment = (dynamicAlignment + minUboAlignment - 1) & ~(minUboAlignment - 1);
+		}
+
+		return dynamicAlignment;
+	}
+
 	struct QueueFamilyIndices
 	{
 		std::optional<uint32_t> graphicsFamily;
