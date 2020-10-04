@@ -11,15 +11,10 @@
 #include "../Core/Utils/ObjectConverter.hpp"
 
 #include "../Engines/Graphic/3D/ObjectGenerators/PlaneGenerator.hpp"
+#include "../Engines//Graphic/Shaders/Models/Light.hpp"
 
 namespace GraphicEngine
 {
-	struct Light
-	{
-		glm::vec3 lightPosition;
-		glm::vec3 eyePosition;
-	};
-
 	class RenderingEngine
 	{
 	public:
@@ -73,7 +68,7 @@ namespace GraphicEngine
 		std::shared_ptr<Core::Configuration> m_cfg;
 
 		std::vector<std::shared_ptr<Scene::Model<Common::VertexPN>>> m_models;
-		Light light;
+		Engines::Graphic::Shaders::Light light;
 	};
 }
 

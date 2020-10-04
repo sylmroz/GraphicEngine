@@ -115,6 +115,12 @@
     <Filter Include="Engines\Graphic\3D\ObjectGenerators">
       <UniqueIdentifier>{a11e3833-dc4f-464c-ba99-dcf258d2111d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engines\Graphic\Shaders">
+      <UniqueIdentifier>{e2916887-9e0d-485d-9420-a69fee9401a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engines\Graphic\Shaders\Models">
+      <UniqueIdentifier>{bab49554-d40f-4598-94a0-069a61e0d277}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -422,6 +428,12 @@
     </ClInclude>
     <ClInclude Include="Core\Utils\MememoryUtils.hpp">
       <Filter>Core\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Engines\Graphic\Shaders\Models\Light.hpp">
+      <Filter>Engines\Graphic\Shaders\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Engines\Graphic\Shaders\Models\ModelMatrices.hpp">
+      <Filter>Engines\Graphic\Shaders\Models</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

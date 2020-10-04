@@ -4,6 +4,8 @@
 
 #include "../../Core/Logger.hpp"
 
+#include "../../Engines/Graphic/Shaders/Models/ModelMatrices.hpp"
+
 #include "OpenGLVertexBuffer.hpp"
 #include "OpenGLShader.hpp"
 #include "OpenGLTexture.hpp"
@@ -27,8 +29,8 @@ namespace GraphicEngine::OpenGL
 	private:
 		std::shared_ptr<OpenGLShaderProgram> m_program;
 		std::shared_ptr<UniformBuffer<glm::mat4>> m_uniformBufferMatrix;
-		std::shared_ptr<UniformBuffer<Light>> m_lightUniformBuffer;
-		std::shared_ptr<UniformBuffer<Scene::ModelMartices>> m_modelMatrix;
+		std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::Light>> m_lightUniformBuffer;
+		std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::ModelMartices>> m_modelMatrix;
 
 		std::vector<std::vector<std::shared_ptr<VertexBuffer<Common::VertexPN>>>> m_vertexBuffers;
 		//std::shared_ptr<VertexBuffer<Common::VertexPCTc>> m_vertexBuffer;
