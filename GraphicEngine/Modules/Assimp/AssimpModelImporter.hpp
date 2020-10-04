@@ -73,7 +73,7 @@ namespace GraphicEngine::Modules
 			int generateResources = Common::VertexType::Position;
 			for (uint32_t i{ 0 }; i < mesh->mNumVertices; ++i)
 			{
-				Vertex vertex;
+				auto vertex = std::make_shared<Vertex>();
 
 				if (mesh->HasPositions())
 				{
@@ -81,7 +81,7 @@ namespace GraphicEngine::Modules
 					position.x = mesh->mVertices[i].x;
 					position.y = mesh->mVertices[i].y;
 					position.z = mesh->mVertices[i].z;
-					vertex.position = position;
+					vertex->position = position;
 				}
 
 				if constexpr (std::is_same_v<Vertex, Common::VertexPN> ||
@@ -94,7 +94,7 @@ namespace GraphicEngine::Modules
 						normal.x = mesh->mNormals[i].x;
 						normal.y = mesh->mNormals[i].y;
 						normal.z = mesh->mNormals[i].z;
-						vertex.normal = normal;
+						vertex->normal = normal;
 					}
 
 					else
@@ -112,7 +112,7 @@ namespace GraphicEngine::Modules
 						color.x = mesh->mColors[i]->r;
 						color.y = mesh->mColors[i]->g;
 						color.z = mesh->mColors[i]->b;
-						vertex.color = color;
+						vertex->color = color;
 					}
 				}
 
@@ -125,7 +125,7 @@ namespace GraphicEngine::Modules
 						glm::vec2 texCoord;
 						texCoord.x = mesh->mTextureCoords[0][i].x;
 						texCoord.y = mesh->mTextureCoords[0][i].y;
-						vertex.texCoord = texCoord;
+						vertex->texCoord = texCoord;
 					}
 				}
 
@@ -137,7 +137,7 @@ namespace GraphicEngine::Modules
 						tangent.x = mesh->mNormals[i].x;
 						tangent.y = mesh->mNormals[i].y;
 						tangent.z = mesh->mNormals[i].z;
-						vertex.tangent = tangent;
+						vertex->tangent = tangent;
 					}
 
 					else
@@ -153,11 +153,11 @@ namespace GraphicEngine::Modules
 
 			for (uint32_t i{ 0 }; i < mesh->mNumFaces; ++i)
 			{
-				Scene::Face face;
-				face.indices.reserve(mesh->mFaces[i].mNumIndices);
+				auto face = std::make_shared<Scene::Face>();
+				face->indices.reserve(mesh->mFaces[i].mNumIndices);
 				for (uint32_t j{ 0 }; j < mesh->mFaces[i].mNumIndices; ++j)
 				{
-					face.indices.push_back(mesh->mFaces[i].mIndices[j]);
+					face->indices.push_back(mesh->mFaces[i].mIndices[j]);
 				}
 				outMesh->addFace(face);
 			}

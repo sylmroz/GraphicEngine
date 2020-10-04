@@ -27,7 +27,7 @@ namespace GraphicEngine::Scene
 	{
 	public:
 		Mesh() {}
-		Mesh(const std::vector<Vertex>& vertices, const std::vector<Face>& faces)
+		Mesh(const std::vector<std::shared_ptr<Vertex>>& vertices, const std::vector<std::shared_ptr<Face>>& faces)
 		{
 			m_vertices = std::move(vertices);
 			m_faces = std::move(faces);
@@ -39,10 +39,10 @@ namespace GraphicEngine::Scene
 			return VertexBufferFactory::produceVertexBuffer(args..., getVertices(), getIndices());
 		}
 
-		void addVertex(Vertex& vertex)
+		void addVertex(std::shared_ptr<Vertex> vertex)
 		{
-			m_vertices.push_back(std::move(vertex));
-			m_boudingBox.extendBox(vertex.position);
+			m_vertices.push_back(vertex);
+			m_boudingBox.extendBox(vertex->position);
 		}
 
 		void resizeVertices(uint32_t size)
@@ -50,7 +50,7 @@ namespace GraphicEngine::Scene
 			m_vertices.reserve(size);
 		}
 
-		void addFace(Face& face)
+		void addFace(std::shared_ptr<Face> face)
 		{
 			m_faces.push_back(face);
 		}
@@ -60,12 +60,23 @@ namespace GraphicEngine::Scene
 			m_faces.reserve(size);
 		}
 
-		std::vector<Face> getFaces()
+		std::vector<std::shared_ptr<Face>> getFaces()
 		{
 			return m_faces;
 		}
 
 		std::vector<Vertex> getVertices() 
+		{
+			std::vector<Vertex> vertices;
+			vertices.reserve(m_vertices.size());
+			for (auto vertex : m_vertices)
+			{
+				vertices.push_back(*vertex);
+			}
+			return vertices;
+		}
+
+		std::vector<std::shared_ptr<Vertex>> getVertices2()
 		{
 			return m_vertices;
 		}
@@ -75,14 +86,14 @@ namespace GraphicEngine::Scene
 			uint32_t totalIndices{ 0 };
 			for (auto& face : m_faces)
 			{
-				totalIndices += face.indices.size();
+				totalIndices += face->indices.size();
 			}
 
 			std::vector<uint32_t> indices;
 			indices.reserve(totalIndices);
 			for (auto& face : m_faces)
 			{
-				for (uint32_t index : face.indices)
+				for (uint32_t index : face->indices)
 				{
 					indices.push_back(index);
 				}
@@ -104,15 +115,15 @@ namespace GraphicEngine::Scene
 					for (auto& face : m_faces)
 					{
 						std::vector<glm::vec3> vertices;
-						vertices.reserve(face.indices.size());
-						for (uint32_t index : face.indices)
+						vertices.reserve(face->indices.size());
+						for (uint32_t index : face->indices)
 						{
-							vertices.push_back(m_vertices[index].position);
+							vertices.push_back(m_vertices[index]->position);
 						}
 
-						for (uint32_t i{ 0 }; i < face.indices.size(); ++i)
+						for (uint32_t i{ 0 }; i < face->indices.size(); ++i)
 						{
-							auto& normal = normals[face.indices[i]];
+							auto& normal = normals[face->indices[i]];
 							normal.first++;
 							normal.second += Core::Math::calculateNormalFromPolygon(vertices);
 						}
@@ -121,7 +132,7 @@ namespace GraphicEngine::Scene
 					uint32_t i{ 0 };
 					for (auto& vertex : m_vertices)
 					{
-						vertex.normal = glm::normalize(normals[i].second / static_cast<float>(normals[i].first));
+						vertex->normal = glm::normalize(normals[i].second / static_cast<float>(normals[i].first));
 						++i;
 					}
 				}
@@ -133,21 +144,21 @@ namespace GraphicEngine::Scene
 				{
 					for (auto& vertex : m_vertices)
 					{
-						glm::vec3 normal = vertex.normal;
+						glm::vec3 normal = vertex->normal;
 						glm::vec3 c1 = glm::cross(normal, glm::vec3(0.0, 0.0, 1.0));
 						glm::vec3 c2 = glm::cross(normal, glm::vec3(0.0, 1.0, 0.0));
 
 						if (glm::length(c1) > glm::length(c2))
 						{
-							vertex.tangent = glm::normalize(c1);
+							vertex->tangent = glm::normalize(c1);
 						}
 						
 						else
 						{
-							vertex.tangent = glm::normalize(c2);
+							vertex->tangent = glm::normalize(c2);
 						}
 
-						vertex.bitangent = glm::normalize(glm::cross(vertex.tangent, normal));
+						vertex->bitangent = glm::normalize(glm::cross(vertex->tangent, normal));
 					}
 				}
 			}
@@ -159,8 +170,8 @@ namespace GraphicEngine::Scene
 		}
 		
 	private:
-		std::vector<Vertex> m_vertices;
-		std::vector<Face> m_faces;
+		std::vector<std::shared_ptr<Vertex>> m_vertices;
+		std::vector<std::shared_ptr<Face>> m_faces;
 
 		Engines::Graphic::BoudingBox3D m_boudingBox;
 	};

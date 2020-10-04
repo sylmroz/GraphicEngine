@@ -24,7 +24,7 @@ namespace GraphicEngine::Engines::Graphic::Generators
 	{
 	public:
 		
-		virtual std::tuple<std::vector<Vertex>, std::vector<Scene::Face>> getObject(Args... args) = 0;
+		virtual std::tuple<std::vector<std::shared_ptr<Vertex>>, std::vector<std::shared_ptr<Scene::Face>>> getObject(Args... args) = 0;
 
 		std::shared_ptr<Scene::Mesh<Vertex>> getMesh(Args... args)
 		{

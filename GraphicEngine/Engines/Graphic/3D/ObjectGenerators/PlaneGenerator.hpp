@@ -10,11 +10,11 @@ namespace GraphicEngine::Engines::Graphic::Generators
 	class PlaneGenerator : public IObjectGenerator<Vertex, glm::vec2, glm::vec2, glm::ivec2, GeneratingPosition, TriangleDirection>
 	{
 	public:
-		virtual std::tuple<std::vector<Vertex>, std::vector<Scene::Face>> getObject(glm::vec2 beginPosition, glm::vec2 endPosition, glm::ivec2 scale,
+		virtual std::tuple<std::vector<std::shared_ptr<Vertex>>, std::vector<std::shared_ptr<Scene::Face>>> getObject(glm::vec2 beginPosition, glm::vec2 endPosition, glm::ivec2 scale,
 			GeneratingPosition generateFrom = GeneratingPosition::Corner, TriangleDirection triangleDirection = TriangleDirection::Clockwise) override
 		{
-			std::vector<Vertex> vertices;
-			std::vector<Scene::Face> faces;
+			std::vector<std::shared_ptr<Vertex>> vertices;
+			std::vector<std::shared_ptr<Scene::Face>> faces;
 
 			vertices.reserve((scale.x + 1) * (scale.y + 1));
 			faces.reserve(scale.x * scale.y * 2);
@@ -37,8 +37,8 @@ namespace GraphicEngine::Engines::Graphic::Generators
 			{
 				for (uint32_t y{ 0 }; y < scale.y + 1; ++y)
 				{
-					Vertex v;
-					v.position = glm::vec3(from + step * glm::vec2(x, y), 0.0f);
+					auto v = std::make_shared<Vertex>();
+					v->position = glm::vec3(from + step * glm::vec2(x, y), 0.0f);
 					vertices.push_back(v);
 				}
 			}
@@ -47,7 +47,7 @@ namespace GraphicEngine::Engines::Graphic::Generators
 			//	  
 			//     __ __ __ __ 19
 			//   3| /| /| /| /|
-			//	  |/_|/_|/_|/_|
+			//    |/_|/_|/_|/_|
 			//   2| /| /| /| /|18
 			//    |/_|/_|/_|/_|
 			//   1| /| /| /| /|17
@@ -61,14 +61,14 @@ namespace GraphicEngine::Engines::Graphic::Generators
 					uint32_t point = y + (x * (scale.y + 1));
 					if (triangleDirection == TriangleDirection::CounterClockwise)
 					{	
-						faces.push_back(Scene::Face({ point, point + 1, point + 2 + scale.y }));
-						faces.push_back(Scene::Face({ point, point + 2 + scale.y, point + 1 + scale.y }));
+						faces.push_back(std::make_shared<Scene::Face>(Scene::Face({ point, point + 1, point + 2 + scale.y })));
+						faces.push_back(std::make_shared<Scene::Face>(Scene::Face({ point, point + 2 + scale.y, point + 1 + scale.y })));
 					}
 
 					else
 					{
-						faces.push_back(Scene::Face({ point, point + 1 + scale.y, point + 2 + scale.y }));
-						faces.push_back(Scene::Face({ point, point + 2 + scale.y, point + 1 }));
+						faces.push_back(std::make_shared<Scene::Face>(Scene::Face({ point, point + 1 + scale.y, point + 2 + scale.y })));
+						faces.push_back(std::make_shared<Scene::Face>(Scene::Face({ point, point + 2 + scale.y, point + 1 })));
 					}
 				}
 			}
