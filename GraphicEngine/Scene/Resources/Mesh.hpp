@@ -36,7 +36,7 @@ namespace GraphicEngine::Scene
 		template <typename VertexBufferFactory, typename VertexBuffer, typename... Args>
 		std::shared_ptr<VertexBuffer> compile(Args&... args)
 		{
-			return VertexBufferFactory::produceVertexBuffer(args..., m_vertices, getIndices());
+			return VertexBufferFactory::produceVertexBuffer(args..., getVertices(), getIndices());
 		}
 
 		void addVertex(Vertex& vertex)
@@ -60,12 +60,12 @@ namespace GraphicEngine::Scene
 			m_faces.reserve(size);
 		}
 
-		std::vector<Face>& getFaces() const
+		std::vector<Face> getFaces()
 		{
 			return m_faces;
 		}
 
-		std::vector<Vertex>& getVertices() const 
+		std::vector<Vertex> getVertices() 
 		{
 			return m_vertices;
 		}
@@ -79,6 +79,7 @@ namespace GraphicEngine::Scene
 			}
 
 			std::vector<uint32_t> indices;
+			indices.reserve(totalIndices);
 			for (auto& face : m_faces)
 			{
 				for (uint32_t index : face.indices)
