@@ -8,6 +8,7 @@
 #include "../Core/Input/Keyboard/KeyboardEventProxy.hpp"
 #include "../Core/Input/Mouse/MouseEventProxy.hpp"
 #include "../Core/Logger.hpp"
+#include "../Core/Timer.hpp"
 
 #include <memory>
 
@@ -24,6 +25,7 @@ namespace GraphicEngine
 			std::shared_ptr<Core::Inputs::MouseEventProxy> mouse,
 			std::shared_ptr<Common::CameraController> cameraController,
 			std::shared_ptr<Core::EventManager> eventManager,
+			std::shared_ptr<Core::Timer> timer,
 			std::unique_ptr<Core::Logger<Engine>> logger);
 
 		void initialize();
@@ -38,6 +40,7 @@ namespace GraphicEngine
 		std::shared_ptr<Core::Inputs::MouseEventProxy> m_mouse;
 		std::shared_ptr<Common::CameraController> m_cameraController;
 		std::shared_ptr<Core::EventManager> m_eventManager;
+		std::shared_ptr<Core::Timer> m_timer;
 		std::unique_ptr<Core::Logger<Engine>> m_logger;
 
 		bool shutdown = false;

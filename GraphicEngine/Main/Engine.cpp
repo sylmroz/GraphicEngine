@@ -1,5 +1,4 @@
 #include "Engine.hpp"
-#include "../Core/Timer.hpp"
 
 GraphicEngine::Engine::Engine(std::shared_ptr<Common::WindowKeyboardMouse> window,
 	std::shared_ptr<RenderingEngine> renderingEngine,
@@ -7,6 +6,7 @@ GraphicEngine::Engine::Engine(std::shared_ptr<Common::WindowKeyboardMouse> windo
 	std::shared_ptr<Core::Inputs::MouseEventProxy> mouse,
 	std::shared_ptr<Common::CameraController> cameraController,
 	std::shared_ptr<Core::EventManager> eventManager,
+	std::shared_ptr<Core::Timer> timer,
 	std::unique_ptr<Core::Logger<Engine>> logger) :
 	m_window(window),
 	m_renderingEngine(renderingEngine),
@@ -14,6 +14,7 @@ GraphicEngine::Engine::Engine(std::shared_ptr<Common::WindowKeyboardMouse> windo
 	m_mouse(mouse),
 	m_cameraController(cameraController),
 	m_eventManager(eventManager),
+	m_timer(timer),
 	m_logger(std::move(logger))
 
 {
@@ -32,14 +33,6 @@ void GraphicEngine::Engine::initialize()
 				shutdown = true;
 		});
 
-	//m_keyboard->subscribe([&](std::vector<Core::Inputs::KeyboardKey> keys)
-	//	{
-	//		const auto escKey = std::find(std::begin(keys), std::end(keys), Core::Inputs::KeyboardKey::KEY_ESCAPE);
-	//		if (escKey != std::end(keys))
-	//			shutdown = true;
-	//	}
-	//);
-
 	m_eventManager->addSubject([&]()
 		{
 			m_keyboard->notify(m_window->getPressedKeys());
@@ -57,19 +50,22 @@ void GraphicEngine::Engine::initialize()
 		});
 
 	m_renderingEngine->init(m_window->getWidth(), m_window->getHeight());
+
+	m_timer->onTimeUpdate([&](double dt)
+	{
+		m_cameraController->setDt(dt);
+	});
 }
 
 void GraphicEngine::Engine::run()
 {
 	m_logger->debug(__FILE__, __LINE__, __FUNCTION__, "Run Engine");
-	Core::Timer timer;
-	timer.start();
+	m_timer->start();
 	while (!m_window->windowShouldBeClosed() && !shutdown)
 	{
 		m_renderingEngine->drawFrame();
 		m_window->swapBuffer();
-		timer.updateTime();
-		m_cameraController->setDt(timer.getInterval());
+		m_timer->updateTime();
 		m_window->poolEvents();
 		m_eventManager->call();
 	}
