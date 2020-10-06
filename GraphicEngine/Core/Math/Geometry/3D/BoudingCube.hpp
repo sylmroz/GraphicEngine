@@ -2,7 +2,7 @@
 
 #include "BoudingBox3D.hpp"
 
-namespace GraphicEngine::Engines::Graphic
+namespace GraphicEngine::Core
 {
 	class BoudingCube : public BoudingBox3D
 	{

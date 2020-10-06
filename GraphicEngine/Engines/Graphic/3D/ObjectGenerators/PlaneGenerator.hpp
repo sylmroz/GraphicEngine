@@ -10,7 +10,7 @@ namespace GraphicEngine::Engines::Graphic::Generators
 	class PlaneGenerator : public IObjectGenerator<Vertex, glm::vec2, glm::vec2, glm::ivec2, GeneratingPosition, TriangleDirection>
 	{
 	public:
-		virtual std::tuple<std::vector<std::shared_ptr<Vertex>>, std::vector<std::shared_ptr<Scene::Face>>> getObject(glm::vec2 beginPosition, glm::vec2 endPosition, glm::ivec2 scale,
+		virtual std::tuple<std::vector<std::shared_ptr<Vertex>>, std::vector<std::shared_ptr<Scene::Face>>, Core::BoudingBox3D> getObject(glm::vec2 beginPosition, glm::vec2 endPosition, glm::ivec2 scale,
 			GeneratingPosition generateFrom = GeneratingPosition::Corner, TriangleDirection triangleDirection = TriangleDirection::Clockwise) override
 		{
 			std::vector<std::shared_ptr<Vertex>> vertices;
@@ -27,6 +27,10 @@ namespace GraphicEngine::Engines::Graphic::Generators
 				from = beginPosition - endPosition;
 				to = beginPosition + endPosition;
 			}
+
+			auto thick = std::max(scale.x, scale.y) * 0.01f;
+
+			Core::BoudingBox3D boudingBox(glm::vec3(from, -thick), glm::vec3(to, thick));
 
 			glm::vec2 step(to - from);
 			step.x /= scale.x;
@@ -73,7 +77,7 @@ namespace GraphicEngine::Engines::Graphic::Generators
 				}
 			}
 
-			return std::make_tuple(vertices, faces);
+			return std::make_tuple(vertices, faces, boudingBox);
 		}
 	};
 }

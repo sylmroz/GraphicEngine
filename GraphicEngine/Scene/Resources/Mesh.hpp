@@ -2,17 +2,18 @@
 
 #include "Face.hpp"
 #include "../../Core/Math/GeometryUtils.hpp"
-#include "../../Core/Math/Geometry/3D/BoudingBox3D.hpp"
+#include "../../Core/Math/Geometry/3D/Octree.hpp"
 
 #include <glm\geometric.hpp>
 
 #include <functional>
 #include <memory>
 #include <utility>
+#include <type_traits>
 
 namespace GraphicEngine::Scene
 {
-	template <typename Vertex>
+	template <typename Vertex, int OctreeLevels = 5>
 	class Mesh
 	{
 	public:
@@ -21,6 +22,14 @@ namespace GraphicEngine::Scene
 		{
 			m_vertices = std::move(vertices);
 			m_faces = std::move(faces);
+			generateBoudingBox();
+		}
+
+		Mesh(const std::vector<std::shared_ptr<Vertex>>& vertices, const std::vector<std::shared_ptr<Face>>& faces, Core::BoudingBox3D boudingBox)
+		{
+			m_vertices = std::move(vertices);
+			m_faces = std::move(faces);
+			m_boudingBox = boudingBox;
 		}
 
 		template <typename VertexBufferFactory, typename VertexBuffer, typename... Args>
@@ -152,17 +161,33 @@ namespace GraphicEngine::Scene
 					}
 				}
 			}
+
+			m_octree = std::make_shared<Core::Octree<Vertex, OctreeLevels>>(m_boudingBox, m_vertices);
 		}
 
-		Engines::Graphic::BoudingBox3D getBoudingBox()
+		void generateBoudingBox()
+		{
+			for (auto v : m_vertices)
+			{
+				m_boudingBox.extendBox(v->position);
+			}
+		}
+
+		Core::BoudingBox3D getBoudingBox()
 		{
 			return m_boudingBox;
+		}
+
+		std::shared_ptr<Core::Octree<Vertex>> getOctree()
+		{
+			return m_octree;
 		}
 		
 	private:
 		std::vector<std::shared_ptr<Vertex>> m_vertices;
 		std::vector<std::shared_ptr<Face>> m_faces;
 
-		Engines::Graphic::BoudingBox3D m_boudingBox;
+		Core::BoudingBox3D m_boudingBox;
+		std::shared_ptr<Core::Octree<Vertex, OctreeLevels>> m_octree;
 	};
 }

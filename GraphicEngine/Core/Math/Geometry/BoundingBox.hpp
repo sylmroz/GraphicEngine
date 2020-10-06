@@ -1,6 +1,6 @@
 #pragma once
 
-namespace GraphicEngine::Engines::Graphic
+namespace GraphicEngine::Core
 {
 	template <typename BoudingBoxImpl, typename Vec>
 	class BoundingBox
@@ -63,9 +63,11 @@ namespace GraphicEngine::Engines::Graphic
 		}
 
 	protected:
-		Vec m_left;
-		Vec m_right;
-		Vec m_center;
+		Vec m_left{};
+		Vec m_right{};
+		Vec m_center{};
+
+		const float m_eplilion{ 0.000001f };
 
 	private:
 		void recalculateCenter()

@@ -9,7 +9,7 @@
 
 #include "BoudingBox3D.hpp"
 
-namespace GraphicEngine::Engines::Graphic
+namespace GraphicEngine::Core
 {
 	enum Node3DOctan
 	{
@@ -22,22 +22,6 @@ namespace GraphicEngine::Engines::Graphic
 		NxNyNz, // x< y< z<
 		PxNyNz  // x> y< z<
 	};
-
-	std::map<int, Node3DOctan> getIntToEnumMapping()
-	{
-		std::map<int, Node3DOctan> mapping
-		{
-			{ 0, PxPyPz},
-			{ 1, NxPyPz},
-			{ 2, NxNyPz},
-			{ 3, PxNyPz},
-			{ 4, PxPyNz},
-			{ 5, NxPyNz},
-			{ 6, NxNyNz},
-			{ 7, PxNyNz}
-		};
-		return mapping;
-	}
 
 	template <typename T>
 	struct Octan
@@ -57,6 +41,7 @@ namespace GraphicEngine::Engines::Graphic
 	{
 	public:
 		Octree(BoudingBox3D aabb);
+		Octree(BoudingBox3D aabb, std::vector<std::shared_ptr<T>> points);
 
 		void insertPoint(std::shared_ptr<T> point);
 
@@ -129,6 +114,8 @@ namespace GraphicEngine::Engines::Graphic
 
 		void buildChidrensRecusivelly(std::shared_ptr<Octan<T>> parent, int level);
 
+		std::map<int, Node3DOctan> getIntToEnumMapping();
+
 	protected:
 		std::shared_ptr<Octan<T>> m_root;
 		std::map<Node3DOctan, std::function<BoudingBox3D(glm::vec3, glm::vec3, glm::vec3)>> m_boudingBoxGenerators;
@@ -142,6 +129,16 @@ namespace GraphicEngine::Engines::Graphic
 		if (Levels != 0)
 		{
 			buildChidrensRecusivelly(m_root, 0);
+		}
+	}
+
+	template<typename T, int Levels>
+	inline Octree<T, Levels>::Octree(BoudingBox3D aabb, std::vector<std::shared_ptr<T>> points):
+		Octree<T,Levels>(aabb)
+	{
+		for (auto p : points)
+		{
+			insertPoint(p);
 		}
 	}
 	
@@ -241,5 +238,21 @@ namespace GraphicEngine::Engines::Graphic
 		{
 			buildChidrensRecusivelly(children, level + 1);
 		}
+	}
+	template<typename T, int Levels>
+	inline std::map<int, Node3DOctan> Octree<T, Levels>::getIntToEnumMapping()
+	{
+		std::map<int, Node3DOctan> mapping
+		{
+			{ 0, PxPyPz},
+			{ 1, NxPyPz},
+			{ 2, NxNyPz},
+			{ 3, PxNyPz},
+			{ 4, PxPyNz},
+			{ 5, NxPyNz},
+			{ 6, NxNyNz},
+			{ 7, PxNyNz}
+		};
+		return mapping;
 	}
 }

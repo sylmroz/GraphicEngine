@@ -3,7 +3,7 @@
 #include "../GraphicEngine/Core/Math/Geometry/3D/BoudingBox3D.cpp"
 #include <glm/gtx/transform.hpp>
 
-using namespace GraphicEngine::Engines::Graphic;
+using namespace GraphicEngine::Core;
 
 TEST(BoudingBox, BoudaryCorrectnes)
 {

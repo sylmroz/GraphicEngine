@@ -1,14 +1,20 @@
 #include "BoudingBox3D.hpp"
 #include <glm/vec4.hpp>
 
-GraphicEngine::Engines::Graphic::BoudingBox3D::BoudingBox3D(glm::vec3 left, glm::vec3 right) :
+GraphicEngine::Core::BoudingBox3D::BoudingBox3D()
+{
+	m_left = glm::vec3(10000000.0f);
+	m_right = glm::vec3(-10000000.0f);
+}
+
+GraphicEngine::Core::BoudingBox3D::BoudingBox3D(glm::vec3 left, glm::vec3 right) :
 	BoundingBox{ left, right },
 	m_baseLeft{left},
 	m_baseRight{right}
 {
 }
 
-void GraphicEngine::Engines::Graphic::BoudingBox3D::recalculate(glm::vec3 p)
+void GraphicEngine::Core::BoudingBox3D::recalculate(glm::vec3 p)
 {
 	m_left.x = std::min(m_left.x, p.x);
 	m_left.y = std::min(m_left.y, p.y);
@@ -18,11 +24,19 @@ void GraphicEngine::Engines::Graphic::BoudingBox3D::recalculate(glm::vec3 p)
 	m_right.y = std::max(m_right.y, p.y);
 	m_right.z = std::max(m_right.z, p.z);
 
+	/*for (uint32_t i{ 0 }; i < 3; ++i)
+	{
+		if (m_right[i] < m_left[i] + m_eplilion)
+		{
+			m_right[i] = m_left[i] + m_eplilion;
+		}
+	}*/
+
 	m_baseLeft = m_left;
 	m_baseRight = m_right;
 }
 
-void GraphicEngine::Engines::Graphic::BoudingBox3D::transform(glm::mat4 modelMatrix)
+void GraphicEngine::Core::BoudingBox3D::transform(glm::mat4 modelMatrix)
 {
 	auto p1 =  glm::vec3(modelMatrix * glm::vec4(m_baseLeft, 1.0f));
 	auto p2 = glm::vec3(modelMatrix * glm::vec4(m_baseRight, 1.0f));
@@ -32,7 +46,7 @@ void GraphicEngine::Engines::Graphic::BoudingBox3D::transform(glm::mat4 modelMat
 	m_right = boudingBox.m_right;
 }
 
-bool GraphicEngine::Engines::Graphic::BoudingBox3D::isPointInside(glm::vec3 point)
+bool GraphicEngine::Core::BoudingBox3D::isPointInside(glm::vec3 point)
 {
 	return ((point.x >= m_left.x && point.x <= m_right.x) &&
 		(point.y >= m_left.y && point.y <= m_right.y) &&

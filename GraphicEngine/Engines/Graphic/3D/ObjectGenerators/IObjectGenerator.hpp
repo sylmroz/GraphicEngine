@@ -24,12 +24,12 @@ namespace GraphicEngine::Engines::Graphic::Generators
 	{
 	public:
 		
-		virtual std::tuple<std::vector<std::shared_ptr<Vertex>>, std::vector<std::shared_ptr<Scene::Face>>> getObject(Args... args) = 0;
+		virtual std::tuple<std::vector<std::shared_ptr<Vertex>>, std::vector<std::shared_ptr<Scene::Face>>, Core::BoudingBox3D> getObject(Args... args) = 0;
 
 		std::shared_ptr<Scene::Mesh<Vertex>> getMesh(Args... args)
 		{
-			auto [vertices, faces] = getObject(args...);
-			auto mesh = std::make_shared<Scene::Mesh<Vertex>>(vertices, faces);
+			auto [vertices, faces, boudingBox] = getObject(args...);
+			auto mesh = std::make_shared<Scene::Mesh<Vertex>>(vertices, faces, boudingBox);
 			mesh->generate(static_cast<Common::VertexType>(Vertex::getType()));
 			return mesh;
 		}

@@ -3,7 +3,7 @@
 #include "../GraphicEngine/Core/Math/Geometry/3D/Octree.hpp"
 #include "../GraphicEngine/Common/Vertex.hpp"
 
-using namespace GraphicEngine::Engines::Graphic;
+using namespace GraphicEngine::Core;
 using namespace GraphicEngine::Common;
 
 TEST(OctreeTest, Dynamic_CreateCorrect)
