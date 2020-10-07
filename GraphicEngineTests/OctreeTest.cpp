@@ -2,9 +2,11 @@
 
 #include "../GraphicEngine/Core/Math/Geometry/3D/Octree.hpp"
 #include "../GraphicEngine/Common/Vertex.hpp"
+#include "../GraphicEngine/Engines/Graphic/3D/ObjectGenerators/PlaneGenerator.hpp"
 
 using namespace GraphicEngine::Core;
 using namespace GraphicEngine::Common;
+using namespace GraphicEngine::Engines::Graphic::Generators;
 
 TEST(OctreeTest, Dynamic_CreateCorrect)
 {
@@ -106,4 +108,12 @@ TEST(OctreeTest, Dynamic_InsertPointCheckNodeStoreCorrectPoint)
 
 	auto [node3, level3] = p_octree.findNode(std::make_shared<VertexP>(glm::vec3(9.4f)));
 	EXPECT_EQ(std::get<std::shared_ptr<VertexP>>(node3->element)->position, point3->position);
+}
+
+TEST(OctreeTest, Dynamic_Octree_transform_test)
+{
+	auto [vertices, indices, boudingBox] = PlaneGenerator<VertexP>{}.getObject(glm::vec2(-5), glm::vec2(5), glm::vec2(10));
+	Octree<VertexP, 4> p_octree(boudingBox, vertices);
+
+	p_octree.transform(glm::scale(glm::vec3(2)));
 }

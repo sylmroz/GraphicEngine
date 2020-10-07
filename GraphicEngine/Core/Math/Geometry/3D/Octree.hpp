@@ -47,6 +47,8 @@ namespace GraphicEngine::Core
 
 		std::tuple<std::shared_ptr<Octan<T>>, int> findNode(std::shared_ptr<T> point);
 
+		void transform(glm::mat4 modelMatrix);
+
 	protected:
 		std::shared_ptr<Octan<T>> createNode(BoudingBox3D aabb, std::shared_ptr<Octan<T>> parent);
 
@@ -116,6 +118,9 @@ namespace GraphicEngine::Core
 		void buildChidrensRecusivelly(std::shared_ptr<Octan<T>> parent, int level);
 
 		std::map<int, Node3DOctan> getIntToEnumMapping();
+
+		template <typename Callback>
+		void applyRecursively(std::shared_ptr<Octan<T>> node, Callback callback);
 
 	protected:
 		std::shared_ptr<Octan<T>> m_root;
@@ -241,13 +246,19 @@ namespace GraphicEngine::Core
 	}
 
 	template<typename T, int Levels, bool DynamicCreation>
+	inline void Octree<T, Levels, DynamicCreation>::transform(glm::mat4 modelMatrix)
+	{
+		applyRecursively(m_root, [&](std::shared_ptr<Octan<T>> node) { node->aabb.transform(modelMatrix); });
+	}
+
+	template<typename T, int Levels, bool DynamicCreation>
 	inline void Octree<T, Levels, DynamicCreation>::buidChidrenBoudingBoxGenerator()
 	{
 		m_boudingBoxGenerators = std::map<Node3DOctan, std::function<BoudingBox3D(glm::vec3, glm::vec3, glm::vec3)>>{
-			{ PxPyPz, [&](glm::vec3 left, glm::vec3 center, glm::vec3 right) { return generateBoudingBoxPxPyPz(left,center, right);}},
+			{ PxPyPz, [&](glm::vec3 left, glm::vec3 center, glm::vec3 right) { return generateBoudingBoxPxPyPz(left,center, right); }},
 			{ NxPyPz, [&](glm::vec3 left, glm::vec3 center, glm::vec3 right) { return generateBoudingBoxNxPyPz(left,center, right); }},
-			{ NxNyPz, [&](glm::vec3 left, glm::vec3 center, glm::vec3 right) { return generateBoudingBoxNxNyPz(left,center, right); } },
-			{ PxNyPz, [&](glm::vec3 left, glm::vec3 center, glm::vec3 right) { return generateBoudingBoxPxNyPz(left,center, right);}},
+			{ NxNyPz, [&](glm::vec3 left, glm::vec3 center, glm::vec3 right) { return generateBoudingBoxNxNyPz(left,center, right); }},
+			{ PxNyPz, [&](glm::vec3 left, glm::vec3 center, glm::vec3 right) { return generateBoudingBoxPxNyPz(left,center, right); }},
 			{ PxPyNz, [&](glm::vec3 left, glm::vec3 center, glm::vec3 right) { return generateBoudingBoxPxPyNz(left,center, right); }},
 			{ NxPyNz, [&](glm::vec3 left, glm::vec3 center, glm::vec3 right) { return generateBoudingBoxNxPyNz(left,center, right); }},
 			{ NxNyNz, [&](glm::vec3 left, glm::vec3 center, glm::vec3 right) { return generateBoudingBoxNxNyNz(left,center, right); }},
@@ -281,5 +292,18 @@ namespace GraphicEngine::Core
 			{ 7, PxNyNz}
 		};
 		return mapping;
+	}
+	template<typename T, int Levels, bool DynamicCreation>
+	template<typename Callback>
+	inline void Octree<T, Levels, DynamicCreation>::applyRecursively(std::shared_ptr<Octan<T>> node, Callback callback)
+	{
+		callback(node);
+		if (node->hasChildrens)
+		{
+			for (auto children : node->childrens)
+			{
+				applyRecursively(children, callback);
+			}
+		}
 	}
 }
