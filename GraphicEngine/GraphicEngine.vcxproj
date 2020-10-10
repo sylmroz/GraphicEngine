@@ -270,6 +270,7 @@
     <ClInclude Include="Scene\Resources\Face.hpp" />
     <ClInclude Include="Scene\Resources\Mesh.hpp" />
     <ClInclude Include="Scene\Resources\Model.hpp" />
+    <ClInclude Include="Scene\Resources\Transformation.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\UtilityLib\UtilityLib\UtilityLib.vcxproj">

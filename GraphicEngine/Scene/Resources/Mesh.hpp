@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Face.hpp"
+#include "Transformation.hpp"
 #include "../../Core/Math/GeometryUtils.hpp"
 #include "../../Core/Math/Geometry/3D/Octree.hpp"
 
@@ -14,7 +15,7 @@
 namespace GraphicEngine::Scene
 {
 	template <typename Vertex, int OctreeLevels = 5>
-	class Mesh
+	class Mesh : public Transformation
 	{
 	public:
 		Mesh() {}
@@ -187,7 +188,6 @@ namespace GraphicEngine::Scene
 		std::vector<std::shared_ptr<Vertex>> m_vertices;
 		std::vector<std::shared_ptr<Face>> m_faces;
 
-		Core::BoudingBox3D m_boudingBox;
 		std::shared_ptr<Core::Octree<Vertex, OctreeLevels>> m_octree;
 	};
 }
