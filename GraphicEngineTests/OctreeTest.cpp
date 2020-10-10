@@ -6,7 +6,7 @@
 
 using namespace GraphicEngine::Core;
 using namespace GraphicEngine::Common;
-using namespace GraphicEngine::Engines::Graphic::Generators;
+using namespace GraphicEngine::Engines::Graphic;
 
 TEST(OctreeTest, Dynamic_CreateCorrect)
 {

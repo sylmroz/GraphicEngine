@@ -4,7 +4,7 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 
-namespace GraphicEngine::Engines::Graphic::Generators
+namespace GraphicEngine::Engines::Graphic
 {
 	template <typename Vertex>
 	class PlaneGenerator : public IObjectGenerator<Vertex, glm::vec2, glm::vec2, glm::ivec2, GeneratingPosition, TriangleDirection>

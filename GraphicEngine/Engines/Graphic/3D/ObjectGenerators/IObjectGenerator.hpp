@@ -17,7 +17,7 @@ namespace GraphicEngine::Engines::Graphic
 	};
 }
 
-namespace GraphicEngine::Engines::Graphic::Generators
+namespace GraphicEngine::Engines::Graphic
 {
 	template <typename Vertex, typename... Args>
 	class IObjectGenerator

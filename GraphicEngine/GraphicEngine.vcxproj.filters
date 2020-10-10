@@ -438,5 +438,8 @@
     <ClInclude Include="Scene\Resources\Transformation.hpp">
       <Filter>Scene\Resources</Filter>
     </ClInclude>
+    <ClInclude Include="Engines\Graphic\3D\ObjectGenerators\CuboidGenerator.hpp">
+      <Filter>Engines\Graphic\3D\ObjectGenerators</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
