@@ -41,5 +41,12 @@ namespace GraphicEngine::Engines::Graphic
 			meshes.push_back(mesh);
 			return std::make_shared<Scene::Model<Vertex>>(meshes, name);
 		}
+
+		std::shared_ptr<Scene::Face> buildFace(uint32_t i1, uint32_t i2, uint32_t i3, TriangleDirection direction)
+		{
+			return std::make_shared<Scene::Face>(direction == TriangleDirection::Clockwise ?
+				Scene::Face({ i1, i2, i3 }) :
+				Scene::Face({ i1, i3, i2 }));
+		}
 	};
 }

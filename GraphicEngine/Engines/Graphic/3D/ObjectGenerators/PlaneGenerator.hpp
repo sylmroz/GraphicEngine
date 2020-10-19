@@ -63,17 +63,8 @@ namespace GraphicEngine::Engines::Graphic
 				for (uint32_t y{ 0 }; y < scale.y; ++y)
 				{
 					uint32_t point = y + (x * (scale.y + 1));
-					if (triangleDirection == TriangleDirection::CounterClockwise)
-					{	
-						faces.push_back(std::make_shared<Scene::Face>(Scene::Face({ point, point + 1, point + 2 + scale.y })));
-						faces.push_back(std::make_shared<Scene::Face>(Scene::Face({ point, point + 2 + scale.y, point + 1 + scale.y })));
-					}
-
-					else
-					{
-						faces.push_back(std::make_shared<Scene::Face>(Scene::Face({ point, point + 1 + scale.y, point + 2 + scale.y })));
-						faces.push_back(std::make_shared<Scene::Face>(Scene::Face({ point, point + 2 + scale.y, point + 1 })));
-					}
+					faces.push_back(this->buildFace(point, point + 1 + scale.y, point + 2 + scale.y, triangleDirection));
+					faces.push_back(this->buildFace(point, point + 2 + scale.y, point + 1, triangleDirection));
 				}
 			}
 
