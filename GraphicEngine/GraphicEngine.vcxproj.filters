@@ -441,5 +441,8 @@
     <ClInclude Include="Engines\Graphic\3D\ObjectGenerators\CuboidGenerator.hpp">
       <Filter>Engines\Graphic\3D\ObjectGenerators</Filter>
     </ClInclude>
+    <ClInclude Include="Engines\Graphic\3D\ObjectGenerators\SphereGenerator.hpp">
+      <Filter>Engines\Graphic\3D\ObjectGenerators</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

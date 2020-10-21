@@ -12,6 +12,7 @@
 
 #include "../Engines/Graphic/3D/ObjectGenerators/PlaneGenerator.hpp"
 #include "../Engines/Graphic/3D/ObjectGenerators/CuboidGenerator.hpp"
+#include "../Engines/Graphic/3D/ObjectGenerators/SphereGenerator.hpp"
 #include "../Engines//Graphic/Shaders/Models/Light.hpp"
 
 namespace GraphicEngine
@@ -44,8 +45,9 @@ namespace GraphicEngine
 			m_mesh = std::make_shared<Scene::Mesh<Common::VertexPCTc>>(vertices, faces);*/
 
 			//auto plane = Engines::Graphic::PlaneGenerator<Common::VertexPN>{}.getModel(glm::vec2(-10.0f), glm::vec2(10.0f), glm::ivec2(10), Engines::Graphic::GeneratingPosition::Corner, Engines::Graphic::TriangleDirection::Clockwise);
-			auto cube = Engines::Graphic::CuboidGenerator<Common::VertexPN>{}.getModel(glm::vec3(-1.0f), glm::vec3(1.0f), glm::ivec3(2,2,3), Engines::Graphic::GeneratingPosition::Corner, Engines::Graphic::TriangleDirection::Clockwise);
-			m_models.push_back(cube);
+			//auto cube = Engines::Graphic::CuboidGenerator<Common::VertexPN>{}.getModel(glm::vec3(-1.0f), glm::vec3(1.0f), glm::ivec3(2,2,3), Engines::Graphic::GeneratingPosition::Corner, Engines::Graphic::TriangleDirection::Clockwise);
+			auto sphere = Engines::Graphic::SphereGenerator<Common::VertexPN>{}.getModel(glm::vec3(0.0f), 1.0f, glm::ivec2(40,40), Engines::Graphic::TriangleDirection::CounterClockwise);
+			m_models.push_back(sphere);
 			//m_models = Modules::AssimpModelImporter<Common::VertexPN>{}.read(m_cfg->getProperty<std::string>("scene:object:path"));
 			m_models.front()->setScale(m_cfg->getProperty<float>("scene:object:scale"));
 			m_models.front()->setRotate(Core::Utils::Converter::fromArrayToObject<glm::vec3, std::vector<float>, 3>(m_cfg->getProperty<std::vector<float>>("scene:object:rotate")));

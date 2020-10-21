@@ -257,6 +257,7 @@
     <ClInclude Include="Engines\Graphic\3D\ObjectGenerators\CuboidGenerator.hpp" />
     <ClInclude Include="Engines\Graphic\3D\ObjectGenerators\IObjectGenerator.hpp" />
     <ClInclude Include="Engines\Graphic\3D\ObjectGenerators\PlaneGenerator.hpp" />
+    <ClInclude Include="Engines\Graphic\3D\ObjectGenerators\SphereGenerator.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\Light.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\ModelMatrices.hpp" />
     <ClInclude Include="Main\Application.hpp" />

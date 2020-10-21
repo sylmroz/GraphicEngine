@@ -23,7 +23,6 @@ namespace GraphicEngine::Engines::Graphic
 	class IObjectGenerator
 	{
 	public:
-		
 		virtual std::tuple<std::vector<std::shared_ptr<Vertex>>, std::vector<std::shared_ptr<Scene::Face>>, Core::BoudingBox3D> getObject(Args... args) = 0;
 
 		std::shared_ptr<Scene::Mesh<Vertex>> getMesh(Args... args)
