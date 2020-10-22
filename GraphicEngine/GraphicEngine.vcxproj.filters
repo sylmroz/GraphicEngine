@@ -447,5 +447,8 @@
     <ClInclude Include="Engines\Graphic\3D\ObjectGenerators\CylinderGenerator.hpp">
       <Filter>Engines\Graphic\3D\ObjectGenerators</Filter>
     </ClInclude>
+    <ClInclude Include="Engines\Graphic\3D\ObjectGenerators\ConeGenerator.hpp">
+      <Filter>Engines\Graphic\3D\ObjectGenerators</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

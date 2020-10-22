@@ -66,10 +66,10 @@ namespace GraphicEngine::Engines::Graphic
 			uint32_t offset = last - (scale.x + 1);
 			for (uint32_t i{ offset }; i < last - 1; ++i)
 			{
-				faces.push_back(this->buildFace(i, last, i + 1, TriangleDirection::CounterClockwise));
+				faces.push_back(this->buildFace(i, last, i + 1, triangleDirection));
 			}
 
-			faces.push_back(this->buildFace(last -1, last, offset, TriangleDirection::CounterClockwise));
+			faces.push_back(this->buildFace(last -1, last, offset, triangleDirection));
 
 			return std::make_tuple(vertices, faces, boudingBox);
 		}

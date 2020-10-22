@@ -254,6 +254,7 @@
     <ClInclude Include="Drivers\Vulkan\VulkanVertexBufferFactory.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanWindowContext.hpp" />
     <ClInclude Include="Engines\Graphic\3D\ObjectGenerator.hpp" />
+    <ClInclude Include="Engines\Graphic\3D\ObjectGenerators\ConeGenerator.hpp" />
     <ClInclude Include="Engines\Graphic\3D\ObjectGenerators\CuboidGenerator.hpp" />
     <ClInclude Include="Engines\Graphic\3D\ObjectGenerators\CylinderGenerator.hpp" />
     <ClInclude Include="Engines\Graphic\3D\ObjectGenerators\IObjectGenerator.hpp" />
