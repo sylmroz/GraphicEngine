@@ -7,7 +7,7 @@
 namespace GraphicEngine::Engines::Graphic
 {
 	template <typename Vertex>
-	class CylindeRgenerator : public IObjectGenerator<Vertex, glm::vec3, float, float, float, glm::ivec3, TriangleDirection>
+	class CylinderGenerator : public IObjectGenerator<Vertex, glm::vec3, float, float, float, glm::ivec3, TriangleDirection>
 	{
 	public:
 		virtual std::tuple<std::vector<std::shared_ptr<Vertex>>, std::vector<std::shared_ptr<Scene::Face>>, Core::BoudingBox3D> getObject(glm::vec3 center, float radiusBottom, float radiusTop, float height,
