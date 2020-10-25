@@ -7,16 +7,20 @@
 namespace GraphicEngine::Engines::Graphic
 {
 	template <typename Vertex>
-	class CylindeRgenerator : public IObjectGenerator<Vertex, glm::vec3, float, float, glm::ivec3, TriangleDirection>
+	class CylindeRgenerator : public IObjectGenerator<Vertex, glm::vec3, float, float, float, glm::ivec3, TriangleDirection>
 	{
 	public:
-		virtual std::tuple<std::vector<std::shared_ptr<Vertex>>, std::vector<std::shared_ptr<Scene::Face>>, Core::BoudingBox3D> getObject(glm::vec3 center, float radius, float height, glm::ivec3 scale,
-			TriangleDirection triangleDirection = TriangleDirection::Clockwise) override
+		virtual std::tuple<std::vector<std::shared_ptr<Vertex>>, std::vector<std::shared_ptr<Scene::Face>>, Core::BoudingBox3D> getObject(glm::vec3 center, float radiusBottom, float radiusTop, float height,
+			glm::ivec3 scale, TriangleDirection triangleDirection = TriangleDirection::Clockwise) override
 		{
-			float fiStep = 360.0f / (scale.x + 1);
-			float radiusStep = radius / (scale.y + 1);
-			float heightStep = height / (scale.z + 1);
-			Core::BoudingBox3D boudingBox(glm::vec3(-radius, -radius, 0.0f) + center, glm::vec3(radius, radius, height) + center);
+			float fiStep{ 360.0f / (scale.x + 1) };
+			float bottomRadiusStep{ radiusBottom / (scale.y + 1) };
+			float topRadiusStep{ radiusTop / (scale.y + 1) };
+			float heightStep{ height / (scale.z + 1) };
+			float secondRadiusStep{ (radiusBottom - radiusTop) / (scale.z + 1) };
+			float boudingBoxRadius{ std::max(radiusBottom, radiusTop) };
+
+			Core::BoudingBox3D boudingBox(glm::vec3(-boudingBoxRadius, -boudingBoxRadius, 0.0f) + center, glm::vec3(boudingBoxRadius, boudingBoxRadius, height) + center);
 
 			std::vector<std::shared_ptr<Vertex>> vertices;
 			std::vector<std::shared_ptr<Scene::Face>> faces;
@@ -31,12 +35,12 @@ namespace GraphicEngine::Engines::Graphic
 
 			for (uint32_t y{ 0 }; y < scale.y + 1; ++y)
 			{
-				float internalRadius{ (y + 1) * radiusStep };
+				float internalRadius{ (y + 1) * bottomRadiusStep };
 				for (uint32_t x{ 0 }; x < scale.x + 1; ++x)
 				{
 					float internalFi{ glm::radians(x * fiStep) };
 					auto v2 = std::make_shared<Vertex>();
-					v2->position = glm::vec3(internalRadius*std::cos(internalFi),internalRadius*std::sin(internalFi), 0.0f) + center;
+					v2->position = glm::vec3(internalRadius * std::cos(internalFi), internalRadius * std::sin(internalFi), 0.0f) + center;
 					vertices.push_back(v2);
 				}
 			}
@@ -60,11 +64,12 @@ namespace GraphicEngine::Engines::Graphic
 
 			for (uint32_t z{ 0 }; z < scale.z + 2; ++z)
 			{
+				float internalRadius{ radiusBottom - z * secondRadiusStep };
 				for (uint32_t x{ 0 }; x < scale.x + 1; ++x)
 				{
 					float internalFi{ glm::radians(x * fiStep) };
 					auto v2 = std::make_shared<Vertex>();
-					v2->position = glm::vec3(radius * std::cos(internalFi), radius * std::sin(internalFi), z * heightStep) + center;
+					v2->position = glm::vec3(internalRadius * std::cos(internalFi), internalRadius * std::sin(internalFi), z * heightStep) + center;
 					vertices.push_back(v2);
 				}
 			}
@@ -89,7 +94,7 @@ namespace GraphicEngine::Engines::Graphic
 
 			for (uint32_t y{ 0 }; y < scale.y + 1; ++y)
 			{
-				float internalRadius{ (y + 1) * radiusStep };
+				float internalRadius{ (y + 1) * topRadiusStep };
 				for (uint32_t x{ 0 }; x < scale.x + 1; ++x)
 				{
 					float internalFi{ glm::radians(x * fiStep) };
