@@ -24,6 +24,8 @@ namespace GraphicEngine::Core
 
 		bool isPointInside(glm::vec3 point);
 
+		void applyTransformation();
+
 		void operator=(BoudingBox3D boudingBox)
 		{
 			m_left = boudingBox.m_left;

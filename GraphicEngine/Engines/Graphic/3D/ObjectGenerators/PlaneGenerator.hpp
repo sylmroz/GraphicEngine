@@ -10,7 +10,7 @@ namespace GraphicEngine::Engines::Graphic
 	class PlaneGenerator : public IObjectGenerator<Vertex, glm::vec2, glm::vec2, glm::ivec2, GeneratingPosition, TriangleDirection>
 	{
 	public:
-		virtual std::tuple<std::vector<std::shared_ptr<Vertex>>, std::vector<std::shared_ptr<Scene::Face>>, Core::BoudingBox3D> getObject(glm::vec2 beginPosition, glm::vec2 endPosition, glm::ivec2 scale,
+		virtual std::tuple<std::vector<std::shared_ptr<Vertex>>, std::vector<std::shared_ptr<Scene::Face>>, Core::BoudingBox3D, glm::vec3> getObject(glm::vec2 beginPosition, glm::vec2 endPosition, glm::ivec2 scale,
 			GeneratingPosition generateFrom = GeneratingPosition::Corner, TriangleDirection triangleDirection = TriangleDirection::Clockwise) override
 		{
 			std::vector<std::shared_ptr<Vertex>> vertices;
@@ -68,7 +68,7 @@ namespace GraphicEngine::Engines::Graphic
 				}
 			}
 
-			return std::make_tuple(vertices, faces, boudingBox);
+			return std::make_tuple(vertices, faces, boudingBox, boudingBox.getCenter());
 		}
 	};
 }

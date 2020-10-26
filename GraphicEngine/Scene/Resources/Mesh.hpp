@@ -31,6 +31,23 @@ namespace GraphicEngine::Scene
 			m_vertices = std::move(vertices);
 			m_faces = std::move(faces);
 			m_boudingBox = boudingBox;
+			m_pivotPoint = boudingBox.getCenter();
+		}
+
+		Mesh(const std::vector<std::shared_ptr<Vertex>>& vertices, const std::vector<std::shared_ptr<Face>>& faces, glm::vec3 centralPosition)
+		{
+			m_vertices = std::move(vertices);
+			m_faces = std::move(faces);
+			generateBoudingBox(false);
+			m_pivotPoint = centralPosition;
+		}
+
+		Mesh(const std::vector<std::shared_ptr<Vertex>>& vertices, const std::vector<std::shared_ptr<Face>>& faces, Core::BoudingBox3D boudingBox, glm::vec3 centralPosition)
+		{
+			m_vertices = std::move(vertices);
+			m_faces = std::move(faces);
+			m_boudingBox = boudingBox;
+			m_pivotPoint = centralPosition;
 		}
 
 		template <typename VertexBufferFactory, typename VertexBuffer, typename... Args>
@@ -166,12 +183,17 @@ namespace GraphicEngine::Scene
 			m_octree = std::make_shared<Core::Octree<Vertex, OctreeLevels>>(m_boudingBox, m_vertices);
 		}
 
-		void generateBoudingBox()
+		void generateBoudingBox(bool generateCentralPosition = true)
 		{
+			m_pivotPoint = glm::vec3(0.0f);
 			for (auto v : m_vertices)
 			{
 				m_boudingBox.extendBox(v->position);
+				if (generateCentralPosition)
+					m_pivotPoint += v->position;
 			}
+			if (generateCentralPosition)
+				m_pivotPoint /= m_vertices.size();
 		}
 
 		Core::BoudingBox3D getBoudingBox()
@@ -182,6 +204,15 @@ namespace GraphicEngine::Scene
 		std::shared_ptr<Core::Octree<Vertex>> getOctree()
 		{
 			return m_octree;
+		}
+
+		virtual void applyTransformation() override
+		{
+			for (auto v : m_vertices)
+			{
+				v->position = glm::vec3(m_modelMatrix * glm::vec4(v->position, 1.0f));
+			}
+			generate(static_cast<Common::VertexType>(Vertex::getType()));
 		}
 		
 	private:

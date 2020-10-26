@@ -24,14 +24,6 @@ void GraphicEngine::Core::BoudingBox3D::recalculate(glm::vec3 p)
 	m_right.y = std::max(m_right.y, p.y);
 	m_right.z = std::max(m_right.z, p.z);
 
-	/*for (uint32_t i{ 0 }; i < 3; ++i)
-	{
-		if (m_right[i] < m_left[i] + m_eplilion)
-		{
-			m_right[i] = m_left[i] + m_eplilion;
-		}
-	}*/
-
 	m_baseLeft = m_left;
 	m_baseRight = m_right;
 }
@@ -51,4 +43,10 @@ bool GraphicEngine::Core::BoudingBox3D::isPointInside(glm::vec3 point)
 	return ((point.x >= m_left.x && point.x <= m_right.x) &&
 		(point.y >= m_left.y && point.y <= m_right.y) &&
 		(point.z >= m_left.z && point.z <= m_right.z));
+}
+
+void GraphicEngine::Core::BoudingBox3D::applyTransformation()
+{
+	m_baseLeft = m_left;
+	m_baseRight = m_right;
 }

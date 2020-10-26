@@ -23,12 +23,12 @@ namespace GraphicEngine::Engines::Graphic
 	class IObjectGenerator
 	{
 	public:
-		virtual std::tuple<std::vector<std::shared_ptr<Vertex>>, std::vector<std::shared_ptr<Scene::Face>>, Core::BoudingBox3D> getObject(Args... args) = 0;
+		virtual std::tuple<std::vector<std::shared_ptr<Vertex>>, std::vector<std::shared_ptr<Scene::Face>>, Core::BoudingBox3D, glm::vec3> getObject(Args... args) = 0;
 
 		std::shared_ptr<Scene::Mesh<Vertex>> getMesh(Args... args)
 		{
-			auto [vertices, faces, boudingBox] = getObject(args...);
-			auto mesh = std::make_shared<Scene::Mesh<Vertex>>(vertices, faces, boudingBox);
+			auto [vertices, faces, boudingBox, pivotPoint] = getObject(args...);
+			auto mesh = std::make_shared<Scene::Mesh<Vertex>>(vertices, faces, boudingBox, pivotPoint);
 			mesh->generate(static_cast<Common::VertexType>(Vertex::getType()));
 			return mesh;
 		}
@@ -38,7 +38,7 @@ namespace GraphicEngine::Engines::Graphic
 			std::vector<std::shared_ptr<Scene::Mesh<Vertex>>> meshes;
 			auto mesh = getMesh(args...);
 			meshes.push_back(mesh);
-			return std::make_shared<Scene::Model<Vertex>>(meshes, name);
+			return std::make_shared<Scene::Model<Vertex>>(meshes, mesh->getPivotPoint(), name);
 		}
 
 		std::shared_ptr<Scene::Face> buildFace(uint32_t i1, uint32_t i2, uint32_t i3, TriangleDirection direction)

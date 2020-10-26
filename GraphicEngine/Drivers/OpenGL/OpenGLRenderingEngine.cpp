@@ -38,18 +38,18 @@ bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 			vb->draw();
 		}
 	}
-	m.modelMatrix = glm::identity<glm::mat4>();
-	m.normalMatrix = glm::transpose(glm::inverse(glm::mat3(m_camera->getViewMatrix())));
-	m_modelMatrix->update(&m);
+	//m.modelMatrix = glm::identity<glm::mat4>();
+	//m.normalMatrix = glm::transpose(glm::inverse(glm::mat3(m_camera->getViewMatrix())));
+	//m_modelMatrix->update(&m);
 
-	for (auto& vbs : m_vertexBuffers)
-	{
-		for (auto& vb : vbs)
-		{
-			vb->bind();
-			vb->draw();
-		}
-	}
+	//for (auto& vbs : m_vertexBuffers)
+	//{
+	//	for (auto& vb : vbs)
+	//	{
+	//		vb->bind();
+	//		vb->draw();
+	//	}
+	//}
 
 	return false;
 }

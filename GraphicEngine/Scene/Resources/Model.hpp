@@ -14,6 +14,11 @@ namespace GraphicEngine::Scene
 			setMeshes(meshes, name);
 		}
 
+		Model(std::vector<std::shared_ptr<Mesh<Vertex>>>& meshes, glm::vec3 pivotPoint, const std::string& name = "")
+		{
+			setMeshes(meshes, pivotPoint, name);
+		}
+
 		void setMeshes(std::vector<std::shared_ptr<Mesh<Vertex>>>& meshes, const std::string& name = "")
 		{
 			m_meshes = std::move(meshes);
@@ -21,7 +26,15 @@ namespace GraphicEngine::Scene
 			for (auto& m : m_meshes)
 			{
 				m_boudingBox.extendBox(m->getBoudingBox());
+				m->setParent(this->weak_from_this());
 			}
+			m_pivotPoint = m_boudingBox.getCenter();
+		}
+
+		void setMeshes(std::vector<std::shared_ptr<Mesh<Vertex>>>& meshes, glm::vec3 pivotPoint, const std::string& name = "")
+		{
+			setMeshes(meshes, name);
+			setPivotPoint(pivotPoint);
 		}
 
 		void setName(const std::string& name)
@@ -72,6 +85,14 @@ namespace GraphicEngine::Scene
 		int32_t getParentId()
 		{
 			return m_parentId;
+		}
+
+		virtual void applyTransformation() override
+		{
+			for (auto m : m_meshes)
+			{
+				m->applyTransformation();
+			}
 		}
 
 		template <template<typename> typename VertexBufferFactory, template<typename> typename VertexBuffer, typename... Args>

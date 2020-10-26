@@ -9,7 +9,7 @@ namespace GraphicEngine::Engines::Graphic
 	class CuboidGenerator : public IObjectGenerator<Vertex, glm::vec3, glm::vec3, glm::ivec3, GeneratingPosition, TriangleDirection>
 	{
 	public:
-		virtual std::tuple<std::vector<std::shared_ptr<Vertex>>, std::vector<std::shared_ptr<Scene::Face>>, Core::BoudingBox3D> getObject(glm::vec3 beginPosition, glm::vec3 endPosition, glm::ivec3 scale,
+		virtual std::tuple<std::vector<std::shared_ptr<Vertex>>, std::vector<std::shared_ptr<Scene::Face>>, Core::BoudingBox3D, glm::vec3> getObject(glm::vec3 beginPosition, glm::vec3 endPosition, glm::ivec3 scale,
 			GeneratingPosition generateFrom = GeneratingPosition::Corner, TriangleDirection triangleDirection = TriangleDirection::Clockwise) override
 		{
 			auto verticesSize = 2 * (((scale.x + 1) * (scale.z + 1)) + ((scale.x + 1) * (scale.y + 1)) + ((scale.y + 1) * (scale.z + 1)));
@@ -155,7 +155,7 @@ namespace GraphicEngine::Engines::Graphic
 				}
 			}
 
-			return std::make_tuple(vertices, faces, boudingBox);
+			return std::make_tuple(vertices, faces, boudingBox, boudingBox.getCenter());
 		}
 	};
 }

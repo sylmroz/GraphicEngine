@@ -10,7 +10,7 @@ namespace GraphicEngine::Engines::Graphic
 	class ConeGenerator : public IObjectGenerator<Vertex, glm::vec3, float, float, glm::ivec3, TriangleDirection>
 	{
 	public:
-		virtual std::tuple<std::vector<std::shared_ptr<Vertex>>, std::vector<std::shared_ptr<Scene::Face>>, Core::BoudingBox3D> getObject(glm::vec3 center, float radius, float height, glm::ivec3 scale,
+		virtual std::tuple<std::vector<std::shared_ptr<Vertex>>, std::vector<std::shared_ptr<Scene::Face>>, Core::BoudingBox3D, glm::vec3> getObject(glm::vec3 center, float radius, float height, glm::ivec3 scale,
 			TriangleDirection triangleDirection = TriangleDirection::Clockwise) override
 		{
 			float fiStep = 360.0f / (scale.x + 1);
@@ -97,7 +97,7 @@ namespace GraphicEngine::Engines::Graphic
 			vertices.push_back(v3);
 			faces.push_back(this->buildFace(last - 1, vertices.size() - 1, offset, triangleDirection));
 
-			return std::make_tuple(vertices, faces, boudingBox);
+			return std::make_tuple(vertices, faces, boudingBox, center);
 		}
 	};
 }

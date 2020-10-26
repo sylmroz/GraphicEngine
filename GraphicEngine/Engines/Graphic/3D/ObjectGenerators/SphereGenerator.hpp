@@ -10,7 +10,7 @@ namespace GraphicEngine::Engines::Graphic
 	class SphereGenerator : public IObjectGenerator<Vertex, glm::vec3, float, glm::ivec2, TriangleDirection>
 	{
 	public:
-		virtual std::tuple<std::vector<std::shared_ptr<Vertex>>, std::vector<std::shared_ptr<Scene::Face>>, Core::BoudingBox3D> getObject(glm::vec3 centerPosition, float radius, glm::ivec2 scale,
+		virtual std::tuple<std::vector<std::shared_ptr<Vertex>>, std::vector<std::shared_ptr<Scene::Face>>, Core::BoudingBox3D, glm::vec3> getObject(glm::vec3 centerPosition, float radius, glm::ivec2 scale,
 			TriangleDirection triangleDirection = TriangleDirection::Clockwise) override
 		{
 			std::vector<std::shared_ptr<Vertex>> vertices;
@@ -71,7 +71,7 @@ namespace GraphicEngine::Engines::Graphic
 
 			faces.push_back(this->buildFace(last -1, last, offset, triangleDirection));
 
-			return std::make_tuple(vertices, faces, boudingBox);
+			return std::make_tuple(vertices, faces, boudingBox, centerPosition);
 		}
 	};
 }
