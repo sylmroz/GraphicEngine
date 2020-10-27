@@ -5,7 +5,7 @@
 namespace GraphicEngine::Scene
 {
 	template <typename Vertex>
-	class Model : public Transformation
+	class Model : public Transformation, public std::enable_shared_from_this<Model<Vertex>>
 	{
 	public:
 		Model() {}
@@ -26,7 +26,7 @@ namespace GraphicEngine::Scene
 			for (auto& m : m_meshes)
 			{
 				m_boudingBox.extendBox(m->getBoudingBox());
-				m->setParent(this->weak_from_this());
+				m->setParent(this);
 			}
 			m_pivotPoint = m_boudingBox.getCenter();
 		}
@@ -35,6 +35,11 @@ namespace GraphicEngine::Scene
 		{
 			setMeshes(meshes, name);
 			setPivotPoint(pivotPoint);
+		}
+
+		std::vector<std::shared_ptr<Mesh<Vertex>>>& getMeshes()
+		{
+			return m_meshes;
 		}
 
 		void setName(const std::string& name)
@@ -89,10 +94,13 @@ namespace GraphicEngine::Scene
 
 		virtual void applyTransformation() override
 		{
+			m_boudingBox = Core::BoudingBox3D();
 			for (auto m : m_meshes)
 			{
 				m->applyTransformation();
+				m_boudingBox.extendBox(m->getBoudingBox());
 			}
+			resetTransformation();
 		}
 
 		template <template<typename> typename VertexBufferFactory, template<typename> typename VertexBuffer, typename... Args>

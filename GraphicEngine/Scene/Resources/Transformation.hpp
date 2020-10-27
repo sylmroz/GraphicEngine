@@ -6,16 +6,15 @@
 
 namespace GraphicEngine::Scene
 {
-	class Transformation : public std::enable_shared_from_this<Transformation>
+	class Transformation
 	{
 	public:
-
-		void setParent(std::weak_ptr<Transformation> parent)
+		void setParent(Transformation* parent)
 		{
 			m_parentTransforamtion = parent;
 		}
 
-		std::weak_ptr<Transformation> getParent()
+		Transformation* getParent()
 		{
 			return m_parentTransforamtion;
 		}
@@ -75,27 +74,43 @@ namespace GraphicEngine::Scene
 		{
 			if (m_matrixNeedUpdate)
 			{
-				m_modelMatrix = glm::mat4(1.0f);
-				m_modelMatrix = glm::translate(m_modelMatrix, m_pivotPoint);
+				// Create translate matrix for pivot point
+				// We would to make scale and rotate transformations around pivot point
+				auto pivotTranslateMatrix = glm::translate(m_pivotPoint);
 
-				m_modelMatrix = glm::scale(m_modelMatrix, m_scale);
+				auto scaleMatrix = glm::scale(pivotTranslateMatrix, m_scale);
 
-				m_modelMatrix = glm::rotate(m_modelMatrix, glm::radians(m_rotation.x), glm::vec3(1, 0, 0));
-				m_modelMatrix = glm::rotate(m_modelMatrix, glm::radians(m_rotation.y), glm::vec3(0, 1, 0));
-				m_modelMatrix = glm::rotate(m_modelMatrix, glm::radians(m_rotation.z), glm::vec3(0, 0, 1));
+				auto rotateXMatrix = glm::rotate(pivotTranslateMatrix, glm::radians(m_rotation.x), glm::vec3(1, 0, 0));
+				auto rotateYMatrix = glm::rotate(pivotTranslateMatrix, glm::radians(m_rotation.y), glm::vec3(0, 1, 0));
+				auto rotateZMatrix = glm::rotate(pivotTranslateMatrix, glm::radians(m_rotation.z), glm::vec3(0, 0, 1));
 
-				m_modelMatrix = glm::translate(m_modelMatrix, m_position);
+				auto rotateMatrix = rotateZMatrix * rotateYMatrix * rotateXMatrix;
+
+				auto translateMatrix = glm::translate(m_position);
 				
-				if (auto parentTransform = m_parentTransforamtion.lock())
+				m_modelMatrix = translateMatrix * rotateMatrix * scaleMatrix;
+
+				if (m_parentTransforamtion != nullptr)
 				{
-					m_modelMatrix = parentTransform->getModelMatrix() * m_modelMatrix;
+					m_modelMatrix = m_parentTransforamtion->getModelMatrix() * m_modelMatrix;
 				}
 
 				m_matrixNeedUpdate = false;
+				m_boudingBox.transform(m_modelMatrix);
 			}
 
 			return m_modelMatrix;
 		}
+
+		void resetTransformation()
+		{
+			m_position = glm::vec3(0.0f);
+			m_rotation = glm::vec3(0.0f);
+			m_scale = glm::vec3(1.0f);
+			m_matrixNeedUpdate = false;
+			m_modelMatrix = glm::identity<glm::mat4>();
+		}
+
 	protected:
 		glm::vec3 m_pivotPoint; // average of vertex positions
 
@@ -103,10 +118,10 @@ namespace GraphicEngine::Scene
 		glm::vec3 m_rotation{ 0.0f,0.0f,0.0f };
 		glm::vec3 m_scale{ 1.0f,1.0f,1.0f };
 		bool m_matrixNeedUpdate{ true };
-		glm::mat4 m_modelMatrix = glm::mat4(1.0f);
+		glm::mat4 m_modelMatrix = glm::identity<glm::mat4>();
 
 		Core::BoudingBox3D m_boudingBox;
 
-		std::weak_ptr<Transformation> m_parentTransforamtion;
+		Transformation* m_parentTransforamtion = nullptr;
 	};
 }

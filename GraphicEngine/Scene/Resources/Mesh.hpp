@@ -208,10 +208,15 @@ namespace GraphicEngine::Scene
 
 		virtual void applyTransformation() override
 		{
+			auto modelMatrix = getModelMatrix();
+
+			m_boudingBox = Core::BoudingBox3D();
 			for (auto v : m_vertices)
 			{
-				v->position = glm::vec3(m_modelMatrix * glm::vec4(v->position, 1.0f));
+				v->position = glm::vec3(modelMatrix * glm::vec4(v->position, 1.0f));
+				m_boudingBox.extendBox(v->position);
 			}
+			resetTransformation();
 			generate(static_cast<Common::VertexType>(Vertex::getType()));
 		}
 		

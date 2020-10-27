@@ -27,7 +27,7 @@ bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 
 	light.eyePosition = m_camera->getPosition();
 	m_lightUniformBuffer->update(&light);
-	Engines::Graphic::Shaders::ModelMartices m (m_models.front()->getModelMatrix(), glm::transpose(glm::inverse(glm::mat3(m_camera->getViewMatrix()* m_models.front()->getModelMatrix()))));
+	Engines::Graphic::Shaders::ModelMartices m (m_models.front()->getMeshes().front()->getModelMatrix(), glm::transpose(glm::inverse(glm::mat3(m_camera->getViewMatrix()/* * m_models.front()->getModelMatrix()*/))));
 	m_modelMatrix->update(&m);
 
 	for (auto& vbs : m_vertexBuffers)
