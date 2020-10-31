@@ -33,8 +33,6 @@ namespace GraphicEngine::OpenGL
 		std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::ModelMartices>> m_modelMatrix;
 
 		std::vector<std::vector<std::shared_ptr<VertexBuffer<Common::VertexPN>>>> m_vertexBuffers;
-		//std::shared_ptr<VertexBuffer<Common::VertexPCTc>> m_vertexBuffer;
-		//std::shared_ptr<Texture2D> m_texture;
 
 		std::unique_ptr<Core::Logger<OpenGLRenderingEngine>> m_logger;
 	};

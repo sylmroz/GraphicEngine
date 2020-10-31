@@ -1,5 +1,8 @@
 #include "Engine.hpp"
 
+#include "../Platform/Glfw/OpenGL/GlfwOpenGLInjector.hpp"
+#include "../Platform/Glfw/Vulkan/GlfwVulkanInjector.hpp"
+
 GraphicEngine::Engine::Engine(std::shared_ptr<Common::WindowKeyboardMouse> window,
 	std::shared_ptr<RenderingEngine> renderingEngine,
 	std::shared_ptr<Core::Inputs::KeyboardEventProxy> keyboard,
@@ -16,7 +19,6 @@ GraphicEngine::Engine::Engine(std::shared_ptr<Common::WindowKeyboardMouse> windo
 	m_eventManager(eventManager),
 	m_timer(timer),
 	m_logger(std::move(logger))
-
 {
 }
 
@@ -70,6 +72,20 @@ void GraphicEngine::Engine::run()
 		m_eventManager->call();
 	}
 	m_renderingEngine->cleanup();
+}
+
+std::unique_ptr<GraphicEngine::Engine> GraphicEngine::Engine::createEngine(std::string driverType, std::string windowType)
+{
+	auto createEngine = [](const auto& injector) -> std::unique_ptr<GraphicEngine::Engine>
+	{
+		return injector.template create<std::unique_ptr<GraphicEngine::Engine>>();
+	};
+
+	auto engine = driverType == "vulkan" ?
+		createEngine(GraphicEngine::GLFW::injectGlfwVulkanResources()) :
+		createEngine(GraphicEngine::GLFW::injectGlfwOpenGlResources());
+
+	return engine;
 }
 
 GraphicEngine::Engine::~Engine()

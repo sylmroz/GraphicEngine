@@ -31,6 +31,8 @@ namespace GraphicEngine
 		void initialize();
 		void run();
 
+		static std::unique_ptr<Engine> createEngine(std::string driverType, std::string windowType);
+
 		~Engine();
 	protected:
 	private:

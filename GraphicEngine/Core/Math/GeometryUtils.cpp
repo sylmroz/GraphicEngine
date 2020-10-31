@@ -13,7 +13,7 @@ glm::vec3 GraphicEngine::Core::Math::calculateNormalFromTriangle(const std::arra
 glm::vec3 GraphicEngine::Core::Math::calculateNormalFromPolygon(const std::vector<glm::vec3>& polygon)
 {
     if (polygon.size() < 3)
-        throw std::runtime_error("Polygon should has minumm three verctor!");
+        throw std::runtime_error("Polygon should contain minumm three verctor!");
 
     if (polygon.size() == 3)
     {

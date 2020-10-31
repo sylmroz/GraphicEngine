@@ -1,8 +1,6 @@
 #include "Application.hpp"
 #include "Engine.hpp"
 
-#include "../Platform/Glfw/OpenGL/GlfwOpenGLInjector.hpp"
-#include "../Platform/Glfw/Vulkan/GlfwVulkanInjector.hpp"
 #include "../Core/Configuration.hpp"
 
 #include <exception>
@@ -11,7 +9,6 @@
 Application::Application(int argc, char** argv)
 {
 	// TODO - parse argc and argv to get parameters
-
 }
 
 void Application::exec()
@@ -22,14 +19,7 @@ void Application::exec()
 
 		std::string engineType = cfg.getProperty<std::string>("engine");
 
-		auto createEngine = [](const auto& injector) -> std::unique_ptr<GraphicEngine::Engine>
-		{
-			return injector.template create<std::unique_ptr<GraphicEngine::Engine>>();
-		};
-
-		auto engine = engineType == "vulkan" ?
-			createEngine(GraphicEngine::GLFW::injectGlfwVulkanResources()) :
-			createEngine(GraphicEngine::GLFW::injectGlfwOpenGlResources());
+		auto engine = GraphicEngine::Engine::createEngine(engineType, "glfw");
 
 		engine->initialize();
 		engine->run();

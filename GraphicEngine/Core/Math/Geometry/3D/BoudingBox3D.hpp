@@ -17,7 +17,7 @@ namespace GraphicEngine::Core
 	public:
 		BoudingBox3D();
 		BoudingBox3D(glm::vec3 left, glm::vec3 right);
-	
+
 		void recalculate(glm::vec3 p);
 
 		void transform(glm::mat4 modelMatrix);

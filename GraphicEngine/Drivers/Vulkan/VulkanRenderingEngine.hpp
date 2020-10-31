@@ -34,7 +34,6 @@ namespace GraphicEngine::Vulkan
 		vk::UniquePipelineCache m_pipelineCache;
 		vk::UniquePipelineLayout m_pipelineLayout;
 		vk::UniquePipeline m_graphicPipeline;
-		//std::shared_ptr<VertexBuffer<Common::VertexPCTc>> m_vertexBuffer;
 		std::vector<std::vector<std::shared_ptr<VertexBuffer<Common::VertexPN>>>> m_vertexBuffers;
 		
 		std::unique_ptr<VulkanShader> m_vertexShader;
@@ -46,10 +45,6 @@ namespace GraphicEngine::Vulkan
 		vk::UniqueDescriptorPool m_descriptorPool;
 		vk::UniqueDescriptorSetLayout m_descriptorSetLayout;
 		std::vector<vk::UniqueDescriptorSet> m_descriptorSets;
-
-		//std::shared_ptr<Texture2D> m_texture;
-
-
 	private:
 		std::shared_ptr<VulkanWindowContext> m_vulkanWindowContext;
 

@@ -25,43 +25,16 @@ namespace GraphicEngine
 			m_eventManager(eventManager),
 			m_cfg(cfg)
 		{
-			// TO DO
-			/*std::vector<Common::VertexPCTc> vertices =
-			{
-				{glm::vec3(0.5f,  0.5f, 0.0f), glm::vec3(0,0,1), glm::vec2(1.0f, 1.0f)},
-				{glm::vec3(0.5f, -0.5f, 0.0f), glm::vec3(1,0,0), glm::vec2(1.0f, 0.0f)},
-				{glm::vec3(-0.5f, -0.5f, 0.0f),glm::vec3(0,1,0), glm::vec2(0.0f, 0.0f)},
-				{glm::vec3(-0.5f,  0.5f, 0.0f),glm::vec3(1,1,0), glm::vec2(0.0f, 1.0f)}
-			};
-
-			std::vector<Scene::Face> faces =
-			{
-				Scene::Face({0,1,3}),
-				Scene::Face({1,2,3})
-			};
-
-			m_mesh = std::make_shared<Scene::Mesh<Common::VertexPCTc>>(vertices, faces);*/
-
-			//auto plane = Engines::Graphic::PlaneGenerator<Common::VertexPN>{}.getModel(glm::vec2(-10.0f), glm::vec2(10.0f), glm::ivec2(10), Engines::Graphic::GeneratingPosition::Corner, Engines::Graphic::TriangleDirection::Clockwise);
-			//auto cube = Engines::Graphic::CuboidGenerator<Common::VertexPN>{}.getModel(glm::vec3(-1.0f), glm::vec3(1.0f), glm::ivec3(2,2,3), Engines::Graphic::GeneratingPosition::Corner, Engines::Graphic::TriangleDirection::Clockwise);
-			//auto sphere = GraphicEngine::Engines::Graphic::ObjectGenerator<Common::VertexPN>::getSphereModel(
-				//glm::vec3(0.0f), 1.0f, glm::ivec2(40,40), Engines::Graphic::TriangleDirection::CounterClockwise);
 			auto cylinder = Engines::Graphic::CylinderGenerator<Common::VertexPN>{}.getModel(glm::vec3(0.0f), 0.5f, 0.5f, 2.0f, glm::ivec3(20, 2, 2), Engines::Graphic::TriangleDirection::CounterClockwise);
-			//auto cone = Engines::Graphic::ConeGenerator<Common::VertexPN>{}.getModel(glm::vec3(0.0f), 0.25f, 1.0f, glm::ivec3(20, 5, 2), Engines::Graphic::TriangleDirection::CounterClockwise);
 			m_models.push_back(cylinder);
-			//m_models = Modules::AssimpModelImporter<Common::VertexPN>{}.read(m_cfg->getProperty<std::string>("scene:object:path"));
 			m_models.front()->setScale(m_cfg->getProperty<float>("scene:object:scale"));
 			m_models.front()->setRotate(Core::Utils::Converter::fromArrayToObject<glm::vec3, std::vector<float>, 3>(m_cfg->getProperty<std::vector<float>>("scene:object:rotate")));
 			m_models.front()->setPosition(Core::Utils::Converter::fromArrayToObject<glm::vec3, std::vector<float>, 3>(m_cfg->getProperty<std::vector<float>>("scene:object:position")));
 
 			m_models.front()->getMeshes().front()->setRotate(Core::Utils::Converter::fromArrayToObject<glm::vec3, std::vector<float>, 3>(m_cfg->getProperty<std::vector<float>>("scene:object:rotate")));
-			//cylinder->getModelMatrix();
 			m_models.front()->applyTransformation();
 			
-
 			light.lightPosition = glm::vec3(100.0, 100.0, 100.0);
-
-			
 		}
 
 		virtual bool drawFrame() = 0;

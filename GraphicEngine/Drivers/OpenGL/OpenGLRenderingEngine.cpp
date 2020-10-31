@@ -66,9 +66,6 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 
 	try
 	{
-		/*OpenGLVertexShader vert(readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("basicPCTVP.vert").string()));
-		OpenGLFragmentShader frag(readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("basicPCTVP.frag").string()));*/
-
 		OpenGLVertexShader vert(readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("diffuse.vert").string()));
 		OpenGLFragmentShader frag(readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("diffuse.frag").string()));
 
@@ -82,13 +79,10 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 		m_uniformBufferMatrix = std::make_shared<UniformBuffer<glm::mat4>>(0);
 		m_lightUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::Light>>(1);
 		m_modelMatrix = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::ModelMartices>>(2);
-		//m_vertexBuffer = m_mesh->compile<VertexBufferFactory<Common::VertexPCTc>, VertexBuffer<Common::VertexPCTc>>();
 		for (auto& model : m_models)
 		{
 			m_vertexBuffers.push_back(model->compile<VertexBufferFactory, VertexBuffer>());
 		}
-		
-		//m_texture = TextureFactory::produceTexture("C:/rem.png");
 
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LESS);
