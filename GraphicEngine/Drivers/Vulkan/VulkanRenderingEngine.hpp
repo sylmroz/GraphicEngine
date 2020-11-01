@@ -36,8 +36,8 @@ namespace GraphicEngine::Vulkan
 		vk::UniquePipeline m_graphicPipeline;
 		std::vector<std::vector<std::shared_ptr<VertexBuffer<Common::VertexPN>>>> m_vertexBuffers;
 		
-		std::unique_ptr<VulkanShader> m_vertexShader;
-		std::unique_ptr<VulkanShader> m_fragmentShader;
+		std::shared_ptr<VulkanShader> m_vertexShader;
+		std::shared_ptr<VulkanShader> m_fragmentShader;
 		std::shared_ptr<UniformBuffer<glm::mat4>> m_uniformBuffer;
 		std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::Light>> m_lightUniformBuffer;
 		std::shared_ptr<UniformBufferDynamic<Engines::Graphic::Shaders::ModelMartices>> m_modelMatrix;

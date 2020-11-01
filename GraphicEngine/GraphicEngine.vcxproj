@@ -187,6 +187,7 @@
     <ClCompile Include="Drivers\Vulkan\VulkanHelper.cpp" />
     <ClCompile Include="Drivers\Vulkan\VulkanRenderingEngine.cpp" />
     <ClCompile Include="Drivers\Vulkan\VulkanShader.cpp" />
+    <ClCompile Include="Drivers\Vulkan\VulkanShaderFactory.cpp" />
     <ClCompile Include="Drivers\Vulkan\VulkanTexture.cpp" />
     <ClCompile Include="Main\Application.cpp" />
     <ClCompile Include="Main\Engine.cpp" />
@@ -247,6 +248,7 @@
     <ClInclude Include="Drivers\Vulkan\VulkanShader.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanHelper.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanRenderingEngine.hpp" />
+    <ClInclude Include="Drivers\Vulkan\VulkanShaderFactory.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanTexture.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanTextureFactory.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanUniformBuffer.hpp" />

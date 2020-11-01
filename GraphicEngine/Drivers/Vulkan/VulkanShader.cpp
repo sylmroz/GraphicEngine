@@ -13,4 +13,17 @@ GraphicEngine::ShaderType GraphicEngine::Vulkan::GetShaderType(vk::ShaderStageFl
 	};
 
 	return shaderTypeMap[shaderType];
-};
+}
+vk::ShaderStageFlagBits GraphicEngine::Vulkan::GetVulkanShaderType(ShaderType shaderType)
+{
+	std::map<ShaderType, vk::ShaderStageFlagBits> shaderTypeMap =
+	{
+		{ ShaderType::Vertex, vk::ShaderStageFlagBits::eVertex },
+		{ ShaderType::Fragment , vk::ShaderStageFlagBits::eFragment },
+		{ ShaderType::Geometry, vk::ShaderStageFlagBits::eGeometry },
+		{ ShaderType::TessalationControll, vk::ShaderStageFlagBits::eTessellationControl },
+		{ ShaderType::TessalationEvaluation, vk::ShaderStageFlagBits::eTessellationEvaluation }
+	};
+
+	return shaderTypeMap[shaderType];
+}

@@ -8,11 +8,12 @@
 namespace GraphicEngine::Vulkan
 {
 	ShaderType GetShaderType(vk::ShaderStageFlags shaderType);
+	vk::ShaderStageFlagBits GetVulkanShaderType(ShaderType shaderType);
 	
 	class VulkanShader : public Shader
 	{
 	public:
-		VulkanShader(const vk::UniqueDevice& device, const std::string& code, vk::ShaderStageFlags shaderType) :
+		VulkanShader(const vk::UniqueDevice& device, const std::string& code, vk::ShaderStageFlagBits shaderType) :
 			Shader{ code, GetShaderType(shaderType) }, m_shaderType{ shaderType }
 		{
 			m_device = device.get();
@@ -20,11 +21,16 @@ namespace GraphicEngine::Vulkan
 		}
 
 		template <typename Reader>
-		VulkanShader(const vk::UniqueDevice& device, Reader reader, const std::string& path, vk::ShaderStageFlags shaderType) :
+		VulkanShader(const vk::UniqueDevice& device, Reader reader, const std::string& path, vk::ShaderStageFlagBits shaderType) :
 			Shader{ reader, path, GetShaderType(shaderType) }, m_shaderType{ shaderType }
 		{
 			m_device = device.get();
 			compile();
+		}
+
+		vk::ShaderStageFlagBits getVulkanShaderType()
+		{
+			return m_shaderType;
 		}
 
 	public:
@@ -39,7 +45,7 @@ namespace GraphicEngine::Vulkan
 
 	protected:
 		vk::Device m_device;
-		vk::ShaderStageFlags m_shaderType;
+		vk::ShaderStageFlagBits m_shaderType;
 	};
 
 	class VulkanVertexShader : public VulkanShader

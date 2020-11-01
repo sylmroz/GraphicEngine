@@ -330,13 +330,14 @@ std::vector<vk::UniqueFramebuffer> GraphicEngine::Vulkan::createFrameBuffers(con
 	return frameBuffers;
 }
 
-vk::UniquePipeline GraphicEngine::Vulkan::createGraphicPipeline(const vk::UniqueDevice& device, const vk::UniquePipelineCache& pipeliceCache, const ShaderInfo& vertexShaderInfo, const ShaderInfo& fragmentShaderInfo, std::vector<vk::VertexInputAttributeDescription> attributeDescriptions, const vk::VertexInputBindingDescription& bindingDescription, bool depthBuffered, const vk::FrontFace& frontFace, const vk::UniquePipelineLayout& pipelineLayout, const vk::UniqueRenderPass& renderPass, vk::SampleCountFlagBits msaaSample, vk::CullModeFlags cullMode, bool depthBoundsTestEnable, bool stencilTestEnable)
+vk::UniquePipeline GraphicEngine::Vulkan::createGraphicPipeline(const vk::UniqueDevice& device, const vk::UniquePipelineCache& pipeliceCache, const std::vector<ShaderInfo>& shadersInfo, std::vector<vk::VertexInputAttributeDescription> attributeDescriptions, const vk::VertexInputBindingDescription& bindingDescription, bool depthBuffered, const vk::FrontFace& frontFace, const vk::UniquePipelineLayout& pipelineLayout, const vk::UniqueRenderPass& renderPass, vk::SampleCountFlagBits msaaSample, vk::CullModeFlags cullMode, bool depthBoundsTestEnable, bool stencilTestEnable)
 {
-	std::array<vk::PipelineShaderStageCreateInfo, 2> pipelineShaderCreateInfos =
+	std::vector<vk::PipelineShaderStageCreateInfo> pipelineShaderCreateInfos;
+	pipelineShaderCreateInfos.reserve(shadersInfo.size());
+	for (auto& shaderInfo : shadersInfo)
 	{
-		vk::PipelineShaderStageCreateInfo(vk::PipelineShaderStageCreateFlags(), vk::ShaderStageFlagBits::eVertex, vertexShaderInfo.shaderModule , "main", &vertexShaderInfo.specializationInfo),
-		vk::PipelineShaderStageCreateInfo(vk::PipelineShaderStageCreateFlags(), vk::ShaderStageFlagBits::eFragment, fragmentShaderInfo.shaderModule, "main", &fragmentShaderInfo.specializationInfo)
-	};
+		pipelineShaderCreateInfos.push_back(vk::PipelineShaderStageCreateInfo(vk::PipelineShaderStageCreateFlags(), shaderInfo.shaderType, shaderInfo.shaderModule, "main", &shaderInfo.specializationInfo));
+	}
 
 	vk::PipelineVertexInputStateCreateInfo pipelineVertexInputStateCreateInfo(vk::PipelineVertexInputStateCreateFlags(),
 		1, &bindingDescription,

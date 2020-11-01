@@ -66,6 +66,7 @@ namespace GraphicEngine::Vulkan
 	{
 		vk::ShaderModule shaderModule;
 		vk::SpecializationInfo specializationInfo;
+		vk::ShaderStageFlagBits shaderType;
 	};
 
 	struct SwapChainSupportDetails
@@ -185,7 +186,7 @@ namespace GraphicEngine::Vulkan
 	std::vector<vk::UniqueFramebuffer> createFrameBuffers(const vk::UniqueDevice& device, const vk::UniqueRenderPass& renderPass, vk::Extent2D extent, uint32_t layers,
 		const vk::UniqueImageView& colorImageView, const vk::UniqueImageView& depthImageView, const std::vector<vk::UniqueImageView>& swapChainImageViews);
 
-	vk::UniquePipeline createGraphicPipeline(const vk::UniqueDevice& device, const vk::UniquePipelineCache& pipeliceCache, const ShaderInfo& vertexShaderInfo, const ShaderInfo& fragmentShaderInfo,
+	vk::UniquePipeline createGraphicPipeline(const vk::UniqueDevice& device, const vk::UniquePipelineCache& pipeliceCache, const std::vector<ShaderInfo>& shadersInfo,
 		std::vector<vk::VertexInputAttributeDescription> attributeDescriptions, const vk::VertexInputBindingDescription& bindingDescription,
 		bool depthBuffered, const vk::FrontFace& frontFace, const vk::UniquePipelineLayout& pipelineLayout,
 		const vk::UniqueRenderPass& renderPass, vk::SampleCountFlagBits msaaSample, vk::CullModeFlags cullMode = vk::CullModeFlagBits::eNone, bool depthBoundsTestEnable = false,

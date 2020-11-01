@@ -2,7 +2,13 @@
 
 #undef max
 
-GraphicEngine::Vulkan::VulkanFramework::VulkanFramework(std::shared_ptr<VulkanWindowContext> vulkanWindowsContext, const std::string& appName, const std::string& engineName, int width, int height, vk::SampleCountFlagBits msaaSamples, const std::vector<std::string>& validationLayers, std::unique_ptr<GraphicEngine::Core::Logger<VulkanFramework>> logger)
+GraphicEngine::Vulkan::VulkanFramework::VulkanFramework():
+	VulkanShaderFactory{ this }
+{
+}
+
+GraphicEngine::Vulkan::VulkanFramework::VulkanFramework(std::shared_ptr<VulkanWindowContext> vulkanWindowsContext, const std::string& appName, const std::string& engineName, int width, int height, vk::SampleCountFlagBits msaaSamples, const std::vector<std::string>& validationLayers, std::unique_ptr<GraphicEngine::Core::Logger<VulkanFramework>> logger):
+	VulkanShaderFactory{ this }
 {
 	initialize(vulkanWindowsContext, appName, engineName, width, height, msaaSamples, validationLayers, std::move(logger));
 }

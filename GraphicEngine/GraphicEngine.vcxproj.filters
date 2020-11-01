@@ -214,6 +214,9 @@
     <ClCompile Include="Core\Math\Geometry\3D\BoudingCube.cpp">
       <Filter>Core\Math\Geometry\3D</Filter>
     </ClCompile>
+    <ClCompile Include="Drivers\Vulkan\VulkanShaderFactory.cpp">
+      <Filter>Drivers\Vulkan</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Input\Keyboard\KeyboardEnumKeys.hpp">
@@ -449,6 +452,9 @@
     </ClInclude>
     <ClInclude Include="Engines\Graphic\3D\ObjectGenerators\ConeGenerator.hpp">
       <Filter>Engines\Graphic\3D\ObjectGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="Drivers\Vulkan\VulkanShaderFactory.hpp">
+      <Filter>Drivers\Vulkan</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

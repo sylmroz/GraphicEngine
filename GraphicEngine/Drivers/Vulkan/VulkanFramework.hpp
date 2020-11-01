@@ -2,15 +2,15 @@
 
 #include "VulkanHelper.hpp"
 #include "VulkanWindowContext.hpp"
+#include "VulkanShaderFactory.hpp"
 #include "../../Core/Logger.hpp"
 
 namespace GraphicEngine::Vulkan
 {
-
-	class VulkanFramework
+	class VulkanFramework : public VulkanShaderFactory
 	{
 	public:
-		VulkanFramework() = default;
+		VulkanFramework();
 		VulkanFramework(std::shared_ptr<VulkanWindowContext> vulkanWindowsContext, const std::string& appName, 
 			const std::string& engineName, int width, int height, vk::SampleCountFlagBits msaaSamples,
 			const std::vector<std::string>& validationLayers,

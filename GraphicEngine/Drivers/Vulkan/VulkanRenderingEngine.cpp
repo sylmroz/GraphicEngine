@@ -60,9 +60,6 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 		{
 			m_vertexBuffers.push_back(model->compile<VertexBufferFactory, VertexBuffer>(m_framework->m_physicalDevice, m_framework->m_device, m_framework->m_commandPool, m_framework->m_graphicQueue));
 		}
-		
-		m_vertexShader = std::make_unique<VulkanVertexShader>(m_framework->m_device, Core::IO::readFile<std::string>(Core::FileSystem::getVulkanShaderPath("diffuse.vert.spv").string()));
-		m_fragmentShader = std::make_unique<VulkanFragmentShader>(m_framework->m_device, Core::IO::readFile<std::string>(Core::FileSystem::getVulkanShaderPath("diffuse.frag.spv").string()));
 
 		m_descriptorSetLayout = createDescriptorSetLayout(m_framework->m_device,
 			{ {m_uniformBuffer->getDescriptorType(), 1, vk::ShaderStageFlagBits::eVertex},
@@ -87,8 +84,13 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 
 		m_pipelineCache = m_framework->m_device->createPipelineCacheUnique(vk::PipelineCacheCreateInfo());
 
-		m_graphicPipeline = createGraphicPipeline(m_framework->m_device, m_pipelineCache, ShaderInfo{ m_vertexShader->shaderModule.get(),vk::SpecializationInfo() },
-			ShaderInfo{ m_fragmentShader->shaderModule.get(),vk::SpecializationInfo() }, createVertexInputAttributeDescriptions(Common::VertexPN::getSizeAndOffsets()),
+		m_vertexShader = m_framework->getVulkanVertexShader(Core::IO::readFile<std::string>(Core::FileSystem::getVulkanShaderPath("diffuse.vert.spv").string()));
+		m_fragmentShader = m_framework->getVulkanFragmentShader(Core::IO::readFile<std::string>(Core::FileSystem::getVulkanShaderPath("diffuse.frag.spv").string()));
+
+		m_graphicPipeline = createGraphicPipeline(m_framework->m_device, m_pipelineCache, 
+			{ ShaderInfo{ m_vertexShader->shaderModule.get(),vk::SpecializationInfo(), m_vertexShader->getVulkanShaderType() },
+			ShaderInfo{ m_fragmentShader->shaderModule.get(),vk::SpecializationInfo(), m_fragmentShader->getVulkanShaderType() } }, 
+			createVertexInputAttributeDescriptions(Common::VertexPN::getSizeAndOffsets()),
 			vk::VertexInputBindingDescription(0, Common::VertexPN::getStride()), true, vk::FrontFace::eClockwise, m_pipelineLayout, m_framework->m_renderPass, m_framework->m_msaaSamples, vk::CullModeFlagBits::eNone);
 
 		buildCommandBuffers();
