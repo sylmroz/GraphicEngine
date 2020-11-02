@@ -123,60 +123,14 @@ namespace GraphicEngine::Scene
 		{
 			if (resources & Common::VertexType::Normal)
 			{
-				if constexpr (std::is_same_v<Vertex, Common::VertexPN> ||
-					std::is_same_v<Vertex, Common::VertexPTcN> ||
-					std::is_same_v<Vertex, Common::VertexPTcNTB>)
-				{
-					std::vector<std::pair<uint32_t, glm::vec3>> normals;
-					normals.resize(m_vertices.size());
-					for (auto& face : m_faces)
-					{
-						std::vector<glm::vec3> vertices;
-						vertices.reserve(face->indices.size());
-						for (uint32_t index : face->indices)
-						{
-							vertices.push_back(m_vertices[index]->position);
-						}
-
-						for (uint32_t i{ 0 }; i < face->indices.size(); ++i)
-						{
-							auto& normal = normals[face->indices[i]];
-							normal.first++;
-							normal.second += Core::Math::calculateNormalFromPolygon(vertices);
-						}
-					}
-
-					uint32_t i{ 0 };
-					for (auto& vertex : m_vertices)
-					{
-						vertex->normal = glm::normalize(normals[i].second / static_cast<float>(normals[i].first));
-						++i;
-					}
-				}
+				generateNormals();
 			}
 
 			if (resources & Common::VertexType::Tangent || resources & Common::VertexType::BiTangent)
 			{
 				if constexpr (std::is_same_v<Vertex, Common::VertexPTcNTB>)
 				{
-					for (auto& vertex : m_vertices)
-					{
-						glm::vec3 normal = vertex->normal;
-						glm::vec3 c1 = glm::cross(normal, glm::vec3(0.0, 0.0, 1.0));
-						glm::vec3 c2 = glm::cross(normal, glm::vec3(0.0, 1.0, 0.0));
-
-						if (glm::length(c1) > glm::length(c2))
-						{
-							vertex->tangent = glm::normalize(c1);
-						}
-						
-						else
-						{
-							vertex->tangent = glm::normalize(c2);
-						}
-
-						vertex->bitangent = glm::normalize(glm::cross(vertex->tangent, normal));
-					}
+					generateTangentsAndBitangents();
 				}
 			}
 
@@ -218,6 +172,49 @@ namespace GraphicEngine::Scene
 			}
 			resetTransformation();
 			generate(static_cast<Common::VertexType>(Vertex::getType()));
+		}
+
+		void generateNormals()
+		{
+			if constexpr (std::is_same_v<Vertex, Common::VertexPN> ||
+				std::is_same_v<Vertex, Common::VertexPTcN> ||
+				std::is_same_v<Vertex, Common::VertexPTcNTB>)
+			{
+				std::vector<std::pair<uint32_t, glm::vec3>> normals;
+				normals.resize(m_vertices.size());
+				for (auto& face : m_faces)
+				{
+					std::vector<glm::vec3> vertices;
+					vertices.reserve(face->indices.size());
+					for (uint32_t index : face->indices)
+					{
+						vertices.push_back(m_vertices[index]->position);
+					}
+
+					for (uint32_t i{ 0 }; i < face->indices.size(); ++i)
+					{
+						auto& normal = normals[face->indices[i]];
+						normal.first++;
+						normal.second += Core::Math::calculateNormalFromPolygon(vertices);
+					}
+				}
+
+				uint32_t i{ 0 };
+				for (auto& vertex : m_vertices)
+				{
+					vertex->normal = glm::normalize(normals[i].second / static_cast<float>(normals[i].first));
+					++i;
+				}
+			}
+		}
+
+		void generateTangentsAndBitangents()
+		{
+			for (auto& vertex : m_vertices)
+			{
+				vertex->tangent = Core::Math::generateTangent(vertex->normal);
+				vertex->bitangent = Core::Math::generateBitangent(vertex->tangent, vertex->normal);
+			}
 		}
 		
 	private:

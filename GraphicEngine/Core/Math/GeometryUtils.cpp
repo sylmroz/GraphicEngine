@@ -33,3 +33,16 @@ glm::vec3 GraphicEngine::Core::Math::calculateNormalFromPolygon(const std::vecto
     }
     return glm::normalize(normal);
 }
+
+glm::vec3 GraphicEngine::Core::Math::generateTangent(glm::vec3 normal)
+{
+    glm::vec3 c1 = glm::cross(normal, glm::vec3(0.0, 0.0, 1.0));
+    glm::vec3 c2 = glm::cross(normal, glm::vec3(0.0, 1.0, 0.0));
+
+    return glm::length(c1) > glm::length(c2) ? glm::normalize(c1) : glm::normalize(c2);;
+}
+
+glm::vec3 GraphicEngine::Core::Math::generateBitangent(glm::vec3 tangent, glm::vec3 normal)
+{
+    return glm::normalize(glm::cross(tangent, normal));
+}
