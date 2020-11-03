@@ -16,7 +16,7 @@ namespace GraphicEngine::OpenGL
 	class OpenGLRenderingEngine : public GraphicEngine::RenderingEngine
 	{
 	public:
-		OpenGLRenderingEngine(std::shared_ptr<Common::Camera> camera, 
+		OpenGLRenderingEngine(std::shared_ptr<Services::CameraControllerManager> cameraControllerManager,
 			std::shared_ptr<Core::EventManager> eventManager,
 			std::shared_ptr<Core::Configuration> cfg,
 			std::unique_ptr<Core::Logger<OpenGLRenderingEngine>> logger);

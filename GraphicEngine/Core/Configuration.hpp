@@ -11,7 +11,7 @@ namespace GraphicEngine::Core
 	{
 	public:
 		Configuration(const std::string& fileName = "AppSettings.json");
-		Configuration(const json& j);
+		Configuration(json& j);
 
 		template <typename T>
 		T getProperty(const std::string& key)

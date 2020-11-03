@@ -9,6 +9,7 @@
 #include "../Scene/Resources/Model.hpp"
 #include "../Modules/Assimp/AssimpModelImporter.hpp"
 #include "../Core/Utils/ObjectConverter.hpp"
+#include "../Services/CameraControllerManager.hpp"
 
 #include "../Engines/Graphic/3D/ObjectGenerator.hpp"
 #include "../Engines//Graphic/Shaders/Models/Light.hpp"
@@ -18,10 +19,10 @@ namespace GraphicEngine
 	class RenderingEngine
 	{
 	public:
-		RenderingEngine(std::shared_ptr<Common::Camera> camera,
+		RenderingEngine(std::shared_ptr<Services::CameraControllerManager> cameraControllerManager,
 			std::shared_ptr<Core::EventManager> eventManager,
 			std::shared_ptr<Core::Configuration> cfg) :
-			m_camera(camera),
+			m_cameraControllerManager(cameraControllerManager),
 			m_eventManager(eventManager),
 			m_cfg(cfg)
 		{
@@ -42,11 +43,9 @@ namespace GraphicEngine
 		virtual void resizeFrameBuffer(size_t width, size_t height) = 0;
 		virtual void cleanup() = 0;
 
-		void setCamera(std::shared_ptr<Common::Camera> camera) { m_camera = camera; }
-
 		virtual ~RenderingEngine() = default;
 	protected:
-		std::shared_ptr<Common::Camera> m_camera;
+		std::shared_ptr<Services::CameraControllerManager> m_cameraControllerManager;
 		std::shared_ptr<Core::EventManager> m_eventManager;
 		std::shared_ptr<Core::Configuration> m_cfg;
 

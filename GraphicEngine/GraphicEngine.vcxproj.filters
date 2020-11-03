@@ -121,6 +121,9 @@
     <Filter Include="Engines\Graphic\Shaders\Models">
       <UniqueIdentifier>{bab49554-d40f-4598-94a0-069a61e0d277}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Services">
+      <UniqueIdentifier>{5f1621d4-0dc8-47a6-9f19-82e638546693}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -216,6 +219,12 @@
     </ClCompile>
     <ClCompile Include="Drivers\Vulkan\VulkanShaderFactory.cpp">
       <Filter>Drivers\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="Services\CameraControllerManager.cpp">
+      <Filter>Services</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\CameraController.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -455,6 +464,12 @@
     </ClInclude>
     <ClInclude Include="Drivers\Vulkan\VulkanShaderFactory.hpp">
       <Filter>Drivers\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Services\CameraControllerManager.hpp">
+      <Filter>Services</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\CameraController.hpp">
+      <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

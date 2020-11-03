@@ -171,6 +171,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Common\Camera.cpp" />
+    <ClCompile Include="Common\CameraController.cpp" />
     <ClCompile Include="Common\Mouse.cpp" />
     <ClCompile Include="Common\TextureReader.cpp" />
     <ClCompile Include="Core\Configuration.cpp" />
@@ -196,9 +197,11 @@
     <ClCompile Include="Platform\Glfw\OpenGL\GlfwOpenGLWindow.cpp" />
     <ClCompile Include="Platform\Glfw\Vulkan\GlfwVulkanWindow.cpp" />
     <ClCompile Include="Platform\Glfw\Vulkan\GlfwVulkanWindowContext.cpp" />
+    <ClCompile Include="Services\CameraControllerManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common\Camera.hpp" />
+    <ClInclude Include="Common\CameraController.hpp" />
     <ClInclude Include="Common\Keyboard.hpp" />
     <ClInclude Include="Common\ModelImporter.hpp" />
     <ClInclude Include="Common\Mouse.hpp" />
@@ -277,6 +280,7 @@
     <ClInclude Include="Scene\Resources\Mesh.hpp" />
     <ClInclude Include="Scene\Resources\Model.hpp" />
     <ClInclude Include="Scene\Resources\Transformation.hpp" />
+    <ClInclude Include="Services\CameraControllerManager.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\UtilityLib\UtilityLib\UtilityLib.vcxproj">

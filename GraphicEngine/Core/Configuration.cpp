@@ -1,5 +1,6 @@
 #include "Configuration.hpp"
 #include <fstream>
+#include <iostream>
 
 GraphicEngine::Core::Configuration::Configuration(const std::string& fileName)
 {
@@ -24,7 +25,7 @@ GraphicEngine::Core::Configuration::Configuration(const std::string& fileName)
 	}
 }
 
-GraphicEngine::Core::Configuration::Configuration(const json& j):
-	configuration{j}
+GraphicEngine::Core::Configuration::Configuration(json& j)
 {
+	configuration = j;
 }

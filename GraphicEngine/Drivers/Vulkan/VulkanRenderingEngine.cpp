@@ -9,12 +9,12 @@
 #undef max
 
 GraphicEngine::Vulkan::VulkanRenderingEngine::VulkanRenderingEngine(std::shared_ptr<VulkanWindowContext> vulkanWindowContext,
-	std::shared_ptr<Common::Camera> camera,
+	std::shared_ptr<Services::CameraControllerManager> cameraControllerManager,
 	std::shared_ptr<Core::EventManager> eventManager,
 	std::shared_ptr<Core::Configuration> cfg,
 	std::unique_ptr<Core::Logger<VulkanRenderingEngine>> logger) :
 	m_vulkanWindowContext(vulkanWindowContext),
-	RenderingEngine(camera, eventManager, cfg)
+	RenderingEngine(cameraControllerManager, eventManager, cfg)
 {
 }
 
@@ -24,11 +24,11 @@ bool GraphicEngine::Vulkan::VulkanRenderingEngine::drawFrame()
 	{
 		m_framework->acquireFrame();
 
-		m_uniformBuffer->updateAndSet(m_camera->getViewProjectionMatrix());
-		light.eyePosition = m_camera->getPosition();
+		m_uniformBuffer->updateAndSet(m_cameraControllerManager->getActiveCamera()->getViewProjectionMatrix());
+		light.eyePosition = m_cameraControllerManager->getActiveCamera()->getPosition();
 		m_lightUniformBuffer->updateAndSet(light);
-		m_modelMatrix->updateAndSet({ Engines::Graphic::Shaders::ModelMartices(m_models.front()->getModelMatrix(), glm::transpose(glm::inverse(glm::mat3(m_camera->getViewMatrix() * m_models.front()->getModelMatrix())))),
-			 Engines::Graphic::Shaders::ModelMartices( glm::identity<glm::mat4>(), glm::transpose(glm::inverse(glm::mat3(m_camera->getViewMatrix())))) });
+		m_modelMatrix->updateAndSet({ Engines::Graphic::Shaders::ModelMartices(m_models.front()->getModelMatrix(), glm::transpose(glm::inverse(glm::mat3(m_cameraControllerManager->getActiveCamera()->getViewMatrix() * m_models.front()->getModelMatrix())))),
+			 Engines::Graphic::Shaders::ModelMartices( glm::identity<glm::mat4>(), glm::transpose(glm::inverse(glm::mat3(m_cameraControllerManager->getActiveCamera()->getViewMatrix())))) });
 
 		m_framework->submitFrame();
 	}

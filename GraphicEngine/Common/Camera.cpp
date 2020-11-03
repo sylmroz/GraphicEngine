@@ -89,18 +89,18 @@ glm::vec3 GraphicEngine::Common::Camera::getPosition()
 	return m_position;
 }
 
-GraphicEngine::Common::Camera::Camera(std::shared_ptr<Core::Configuration> cfg):
-	m_cfg{cfg}
+GraphicEngine::Common::Camera::Camera(std::shared_ptr<Core::Configuration> cfg) :
+	m_cfg{ cfg }
 {
 	CameraParameters param
 	{
-		m_cfg->getProperty<float>("camera:parameters:fov"),
-		m_cfg->getProperty<float>("camera:parameters:aspect ratio"),
-		m_cfg->getProperty<float>("camera:parameters:z-near"),
-		m_cfg->getProperty<float>("camera:parameters:z-far"),
+		m_cfg->getProperty<float>("parameters:fov"),
+		m_cfg->getProperty<float>("parameters:aspect ratio"),
+		m_cfg->getProperty<float>("parameters:z-near"),
+		m_cfg->getProperty<float>("parameters:z-far"),
 	};
 
-	if (m_cfg->getProperty<std::string>("camera:type") == "perspective")
+	if (m_cfg->getProperty<std::string>("type") == "perspective")
 	{
 		setCameraPerspectiveProperties(param);
 	}
@@ -110,28 +110,18 @@ GraphicEngine::Common::Camera::Camera(std::shared_ptr<Core::Configuration> cfg):
 		setCameraOrthographicProperties(param);
 	}
 
-	m_position = Core::Utils::Converter::fromArrayToObject<glm::vec3, std::vector<float>, 3>(m_cfg->getProperty<std::vector<float>>("camera:position"));
-	m_direction = glm::normalize(Core::Utils::Converter::fromArrayToObject<glm::vec3, std::vector<float>, 3>(m_cfg->getProperty<std::vector<float>>("camera:direction")));
-	m_up = Core::Utils::Converter::fromArrayToObject<glm::vec3, std::vector<float>, 3>(m_cfg->getProperty<std::vector<float>>("camera:up"));
-	m_speed = m_cfg->getProperty<float>("camera:speed");
+	m_position = Core::Utils::Converter::fromArrayToObject<glm::vec3, std::vector<float>, 3>(m_cfg->getProperty<std::vector<float>>("position"));
+	m_direction = glm::normalize(Core::Utils::Converter::fromArrayToObject<glm::vec3, std::vector<float>, 3>(m_cfg->getProperty<std::vector<float>>("direction")));
+	m_up = Core::Utils::Converter::fromArrayToObject<glm::vec3, std::vector<float>, 3>(m_cfg->getProperty<std::vector<float>>("up"));
+	m_speed = m_cfg->getProperty<float>("speed");
 }
-
-//GraphicEngine::Common::Camera::Camera(PerspectiveParameters_s perspectiveParameters)
-//{
-//	setCameraPerspectiveProperties(perspectiveParameters);
-//}
-
-//GraphicEngine::Common::Camera::Camera(OrthogonalParameters orthogonalParameters)
-//{
-//	setCameraOrthogonalProperties(orthogonalParameters);
-//}
 
 void GraphicEngine::Common::Camera::rotate(const glm::vec2& offset)
 {
 	m_yawPitchOffset = (offset * m_sensitivity);
 	float oldPitch = m_yawPitch.x;
 	m_yawPitch += m_yawPitchOffset;
-	
+
 	m_shouldUpdateView = true;
 }
 
@@ -152,7 +142,7 @@ void GraphicEngine::Common::Camera::move(const glm::vec2& offset)
 
 glm::mat4 GraphicEngine::Common::Camera::caclulatePerspective()
 {
-	return glm::perspective(glm::radians(m_cameraParameters.fov), m_cameraParameters.aspectRatio, 
+	return glm::perspective(glm::radians(m_cameraParameters.fov), m_cameraParameters.aspectRatio,
 		m_cameraParameters.zNear, m_cameraParameters.zFar);
 }
 
@@ -176,7 +166,7 @@ void GraphicEngine::Common::Camera::updateViewMatrix()
 		m_new_direction = glm::normalize(glm::rotate(rot, m_direction));
 	}
 	m_viewMatrix = glm::lookAt(m_position, m_position + m_new_direction, up);
-	
+
 	m_yawPitchOffset = glm::vec2(0.0f, 0.0f);
 	m_shouldUpdateView = false;
 	if (m_cameraType == CameraType::Orthographic)
@@ -189,117 +179,4 @@ void GraphicEngine::Common::Camera::updateProjectionMatrix()
 {
 	m_projectionMatrix = calculateProjectionMatrix();
 	m_shouldUpdateProjection = false;
-}
-
-GraphicEngine::Common::CameraController::CameraController(std::shared_ptr<Camera> camera, std::shared_ptr<WindowKeyboardMouse> window,
-	std::shared_ptr<Core::EventManager> eventManager, std::shared_ptr<Core::Inputs::KeyboardEventProxy> keyboard) :
-	m_camera(camera),
-	m_window(window),
-	m_eventManager(eventManager),
-	m_keyboard(keyboard),
-	m_prevMousePosition(glm::vec2(0.0f, 0.0f))
-{
-	m_eventManager->addSubject([&]()
-		{
-			if (isCameraActivated())
-			{
-				updateCamera(
-					m_window->getCursorPosition(),
-					m_window->getScrollValue(),
-					m_window->getPressedButtons(),
-					m_window->getPressedKeys()
-				);
-			}
-		});
-
-	m_keyboard->onKeyUp([&](Core::Inputs::KeyboardKey key)
-		{
-			if (key == Core::Inputs::KeyboardKey::KEY_C)
-			{
-				switchCameraType();
-			}
-		});
-
-	m_camera->setSensitivity(m_window->getSensitivity());
-}
-
-void GraphicEngine::Common::CameraController::setCameraType(CameraType cameraType)
-{
-	m_camera->setCameraType(cameraType);
-}
-
-void GraphicEngine::Common::CameraController::setDt(float dt)
-{
-	m_dt = dt;
-}
-
-void GraphicEngine::Common::CameraController::setInitialMousePosition(glm::vec2 pos)
-{
-	m_prevMousePosition = pos;
-}
-
-void GraphicEngine::Common::CameraController::updateCamera(glm::vec2 cursorPosition, glm::vec2 scrollPosition, const std::vector<Core::Inputs::MouseButton>& buttons, std::vector<Core::Inputs::KeyboardKey> keys)
-{
-	move(keys);
-	zoom(scrollPosition.x);
-	rotate(cursorPosition, buttons);
-}
-
-bool GraphicEngine::Common::CameraController::isCameraActivated()
-{
-	// TODO
-	return true;
-}
-
-void GraphicEngine::Common::CameraController::rotate(glm::vec2 pos, const std::vector<Core::Inputs::MouseButton>& buttons)
-{
-	glm::vec2 newOffset = m_prevMousePosition - pos;
-
-	if (m_rotateButton == Core::Inputs::MouseButton::buttonNone || std::find(std::begin(buttons), std::end(buttons), m_rotateButton) != std::end(buttons))
-	{
-		m_camera->rotate(newOffset);
-	}
-
-	m_prevMousePosition = pos;
-}
-
-void GraphicEngine::Common::CameraController::move(std::vector<Core::Inputs::KeyboardKey> keys)
-{
-	using namespace Core::Inputs;
-	std::vector<KeyboardKey> basicMovementKeys{ KeyboardKey::KEY_W, KeyboardKey::KEY_A, KeyboardKey::KEY_S, KeyboardKey::KEY_D};
-	std::vector<KeyboardKey> filteredKeys = GraphicEngine::Core::Ranges::filter(keys, [&](KeyboardKey key)
-		{
-			return std::find(std::begin(basicMovementKeys), std::end(basicMovementKeys), key) != std::end(basicMovementKeys);
-		});
-	glm::vec2 movementOffset{ 0.0,0.0 };
-	for (KeyboardKey key : filteredKeys)
-	{
-		if (key == KeyboardKey::KEY_W)
-			movementOffset.x += m_dt;
-		else if (key == KeyboardKey::KEY_S)
-			movementOffset.x -= m_dt;
-		else if (key == KeyboardKey::KEY_A)
-			movementOffset.y -= m_dt;
-		else if (key == KeyboardKey::KEY_D)
-			movementOffset.y += m_dt;
-	}
-
-	m_camera->move(movementOffset);
-}
-
-void GraphicEngine::Common::CameraController::zoom(double offset)
-{
-}
-
-std::shared_ptr<GraphicEngine::Common::Camera> GraphicEngine::Common::CameraController::getCamera()
-{
-	return m_camera;
-}
-
-void GraphicEngine::Common::CameraController::switchCameraType()
-{
-	auto camType = m_camera->getCameraType();
-	camType == CameraType::Perspective ?
-		m_camera->setCameraType(CameraType::Orthographic) :
-		m_camera->setCameraType(CameraType::Perspective);
 }

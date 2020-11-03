@@ -7,12 +7,12 @@
 #include "OpenGLVertexBufferFactory.hpp"
 
 GraphicEngine::OpenGL::OpenGLRenderingEngine::OpenGLRenderingEngine(
-	std::shared_ptr<Common::Camera> camera,
+	std::shared_ptr<Services::CameraControllerManager> cameraControllerManager,
 	std::shared_ptr<Core::EventManager> eventManager,
 	std::shared_ptr<Core::Configuration> cfg,
 	std::unique_ptr<Core::Logger<OpenGLRenderingEngine>> logger) :
 	m_logger(std::move(logger)),
-	RenderingEngine(camera, eventManager, cfg)
+	RenderingEngine(cameraControllerManager, eventManager, cfg)
 {
 	m_logger->info(__FILE__, __LINE__, __FUNCTION__, "Create OpenGL rendering engine instance.");
 }
@@ -22,12 +22,12 @@ bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	m_program->use();
-	auto v = m_camera->getViewProjectionMatrix();
+	auto v = m_cameraControllerManager->getActiveCamera()->getViewProjectionMatrix();
 	m_uniformBufferMatrix->update(&v);
 
-	light.eyePosition = m_camera->getPosition();
+	light.eyePosition = m_cameraControllerManager->getActiveCamera()->getPosition();
 	m_lightUniformBuffer->update(&light);
-	Engines::Graphic::Shaders::ModelMartices m (m_models.front()->getMeshes().front()->getModelMatrix(), glm::transpose(glm::inverse(glm::mat3(m_camera->getViewMatrix()/* * m_models.front()->getModelMatrix()*/))));
+	Engines::Graphic::Shaders::ModelMartices m (m_models.front()->getMeshes().front()->getModelMatrix(), glm::transpose(glm::inverse(glm::mat3(m_cameraControllerManager->getActiveCamera()->getViewMatrix()/* * m_models.front()->getModelMatrix()*/))));
 	m_modelMatrix->update(&m);
 
 	for (auto& vbs : m_vertexBuffers)
