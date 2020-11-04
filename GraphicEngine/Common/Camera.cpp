@@ -62,8 +62,16 @@ float GraphicEngine::Common::Camera::getSensitivity()
 
 void GraphicEngine::Common::Camera::setFOV(float fov)
 {
-	m_cameraParameters.fov = fov;
-	m_shouldUpdateProjection = true;
+	if (fov > 0 && fov <= 90)
+	{
+		m_cameraParameters.fov = fov;
+		m_shouldUpdateProjection = true;
+	}
+}
+
+float GraphicEngine::Common::Camera::getFOV()
+{
+	return m_cameraParameters.fov;
 }
 
 void GraphicEngine::Common::Camera::setAspectRatio(float aspectRatio)
@@ -138,6 +146,11 @@ void GraphicEngine::Common::Camera::move(const glm::vec2& offset)
 
 	m_positionOffset -= offset;
 	m_shouldUpdateView = true;
+}
+
+void GraphicEngine::Common::Camera::zoom(double offset)
+{
+	setFOV(getFOV() + offset);
 }
 
 glm::mat4 GraphicEngine::Common::Camera::caclulatePerspective()

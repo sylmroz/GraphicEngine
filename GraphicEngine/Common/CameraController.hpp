@@ -10,7 +10,7 @@ namespace GraphicEngine::Common
 	public:
 		CameraController(std::shared_ptr<Camera> camera, std::shared_ptr<WindowKeyboardMouse> window,
 			std::shared_ptr<Core::EventManager> eventManager, std::shared_ptr<Core::Inputs::KeyboardEventProxy> keyboard,
-			std::shared_ptr<Core::Timer> timer);
+			std::shared_ptr<Core::Timer> timer, std::shared_ptr<Core::Logger<Services::CameraControllerManager>> logger);
 
 		void setCameraType(CameraType cameraType);
 
@@ -42,11 +42,13 @@ namespace GraphicEngine::Common
 		std::shared_ptr<WindowKeyboardMouse> m_window;
 		std::shared_ptr<Core::EventManager> m_eventManager;
 		std::shared_ptr<Core::Inputs::KeyboardEventProxy> m_keyboard;
+		std::shared_ptr<Core::Timer> m_timer;
+		std::shared_ptr<Core::Logger<Services::CameraControllerManager>> m_logger;
 
 		float m_dt{ 0.0f };
 		glm::vec2 m_prevMousePosition;
 		Core::Inputs::MouseButton m_rotateButton = Core::Inputs::MouseButton::buttonLeft;
-		std::shared_ptr<Core::Timer> m_timer;
+		
 
 		bool isActive{ false };
 	};

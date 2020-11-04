@@ -2,11 +2,12 @@
 
 GraphicEngine::Services::CameraControllerManager::CameraControllerManager(std::shared_ptr<Core::Configuration> cfg, std::shared_ptr<Common::WindowKeyboardMouse> window,
 	std::shared_ptr<Core::EventManager> eventManager, std::shared_ptr<Core::Inputs::KeyboardEventProxy> keyboard,
-	std::shared_ptr<Core::Timer> timer) :
+	std::shared_ptr<Core::Timer> timer, std::shared_ptr<Core::Logger<CameraControllerManager>> logger) :
 	m_window(window),
 	m_eventManager(eventManager),
 	m_keyboard(keyboard),
-	m_timer{ timer }
+	m_timer{ timer },
+	m_logger{ logger }
 {
 	auto cameras = cfg->getProperty<std::vector<json>>("cameras");
 	for (auto cameraParameters : cameras)
@@ -57,5 +58,5 @@ std::shared_ptr<GraphicEngine::Common::Camera> GraphicEngine::Services::CameraCo
 
 std::shared_ptr<GraphicEngine::Common::CameraController> GraphicEngine::Services::CameraControllerManager::createCameraController(std::shared_ptr<Common::Camera> camera)
 {
-	return std::make_shared<Common::CameraController>(camera, m_window, m_eventManager, m_keyboard, m_timer);
+	return std::make_shared<Common::CameraController>(camera, m_window, m_eventManager, m_keyboard, m_timer, m_logger);
 }

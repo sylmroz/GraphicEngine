@@ -53,7 +53,9 @@ glm::vec2 GraphicEngine::GLFW::GlfwWindow::getCursorPosition()
 
 glm::vec2 GraphicEngine::GLFW::GlfwWindow::getScrollValue()
 {
-	return m_scrollValues;
+	auto scroll = m_scrollValues;
+	m_scrollValues = glm::vec2(0.0f);
+	return scroll;
 }
 
 GraphicEngine::GLFW::GlfwWindow::~GlfwWindow()

@@ -10,7 +10,7 @@ namespace GraphicEngine::Services
 	public:
 		CameraControllerManager(std::shared_ptr<Core::Configuration> cfg, std::shared_ptr<Common::WindowKeyboardMouse> window,
 			std::shared_ptr<Core::EventManager> eventManager, std::shared_ptr<Core::Inputs::KeyboardEventProxy> keyboard,
-			std::shared_ptr<Core::Timer> timer);
+			std::shared_ptr<Core::Timer> timer, std::shared_ptr<Core::Logger<CameraControllerManager>> logger);
 
 		void addCameraController(std::unique_ptr<Common::CameraController> cameraController);
 
@@ -29,5 +29,6 @@ namespace GraphicEngine::Services
 		std::shared_ptr<Core::Inputs::KeyboardEventProxy> m_keyboard;
 		std::shared_ptr<Common::CameraController> m_activeCamera;
 		std::shared_ptr<Core::Timer> m_timer;
+		std::shared_ptr<Core::Logger<CameraControllerManager>> m_logger;
 	};
 }

@@ -3,13 +3,20 @@
 #include "../Core/Input/Keyboard/KeyboardEventProxy.hpp"
 #include "../Core/Input/Mouse/MouseEnumButton.hpp"
 
-#include "../Core/EventManager.hpp"
 #include "../Core/Configuration.hpp"
+#include "../Core/EventManager.hpp"
+#include "../Core/Logger.hpp"
+
 #include "WindowKeyboardMouse.hpp"
 
 #include <functional>
 
 #include <glm/glm.hpp>
+
+namespace GraphicEngine::Services
+{
+	class CameraControllerManager;
+}
 
 namespace GraphicEngine::Common
 {
@@ -35,6 +42,7 @@ namespace GraphicEngine::Common
 
 		void rotate(const glm::vec2& offset);
 		void move(const glm::vec2& offset);
+		void zoom(double offset);
 
 		glm::mat4 getViewProjectionMatrix();
 		glm::mat4 getViewMatrix();
@@ -48,6 +56,7 @@ namespace GraphicEngine::Common
 		void setSensitivity(float sensitivity);
 		float getSensitivity();
 		void setFOV(float fov);
+		float getFOV();
 		void setAspectRatio(float aspectRatio);
 
 		void setCameraType(CameraType cameraType);
@@ -94,5 +103,6 @@ namespace GraphicEngine::Common
 		};
 
 		std::shared_ptr<Core::Configuration> m_cfg;
+		std::shared_ptr<Services::CameraControllerManager> m_logger;
 	};
 }

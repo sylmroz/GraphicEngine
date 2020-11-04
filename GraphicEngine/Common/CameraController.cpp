@@ -2,12 +2,13 @@
 
 GraphicEngine::Common::CameraController::CameraController(std::shared_ptr<Camera> camera, std::shared_ptr<WindowKeyboardMouse> window,
 	std::shared_ptr<Core::EventManager> eventManager, std::shared_ptr<Core::Inputs::KeyboardEventProxy> keyboard,
-	std::shared_ptr<Core::Timer> timer) :
-	m_camera(std::move(camera)),
-	m_window(window),
-	m_eventManager(eventManager),
-	m_keyboard(keyboard),
+	std::shared_ptr<Core::Timer> timer, std::shared_ptr<Core::Logger<Services::CameraControllerManager>> logger) :
+	m_camera{ camera },
+	m_window{ window },
+	m_eventManager{ eventManager },
+	m_keyboard{ keyboard },
 	m_timer{ timer },
+	m_logger{ logger },
 	m_prevMousePosition(glm::vec2(0.0f, 0.0f))
 {
 	setInitialMousePosition(glm::vec2(m_window->getWidth() / 2, m_window->getHeight() / 2));
@@ -71,8 +72,9 @@ void GraphicEngine::Common::CameraController::setInitialMousePosition(glm::vec2 
 
 void GraphicEngine::Common::CameraController::updateCamera(glm::vec2 cursorPosition, glm::vec2 scrollPosition, const std::vector<Core::Inputs::MouseButton>& buttons, std::vector<Core::Inputs::KeyboardKey> keys)
 {
+	//m_logger->info(__FILE__, __LINE__, __FUNCTION__, "zoom offset x:{} y:{}", scrollPosition.x, scrollPosition.y);
 	move(keys);
-	zoom(scrollPosition.x);
+	zoom(-scrollPosition.y);
 	rotate(cursorPosition, buttons);
 }
 
@@ -120,6 +122,7 @@ void GraphicEngine::Common::CameraController::move(std::vector<Core::Inputs::Key
 
 void GraphicEngine::Common::CameraController::zoom(double offset)
 {
+	m_camera->zoom(offset);
 }
 
 std::shared_ptr<GraphicEngine::Common::Camera> GraphicEngine::Common::CameraController::getCamera()
