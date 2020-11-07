@@ -6,36 +6,24 @@ using namespace GraphicEngine::Core::Inputs;
 std::vector<KeyboardKey> GraphicEngine::GLFW::GlfwWindow::getPressedKeys()
 {
 	_keys.clear();
-	if (glfwGetKey(m_glfwWindow.get(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		_keys.push_back(KeyboardKey::KEY_ESCAPE);
-	if (glfwGetKey(m_glfwWindow.get(), GLFW_KEY_W) == GLFW_PRESS)
-		_keys.push_back(KeyboardKey::KEY_W);
-	if (glfwGetKey(m_glfwWindow.get(), GLFW_KEY_A) == GLFW_PRESS)
-		_keys.push_back(KeyboardKey::KEY_A);
-	if (glfwGetKey(m_glfwWindow.get(), GLFW_KEY_S) == GLFW_PRESS)
-		_keys.push_back(KeyboardKey::KEY_S);
-	if (glfwGetKey(m_glfwWindow.get(), GLFW_KEY_D) == GLFW_PRESS)
-		_keys.push_back(KeyboardKey::KEY_D);
-	if (glfwGetKey(m_glfwWindow.get(), GLFW_KEY_C) == GLFW_PRESS)
-		_keys.push_back(KeyboardKey::KEY_C);
-	if (glfwGetKey(m_glfwWindow.get(), GLFW_KEY_1) == GLFW_PRESS)
-		_keys.push_back(KeyboardKey::KEY_1);
-	if (glfwGetKey(m_glfwWindow.get(), GLFW_KEY_2) == GLFW_PRESS)
-		_keys.push_back(KeyboardKey::KEY_2);
+	for (const auto& [key, value] : m_mappedKeys)
+	{
+		if (glfwGetKey(m_glfwWindow.get(), key) == GLFW_PRESS)
+			_keys.push_back(value);
+	}
 
-	// Implement more if needed
 	return std::move(_keys);
 }
 
 std::vector<MouseButton> GraphicEngine::GLFW::GlfwWindow::getPressedButtons()
 {
 	m_pressedButtons.clear();
-	if (glfwGetMouseButton(m_glfwWindow.get(), GLFW_MOUSE_BUTTON_LEFT))
-		m_pressedButtons.push_back(MouseButton::buttonLeft);
-	if (glfwGetMouseButton(m_glfwWindow.get(), GLFW_MOUSE_BUTTON_MIDDLE))
-		m_pressedButtons.push_back(MouseButton::butonMiddle);
-	if (glfwGetMouseButton(m_glfwWindow.get(), GLFW_MOUSE_BUTTON_RIGHT))
-		m_pressedButtons.push_back(MouseButton::buttonRight);
+	for (const auto& [key, value] : m_mappedButtons)
+	{
+		if (glfwGetMouseButton(m_glfwWindow.get(), key))
+			m_pressedButtons.push_back(value);
+	}
+
 
 	return std::move(m_pressedButtons);
 }

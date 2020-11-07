@@ -74,5 +74,31 @@ namespace GraphicEngine::GLFW
 		WindowGlfwProfile m_windowProfile = WindowGlfwProfile::None;
 
 		std::shared_ptr<WindowGlfwApi> m_specialApi;
+
+		const std::map<int, Core::Inputs::MouseButton> m_mappedButtons = {
+			{ GLFW_MOUSE_BUTTON_LEFT, Core::Inputs::MouseButton::buttonLeft },
+			{ GLFW_MOUSE_BUTTON_MIDDLE, Core::Inputs::MouseButton::butonMiddle },
+			{ GLFW_MOUSE_BUTTON_RIGHT, Core::Inputs::MouseButton::buttonRight }
+		};
+
+		const std::map<int, Core::Inputs::KeyboardKey> m_mappedKeys = {
+		   { GLFW_KEY_ESCAPE, Core::Inputs::KeyboardKey::KEY_ESCAPE },
+		   { GLFW_KEY_W, Core::Inputs::KeyboardKey::KEY_W },
+		   { GLFW_KEY_A, Core::Inputs::KeyboardKey::KEY_A },
+		   { GLFW_KEY_S, Core::Inputs::KeyboardKey::KEY_S },
+		   { GLFW_KEY_D, Core::Inputs::KeyboardKey::KEY_D },
+		   { GLFW_KEY_C, Core::Inputs::KeyboardKey::KEY_C },
+		   { GLFW_KEY_ENTER, Core::Inputs::KeyboardKey::KEY_ENTER },
+		   { GLFW_KEY_0, Core::Inputs::KeyboardKey::KEY_0 },
+		   { GLFW_KEY_1, Core::Inputs::KeyboardKey::KEY_1 },
+		   { GLFW_KEY_2, Core::Inputs::KeyboardKey::KEY_2 },
+		   { GLFW_KEY_3, Core::Inputs::KeyboardKey::KEY_3 },
+		   { GLFW_KEY_4, Core::Inputs::KeyboardKey::KEY_4 },
+		   { GLFW_KEY_5, Core::Inputs::KeyboardKey::KEY_5 },
+		   { GLFW_KEY_6, Core::Inputs::KeyboardKey::KEY_6 },
+		   { GLFW_KEY_7, Core::Inputs::KeyboardKey::KEY_7 },
+		   { GLFW_KEY_8, Core::Inputs::KeyboardKey::KEY_8 },
+		   { GLFW_KEY_9, Core::Inputs::KeyboardKey::KEY_9 }
+		};
 	};
 }

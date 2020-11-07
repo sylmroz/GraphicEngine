@@ -98,10 +98,9 @@ void GraphicEngine::Common::CameraController::rotate(glm::vec2 pos, const std::v
 void GraphicEngine::Common::CameraController::move(std::vector<Core::Inputs::KeyboardKey> keys)
 {
 	using namespace Core::Inputs;
-	std::vector<KeyboardKey> basicMovementKeys{ KeyboardKey::KEY_W, KeyboardKey::KEY_A, KeyboardKey::KEY_S, KeyboardKey::KEY_D };
 	std::vector<KeyboardKey> filteredKeys = GraphicEngine::Core::Ranges::filter(keys, [&](KeyboardKey key)
 	{
-		return std::find(std::begin(basicMovementKeys), std::end(basicMovementKeys), key) != std::end(basicMovementKeys);
+		return std::find(std::begin(m_basicMovementKeys), std::end(m_basicMovementKeys), key) != std::end(m_basicMovementKeys);
 	});
 
 	glm::vec2 movementOffset{ 0.0,0.0 };

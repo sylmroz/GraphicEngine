@@ -48,6 +48,7 @@ namespace GraphicEngine::Common
 		float m_dt{ 0.0f };
 		glm::vec2 m_prevMousePosition;
 		Core::Inputs::MouseButton m_rotateButton = Core::Inputs::MouseButton::buttonLeft;
+		std::vector<Core::Inputs::KeyboardKey> m_basicMovementKeys{ Core::Inputs::KeyboardKey::KEY_W, Core::Inputs::KeyboardKey::KEY_A, Core::Inputs::KeyboardKey::KEY_S, Core::Inputs::KeyboardKey::KEY_D };
 		
 
 		bool isActive{ false };
