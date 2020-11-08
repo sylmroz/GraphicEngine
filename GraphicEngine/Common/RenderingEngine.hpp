@@ -33,7 +33,6 @@ namespace GraphicEngine
 			m_models.front()->setPosition(Core::Utils::Converter::fromArrayToObject<glm::vec3, std::vector<float>, 3>(m_cfg->getProperty<std::vector<float>>("scene:object:position")));
 
 			m_models.front()->getMeshes().front()->setRotate(Core::Utils::Converter::fromArrayToObject<glm::vec3, std::vector<float>, 3>(m_cfg->getProperty<std::vector<float>>("scene:object:rotate")));
-			m_models.front()->applyTransformation();
 			
 			light.lightPosition = glm::vec3(100.0, 100.0, 100.0);
 		}

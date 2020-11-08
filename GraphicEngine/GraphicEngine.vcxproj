@@ -202,6 +202,7 @@
   <ItemGroup>
     <ClInclude Include="Common\Camera.hpp" />
     <ClInclude Include="Common\CameraController.hpp" />
+    <ClInclude Include="Common\GraphicPipeline.hpp" />
     <ClInclude Include="Common\Keyboard.hpp" />
     <ClInclude Include="Common\ModelImporter.hpp" />
     <ClInclude Include="Common\Mouse.hpp" />

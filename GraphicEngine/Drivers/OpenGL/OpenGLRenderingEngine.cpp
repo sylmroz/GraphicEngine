@@ -21,14 +21,15 @@ bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 {
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	m_program->use();
 	auto v = m_cameraControllerManager->getActiveCamera()->getViewProjectionMatrix();
 	m_uniformBufferMatrix->update(&v);
 
 	light.eyePosition = m_cameraControllerManager->getActiveCamera()->getPosition();
 	m_lightUniformBuffer->update(&light);
-	Engines::Graphic::Shaders::ModelMartices m (m_models.front()->getMeshes().front()->getModelMatrix(), glm::transpose(glm::inverse(glm::mat3(m_cameraControllerManager->getActiveCamera()->getViewMatrix()/* * m_models.front()->getModelMatrix()*/))));
+	Engines::Graphic::Shaders::ModelMartices m(m_models.front()->getMeshes().front()->getModelMatrix(), glm::transpose(glm::inverse(glm::mat3(m_cameraControllerManager->getActiveCamera()->getViewMatrix()/* * m_models.front()->getModelMatrix()*/))));
 	m_modelMatrix->update(&m);
+
+	m_program->use();
 
 	for (auto& vbs : m_vertexBuffers)
 	{
