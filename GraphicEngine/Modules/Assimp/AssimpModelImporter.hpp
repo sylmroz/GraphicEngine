@@ -2,6 +2,7 @@
 
 #include "../../Common/ModelImporter.hpp"
 #include "../../Common/Vertex.hpp"
+#include "../../Core/Utils/MemberTraits.hpp"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -84,9 +85,7 @@ namespace GraphicEngine::Modules
 					vertex->position = position;
 				}
 
-				if constexpr (std::is_same_v<Vertex, Common::VertexPN> ||
-					std::is_same_v<Vertex, Common::VertexPTcN> ||
-					std::is_same_v<Vertex, Common::VertexPTcNTB>)
+				if constexpr (Core::Utils::has_normal_member<Vertex>::value)
 				{
 					if (mesh->HasNormals())
 					{
@@ -103,8 +102,7 @@ namespace GraphicEngine::Modules
 					}
 				}
 
-				if constexpr (std::is_same_v<Vertex, Common::VertexPC> ||
-					std::is_same_v<Vertex, Common::VertexPCTc>)
+				if constexpr (Core::Utils::has_color_member<Vertex>::value)
 				{
 					if (mesh->HasVertexColors(0))
 					{
@@ -116,9 +114,7 @@ namespace GraphicEngine::Modules
 					}
 				}
 
-				if constexpr (std::is_same_v<Vertex, Common::VertexPTc> ||
-					std::is_same_v<Vertex, Common::VertexPCTc> ||
-					std::is_same_v<Vertex, Common::VertexPTcNTB>)
+				if constexpr (Core::Utils::has_texCoord_member<Vertex>::value)
 				{
 					if (mesh->HasTextureCoords(0) && mesh->mTextureCoords[0])
 					{
@@ -129,15 +125,21 @@ namespace GraphicEngine::Modules
 					}
 				}
 
-				if constexpr (std::is_same_v<Vertex, Common::VertexPTcNTB>)
+				if constexpr (Core::Utils::has_tangent_member<Vertex>::value && Core::Utils::has_bitangent_member<Vertex>::value)
 				{
 					if (mesh->HasTangentsAndBitangents())
 					{
 						glm::vec3 tangent;
-						tangent.x = mesh->mNormals[i].x;
-						tangent.y = mesh->mNormals[i].y;
-						tangent.z = mesh->mNormals[i].z;
+						tangent.x = mesh->mTangents[i].x;
+						tangent.y = mesh->mTangents[i].y;
+						tangent.z = mesh->mTangents[i].z;
 						vertex->tangent = tangent;
+
+						glm::vec3 bitangent;
+						bitangent.x = mesh->mBitangents[i].x;
+						bitangent.y = mesh->mBitangents[i].y;
+						bitangent.z = mesh->mBitangents[i].z;
+						vertex->bitangent = bitangent;
 					}
 
 					else

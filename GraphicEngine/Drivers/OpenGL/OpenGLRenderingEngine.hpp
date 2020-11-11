@@ -32,7 +32,7 @@ namespace GraphicEngine::OpenGL
 		std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::Light>> m_lightUniformBuffer;
 		std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::ModelMartices>> m_modelMatrix;
 
-		std::vector<std::vector<std::shared_ptr<VertexBuffer<Common::VertexPN>>>> m_vertexBuffers;
+		std::vector<std::vector<std::shared_ptr<VertexBuffer<decltype(m_models)::value_type::element_type::vertex_type>>>> m_vertexBuffers;
 
 		std::unique_ptr<Core::Logger<OpenGLRenderingEngine>> m_logger;
 	};

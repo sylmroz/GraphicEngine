@@ -34,7 +34,7 @@ namespace GraphicEngine::Vulkan
 		vk::UniquePipelineCache m_pipelineCache;
 		vk::UniquePipelineLayout m_pipelineLayout;
 		vk::UniquePipeline m_graphicPipeline;
-		std::vector<std::vector<std::shared_ptr<VertexBuffer<Common::VertexPN>>>> m_vertexBuffers;
+		std::vector<std::vector<std::shared_ptr<VertexBuffer<decltype(m_models)::value_type::element_type::vertex_type>>>> m_vertexBuffers;
 		
 		std::shared_ptr<VulkanShader> m_vertexShader;
 		std::shared_ptr<VulkanShader> m_fragmentShader;

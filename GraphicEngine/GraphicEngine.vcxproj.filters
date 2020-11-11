@@ -474,5 +474,8 @@
     <ClInclude Include="Common\GraphicPipeline.hpp">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Utils\MemberTraits.hpp">
+      <Filter>Core\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

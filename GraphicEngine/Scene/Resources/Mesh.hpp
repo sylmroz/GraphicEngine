@@ -4,6 +4,7 @@
 #include "Transformation.hpp"
 #include "../../Core/Math/GeometryUtils.hpp"
 #include "../../Core/Math/Geometry/3D/Octree.hpp"
+#include "../../Core/Utils/MemberTraits.hpp"
 
 #include <glm\geometric.hpp>
 
@@ -17,6 +18,8 @@ namespace GraphicEngine::Scene
 	template <typename Vertex, int OctreeLevels = 5>
 	class Mesh : public Transformation
 	{
+	public:
+		using vertex_type = Vertex;
 	public:
 		Mesh() {}
 		Mesh(const std::vector<std::shared_ptr<Vertex>>& vertices, const std::vector<std::shared_ptr<Face>>& faces)
@@ -82,7 +85,7 @@ namespace GraphicEngine::Scene
 			return m_faces;
 		}
 
-		std::vector<Vertex> getVertices() 
+		std::vector<Vertex> getVertices()
 		{
 			std::vector<Vertex> vertices;
 			vertices.reserve(m_vertices.size());
@@ -123,12 +126,13 @@ namespace GraphicEngine::Scene
 		{
 			if (resources & Common::VertexType::Normal)
 			{
+				if constexpr (Core::Utils::has_normal_member<Vertex>::value)
 				generateNormals();
 			}
 
 			if (resources & Common::VertexType::Tangent || resources & Common::VertexType::BiTangent)
 			{
-				if constexpr (std::is_same_v<Vertex, Common::VertexPTcNTB>)
+				if constexpr (Core::Utils::has_tangent_member<Vertex>::value && Core::Utils::has_bitangent_member<Vertex>::value)
 				{
 					generateTangentsAndBitangents();
 				}
@@ -176,35 +180,30 @@ namespace GraphicEngine::Scene
 
 		void generateNormals()
 		{
-			if constexpr (std::is_same_v<Vertex, Common::VertexPN> ||
-				std::is_same_v<Vertex, Common::VertexPTcN> ||
-				std::is_same_v<Vertex, Common::VertexPTcNTB>)
+			std::vector<std::pair<uint32_t, glm::vec3>> normals;
+			normals.resize(m_vertices.size());
+			for (auto& face : m_faces)
 			{
-				std::vector<std::pair<uint32_t, glm::vec3>> normals;
-				normals.resize(m_vertices.size());
-				for (auto& face : m_faces)
+				std::vector<glm::vec3> vertices;
+				vertices.reserve(face->indices.size());
+				for (uint32_t index : face->indices)
 				{
-					std::vector<glm::vec3> vertices;
-					vertices.reserve(face->indices.size());
-					for (uint32_t index : face->indices)
-					{
-						vertices.push_back(m_vertices[index]->position);
-					}
-
-					for (uint32_t i{ 0 }; i < face->indices.size(); ++i)
-					{
-						auto& normal = normals[face->indices[i]];
-						normal.first++;
-						normal.second += Core::Math::calculateNormalFromPolygon(vertices);
-					}
+					vertices.push_back(m_vertices[index]->position);
 				}
 
-				uint32_t i{ 0 };
-				for (auto& vertex : m_vertices)
+				for (uint32_t i{ 0 }; i < face->indices.size(); ++i)
 				{
-					vertex->normal = glm::normalize(normals[i].second / static_cast<float>(normals[i].first));
-					++i;
+					auto& normal = normals[face->indices[i]];
+					normal.first++;
+					normal.second += Core::Math::calculateNormalFromPolygon(vertices);
 				}
+			}
+
+			uint32_t i{ 0 };
+			for (auto& vertex : m_vertices)
+			{
+				vertex->normal = glm::normalize(normals[i].second / static_cast<float>(normals[i].first));
+				++i;
 			}
 		}
 
@@ -216,7 +215,7 @@ namespace GraphicEngine::Scene
 				vertex->bitangent = Core::Math::generateBitangent(vertex->tangent, vertex->normal);
 			}
 		}
-		
+
 	private:
 		std::vector<std::shared_ptr<Vertex>> m_vertices;
 		std::vector<std::shared_ptr<Face>> m_faces;

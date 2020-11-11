@@ -8,6 +8,8 @@ namespace GraphicEngine::Scene
 	class Model : public Transformation, public std::enable_shared_from_this<Model<Vertex>>
 	{
 	public:
+		using vertex_type = Vertex;
+	public:
 		Model() {}
 		Model(std::vector<std::shared_ptr<Mesh<Vertex>>>& meshes, const std::string& name = "")
 		{
