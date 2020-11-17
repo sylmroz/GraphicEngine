@@ -10,7 +10,7 @@
 namespace GraphicEngine::OpenGL
 {
 	template <typename _Vertex>
-	class VertexBuffer : public Common::VertexBuffer<OpenGL::VertexBuffer<_Vertex>>
+	class VertexBuffer : public Common::VertexBuffer<OpenGL::VertexBuffer<_Vertex>, int>
 	{
 		class _VertexBuffer
 		{
@@ -39,17 +39,17 @@ namespace GraphicEngine::OpenGL
 				unbind();
 			}
 
-			void bind() const
+			void bind(int bummy = 0) const
 			{
 				glBindVertexArray(_vao);
 			}
 
-			virtual void draw()
+			virtual void draw(int primitiveTopology)
 			{
-				glDrawArrays(GL_TRIANGLES, 0, _size);
+				glDrawArrays(primitiveTopology, 0, _size);
 			}
 
-			void unbind() const
+			void unbind(int dummy = 0) const
 			{
 				glBindVertexArray(0);
 			}
@@ -91,9 +91,9 @@ namespace GraphicEngine::OpenGL
 				glBindBuffer(GL_ARRAY_BUFFER, 0);
 				this->unbind();
 			}
-			virtual void draw() override
+			virtual void draw(int primitiveTopology) override
 			{
-				glDrawElements(GL_TRIANGLES, this->_size, GL_UNSIGNED_INT, nullptr);
+				glDrawElements(primitiveTopology, this->_size, GL_UNSIGNED_INT, nullptr);
 			}
 
 			virtual ~_VertexBufferWithElements() = default;
@@ -111,17 +111,17 @@ namespace GraphicEngine::OpenGL
 			m_data = std::make_unique<_VertexBufferWithElements>(vertices, indices);
 		}
 
-		void bind() const
+		void bind(int dummy = 0) const
 		{
 			m_data->bind();
 		}
 
-		void draw()
+		void draw(int primitiveTopology)
 		{
-			m_data->draw();
+			m_data->draw(primitiveTopology);
 		}
 
-		void unbind() const
+		void unbind(int dummy = 0) const
 		{
 			m_data->unbind();
 		}

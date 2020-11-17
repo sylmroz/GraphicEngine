@@ -36,7 +36,7 @@ bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 		for (auto& vb : vbs)
 		{
 			vb->bind();
-			vb->draw();
+			vb->draw(GL_TRIANGLES);
 		}
 	}
 	//m.modelMatrix = glm::identity<glm::mat4>();

@@ -330,7 +330,7 @@ std::vector<vk::UniqueFramebuffer> GraphicEngine::Vulkan::createFrameBuffers(con
 	return frameBuffers;
 }
 
-vk::UniquePipeline GraphicEngine::Vulkan::createGraphicPipeline(const vk::UniqueDevice& device, const vk::UniquePipelineCache& pipeliceCache, const std::vector<ShaderInfo>& shadersInfo, std::vector<vk::VertexInputAttributeDescription> attributeDescriptions, const vk::VertexInputBindingDescription& bindingDescription, bool depthBuffered, const vk::FrontFace& frontFace, const vk::UniquePipelineLayout& pipelineLayout, const vk::UniqueRenderPass& renderPass, vk::SampleCountFlagBits msaaSample, vk::CullModeFlags cullMode, bool depthBoundsTestEnable, bool stencilTestEnable)
+vk::UniquePipeline GraphicEngine::Vulkan::createGraphicPipeline(const vk::UniqueDevice& device, const vk::UniquePipelineCache& pipeliceCache, const std::vector<ShaderInfo>& shadersInfo, std::vector<vk::VertexInputAttributeDescription> attributeDescriptions, const vk::VertexInputBindingDescription& bindingDescription, bool depthBuffered, const vk::FrontFace& frontFace, const vk::UniquePipelineLayout& pipelineLayout, const vk::UniqueRenderPass& renderPass, vk::SampleCountFlagBits msaaSample, vk::PrimitiveTopology primitiveTopology, vk::CullModeFlags cullMode, bool depthBoundsTestEnable, bool stencilTestEnable)
 {
 	std::vector<vk::PipelineShaderStageCreateInfo> pipelineShaderCreateInfos;
 	pipelineShaderCreateInfos.reserve(shadersInfo.size());
@@ -343,7 +343,7 @@ vk::UniquePipeline GraphicEngine::Vulkan::createGraphicPipeline(const vk::Unique
 		1, &bindingDescription,
 		static_cast<uint32_t>(attributeDescriptions.size()), attributeDescriptions.data());
 
-	vk::PipelineInputAssemblyStateCreateInfo pipelineInputAssemblyStateCreateInfo(vk::PipelineInputAssemblyStateCreateFlags(), vk::PrimitiveTopology::eTriangleList, false);
+	vk::PipelineInputAssemblyStateCreateInfo pipelineInputAssemblyStateCreateInfo(vk::PipelineInputAssemblyStateCreateFlags(), primitiveTopology, false);
 
 	vk::PipelineViewportStateCreateInfo pipelineViewportCreateInfo(vk::PipelineViewportStateCreateFlags(), 1, nullptr, 1, nullptr);
 

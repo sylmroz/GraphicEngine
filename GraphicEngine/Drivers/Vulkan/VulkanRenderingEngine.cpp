@@ -91,7 +91,7 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 			{ ShaderInfo{ m_vertexShader->shaderModule.get(),vk::SpecializationInfo(), m_vertexShader->getVulkanShaderType() },
 			ShaderInfo{ m_fragmentShader->shaderModule.get(),vk::SpecializationInfo(), m_fragmentShader->getVulkanShaderType() } }, 
 			createVertexInputAttributeDescriptions(decltype(m_models)::value_type::element_type::vertex_type::getSizeAndOffsets()),
-			vk::VertexInputBindingDescription(0, decltype(m_models)::value_type::element_type::vertex_type::getStride()), true, vk::FrontFace::eClockwise, m_pipelineLayout, m_framework->m_renderPass, m_framework->m_msaaSamples, vk::CullModeFlagBits::eNone);
+			vk::VertexInputBindingDescription(0, decltype(m_models)::value_type::element_type::vertex_type::getStride()), true, vk::FrontFace::eClockwise, m_pipelineLayout, m_framework->m_renderPass, m_framework->m_msaaSamples);
 
 		buildCommandBuffers();
 	}
