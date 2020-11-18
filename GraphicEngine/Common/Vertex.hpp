@@ -6,6 +6,8 @@
 
 #include <vector>
 
+#include "../Core/Utils/TupleUtils.hpp"
+
 namespace GraphicEngine::Common
 {
 	enum VertexType
@@ -285,6 +287,7 @@ namespace GraphicEngine::Common
 		}
 	};
 
+	// Position, Color, Texture Coordinates, Weights
 	struct VertexPCTcW : VertexPCTc
 	{
 		VertexPCTcW() = default;
@@ -503,4 +506,7 @@ namespace GraphicEngine::Common
 			return (VertexPTcNTB::getType() | VertexType::Weight);
 		}
 	};
+
+	// Register new vertex type so compiler will know how to access to them
+	using VertexRegisterTypes = Core::Utils::RegisterTypes<VertexP, VertexPW, VertexPC, VertexPCW, VertexPN, VertexPNW, VertexPTc, VertexPTcW, VertexPCTc, VertexPCTcW, VertexPCN, VertexPCNW, VertexPTcN, VertexPTcNW, VertexPTcNTB, VertexPTcNTBW>;
 }

@@ -241,6 +241,8 @@
     <ClInclude Include="Core\Utils\MememoryUtils.hpp" />
     <ClInclude Include="Core\Utils\ObjectConverter.hpp" />
     <ClInclude Include="Core\Utils\GetClassName.hpp" />
+    <ClInclude Include="Core\Utils\TupleUtils.hpp" />
+    <ClInclude Include="Drivers\OpenGL\GraphicPipelines\OpenGLGraphicPipeline.hpp" />
     <ClInclude Include="Drivers\OpenGL\OpenGLVertexBuffer.hpp" />
     <ClInclude Include="Drivers\OpenGL\OpenGLRenderingEngine.hpp" />
     <ClInclude Include="Drivers\OpenGL\OpenGLShader.hpp" />
@@ -269,6 +271,7 @@
     <ClInclude Include="Engines\Graphic\3D\ObjectGenerators\SphereGenerator.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\Light.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\ModelMatrices.hpp" />
+    <ClInclude Include="Engines\Graphic\Shaders\Models\WireframeModelDescriptor.hpp" />
     <ClInclude Include="Main\Application.hpp" />
     <ClInclude Include="Main\Engine.hpp" />
     <ClInclude Include="Modules\Assimp\AssimpModelImporter.hpp" />

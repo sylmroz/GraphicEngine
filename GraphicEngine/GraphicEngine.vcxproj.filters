@@ -124,6 +124,9 @@
     <Filter Include="Services">
       <UniqueIdentifier>{5f1621d4-0dc8-47a6-9f19-82e638546693}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Drivers\OpenGL\GraphicPipelines">
+      <UniqueIdentifier>{0b8b874a-4e2a-458d-bdff-75c50d56e847}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -475,6 +478,15 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="Core\Utils\MemberTraits.hpp">
+      <Filter>Core\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Engines\Graphic\Shaders\Models\WireframeModelDescriptor.hpp">
+      <Filter>Engines\Graphic\Shaders\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Drivers\OpenGL\GraphicPipelines\OpenGLGraphicPipeline.hpp">
+      <Filter>Drivers\OpenGL\GraphicPipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Utils\TupleUtils.hpp">
       <Filter>Core\Utils</Filter>
     </ClInclude>
   </ItemGroup>
