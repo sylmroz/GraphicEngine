@@ -101,12 +101,14 @@ namespace GraphicEngine::Vulkan
 			std::unique_ptr<IndicesDeviceBuffer> _indicesDeviceBuffer;
 		};
 	public:
-		VertexBuffer(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, const vk::UniqueCommandPool& commandPool, vk::Queue queue, const std::vector<_Vertex>& vertices)
+		using VertexType = _Vertex;
+
+		VertexBuffer(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, const vk::UniqueCommandPool& commandPool, vk::Queue queue, const std::vector<VertexType>& vertices)
 		{
 			_data = std::make_unique<_VertexBuffer>(physicalDevice, device, commandPool, queue, vertices);
 		}
 
-		VertexBuffer(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, const vk::UniqueCommandPool& commandPool, vk::Queue queue, const std::vector<_Vertex>& vertices, const std::vector<uint32_t>& indices)
+		VertexBuffer(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, const vk::UniqueCommandPool& commandPool, vk::Queue queue, const std::vector<VertexType>& vertices, const std::vector<uint32_t>& indices)
 		{
 			_data = std::make_unique<_VertexBufferWithIndices>(physicalDevice, device, commandPool, queue, vertices, indices);
 		}

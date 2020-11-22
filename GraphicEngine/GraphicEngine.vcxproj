@@ -181,6 +181,7 @@
     <ClCompile Include="Core\Math\Geometry\3D\BoudingBox3D.cpp" />
     <ClCompile Include="Core\Math\Geometry\3D\BoudingCube.cpp" />
     <ClCompile Include="Core\Math\ImageUtils.cpp" />
+    <ClCompile Include="Drivers\OpenGL\GraphicPipelines\OpenGLWireframeGraphicPipeline.cpp" />
     <ClCompile Include="Drivers\OpenGL\OpenGLRenderingEngine.cpp" />
     <ClCompile Include="Drivers\OpenGL\OpenGLShader.cpp" />
     <ClCompile Include="Drivers\OpenGL\OpenGLTexture.cpp" />
@@ -202,6 +203,7 @@
   <ItemGroup>
     <ClInclude Include="Common\Camera.hpp" />
     <ClInclude Include="Common\CameraController.hpp" />
+    <ClInclude Include="Common\EntityByVertexTypeManager.hpp" />
     <ClInclude Include="Common\GraphicPipeline.hpp" />
     <ClInclude Include="Common\Keyboard.hpp" />
     <ClInclude Include="Common\ModelImporter.hpp" />
@@ -243,6 +245,7 @@
     <ClInclude Include="Core\Utils\GetClassName.hpp" />
     <ClInclude Include="Core\Utils\TupleUtils.hpp" />
     <ClInclude Include="Drivers\OpenGL\GraphicPipelines\OpenGLGraphicPipeline.hpp" />
+    <ClInclude Include="Drivers\OpenGL\GraphicPipelines\OpenGLWireframeGraphicPipeline.hpp" />
     <ClInclude Include="Drivers\OpenGL\OpenGLVertexBuffer.hpp" />
     <ClInclude Include="Drivers\OpenGL\OpenGLRenderingEngine.hpp" />
     <ClInclude Include="Drivers\OpenGL\OpenGLShader.hpp" />

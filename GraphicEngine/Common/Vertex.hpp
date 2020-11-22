@@ -507,6 +507,6 @@ namespace GraphicEngine::Common
 		}
 	};
 
-	// Register new vertex type so compiler will know how to access to them
-	using VertexRegisterTypes = Core::Utils::RegisterTypes<VertexP, VertexPW, VertexPC, VertexPCW, VertexPN, VertexPNW, VertexPTc, VertexPTcW, VertexPCTc, VertexPCTcW, VertexPCN, VertexPCNW, VertexPTcN, VertexPTcNW, VertexPTcNTB, VertexPTcNTBW>;
+	// Record new vertex type so compiler will know how to access to them
+	using VertexTypesRegister = Core::Utils::TypesRegister<VertexP, VertexPW, VertexPC, VertexPCW, VertexPN, VertexPNW, VertexPTc, VertexPTcW, VertexPCTc, VertexPCTcW, VertexPCN, VertexPCNW, VertexPTcN, VertexPTcNW, VertexPTcNTB, VertexPTcNTBW>;
 }

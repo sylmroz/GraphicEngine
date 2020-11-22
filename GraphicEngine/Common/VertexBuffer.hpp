@@ -6,6 +6,8 @@ namespace GraphicEngine::Common
 	class VertexBuffer
 	{
 	public:
+		// using VertexType = BasicVertexBuffer::VertexType;
+
 		void bind(Args... args)
 		{
 			static_cast<BasicVertexBuffer*>(this)->bind(args...);

@@ -102,11 +102,13 @@ namespace GraphicEngine::OpenGL
 		};
 
 	public:
-		VertexBuffer(const std::vector<_Vertex>& vertices)
+		using VertexType = _Vertex;
+
+		VertexBuffer(const std::vector<VertexType>& vertices)
 		{
 			m_data = std::make_unique<_VertexBuffer>(vertices);
 		}
-		VertexBuffer(const std::vector<_Vertex>& vertices, const std::vector<uint32_t>& indices)
+		VertexBuffer(const std::vector<VertexType>& vertices, const std::vector<uint32_t>& indices)
 		{
 			m_data = std::make_unique<_VertexBufferWithElements>(vertices, indices);
 		}

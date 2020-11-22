@@ -229,6 +229,9 @@
     <ClCompile Include="Common\CameraController.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="Drivers\OpenGL\GraphicPipelines\OpenGLWireframeGraphicPipeline.cpp">
+      <Filter>Drivers\OpenGL\GraphicPipelines</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Input\Keyboard\KeyboardEnumKeys.hpp">
@@ -488,6 +491,12 @@
     </ClInclude>
     <ClInclude Include="Core\Utils\TupleUtils.hpp">
       <Filter>Core\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\EntityByVertexTypeManager.hpp">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Drivers\OpenGL\GraphicPipelines\OpenGLWireframeGraphicPipeline.hpp">
+      <Filter>Drivers\OpenGL\GraphicPipelines</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
