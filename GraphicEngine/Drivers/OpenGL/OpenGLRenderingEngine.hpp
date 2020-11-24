@@ -1,15 +1,16 @@
 #pragma once
 
 #include "../../Common/RenderingEngine.hpp"
-
 #include "../../Core/Logger.hpp"
-
 #include "../../Engines/Graphic/Shaders/Models/ModelMatrices.hpp"
 
-#include "OpenGLVertexBuffer.hpp"
 #include "OpenGLShader.hpp"
 #include "OpenGLTexture.hpp"
 #include "OpenGLUniformBuffer.hpp"
+#include "OpenGLVertexBuffer.hpp"
+
+// Pipelines
+#include "GraphicPipelines/OpenGLWireframeGraphicPipeline.hpp"
 
 namespace GraphicEngine::OpenGL
 {
@@ -35,5 +36,7 @@ namespace GraphicEngine::OpenGL
 		std::vector<std::vector<std::shared_ptr<VertexBuffer<decltype(m_models)::value_type::element_type::vertex_type>>>> m_vertexBuffers;
 
 		std::unique_ptr<Core::Logger<OpenGLRenderingEngine>> m_logger;
+
+		std::unique_ptr<OpenGLWireframeGraphicPipeline> m_wireframeGraphicPipeline;
 	};
 }

@@ -2,8 +2,8 @@
 #include "../../../Core/IO/FileReader.hpp"
 #include "../../../Core/IO/FileSystem.hpp"
 
-GraphicEngine::OpenGL::OpenGLWireframeGraphicPipeline::OpenGLWireframeGraphicPipeline(std::shared_ptr<Common::CameraController> cameraController):
-	m_cameraController{cameraController}
+GraphicEngine::OpenGL::OpenGLWireframeGraphicPipeline::OpenGLWireframeGraphicPipeline(std::shared_ptr<Services::CameraControllerManager> cameraControllerManager):
+	m_cameraControllerManager{ cameraControllerManager }
 {
 	OpenGLVertexShader vert(GraphicEngine::Core::IO::readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("wireframe.vert").string()));
 	OpenGLFragmentShader frag(GraphicEngine::Core::IO::readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("wireframe.frag").string()));
@@ -18,13 +18,14 @@ GraphicEngine::OpenGL::OpenGLWireframeGraphicPipeline::OpenGLWireframeGraphicPip
 void GraphicEngine::OpenGL::OpenGLWireframeGraphicPipeline::draw()
 {
 	m_shaderProgram->use();
-	auto cameraMatrix = m_cameraController->getCamera()->getViewProjectionMatrix();
+	auto cameraMatrix = m_cameraControllerManager->getActiveCamera()->getViewProjectionMatrix();
 	m_cameraUniformBuffer->update(&cameraMatrix);
 
 	m_vertexBufferCollection->forEachEntity([&](auto vertexBufferCollection)
 	{
 		vertexBufferCollection->modelDescriptor.modelMatrix = vertexBufferCollection->mesh->getModelMatrix();
 		m_wireframeModelDescriptorUniformBuffer->update(&vertexBufferCollection->modelDescriptor);
-		vertexBufferCollection->vertexBuffer->draw(GL_LINE);
+		vertexBufferCollection->vertexBuffer->bind();
+		vertexBufferCollection->vertexBuffer->draw(GL_LINES);
 	});
 }

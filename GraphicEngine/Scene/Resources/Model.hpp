@@ -112,7 +112,7 @@ namespace GraphicEngine::Scene
 			vertexBuffers.reserve(m_meshes.size());
 			for (auto& mesh : m_meshes)
 			{
-				vertexBuffers.push_back(mesh->compile<VertexBufferFactory<Vertex>, VertexBuffer<Vertex>>(args...));
+				vertexBuffers.push_back(mesh->compile<VertexBufferFactory, VertexBuffer>(args...));
 			}
 
 			return vertexBuffers;

@@ -53,10 +53,10 @@ namespace GraphicEngine::Scene
 			m_pivotPoint = centralPosition;
 		}
 
-		template <typename VertexBufferFactory, typename VertexBuffer, typename... Args>
-		std::shared_ptr<VertexBuffer> compile(Args&... args)
+		template <template<typename> typename VertexBufferFactory, template<typename> typename VertexBuffer, typename... Args>
+		std::shared_ptr<VertexBuffer<Vertex>> compile(Args&... args)
 		{
-			return VertexBufferFactory::produceVertexBuffer(args..., getVertices(), getIndices());
+			return VertexBufferFactory<Vertex>::produceVertexBuffer(args..., getVertices(), getIndices());
 		}
 
 		void addVertex(std::shared_ptr<Vertex> vertex)

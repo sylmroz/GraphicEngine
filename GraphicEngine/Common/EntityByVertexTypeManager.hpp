@@ -25,7 +25,8 @@ namespace GraphicEngine::Common
 			auto index = std::type_index(typeid(VertexType));
 			if (m_entitiesLists.find(index) == std::end(m_entitiesLists))
 			{
-				throw std::bad_typeid("Error when trying to find type: " + index.name());
+				//std::string("Error when trying to find type: ") + std::string(index.name()).c_str();
+				throw std::bad_typeid();
 			}
 			m_entitiesLists[index].push_back(entity);
 		}
@@ -35,9 +36,14 @@ namespace GraphicEngine::Common
 		{
 			Core::Utils::for_each(VertexTypesRegister::types, [&](auto vertexType) 
 			{
-				for (const auto& entity : m_entitiesLists[decltype(vertexType)])
+				auto index = std::type_index(typeid(decltype(vertexType)));
+				for (const auto& entity : m_entitiesLists[index])
 				{
-					func(std::any_cast<std::shared_ptr<Entity<decltype(vertexType)>>(m_entitiesLists[decltype(vertexType)]);
+					for (auto entity : m_entitiesLists[index])
+					{
+						std::shared_ptr<Entity<decltype(vertexType)>> castEntity = std::any_cast<std::shared_ptr<Entity<decltype(vertexType)>>>(entity);
+						func(castEntity);
+					}
 				}
 			});
 		}
@@ -46,7 +52,8 @@ namespace GraphicEngine::Common
 		{
 			Core::Utils::for_each(VertexTypesRegister::types, [&](auto vertexType)
 			{
-				m_entitiesLists[decltype(vertexType)] = std::list<std::any>();
+				auto index = std::type_index(typeid(decltype(vertexType)));
+				m_entitiesLists[index] = std::list<std::any>();
 			});
 		}
 	protected:
