@@ -3,7 +3,7 @@
 #include "../../../Core/IO/FileSystem.hpp"
 
 GraphicEngine::OpenGL::OpenGLWireframeGraphicPipeline::OpenGLWireframeGraphicPipeline(std::shared_ptr<Services::CameraControllerManager> cameraControllerManager):
-	m_cameraControllerManager{ cameraControllerManager }
+	WireframeGraphicPipeline<VertexBuffer, UniformBuffer, UniformBuffer>{ cameraControllerManager }
 {
 	OpenGLVertexShader vert(GraphicEngine::Core::IO::readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("wireframe.vert").string()));
 	OpenGLFragmentShader frag(GraphicEngine::Core::IO::readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("wireframe.frag").string()));
@@ -12,7 +12,7 @@ GraphicEngine::OpenGL::OpenGLWireframeGraphicPipeline::OpenGLWireframeGraphicPip
 	
 	m_cameraUniformBuffer = std::make_shared<UniformBuffer<glm::mat4>>(0);
 	m_wireframeModelDescriptorUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::WireframeModelDescriptor>>(1);
-	m_vertexBufferCollection = std::make_shared<Common::EntityByVertexTypeManager<WireframeVertexBufferCollection>>();
+	//m_vertexBufferCollection = std::make_shared<Common::EntityByVertexTypeManager<Engines::Graphic::WireframeVertexBufferCollection>>();
 }
 
 void GraphicEngine::OpenGL::OpenGLWireframeGraphicPipeline::draw()

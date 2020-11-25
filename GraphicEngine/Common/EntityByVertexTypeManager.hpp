@@ -31,6 +31,18 @@ namespace GraphicEngine::Common
 			m_entitiesLists[index].push_back(entity);
 		}
 
+		template <typename VertexType>
+		std::shared_ptr<Entity<VertexType>> getFirstEntity()
+		{
+			auto index = std::type_index(typeid(VertexType));
+			if (m_entitiesLists.find(index) == std::end(m_entitiesLists))
+			{
+				//std::string("Error when trying to find type: ") + std::string(index.name()).c_str();
+				throw std::bad_typeid();
+			}
+			return  std::any_cast<std::shared_ptr<Entity<VertexType>>>(m_entitiesLists[index].front());
+		}
+
 		template <typename Func>
 		void forEachEntity(Func func)
 		{

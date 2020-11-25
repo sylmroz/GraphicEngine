@@ -127,6 +127,12 @@
     <Filter Include="Drivers\OpenGL\GraphicPipelines">
       <UniqueIdentifier>{0b8b874a-4e2a-458d-bdff-75c50d56e847}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engines\Graphic\Pipelines">
+      <UniqueIdentifier>{14ff4f17-3a17-4ee6-a620-4fabc0bfeed0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Drivers\Vulkan\Pipelines">
+      <UniqueIdentifier>{f81bb5fe-27a7-4219-9a2c-37007ba1abc3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -231,6 +237,9 @@
     </ClCompile>
     <ClCompile Include="Drivers\OpenGL\GraphicPipelines\OpenGLWireframeGraphicPipeline.cpp">
       <Filter>Drivers\OpenGL\GraphicPipelines</Filter>
+    </ClCompile>
+    <ClCompile Include="Drivers\Vulkan\Pipelines\VulkanWireframeGraphicPipeline.cpp">
+      <Filter>Drivers\Vulkan\Pipelines</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -497,6 +506,12 @@
     </ClInclude>
     <ClInclude Include="Drivers\OpenGL\GraphicPipelines\OpenGLWireframeGraphicPipeline.hpp">
       <Filter>Drivers\OpenGL\GraphicPipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="Engines\Graphic\Pipelines\WireframeGraphicPipeline.hpp">
+      <Filter>Engines\Graphic\Pipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="Drivers\Vulkan\Pipelines\VulkanWireframeGraphicPipeline.h">
+      <Filter>Drivers\Vulkan\Pipelines</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

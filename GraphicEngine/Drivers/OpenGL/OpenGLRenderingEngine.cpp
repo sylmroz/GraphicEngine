@@ -87,8 +87,6 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 
 		for (auto& model : m_models)
 		{
-			auto vbs = model->compile<VertexBufferFactory, VertexBuffer>();
-			//m_vertexBuffers.push_back(vbs);
 			for (auto mesh : model->getMeshes())
 			{
 				auto vb = mesh->compile<VertexBufferFactory, VertexBuffer>();
@@ -99,8 +97,6 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 		
 		for(auto & model : m_model2)
 		{
-			auto vbs = model->compile<VertexBufferFactory, VertexBuffer>();
-			//m_vertexBuffers.push_back(vbs);
 			for (auto mesh : model->getMeshes())
 			{
 				auto vb = mesh->compile<VertexBufferFactory, VertexBuffer>();
