@@ -513,5 +513,8 @@
     <ClInclude Include="Drivers\Vulkan\Pipelines\VulkanWireframeGraphicPipeline.h">
       <Filter>Drivers\Vulkan\Pipelines</Filter>
     </ClInclude>
+    <ClInclude Include="Edge.hpp">
+      <Filter>Scene\Resources</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

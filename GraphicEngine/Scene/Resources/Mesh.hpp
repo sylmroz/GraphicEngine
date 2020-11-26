@@ -12,6 +12,7 @@
 #include <memory>
 #include <utility>
 #include <type_traits>
+#include <set>
 
 namespace GraphicEngine::Scene
 {
@@ -56,7 +57,7 @@ namespace GraphicEngine::Scene
 		template <template<typename> typename VertexBufferFactory, template<typename> typename VertexBuffer, typename... Args>
 		std::shared_ptr<VertexBuffer<Vertex>> compile(Args&... args)
 		{
-			return VertexBufferFactory<Vertex>::produceVertexBuffer(args..., getVertices(), getIndices());
+			return VertexBufferFactory<Vertex>::produceVertexBuffer(args..., getVertices(), getGeometryIndices(), getWireframeIndices());
 		}
 
 		void addVertex(std::shared_ptr<Vertex> vertex)
@@ -101,7 +102,7 @@ namespace GraphicEngine::Scene
 			return m_vertices;
 		}
 
-		std::vector<uint32_t> getIndices()
+		std::vector<uint32_t> getGeometryIndices()
 		{
 			uint32_t totalIndices{ 0 };
 			for (auto& face : m_faces)
@@ -117,6 +118,35 @@ namespace GraphicEngine::Scene
 				{
 					indices.push_back(index);
 				}
+			}
+
+			return std::move(indices);
+		}
+
+		std::vector<uint32_t> getWireframeIndices()
+		{
+			auto edgeComp = [](const glm::ivec2& p1, const glm::ivec2& p2)
+			{
+				return p1.x < p2.x || (p1.x == p2.x && p1.y < p2.y);
+			};
+
+			std::set<glm::ivec2, decltype(edgeComp)> edges(edgeComp);
+			for (auto& face : m_faces)
+			{
+				auto s = face->indices.size();
+				for (uint32_t i{ 0 }; i < s; ++i)
+				{
+					glm::ivec2 p{ face->indices[i], face->indices[(i + 1) % s] };
+					edges.insert(p);
+				}
+			}
+
+			std::vector<uint32_t> indices;
+			indices.resize(edges.size() * 2);
+			for (auto edge : edges)
+			{
+				indices.push_back(edge.x);
+				indices.push_back(edge.y);
 			}
 
 			return std::move(indices);

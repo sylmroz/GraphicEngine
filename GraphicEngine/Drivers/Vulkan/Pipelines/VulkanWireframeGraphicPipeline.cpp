@@ -54,8 +54,7 @@ void GraphicEngine::Vulkan::VulkanWireframeGraphicPipeline::draw(vk::UniqueComma
 		commandBuffer->bindPipeline(vk::PipelineBindPoint::eGraphics, graphicPipeline->graphicPipeline.get());
 		commandBuffer->bindDescriptorSets(vk::PipelineBindPoint::eGraphics, graphicPipeline->pipelineLayout.get(), 0, 1, &m_descriptorSets[index].get(), 1, &offset);
 
-		vertexBufferCollection->vertexBuffer->bind(commandBuffer);
-		vertexBufferCollection->vertexBuffer->draw(commandBuffer);
+		vertexBufferCollection->vertexBuffer->drawEdges(commandBuffer);
 
 		offset += alignedSize;
 	});

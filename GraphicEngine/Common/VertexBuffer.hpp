@@ -18,6 +18,16 @@ namespace GraphicEngine::Common
 			static_cast<BasicVertexBuffer*>(this)->draw(args...);
 		}
 
+		void drawElements(Args... args)
+		{
+			static_cast<BasicVertexBuffer*>(this)->drawElements(args...);
+		}
+
+		void drawEdges(Args... args)
+		{
+			static_cast<BasicVertexBuffer*>(this)->drawEdges(args...);
+		}
+
 		void unbind(Args... args)
 		{
 			static_cast<BasicVertexBuffer*>(this)->unbind(args...);

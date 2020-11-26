@@ -49,13 +49,10 @@ namespace GraphicEngine::Common
 			Core::Utils::for_each(VertexTypesRegister::types, [&](auto vertexType) 
 			{
 				auto index = std::type_index(typeid(decltype(vertexType)));
-				for (const auto& entity : m_entitiesLists[index])
+				for (auto entity : m_entitiesLists[index])
 				{
-					for (auto entity : m_entitiesLists[index])
-					{
-						std::shared_ptr<Entity<decltype(vertexType)>> castEntity = std::any_cast<std::shared_ptr<Entity<decltype(vertexType)>>>(entity);
-						func(castEntity);
-					}
+					std::shared_ptr<Entity<decltype(vertexType)>> castEntity = std::any_cast<std::shared_ptr<Entity<decltype(vertexType)>>>(entity);
+					func(castEntity);
 				}
 			});
 		}

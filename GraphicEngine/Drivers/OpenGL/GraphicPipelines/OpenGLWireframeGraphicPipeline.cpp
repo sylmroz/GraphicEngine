@@ -12,7 +12,6 @@ GraphicEngine::OpenGL::OpenGLWireframeGraphicPipeline::OpenGLWireframeGraphicPip
 	
 	m_cameraUniformBuffer = std::make_shared<UniformBuffer<glm::mat4>>(0);
 	m_wireframeModelDescriptorUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::WireframeModelDescriptor>>(1);
-	//m_vertexBufferCollection = std::make_shared<Common::EntityByVertexTypeManager<Engines::Graphic::WireframeVertexBufferCollection>>();
 }
 
 void GraphicEngine::OpenGL::OpenGLWireframeGraphicPipeline::draw()
@@ -25,7 +24,6 @@ void GraphicEngine::OpenGL::OpenGLWireframeGraphicPipeline::draw()
 	{
 		vertexBufferCollection->modelDescriptor.modelMatrix = vertexBufferCollection->mesh->getModelMatrix();
 		m_wireframeModelDescriptorUniformBuffer->update(&vertexBufferCollection->modelDescriptor);
-		vertexBufferCollection->vertexBuffer->bind();
-		vertexBufferCollection->vertexBuffer->draw(GL_LINES);
+		vertexBufferCollection->vertexBuffer->drawEdges(GL_LINES);
 	});
 }

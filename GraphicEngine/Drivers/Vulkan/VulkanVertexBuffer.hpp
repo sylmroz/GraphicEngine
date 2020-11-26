@@ -3,6 +3,8 @@
 #include "VulkanHelper.hpp"
 #include "../../Common/VertexBuffer.hpp"
 
+#include <stdexcept>
+
 namespace GraphicEngine::Vulkan
 {
 	template <typename T>
@@ -48,29 +50,60 @@ namespace GraphicEngine::Vulkan
 	template <typename _Vertex>
 	class VertexBuffer : public Common::VertexBuffer<VertexBuffer<_Vertex>, vk::UniqueCommandPool&>
 	{
-		class _VertexBuffer
+		class _IVerexBuffer
+		{
+		public:
+			virtual void bind(const vk::UniqueCommandBuffer& commandBuffer) = 0;
+
+			virtual void bindSecond(const vk::UniqueCommandBuffer& commandBuffer) = 0;
+
+			virtual void draw(const vk::UniqueCommandBuffer& commandBuffer) = 0;
+
+			virtual void drawElements(const vk::UniqueCommandBuffer& commandBuffer) = 0;
+
+			virtual void drawEdges(const vk::UniqueCommandBuffer& commandBuffer) = 0;
+
+			virtual ~_IVerexBuffer() = default;
+		};
+
+		class _VertexBuffer : public _IVerexBuffer
 		{
 		public:
 			_VertexBuffer(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, const vk::UniqueCommandPool& commandPool, vk::Queue queue, const std::vector<_Vertex>& vertices)
 			{
-				_size = vertices.size();
-				_vertexArrayObject = std::make_unique<VertexDeviceBuffer<_Vertex>>(physicalDevice, device, commandPool, queue, vertices);
+				m_vertexBufferSize = vertices.size();
+				m_vertexArrayObject = std::make_unique<VertexDeviceBuffer<_Vertex>>(physicalDevice, device, commandPool, queue, vertices);
 			}
 
-			virtual void bind(const vk::UniqueCommandBuffer& commandBuffer)
+			virtual void bind(const vk::UniqueCommandBuffer& commandBuffer) override
 			{
-				commandBuffer->bindVertexBuffers(0, this->_vertexArrayObject->buffer->buffer.get(), { 0 });
+				commandBuffer->bindVertexBuffers(0, this->m_vertexArrayObject->buffer->buffer.get(), { 0 });
 			}
 
-			virtual void draw(const vk::UniqueCommandBuffer& commandBuffer)
+			virtual void bindSecond(const vk::UniqueCommandBuffer& commandBuffer) override
 			{
-				commandBuffer->draw(_size, 1, 0, 0);
+				throw std::logic_error("Function not yet implemented");
+			}
+
+			virtual void drawElements(const vk::UniqueCommandBuffer& commandBuffer) override
+			{
+				throw std::logic_error("Function not yet implemented");
+			}
+
+			virtual void drawEdges(const vk::UniqueCommandBuffer& commandBuffer) override
+			{
+				throw std::logic_error("Function not yet implemented");
+			}
+
+			virtual void draw(const vk::UniqueCommandBuffer& commandBuffer) override
+			{
+				commandBuffer->draw(m_vertexBufferSize, 1, 0, 0);
 			}
 
 			virtual ~_VertexBuffer() = default;
 		protected:
-			std::unique_ptr<VertexDeviceBuffer<_Vertex>> _vertexArrayObject;
-			uint32_t _size;
+			std::unique_ptr<VertexDeviceBuffer<_Vertex>> m_vertexArrayObject;
+			uint32_t m_vertexBufferSize;
 		};
 
 
@@ -80,47 +113,112 @@ namespace GraphicEngine::Vulkan
 			_VertexBufferWithIndices(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, const vk::UniqueCommandPool& commandPool, vk::Queue queue, const std::vector<_Vertex>& vertices, const std::vector<uint32_t>& indices) :
 				_VertexBuffer(physicalDevice, device, commandPool, queue, vertices)
 			{
-				this->_size = indices.size();
-				_indicesDeviceBuffer = std::make_unique<IndicesDeviceBuffer>(physicalDevice, device, commandPool, queue, indices);
+				this->m_vertexBufferSize = vertices.size();
+				m_indicesBufferSize = indices.size();
+				m_indicesDeviceBuffer = std::make_unique<IndicesDeviceBuffer>(physicalDevice, device, commandPool, queue, indices);
 			}
 
 			virtual void bind(const vk::UniqueCommandBuffer& commandBuffer) override
 			{
-				commandBuffer->bindVertexBuffers(0, this->_vertexArrayObject->buffer->buffer.get(), { 0 });
-				commandBuffer->bindIndexBuffer(_indicesDeviceBuffer->buffer->buffer.get(), 0, vk::IndexType::eUint32);
+				commandBuffer->bindVertexBuffers(0, this->m_vertexArrayObject->buffer->buffer.get(), { 0 });
+				commandBuffer->bindIndexBuffer(m_indicesDeviceBuffer->buffer->buffer.get(), 0, vk::IndexType::eUint32);
+			}
+
+			virtual void drawElements(const vk::UniqueCommandBuffer& commandBuffer) override
+			{
+				commandBuffer->drawIndexed(this->m_indicesBufferSize, 1, 0, 0, 0);
 			}
 
 			virtual void draw(const vk::UniqueCommandBuffer& commandBuffer) override
 			{
-				commandBuffer->drawIndexed(this->_size, 1, 0, 0, 0);
+				commandBuffer->draw(this->m_vertexBufferSize, 1, 0, 0);
 			}
 
 			virtual ~_VertexBufferWithIndices() = default;
 
 		private:
-			std::unique_ptr<IndicesDeviceBuffer> _indicesDeviceBuffer;
+			std::unique_ptr<IndicesDeviceBuffer> m_indicesDeviceBuffer;
+			uint32_t m_indicesBufferSize;
+		};
+
+		class _VertexBufferWithElementsAndEdges : public _IVerexBuffer
+		{
+		public:
+			_VertexBufferWithElementsAndEdges() = default;
+			_VertexBufferWithElementsAndEdges(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, const vk::UniqueCommandPool& commandPool, vk::Queue queue, const std::vector<_Vertex>& vertices, const std::vector<uint32_t>& indices, const std::vector<uint32_t>& edges)
+			{
+				m_elements = std::make_unique<_VertexBufferWithIndices>(physicalDevice, device, commandPool, queue, vertices, indices);
+				m_edges = std::make_unique<_VertexBufferWithIndices>(physicalDevice, device, commandPool, queue, vertices, edges);
+			}
+			virtual void bind(const vk::UniqueCommandBuffer& commandBuffer) override
+			{
+				m_elements->bind(commandBuffer);
+			}
+
+			virtual void bindSecond(const vk::UniqueCommandBuffer& commandBuffer) override
+			{
+				m_edges->bind(commandBuffer);
+			}
+
+			virtual void draw(const vk::UniqueCommandBuffer& commandBuffer) override
+			{
+				m_elements->draw(commandBuffer);
+			}
+
+			virtual void drawElements(const vk::UniqueCommandBuffer& commandBuffer) override
+			{
+				m_elements->bind(commandBuffer);
+				m_elements->drawElements(commandBuffer);
+			}
+
+			virtual void drawEdges(const vk::UniqueCommandBuffer& commandBuffer) override
+			{
+				m_edges->bind(commandBuffer);
+				m_edges->drawElements(commandBuffer);
+			}
+
+			virtual ~_VertexBufferWithElementsAndEdges() = default;
+
+		private:
+			std::unique_ptr<_VertexBufferWithIndices> m_elements;
+			std::unique_ptr<_VertexBufferWithIndices> m_edges;
 		};
 	public:
 		using VertexType = _Vertex;
 
 		VertexBuffer(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, const vk::UniqueCommandPool& commandPool, vk::Queue queue, const std::vector<VertexType>& vertices)
 		{
-			_data = std::make_unique<_VertexBuffer>(physicalDevice, device, commandPool, queue, vertices);
+			m_data = std::make_unique<_VertexBuffer>(physicalDevice, device, commandPool, queue, vertices);
 		}
 
 		VertexBuffer(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, const vk::UniqueCommandPool& commandPool, vk::Queue queue, const std::vector<VertexType>& vertices, const std::vector<uint32_t>& indices)
 		{
-			_data = std::make_unique<_VertexBufferWithIndices>(physicalDevice, device, commandPool, queue, vertices, indices);
+			m_data = std::make_unique<_VertexBufferWithIndices>(physicalDevice, device, commandPool, queue, vertices, indices);
+		}
+
+		VertexBuffer(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, const vk::UniqueCommandPool& commandPool, vk::Queue queue, const std::vector<VertexType>& vertices, const std::vector<uint32_t>& indices, const std::vector<uint32_t>& edges)
+		{
+			m_data = std::make_unique<_VertexBufferWithElementsAndEdges>(physicalDevice, device, commandPool, queue, vertices, indices, edges);
 		}
 
 		void bind(const vk::UniqueCommandBuffer& commandBuffer)
 		{
-			_data->bind(commandBuffer);
+			m_data->bind(commandBuffer);
 		}
 
 		void draw(const vk::UniqueCommandBuffer& commandBuffer)
 		{
-			_data->draw(commandBuffer);
+			m_data->draw(commandBuffer);
+		}
+
+		void drawElements(const vk::UniqueCommandBuffer& commandBuffer)
+		{
+			m_data->drawElements(commandBuffer);
+		}
+
+		void drawEdges(const vk::UniqueCommandBuffer& commandBuffer)
+		{
+			m_data->drawEdges(commandBuffer);
 		}
 
 		void unbind(const vk::UniqueCommandBuffer& commandBuffer)
@@ -128,6 +226,6 @@ namespace GraphicEngine::Vulkan
 			// Vulkan do not need unbinding method
 		}
 	private:
-		std::unique_ptr<_VertexBuffer> _data;
+		std::unique_ptr<_IVerexBuffer> m_data;
 	};
 }
