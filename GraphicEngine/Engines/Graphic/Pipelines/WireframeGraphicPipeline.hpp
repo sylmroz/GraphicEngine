@@ -34,7 +34,7 @@ namespace GraphicEngine::Engines::Graphic
 		{
 			auto vertexBufferCollection = std::make_shared<WireframeVertexBufferCollection<VertexType, VertexBuffer>>();
 			vertexBufferCollection->vertexBuffer = vertexBuffer;
-			vertexBufferCollection->modelDescriptor.wireframeColor = Core::randomColor();
+			vertexBufferCollection->modelDescriptor.wireframeColor = mesh->getMaterial().solidColor;
 			vertexBufferCollection->mesh = mesh;
 			m_vertexBufferCollection->addEntity(vertexBufferCollection);
 		}

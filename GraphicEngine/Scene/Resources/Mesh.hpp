@@ -1,10 +1,12 @@
 #pragma once
 
 #include "Face.hpp"
+#include "MeshMaterial.hpp"
 #include "Transformation.hpp"
 #include "../../Core/Math/GeometryUtils.hpp"
 #include "../../Core/Math/Geometry/3D/Octree.hpp"
 #include "../../Core/Utils/MemberTraits.hpp"
+#include "../../Core/Math/ImageUtils.hpp"
 
 #include <glm\geometric.hpp>
 
@@ -28,6 +30,7 @@ namespace GraphicEngine::Scene
 			m_vertices = std::move(vertices);
 			m_faces = std::move(faces);
 			generateBoudingBox();
+			m_material.solidColor = Core::randomColor();;
 		}
 
 		Mesh(const std::vector<std::shared_ptr<Vertex>>& vertices, const std::vector<std::shared_ptr<Face>>& faces, Core::BoudingBox3D boudingBox)
@@ -36,6 +39,7 @@ namespace GraphicEngine::Scene
 			m_faces = std::move(faces);
 			m_boudingBox = boudingBox;
 			m_pivotPoint = boudingBox.getCenter();
+			m_material.solidColor = Core::randomColor();;
 		}
 
 		Mesh(const std::vector<std::shared_ptr<Vertex>>& vertices, const std::vector<std::shared_ptr<Face>>& faces, glm::vec3 centralPosition)
@@ -44,6 +48,7 @@ namespace GraphicEngine::Scene
 			m_faces = std::move(faces);
 			generateBoudingBox(false);
 			m_pivotPoint = centralPosition;
+			m_material.solidColor = Core::randomColor();;
 		}
 
 		Mesh(const std::vector<std::shared_ptr<Vertex>>& vertices, const std::vector<std::shared_ptr<Face>>& faces, Core::BoudingBox3D boudingBox, glm::vec3 centralPosition)
@@ -52,6 +57,7 @@ namespace GraphicEngine::Scene
 			m_faces = std::move(faces);
 			m_boudingBox = boudingBox;
 			m_pivotPoint = centralPosition;
+			m_material.solidColor = Core::randomColor();;
 		}
 
 		template <template<typename> typename VertexBufferFactory, template<typename> typename VertexBuffer, typename... Args>
@@ -246,10 +252,22 @@ namespace GraphicEngine::Scene
 			}
 		}
 
+		MeshMaterial getMaterial()
+		{
+			return m_material;
+		}
+
+		void setMaterial(MeshMaterial material)
+		{
+			m_material = material;
+		}
+
 	private:
 		std::vector<std::shared_ptr<Vertex>> m_vertices;
 		std::vector<std::shared_ptr<Face>> m_faces;
 
 		std::shared_ptr<Core::Octree<Vertex, OctreeLevels>> m_octree;
+
+		MeshMaterial m_material;
 	};
 }

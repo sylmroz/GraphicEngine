@@ -516,5 +516,8 @@
     <ClInclude Include="Edge.hpp">
       <Filter>Scene\Resources</Filter>
     </ClInclude>
+    <ClInclude Include="Scene\Resources\MeshMaterial.hpp">
+      <Filter>Scene\Resources</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

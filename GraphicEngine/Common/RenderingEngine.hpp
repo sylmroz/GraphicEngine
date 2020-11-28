@@ -35,7 +35,7 @@ namespace GraphicEngine
 			m_models.front()->getMeshes().front()->setRotate(Core::Utils::Converter::fromArrayToObject<glm::vec3, std::vector<float>, 3>(m_cfg->getProperty<std::vector<float>>("scene:object:rotate")));
 			auto cube = Engines::Graphic::CuboidGenerator<decltype(m_model2)::value_type::element_type::vertex_type>{}.getModel(glm::vec3(-0.25f), glm::vec3(0.25), glm::ivec3(1), Engines::Graphic::GeneratingPosition::Corner, Engines::Graphic::TriangleDirection::CounterClockwise);
 			m_model2.push_back(cube);
-			
+
 			light.lightPosition = glm::vec3(100.0, 100.0, 100.0);
 		}
 
@@ -53,6 +53,8 @@ namespace GraphicEngine
 		std::vector<std::shared_ptr<Scene::Model<Common::VertexPNW>>> m_models;
 		std::vector<std::shared_ptr<Scene::Model<Common::VertexPN>>> m_model2;
 		Engines::Graphic::Shaders::Light light;
+
+		glm::vec4 backgroudColor{ 0.2f, 0.2f, 0.2f, 1.0f };
 	};
 }
 

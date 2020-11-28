@@ -291,6 +291,7 @@
     <ClInclude Include="Scene\Resources\Face.hpp" />
     <ClInclude Include="Scene\Resources\Mesh.hpp" />
     <ClInclude Include="Scene\Resources\Model.hpp" />
+    <ClInclude Include="Scene\Resources\MeshMaterial.hpp" />
     <ClInclude Include="Scene\Resources\Transformation.hpp" />
     <ClInclude Include="Services\CameraControllerManager.hpp" />
   </ItemGroup>

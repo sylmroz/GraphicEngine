@@ -19,7 +19,7 @@ GraphicEngine::OpenGL::OpenGLRenderingEngine::OpenGLRenderingEngine(
 
 bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 {
-	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+	glClearColor(backgroudColor.r, backgroudColor.g, backgroudColor.b, backgroudColor.a);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//auto v = m_cameraControllerManager->getActiveCamera()->getViewProjectionMatrix();
 	//m_uniformBufferMatrix->update(&v);
