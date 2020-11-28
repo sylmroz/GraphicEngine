@@ -32,6 +32,21 @@ namespace GraphicEngine::Vulkan
 	public:
 		VulkanWireframeGraphicPipeline(std::shared_ptr<VulkanFramework> framework, std::shared_ptr<UniformBuffer<glm::mat4>> cameraUniformBuffer, std::shared_ptr<Services::CameraControllerManager> cameraControllerManager);
 
+		template <typename VertexType>
+		void addVertexBuffer(std::shared_ptr<Scene::Mesh<VertexType>> mesh, std::shared_ptr<VertexBuffer<VertexType>> vertexBuffer)
+		{
+			Engines::Graphic::WireframeGraphicPipeline<VertexBuffer, UniformBuffer, UniformBufferDynamic, vk::UniqueCommandBuffer&, int>::addVertexBuffer(mesh, vertexBuffer);
+			if (m_wireframeModelDescriptors.size() > 0)
+			{
+				m_wireframeModelDescriptorUniformBuffer->addInstance();
+
+				std::vector<std::shared_ptr<IUniformBuffer>> uniformBuffers{ {m_cameraUniformBuffer, m_wireframeModelDescriptorUniformBuffer} };
+				updateDescriptorSets(m_framework->m_device, m_descriptorPool, m_descriptorSetLayout, m_framework->m_maxFrames, m_descriptorSets, uniformBuffers, {});
+			}
+
+			m_wireframeModelDescriptors.resize(m_wireframeModelDescriptors.size() + 1);
+		}
+
 		virtual void draw(vk::UniqueCommandBuffer& commandBuffer, int index) override;
 
 		void updateDynamicUniforms();

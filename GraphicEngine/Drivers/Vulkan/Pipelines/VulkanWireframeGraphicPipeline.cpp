@@ -8,8 +8,7 @@ GraphicEngine::Vulkan::VulkanWireframeGraphicPipeline::VulkanWireframeGraphicPip
 {
 	m_vulkanGraphicPipelines = std::make_shared<Common::EntityByVertexTypeManager<VulkanGraphicPipelineInfo>>();
 	m_cameraUniformBuffer = cameraUniformBuffer;
-	m_wireframeModelDescriptorUniformBuffer = m_framework->getUniformBuffer<UniformBufferDynamic, Engines::Graphic::Shaders::WireframeModelDescriptor>(2); // TODO
-	m_wireframeModelDescriptors.resize(2);// todo
+	m_wireframeModelDescriptorUniformBuffer = m_framework->getUniformBuffer<UniformBufferDynamic, Engines::Graphic::Shaders::WireframeModelDescriptor>(1);
 
 	alignedSize = getDynamicAligmentSize<Engines::Graphic::Shaders::WireframeModelDescriptor>(m_framework->m_physicalDevice);
 
