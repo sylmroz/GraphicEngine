@@ -6,6 +6,7 @@
 #include "../../Core/Math/GeometryUtils.hpp"
 #include "../../Core/Math/Geometry/3D/Octree.hpp"
 #include "../../Core/Utils/MemberTraits.hpp"
+#include "../../Core/Utils/UniqueIdentifier.hpp"
 #include "../../Core/Math/ImageUtils.hpp"
 
 #include <glm\geometric.hpp>
@@ -19,7 +20,7 @@
 namespace GraphicEngine::Scene
 {
 	template <typename Vertex, int OctreeLevels = 5>
-	class Mesh : public Transformation
+	class Mesh : public Transformation, public Core::Utils::UniqueIdentifier<Mesh<Vertex, OctreeLevels>>
 	{
 	public:
 		using vertex_type = Vertex;

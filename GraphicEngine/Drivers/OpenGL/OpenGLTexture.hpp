@@ -4,7 +4,6 @@
 #include <string>
 #include <GL/glew.h>
 
-
 namespace GraphicEngine::OpenGL
 {
 	class Texture2D

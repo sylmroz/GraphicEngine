@@ -5,7 +5,7 @@
 namespace GraphicEngine::Scene
 {
 	template <typename Vertex>
-	class Model : public Transformation, public std::enable_shared_from_this<Model<Vertex>>
+	class Model : public Transformation, public std::enable_shared_from_this<Model<Vertex>>, public Core::Utils::UniqueIdentifier<Model<Vertex>>
 	{
 	public:
 		using vertex_type = Vertex;

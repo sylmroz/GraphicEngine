@@ -1,9 +1,11 @@
 #pragma once
 
+#include "../Core/Utils/UniqueIdentifier.hpp"
+
 namespace GraphicEngine::Common
 {
 	template <typename BasicVertexBuffer, typename... Args>
-	class VertexBuffer
+	class VertexBuffer : public Core::Utils::UniqueIdentifier<VertexBuffer<BasicVertexBuffer, Args...>>
 	{
 	public:
 		// using VertexType = BasicVertexBuffer::VertexType;

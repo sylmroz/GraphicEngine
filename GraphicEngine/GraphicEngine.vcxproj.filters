@@ -513,11 +513,14 @@
     <ClInclude Include="Drivers\Vulkan\Pipelines\VulkanWireframeGraphicPipeline.h">
       <Filter>Drivers\Vulkan\Pipelines</Filter>
     </ClInclude>
-    <ClInclude Include="Edge.hpp">
-      <Filter>Scene\Resources</Filter>
-    </ClInclude>
     <ClInclude Include="Scene\Resources\MeshMaterial.hpp">
       <Filter>Scene\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Resources\Edge.hpp">
+      <Filter>Scene\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Utils\UniqueIdentifier.hpp">
+      <Filter>Core\Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

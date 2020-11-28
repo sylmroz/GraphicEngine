@@ -98,7 +98,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\libs\assimp\lib\x64;C:\VulkanSDK\1.1.130.0\Lib;C:\libs\opencv-4.2\lib;C:\libs\glew-2.1.0\lib\Release\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\libs\assimp\lib\x64;C:\VulkanSDK\1.1.130.0\Lib;C:\libs\opencv-4.2\lib;C:\libs\glew-2.1.0\lib\Release\x64;%(AdditionalLibraryDirectories);C:\Projects\GraphicEngine\GraphicEngine\x64\Debug</AdditionalLibraryDirectories>
       <AdditionalDependencies>assimp-vc140-mt.lib;vulkan-1.lib;VkLayer_utils.lib;shaderc_combined.lib;opencv_world420d.lib;opengl32.lib;glew32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -108,15 +108,15 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;USE_STB_IMAGE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\libs\glm;C:\VulkanSDK\1.2.135.0\Include;C:\libs\assimp\include\;C:\libs\opencv-4.2\include;C:\libs\glew-2.1.0\include;C:\libs\di\include;C:\libs\di\extension\include;C:\libs\spdlog\include;C:\libs\json\single_include;C:\libs\stb;C:\libs\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\libs\glm;C:\VulkanSDK\1.2.135.0\Include;C:\libs\assimp\include\;C:\libs\opencv-4.2\include;C:\libs\glew-2.1.0\include;C:\libs\di\include;C:\libs\di\extension\include;C:\libs\spdlog\include;C:\libs\json\single_include;C:\libs\stb;C:\libs\imgui;C:\Projects\UtilityLib\UtilityLib\Utility;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\libs\assimp\lib\x64;C:\VulkanSDK\1.2.135.0\Lib;C:\libs\opencv-4.2\lib;C:\libs\glew-2.1.0\lib\Release\x64;C:\libs\spdlog\build\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>assimp-vc140-mt.lib;vulkan-1.lib;VkLayer_utils.lib;shaderc_combined.lib;opencv_world420d.lib;opengl32.lib;glew32.lib;glew32s.lib;spdlogd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\libs\assimp\lib\x64;C:\VulkanSDK\1.2.135.0\Lib;C:\libs\opencv-4.2\lib;C:\libs\glew-2.1.0\lib\Release\x64;C:\libs\spdlog\build\Debug;%(AdditionalLibraryDirectories);C:\Projects\GraphicEngine\x64\Debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc140-mt.lib;vulkan-1.lib;VkLayer_utils.lib;shaderc_combined.lib;opencv_world420d.lib;opengl32.lib;glew32.lib;glew32s.lib;spdlogd.lib;UtilityLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -136,7 +136,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\libs\assimp\lib\x64;C:\VulkanSDK\1.1.130.0\Lib;C:\libs\opencv-4.2\lib;C:\libs\glew-2.1.0\lib\Release\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\libs\assimp\lib\x64;C:\VulkanSDK\1.1.130.0\Lib;C:\libs\opencv-4.2\lib;C:\libs\glew-2.1.0\lib\Release\x64;%(AdditionalLibraryDirectories);C:\Projects\GraphicEngine\GraphicEngine\x64\Debug</AdditionalLibraryDirectories>
       <AdditionalDependencies>assimp-vc140-mt.lib;vulkan-1.lib;VkLayer_utils.lib;shaderc_combined.lib;opencv_world420d.lib;opengl32.lib;glew32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -157,7 +157,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\libs\assimp\lib\x64;C:\VulkanSDK\1.1.130.0\Lib;C:\libs\opencv-4.2\lib;C:\libs\glew-2.1.0\lib\Release\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\libs\assimp\lib\x64;C:\VulkanSDK\1.1.130.0\Lib;C:\libs\opencv-4.2\lib;C:\libs\glew-2.1.0\lib\Release\x64;%(AdditionalLibraryDirectories);C:\Projects\GraphicEngine\GraphicEngine\x64\Debug</AdditionalLibraryDirectories>
       <AdditionalDependencies>assimp-vc140-mt.lib;vulkan-1.lib;VkLayer_utils.lib;shaderc_combined.lib;opencv_world420d.lib;opengl32.lib;glew32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -245,6 +245,7 @@
     <ClInclude Include="Core\Utils\ObjectConverter.hpp" />
     <ClInclude Include="Core\Utils\GetClassName.hpp" />
     <ClInclude Include="Core\Utils\TupleUtils.hpp" />
+    <ClInclude Include="Core\Utils\UniqueIdentifier.hpp" />
     <ClInclude Include="Drivers\OpenGL\GraphicPipelines\OpenGLGraphicPipeline.hpp" />
     <ClInclude Include="Drivers\OpenGL\GraphicPipelines\OpenGLWireframeGraphicPipeline.hpp" />
     <ClInclude Include="Drivers\OpenGL\OpenGLVertexBuffer.hpp" />
@@ -267,7 +268,6 @@
     <ClInclude Include="Drivers\Vulkan\VulkanVertexBuffer.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanVertexBufferFactory.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanWindowContext.hpp" />
-    <ClInclude Include="Edge.hpp" />
     <ClInclude Include="Engines\Graphic\3D\ObjectGenerator.hpp" />
     <ClInclude Include="Engines\Graphic\3D\ObjectGenerators\ConeGenerator.hpp" />
     <ClInclude Include="Engines\Graphic\3D\ObjectGenerators\CuboidGenerator.hpp" />
@@ -288,6 +288,7 @@
     <ClInclude Include="Platform\Glfw\Vulkan\GlfwVulkanInjector.hpp" />
     <ClInclude Include="Platform\Glfw\Vulkan\GlfwVulkanWindow.hpp" />
     <ClInclude Include="Platform\Glfw\Vulkan\GlfwVulkanWindowContext.hpp" />
+    <ClInclude Include="Scene\Resources\Edge.hpp" />
     <ClInclude Include="Scene\Resources\Face.hpp" />
     <ClInclude Include="Scene\Resources\Mesh.hpp" />
     <ClInclude Include="Scene\Resources\Model.hpp" />
