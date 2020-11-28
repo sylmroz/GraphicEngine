@@ -32,23 +32,8 @@ namespace GraphicEngine::Vulkan
 		void buildCommandBuffers();
 	private:
 		std::shared_ptr<VulkanFramework> m_framework;
-
-		//vk::UniquePipelineCache m_pipelineCache;
-		//vk::UniquePipelineLayout m_pipelineLayout;
-		//vk::UniquePipeline m_graphicPipeline;
-		//vk::UniquePipeline m_graphicPipeline2;
-		//std::vector<std::vector<std::shared_ptr<VertexBuffer<decltype(m_models)::value_type::element_type::vertex_type>>>> m_vertexBuffers;
-		//std::vector<std::vector<std::shared_ptr<VertexBuffer<decltype(m_model2)::value_type::element_type::vertex_type>>>> m_vertexBuffers2;
-		//
-		//std::shared_ptr<VulkanShader> m_vertexShader;
-		//std::shared_ptr<VulkanShader> m_fragmentShader;
 		std::shared_ptr<UniformBuffer<glm::mat4>> m_uniformBuffer;
-		/*std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::Light>> m_lightUniformBuffer;
-		std::shared_ptr<UniformBufferDynamic<Engines::Graphic::Shaders::ModelMartices>> m_modelMatrix;
 
-		vk::UniqueDescriptorPool m_descriptorPool;
-		vk::UniqueDescriptorSetLayout m_descriptorSetLayout;
-		std::vector<vk::UniqueDescriptorSet> m_descriptorSets;*/
 	private:
 		std::shared_ptr<VulkanWindowContext> m_vulkanWindowContext;
 
