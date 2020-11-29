@@ -70,3 +70,31 @@ void GraphicEngine::Vulkan::VulkanWireframeGraphicPipeline::updateDynamicUniform
 	});
 	m_wireframeModelDescriptorUniformBuffer->updateAndSet(m_wireframeModelDescriptors);
 }
+
+void GraphicEngine::Vulkan::VulkanWireframeGraphicPipeline::addUniformBuffer()
+{
+	if (m_wireframeModelDescriptors.size() > 0)
+	{
+		m_wireframeModelDescriptorUniformBuffer->addInstance();
+
+		std::vector<std::shared_ptr<IUniformBuffer>> uniformBuffers{ {m_cameraUniformBuffer, m_wireframeModelDescriptorUniformBuffer} };
+		updateDescriptorSets(m_framework->m_device, m_descriptorPool, m_descriptorSetLayout, m_framework->m_maxFrames, m_descriptorSets, uniformBuffers, {});
+	}
+
+	m_wireframeModelDescriptors.resize(m_wireframeModelDescriptors.size() + 1);
+}
+
+void GraphicEngine::Vulkan::VulkanWireframeGraphicPipeline::deleteUniformBuffer()
+{
+	if (m_wireframeModelDescriptors.size() > 0)
+	{
+		m_wireframeModelDescriptors.resize(m_wireframeModelDescriptors.size() - 1);
+		if (m_wireframeModelDescriptors.size() > 0)
+		{
+			m_wireframeModelDescriptorUniformBuffer->deleteInstance();
+
+			std::vector<std::shared_ptr<IUniformBuffer>> uniformBuffers{ {m_cameraUniformBuffer, m_wireframeModelDescriptorUniformBuffer} };
+			updateDescriptorSets(m_framework->m_device, m_descriptorPool, m_descriptorSetLayout, m_framework->m_maxFrames, m_descriptorSets, uniformBuffers, {});
+		}
+	}
+}

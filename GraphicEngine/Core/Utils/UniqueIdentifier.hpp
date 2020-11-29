@@ -4,39 +4,38 @@
 
 namespace GraphicEngine::Core::Utils
 {
-	template <typename Implementation>
 	struct UniqueIdentifier
 	{
-		UtilityLib::uuid id = UtilityLib::uuid::v4();
+		UtilityLib::uuid uniqueIdentifier = UtilityLib::uuid::v4();
 
-		bool operator<(UniqueIdentifier<Implementation>& identifier)
+		bool operator<(UniqueIdentifier& identifier)
 		{
-			return id < identifier.id;
+			return uniqueIdentifier < identifier.uniqueIdentifier;
 		}
-		bool operator>(UniqueIdentifier<Implementation>& identifier)
+		bool operator>(UniqueIdentifier& identifier)
 		{
-			return id > identifier.id;
+			return uniqueIdentifier > identifier.uniqueIdentifier;
 		}
-		bool operator<=(UniqueIdentifier<Implementation>& identifier)
+		bool operator<=(UniqueIdentifier& identifier)
 		{
-			return id <= identifier.id;
+			return uniqueIdentifier <= identifier.uniqueIdentifier;
 		}
-		bool operator>=(UniqueIdentifier<Implementation>& identifier)
+		bool operator>=(UniqueIdentifier& identifier)
 		{
-			return id >= identifier.id;
+			return uniqueIdentifier >= identifier.uniqueIdentifier;
 		}
-		bool operator==(UniqueIdentifier<Implementation>& identifier)
+		bool operator==(UniqueIdentifier& identifier)
 		{
-			return id == identifier.id;
+			return uniqueIdentifier == identifier.uniqueIdentifier;
 		}
-		bool operator!=(UniqueIdentifier<Implementation>& identifier)
+		bool operator!=(UniqueIdentifier& identifier)
 		{
-			return id != identifier.id;
+			return uniqueIdentifier != identifier.uniqueIdentifier;
 		}
 
 		std::string toString()
 		{
-			return id.toString();
+			return uniqueIdentifier.toString();
 		}
 	};
 }

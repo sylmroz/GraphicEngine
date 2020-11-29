@@ -60,6 +60,14 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 			}
 		}
 
+		for (auto& model : m_model2)
+		{
+			for (auto mesh : model->getMeshes())
+			{
+				m_wireframeGraphicPipeline->eraseVertexBuffer<decltype(mesh)::element_type::vertex_type>(mesh);
+			}
+		}
+
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LESS);
 	}

@@ -20,7 +20,7 @@
 namespace GraphicEngine::Scene
 {
 	template <typename Vertex, int OctreeLevels = 5>
-	class Mesh : public Transformation, public Core::Utils::UniqueIdentifier<Mesh<Vertex, OctreeLevels>>
+	class Mesh : public Transformation, public Core::Utils::UniqueIdentifier
 	{
 	public:
 		using vertex_type = Vertex;

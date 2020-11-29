@@ -39,6 +39,38 @@ namespace GraphicEngine::Engines::Graphic
 			m_vertexBufferCollection->addEntity(vertexBufferCollection);
 		}
 
+		template <typename VertexType>
+		void eraseVertexBuffer(std::shared_ptr<Scene::Mesh<VertexType>> mesh)
+		{
+			auto it = m_vertexBufferCollection->findIf<VertexType>([&](std::shared_ptr<WireframeVertexBufferCollection<VertexType, VertexBuffer>> vertexBufferCollection)
+			{
+				return vertexBufferCollection->mesh == mesh;
+			});
+			m_vertexBufferCollection->eraseEntity<VertexType>(it);
+		}
+
+		template <typename VertexType>
+		void eraseVertexBuffer(std::shared_ptr<VertexBuffer<VertexType>> vertexBuffer)
+		{
+			auto it = m_vertexBufferCollection->findIf<VertexType>([&](std::shared_ptr<WireframeVertexBufferCollection<VertexType, VertexBuffer>> vertexBufferCollection)
+			{
+				return vertexBufferCollection->vertexBuffer == vertexBuffer;
+			});
+			m_vertexBufferCollection->eraseEntity<VertexType>(it);
+		}
+
+		template <typename VertexType>
+		void removeVertexBuffer(std::shared_ptr<Scene::Mesh<VertexType>> mesh)
+		{
+
+		}
+
+		template <typename VertexType>
+		void removeVertexBuffer(std::shared_ptr<VertexBuffer<VertexType>> mesh)
+		{
+
+		}
+
 		virtual void draw(Args... args) = 0;
 
 	protected:

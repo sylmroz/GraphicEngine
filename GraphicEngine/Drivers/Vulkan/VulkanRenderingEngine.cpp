@@ -72,6 +72,14 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 			}
 		}
 
+		for (auto& model : m_model2)
+		{
+			for (auto mesh : model->getMeshes())
+			{
+				m_wireframeGraphicPipeline->eraseVertexBuffer<decltype(mesh)::element_type::vertex_type>(mesh);
+			}
+		}
+
 		buildCommandBuffers();
 	}
 

@@ -36,20 +36,30 @@ namespace GraphicEngine::Vulkan
 		void addVertexBuffer(std::shared_ptr<Scene::Mesh<VertexType>> mesh, std::shared_ptr<VertexBuffer<VertexType>> vertexBuffer)
 		{
 			Engines::Graphic::WireframeGraphicPipeline<VertexBuffer, UniformBuffer, UniformBufferDynamic, vk::UniqueCommandBuffer&, int>::addVertexBuffer(mesh, vertexBuffer);
-			if (m_wireframeModelDescriptors.size() > 0)
-			{
-				m_wireframeModelDescriptorUniformBuffer->addInstance();
+			addUniformBuffer();
+		}
 
-				std::vector<std::shared_ptr<IUniformBuffer>> uniformBuffers{ {m_cameraUniformBuffer, m_wireframeModelDescriptorUniformBuffer} };
-				updateDescriptorSets(m_framework->m_device, m_descriptorPool, m_descriptorSetLayout, m_framework->m_maxFrames, m_descriptorSets, uniformBuffers, {});
-			}
+		template <typename VertexType>
+		void eraseVertexBuffer(std::shared_ptr<Scene::Mesh<VertexType>> mesh)
+		{
+			Engines::Graphic::WireframeGraphicPipeline<VertexBuffer, UniformBuffer, UniformBufferDynamic, vk::UniqueCommandBuffer&, int>::eraseVertexBuffer(mesh);
+			deleteUniformBuffer();
+		}
 
-			m_wireframeModelDescriptors.resize(m_wireframeModelDescriptors.size() + 1);
+		template <typename VertexType>
+		void eraseVertexBuffer(std::shared_ptr<VertexBuffer<VertexType>> vertexBuffer)
+		{
+			Engines::Graphic::WireframeGraphicPipeline<VertexBuffer, UniformBuffer, UniformBufferDynamic, vk::UniqueCommandBuffer&, int>::eraseVertexBuffer(vertexBuffer);
+			deleteUniformBuffer();
 		}
 
 		virtual void draw(vk::UniqueCommandBuffer& commandBuffer, int index) override;
 
 		void updateDynamicUniforms();
+
+	private:
+		void addUniformBuffer();
+		void deleteUniformBuffer();
 
 	private:
 		std::shared_ptr<VulkanFramework> m_framework;

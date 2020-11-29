@@ -109,10 +109,6 @@ namespace GraphicEngine::Vulkan
 			m_instancesCount = instances;
 			m_values.resize(m_instancesCount * m_aligmentSize);
 			initializeBufferData(m_instancesCount * m_aligmentSize);
-			/*if (m_instancesCount > m_bufferDataInstancesCount)
-			{
-				m_bufferDataInstancesCount += 500;
-			}*/
 		}
 
 		void addInstance()
@@ -122,7 +118,7 @@ namespace GraphicEngine::Vulkan
 
 		void deleteInstance()
 		{
-			--m_instancesCount;
+			resizeInstancesCount(m_instancesCount + 1);
 		}
 
 		uint32_t getInstancesCount()

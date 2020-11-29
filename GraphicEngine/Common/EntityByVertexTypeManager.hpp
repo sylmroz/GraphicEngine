@@ -7,6 +7,7 @@
 #include <unordered_map>
 
 #include "Vertex.hpp"
+#include "../Core/Utils/UniqueIdentifier.hpp"
 
 namespace GraphicEngine::Common
 {
@@ -25,7 +26,6 @@ namespace GraphicEngine::Common
 			auto index = std::type_index(typeid(VertexType));
 			if (m_entitiesLists.find(index) == std::end(m_entitiesLists))
 			{
-				//std::string("Error when trying to find type: ") + std::string(index.name()).c_str();
 				throw std::bad_typeid();
 			}
 			m_entitiesLists[index].push_back(entity);
@@ -37,10 +37,45 @@ namespace GraphicEngine::Common
 			auto index = std::type_index(typeid(VertexType));
 			if (m_entitiesLists.find(index) == std::end(m_entitiesLists))
 			{
-				//std::string("Error when trying to find type: ") + std::string(index.name()).c_str();
 				throw std::bad_typeid();
 			}
-			return  std::any_cast<std::shared_ptr<Entity<VertexType>>>(m_entitiesLists[index].front());
+			return std::any_cast<std::shared_ptr<Entity<VertexType>>>(m_entitiesLists[index].front());
+		}
+
+		template <typename VertexType>
+		void removeEntity(std::shared_ptr<Entity<VertexType>> entity)
+		{
+			auto index = std::type_index(typeid(VertexType));
+			if (m_entitiesLists.find(index) == std::end(m_entitiesLists))
+			{
+				throw std::bad_typeid();
+			}
+			m_entitiesLists[index].remove(entity);
+		}
+
+		template <typename VertexType>
+		void eraseEntity(std::list<std::any>::const_iterator entity)
+		{
+			auto index = std::type_index(typeid(VertexType));
+			if (m_entitiesLists.find(index) == std::end(m_entitiesLists))
+			{
+				throw std::bad_typeid();
+			}
+			m_entitiesLists[index].erase(entity);
+		}
+
+		template <typename VertexType, typename Comparator>
+		std::list<std::any>::const_iterator findIf(Comparator comparator)
+		{
+			auto index = std::type_index(typeid(VertexType));
+			if (m_entitiesLists.find(index) == std::end(m_entitiesLists))
+			{
+				throw std::bad_typeid();
+			}
+			return std::find_if(std::begin(m_entitiesLists[index]), std::end(m_entitiesLists[index]), [&](std::any ent)
+			{
+				return comparator(std::any_cast<std::shared_ptr<Entity<VertexType>>>(ent));
+			});
 		}
 
 		template <typename Func>
