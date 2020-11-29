@@ -73,40 +73,46 @@ namespace GraphicEngine::Engines::Graphic
 
 		static std::tuple<std::vector<std::shared_ptr<Vertex>>, std::vector<std::shared_ptr<Scene::Face>>, Core::BoudingBox3D> getConeObject(
 			glm::vec3 center, float radius, float height, glm::ivec3 scale,
+			bool generateBottom = true, bool generateMiddle = true,
 			TriangleDirection triangleDirection = TriangleDirection::Clockwise)
 		{
-			return ConeGenerator<Vertex>{}.getObject(center, radius, scale, triangleDirection);
+			return ConeGenerator<Vertex>{}.getObject(center, radius, scale, generateBottom, generateMiddle, triangleDirection);
 		}
 
 		static std::shared_ptr<Scene::Mesh<Vertex>> getConeMesh(glm::vec3 center, float radius, float height, glm::ivec3 scale,
+			bool generateBottom = true, bool generateMiddle = true,
 			TriangleDirection triangleDirection = TriangleDirection::Clockwise)
 		{
-			return ConeGenerator<Vertex>{}.getMesh(center, radius, scale, triangleDirection);
+			return ConeGenerator<Vertex>{}.getMesh(center, radius, scale, generateBottom, generateMiddle, triangleDirection);
 		}
 
 		static std::shared_ptr<Scene::Model<Vertex>> getConeModel(glm::vec3 center, float radius, float height, glm::ivec3 scale,
+			bool generateBottom = true, bool generateMiddle = true,
 			TriangleDirection triangleDirection = TriangleDirection::Clockwise)
 		{
-			return ConeGenerator<Vertex>{}.getModel(center, radius, scale, triangleDirection);
+			return ConeGenerator<Vertex>{}.getModel(center, radius, scale, generateBottom, generateMiddle, triangleDirection);
 		}
 
 		static std::tuple<std::vector<std::shared_ptr<Vertex>>, std::vector<std::shared_ptr<Scene::Face>>, Core::BoudingBox3D> getCylinderObject(
-			glm::vec3 center, float radiusBottom, float radiusTop, float height,
-			glm::ivec3 scale, TriangleDirection triangleDirection = TriangleDirection::Clockwise)
+			glm::vec3 center, float radiusBottom, float radiusTop, float height, glm::ivec3 scale,
+			bool generateBottom = true, bool generateMiddle = true, bool generateTop = true,
+			TriangleDirection triangleDirection = TriangleDirection::Clockwise)
 		{
-			return CylinderGenerator<Vertex>{}.getObject(center, radiusBottom, radiusTop, height, scale, triangleDirection);
+			return CylinderGenerator<Vertex>{}.getObject(center, radiusBottom, radiusTop, height, scale, generateBottom, generateMiddle, generateTop, triangleDirection);
 		}
 
-		static std::shared_ptr<Scene::Mesh<Vertex>> getConeMesh(glm::vec3 center, float radiusBottom, float radiusTop, float height,
-			glm::ivec3 scale, TriangleDirection triangleDirection = TriangleDirection::Clockwise)
+		static std::shared_ptr<Scene::Mesh<Vertex>> getCylinderMesh(glm::vec3 center, float radiusBottom, float radiusTop, float height, glm::ivec3 scale,
+			bool generateBottom = true, bool generateMiddle = true, bool generateTop = true,
+			TriangleDirection triangleDirection = TriangleDirection::Clockwise)
 		{
-			return CylinderGenerator<Vertex>{}.getMesh(center, radiusBottom, radiusTop, height, scale, triangleDirection);
+			return CylinderGenerator<Vertex>{}.getMesh(center, radiusBottom, radiusTop, height, scale, generateBottom, generateMiddle, generateTop, triangleDirection);
 		}
 
-		static std::shared_ptr<Scene::Model<Vertex>> getConeModel(glm::vec3 center, float radiusBottom, float radiusTop, float height,
-			glm::ivec3 scale, TriangleDirection triangleDirection = TriangleDirection::Clockwise)
+		static std::shared_ptr<Scene::Model<Vertex>> getCylinderModel(glm::vec3 center, float radiusBottom, float radiusTop, float height, glm::ivec3 scale,
+			bool generateBottom = true, bool generateMiddle = true, bool generateTop = true,
+			TriangleDirection triangleDirection = TriangleDirection::Clockwise)
 		{
-			return CylinderGenerator<Vertex>{}.getModel(center, radiusBottom, radiusTop, height, scale, triangleDirection);
+			return CylinderGenerator<Vertex>{}.getModel(center, radiusBottom, radiusTop, height, scale, generateBottom, generateMiddle, generateTop, triangleDirection);
 		}
 	};
 }
