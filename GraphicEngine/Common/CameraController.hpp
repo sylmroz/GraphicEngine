@@ -2,10 +2,11 @@
 
 #include "Camera.hpp"
 #include "../Core/Timer.hpp"
+#include "../Core/Utils/UniqueIdentifier.hpp"
 
 namespace GraphicEngine::Common
 {
-	class CameraController
+	class CameraController : public Core::Utils::UniqueIdentifier
 	{
 	public:
 		CameraController(std::shared_ptr<Camera> camera, std::shared_ptr<WindowKeyboardMouse> window,

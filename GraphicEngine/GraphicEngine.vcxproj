@@ -200,6 +200,7 @@
     <ClCompile Include="Platform\Glfw\Vulkan\GlfwVulkanWindow.cpp" />
     <ClCompile Include="Platform\Glfw\Vulkan\GlfwVulkanWindowContext.cpp" />
     <ClCompile Include="Services\CameraControllerManager.cpp" />
+    <ClCompile Include="Services\ModelManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common\Camera.hpp" />
@@ -295,6 +296,7 @@
     <ClInclude Include="Scene\Resources\MeshMaterial.hpp" />
     <ClInclude Include="Scene\Resources\Transformation.hpp" />
     <ClInclude Include="Services\CameraControllerManager.hpp" />
+    <ClInclude Include="Services\ModelManager.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\UtilityLib\UtilityLib\UtilityLib.vcxproj">

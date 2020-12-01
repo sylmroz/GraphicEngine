@@ -12,7 +12,11 @@ namespace GraphicEngine::Services
 			std::shared_ptr<Core::EventManager> eventManager, std::shared_ptr<Core::Inputs::KeyboardEventProxy> keyboard,
 			std::shared_ptr<Core::Timer> timer, std::shared_ptr<Core::Logger<CameraControllerManager>> logger);
 
-		void addCameraController(std::unique_ptr<Common::CameraController> cameraController);
+		void addCameraController(std::shared_ptr<Common::CameraController> cameraController);
+
+		void deleteCameraController(uint32_t index);
+
+		void deleteCameraController(UtilityLib::uuid id);
 
 		void activateCameraController(uint32_t index);
 

@@ -122,6 +122,7 @@ GraphicEngine::Common::Camera::Camera(std::shared_ptr<Core::Configuration> cfg) 
 	m_direction = glm::normalize(Core::Utils::Converter::fromArrayToObject<glm::vec3, std::vector<float>, 3>(m_cfg->getProperty<std::vector<float>>("direction")));
 	m_up = Core::Utils::Converter::fromArrayToObject<glm::vec3, std::vector<float>, 3>(m_cfg->getProperty<std::vector<float>>("up"));
 	m_speed = m_cfg->getProperty<float>("speed");
+	rotate(glm::vec2(0.001));
 }
 
 void GraphicEngine::Common::Camera::rotate(const glm::vec2& offset)

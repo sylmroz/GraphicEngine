@@ -34,9 +34,26 @@ GraphicEngine::Services::CameraControllerManager::CameraControllerManager(std::s
 	});
 }
 
-void GraphicEngine::Services::CameraControllerManager::addCameraController(std::unique_ptr<Common::CameraController> cameraController)
+void GraphicEngine::Services::CameraControllerManager::addCameraController(std::shared_ptr<Common::CameraController> cameraController)
 {
-	// TODO
+	m_cameraControllers.push_back(cameraController);
+}
+
+void GraphicEngine::Services::CameraControllerManager::deleteCameraController(uint32_t index)
+{
+	if (index < m_cameraControllers.size())
+	{
+		m_cameraControllers.erase(m_cameraControllers.begin() + index);
+	}
+}
+
+void GraphicEngine::Services::CameraControllerManager::deleteCameraController(UtilityLib::uuid id)
+{
+	m_cameraControllers.erase(std::remove_if(std::begin(m_cameraControllers), std::end(m_cameraControllers), 
+		[&id](auto cameraController)
+	{
+		return cameraController->uniqueIdentifier == id;
+	}));
 }
 
 void GraphicEngine::Services::CameraControllerManager::activateCameraController(uint32_t index)

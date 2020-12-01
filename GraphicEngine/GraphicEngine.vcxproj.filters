@@ -241,6 +241,9 @@
     <ClCompile Include="Drivers\Vulkan\Pipelines\VulkanWireframeGraphicPipeline.cpp">
       <Filter>Drivers\Vulkan\Pipelines</Filter>
     </ClCompile>
+    <ClCompile Include="Services\ModelManager.cpp">
+      <Filter>Services</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Input\Keyboard\KeyboardEnumKeys.hpp">
@@ -521,6 +524,9 @@
     </ClInclude>
     <ClInclude Include="Core\Utils\UniqueIdentifier.hpp">
       <Filter>Core\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Services\ModelManager.hpp">
+      <Filter>Services</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
