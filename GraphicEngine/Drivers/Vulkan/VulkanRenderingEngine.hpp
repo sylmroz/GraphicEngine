@@ -19,6 +19,7 @@ namespace GraphicEngine::Vulkan
 	public:
 		VulkanRenderingEngine(std::shared_ptr<VulkanWindowContext> vulkanWindowContext,
 			std::shared_ptr<Services::CameraControllerManager> cameraControllerManager,
+			std::shared_ptr<Services::ModelManager> modelManager,
 			std::shared_ptr<Core::EventManager> eventManager,
 			std::shared_ptr<Core::Configuration> cfg,
 			std::unique_ptr<Core::Logger<VulkanRenderingEngine>> logger);

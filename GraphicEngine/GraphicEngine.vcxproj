@@ -111,6 +111,7 @@
       <AdditionalIncludeDirectories>C:\libs\glm;C:\VulkanSDK\1.2.135.0\Include;C:\libs\assimp\include\;C:\libs\opencv-4.2\include;C:\libs\glew-2.1.0\include;C:\libs\di\include;C:\libs\di\extension\include;C:\libs\spdlog\include;C:\libs\json\single_include;C:\libs\stb;C:\libs\imgui;C:\Projects\UtilityLib\UtilityLib\Utility;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

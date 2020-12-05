@@ -10,11 +10,12 @@
 
 GraphicEngine::Vulkan::VulkanRenderingEngine::VulkanRenderingEngine(std::shared_ptr<VulkanWindowContext> vulkanWindowContext,
 	std::shared_ptr<Services::CameraControllerManager> cameraControllerManager,
+	std::shared_ptr<Services::ModelManager> modelManager,
 	std::shared_ptr<Core::EventManager> eventManager,
 	std::shared_ptr<Core::Configuration> cfg,
 	std::unique_ptr<Core::Logger<VulkanRenderingEngine>> logger) :
 	m_vulkanWindowContext(vulkanWindowContext),
-	RenderingEngine(cameraControllerManager, eventManager, cfg)
+	RenderingEngine(cameraControllerManager, modelManager, eventManager, cfg)
 {
 }
 
@@ -52,33 +53,14 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 		m_uniformBuffer = m_framework->getUniformBuffer<UniformBuffer, glm::mat4>();
 
 		m_wireframeGraphicPipeline = std::make_shared<VulkanWireframeGraphicPipeline>(m_framework, m_uniformBuffer, m_cameraControllerManager);
-
-		for (auto& model : m_models)
+		m_modelManager->getModelEntityContainer()->forEachEntity([&](auto model)
 		{
 			for (auto mesh : model->getMeshes())
 			{
 				auto vb = mesh->compile<VertexBufferFactory, VertexBuffer>(m_framework->m_physicalDevice, m_framework->m_device, m_framework->m_commandPool, m_framework->m_graphicQueue);
 				m_wireframeGraphicPipeline->addVertexBuffer<decltype(mesh)::element_type::vertex_type>(mesh, vb);
 			}
-		}
-
-
-		for (auto& model : m_model2)
-		{
-			for (auto mesh : model->getMeshes())
-			{
-				auto vb = mesh->compile<VertexBufferFactory, VertexBuffer>(m_framework->m_physicalDevice, m_framework->m_device, m_framework->m_commandPool, m_framework->m_graphicQueue);
-				m_wireframeGraphicPipeline->addVertexBuffer<decltype(mesh)::element_type::vertex_type>(mesh, vb);
-			}
-		}
-
-		for (auto& model : m_model2)
-		{
-			for (auto mesh : model->getMeshes())
-			{
-				m_wireframeGraphicPipeline->eraseVertexBuffer<decltype(mesh)::element_type::vertex_type>(mesh);
-			}
-		}
+		});
 
 		buildCommandBuffers();
 	}

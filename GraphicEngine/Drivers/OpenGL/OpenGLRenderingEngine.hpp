@@ -18,6 +18,7 @@ namespace GraphicEngine::OpenGL
 	{
 	public:
 		OpenGLRenderingEngine(std::shared_ptr<Services::CameraControllerManager> cameraControllerManager,
+			std::shared_ptr<Services::ModelManager> modelManager,
 			std::shared_ptr<Core::EventManager> eventManager,
 			std::shared_ptr<Core::Configuration> cfg,
 			std::unique_ptr<Core::Logger<OpenGLRenderingEngine>> logger);
@@ -33,7 +34,7 @@ namespace GraphicEngine::OpenGL
 		std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::Light>> m_lightUniformBuffer;
 		std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::ModelMartices>> m_modelMatrix;
 
-		std::vector<std::vector<std::shared_ptr<VertexBuffer<decltype(m_models)::value_type::element_type::vertex_type>>>> m_vertexBuffers;
+		// std::vector<std::vector<std::shared_ptr<VertexBuffer<decltype(m_models)::value_type::element_type::vertex_type>>>> m_vertexBuffers;
 
 		std::unique_ptr<Core::Logger<OpenGLRenderingEngine>> m_logger;
 
