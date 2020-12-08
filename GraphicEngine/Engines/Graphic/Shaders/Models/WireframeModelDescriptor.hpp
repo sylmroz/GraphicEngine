@@ -10,7 +10,7 @@ namespace GraphicEngine::Engines::Graphic::Shaders
 			wireframeColor{ wireframeColor },
 			modelMatrix{} {}
 
-		glm::mat4 modelMatrix;
-		glm::vec3 wireframeColor;
+		alignas(16) glm::mat4 modelMatrix;
+		alignas(16) glm::vec3 wireframeColor;
 	};
 }

@@ -23,12 +23,6 @@ namespace GraphicEngine::Engines::Graphic
 		template <typename VertexType>
 		using VWireframeVertexBufferCollection = WireframeVertexBufferCollection<VertexType, VertexBuffer>;
 	public:
-		WireframeGraphicPipeline(std::shared_ptr<Services::CameraControllerManager> cameraControllerManager) :
-			m_cameraControllerManager{cameraControllerManager} 
-		{
-			m_vertexBufferCollection = std::make_shared<Common::EntityByVertexTypeManager<VWireframeVertexBufferCollection>>();
-		}
-
 		template <typename VertexType>
 		void addVertexBuffer(std::shared_ptr<Scene::Mesh<VertexType>> mesh, std::shared_ptr<VertexBuffer<VertexType>> vertexBuffer)
 		{
@@ -79,6 +73,6 @@ namespace GraphicEngine::Engines::Graphic
 		std::shared_ptr<UniformBuffer<glm::mat4>> m_cameraUniformBuffer;
 		std::shared_ptr<Services::CameraControllerManager> m_cameraControllerManager;
 		std::shared_ptr<UniformBufferDynamic<Engines::Graphic::Shaders::WireframeModelDescriptor>> m_wireframeModelDescriptorUniformBuffer;
-		std::shared_ptr<Common::EntityByVertexTypeManager<VWireframeVertexBufferCollection>> m_vertexBufferCollection;
+		std::shared_ptr<Common::EntityByVertexTypeManager<VWireframeVertexBufferCollection>> m_vertexBufferCollection = std::make_shared<Common::EntityByVertexTypeManager<VWireframeVertexBufferCollection>>();
 	};
 }

@@ -24,6 +24,7 @@ bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	m_wireframeGraphicPipeline->draw();
+	m_solidColorGraphicPipeline->draw();
 
 	return false;
 }
@@ -31,7 +32,7 @@ bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t height)
 {
 	m_logger->info(__FILE__, __LINE__, __FUNCTION__, "Initialize OpenGL rendering engine instance.");
-	using namespace GraphicEngine::Core::IO;
+
 	if (glewInit() != GLEW_OK)
 	{
 		throw std::runtime_error("OpenGL initialization failed!");
@@ -40,13 +41,15 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 
 	try
 	{
-		m_wireframeGraphicPipeline = std::make_unique<OpenGLWireframeGraphicPipeline>(m_cameraControllerManager);
+		m_wireframeGraphicPipeline = std::make_unique<OpenGLWireframeGraphicPipeline>();
+		m_solidColorGraphicPipeline = std::make_unique<OpenGLSolidColorGraphicPipeline>(m_cameraControllerManager);
 		m_modelManager->getModelEntityContainer()->forEachEntity([&](auto model)
 		{
 			for (auto mesh : model->getMeshes())
 			{
 				auto vb = mesh->compile<VertexBufferFactory, VertexBuffer>();
 				m_wireframeGraphicPipeline->addVertexBuffer<decltype(mesh)::element_type::vertex_type>(mesh, vb);
+				m_solidColorGraphicPipeline->addVertexBuffer<decltype(mesh)::element_type::vertex_type>(mesh, vb);
 			}
 		});
 

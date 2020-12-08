@@ -8,7 +8,7 @@ namespace GraphicEngine::OpenGL
 	class OpenGLWireframeGraphicPipeline : public Engines::Graphic::WireframeGraphicPipeline<VertexBuffer, UniformBuffer, UniformBuffer>
 	{
 	public:
-		OpenGLWireframeGraphicPipeline(std::shared_ptr<Services::CameraControllerManager> cameraControllerManager);
+		OpenGLWireframeGraphicPipeline();
 
 		virtual void draw() override;
 	private:

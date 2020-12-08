@@ -244,6 +244,9 @@
     <ClCompile Include="Services\ModelManager.cpp">
       <Filter>Services</Filter>
     </ClCompile>
+    <ClCompile Include="Drivers\OpenGL\GraphicPipelines\OpenGLSolidColorGraphicPipeline.cpp">
+      <Filter>Drivers\OpenGL\GraphicPipelines</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Input\Keyboard\KeyboardEnumKeys.hpp">
@@ -527,6 +530,15 @@
     </ClInclude>
     <ClInclude Include="Services\ModelManager.hpp">
       <Filter>Services</Filter>
+    </ClInclude>
+    <ClInclude Include="Engines\Graphic\Pipelines\SolidColorGraphicPipeline.hpp">
+      <Filter>Engines\Graphic\Pipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="Engines\Graphic\Shaders\Models\SolidColorModelDescriptor.hpp">
+      <Filter>Engines\Graphic\Shaders\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Drivers\OpenGL\GraphicPipelines\OpenGLSolidColorGraphicPipeline.hpp">
+      <Filter>Drivers\OpenGL\GraphicPipelines</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

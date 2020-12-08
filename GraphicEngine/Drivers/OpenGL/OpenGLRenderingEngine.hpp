@@ -11,6 +11,7 @@
 
 // Pipelines
 #include "GraphicPipelines/OpenGLWireframeGraphicPipeline.hpp"
+#include "GraphicPipelines/OpenGLSolidColorGraphicPipeline.hpp"
 
 namespace GraphicEngine::OpenGL
 {
@@ -29,15 +30,11 @@ namespace GraphicEngine::OpenGL
 
 		virtual ~OpenGLRenderingEngine() = default;
 	private:
-		std::shared_ptr<OpenGLShaderProgram> m_program;
-		std::shared_ptr<UniformBuffer<glm::mat4>> m_uniformBufferMatrix;
-		std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::Light>> m_lightUniformBuffer;
-		std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::ModelMartices>> m_modelMatrix;
-
-		// std::vector<std::vector<std::shared_ptr<VertexBuffer<decltype(m_models)::value_type::element_type::vertex_type>>>> m_vertexBuffers;
+		std::shared_ptr<UniformBuffer<glm::mat4>> m_cameraUniformBuffer;
 
 		std::unique_ptr<Core::Logger<OpenGLRenderingEngine>> m_logger;
 
 		std::unique_ptr<OpenGLWireframeGraphicPipeline> m_wireframeGraphicPipeline;
+		std::unique_ptr<OpenGLSolidColorGraphicPipeline> m_solidColorGraphicPipeline;
 	};
 }

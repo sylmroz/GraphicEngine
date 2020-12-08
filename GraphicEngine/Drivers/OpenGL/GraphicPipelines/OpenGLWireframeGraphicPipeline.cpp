@@ -2,8 +2,7 @@
 #include "../../../Core/IO/FileReader.hpp"
 #include "../../../Core/IO/FileSystem.hpp"
 
-GraphicEngine::OpenGL::OpenGLWireframeGraphicPipeline::OpenGLWireframeGraphicPipeline(std::shared_ptr<Services::CameraControllerManager> cameraControllerManager):
-	WireframeGraphicPipeline<VertexBuffer, UniformBuffer, UniformBuffer>{ cameraControllerManager }
+GraphicEngine::OpenGL::OpenGLWireframeGraphicPipeline::OpenGLWireframeGraphicPipeline()
 {
 	OpenGLVertexShader vert(GraphicEngine::Core::IO::readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("wireframe.vert").string()));
 	OpenGLFragmentShader frag(GraphicEngine::Core::IO::readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("wireframe.frag").string()));
@@ -17,8 +16,6 @@ GraphicEngine::OpenGL::OpenGLWireframeGraphicPipeline::OpenGLWireframeGraphicPip
 void GraphicEngine::OpenGL::OpenGLWireframeGraphicPipeline::draw()
 {
 	m_shaderProgram->use();
-	auto cameraMatrix = m_cameraControllerManager->getActiveCamera()->getViewProjectionMatrix();
-	m_cameraUniformBuffer->update(&cameraMatrix);
 
 	m_vertexBufferCollection->forEachEntity([&](auto vertexBufferCollection)
 	{

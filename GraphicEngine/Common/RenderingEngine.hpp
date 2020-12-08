@@ -41,7 +41,7 @@ namespace GraphicEngine
 			m_modelManager->addModel(cube);
 			//m_model2.push_back(cube);
 
-			light.lightPosition = glm::vec3(100.0, 100.0, 100.0);
+		//	light.lightPosition = glm::vec3(100.0, 100.0, 100.0);
 		}
 
 		virtual bool drawFrame() = 0;

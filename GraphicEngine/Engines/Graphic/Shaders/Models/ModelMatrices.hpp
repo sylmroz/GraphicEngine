@@ -10,7 +10,7 @@ namespace GraphicEngine::Engines::Graphic::Shaders
 		ModelMartices(glm::mat4 modelMatrix, glm::mat3 normalMatrix) :
 			modelMatrix(modelMatrix), normalMatrix(normalMatrix)
 		{}
-		glm::mat4 modelMatrix;
-		glm::mat3 normalMatrix;
+		alignas(16) glm::mat4 modelMatrix;
+		alignas(16) glm::mat3 normalMatrix;
 	};
 }
