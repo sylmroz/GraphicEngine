@@ -13,9 +13,7 @@ namespace GraphicEngine::Core::LoggerCore
 	public:
 		auto operator()()
 		{
-			std::string loggerName = Utils::getClassName<T>();
-			auto lastDoubeDot = loggerName.find_last_of(':');
-			std::string className = lastDoubeDot != std::string::npos ? loggerName.substr(lastDoubeDot + 1) : loggerName;
+			std::string className = Utils::getClassName<T>();
 			auto threadId = std::this_thread::get_id();
 			std::stringstream ss;
 			ss << threadId;

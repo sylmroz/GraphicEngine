@@ -281,6 +281,7 @@
     <ClInclude Include="Engines\Graphic\3D\ObjectGenerators\SphereGenerator.hpp" />
     <ClInclude Include="Engines\Graphic\Pipelines\SolidColorGraphicPipeline.hpp" />
     <ClInclude Include="Engines\Graphic\Pipelines\WireframeGraphicPipeline.hpp" />
+    <ClInclude Include="Engines\Graphic\Shaders\Models\Eye.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\Light.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\ModelMatrices.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\SolidColorModelDescriptor.hpp" />

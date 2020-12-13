@@ -540,5 +540,8 @@
     <ClInclude Include="Drivers\OpenGL\GraphicPipelines\OpenGLSolidColorGraphicPipeline.hpp">
       <Filter>Drivers\OpenGL\GraphicPipelines</Filter>
     </ClInclude>
+    <ClInclude Include="Engines\Graphic\Shaders\Models\Eye.hpp">
+      <Filter>Engines\Graphic\Shaders\Models</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

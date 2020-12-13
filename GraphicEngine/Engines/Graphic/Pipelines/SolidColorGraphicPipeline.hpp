@@ -2,6 +2,7 @@
 
 #include "../Shaders/Models/SolidColorModelDescriptor.hpp"
 #include "../Shaders/Models/Light.hpp"
+#include "../Shaders/Models/Eye.hpp"
 #include "../../../Common/EntityByVertexTypeManager.hpp"
 #include "../../../Core/Math/ImageUtils.hpp"
 #include "../../../Scene/Resources/Mesh.hpp"
@@ -43,7 +44,7 @@ namespace GraphicEngine::Engines::Graphic
 
 	protected:
 		std::shared_ptr<UniformBuffer<glm::mat4>> m_cameraUniformBuffer;
-		std::shared_ptr<UniformBuffer<glm::vec3>> m_eyePositionUniformBuffer;
+		std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::Eye>> m_eyePositionUniformBuffer;
 		std::shared_ptr<UniformBuffer<Shaders::Light>> m_ligthUniformBuffer;
 		std::shared_ptr<Services::CameraControllerManager> m_cameraControllerManager;
 		std::shared_ptr<UniformBufferDynamic<Shaders::SolidColorModelDescriptor>> m_solidColorUniformBuffer;

@@ -6,12 +6,12 @@ layout (location = 0) in vec3 position;
 layout (location = 1) in vec3 normal;
 layout (location = 2) in vec3 solidColor;
 
-layout (std140, binding = 2) uniform Eye
+layout (std140) uniform Eye
 {
     vec3 eyePosition;
 } eye;
 
-layout (std140, binding = 3) uniform Light
+layout (std140) uniform Light
 {
     vec3 position;
     vec3 color;

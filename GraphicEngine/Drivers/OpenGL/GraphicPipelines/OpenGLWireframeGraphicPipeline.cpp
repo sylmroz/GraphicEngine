@@ -7,10 +7,10 @@ GraphicEngine::OpenGL::OpenGLWireframeGraphicPipeline::OpenGLWireframeGraphicPip
 	OpenGLVertexShader vert(GraphicEngine::Core::IO::readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("wireframe.vert").string()));
 	OpenGLFragmentShader frag(GraphicEngine::Core::IO::readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("wireframe.frag").string()));
 
-	m_shaderProgram = std::make_unique<OpenGLShaderProgram>(std::vector<OpenGLShader>{ vert, frag });
+	m_shaderProgram = std::make_shared<OpenGLShaderProgram>(std::vector<OpenGLShader>{ vert, frag });
 	
 	m_cameraUniformBuffer = std::make_shared<UniformBuffer<glm::mat4>>(0);
-	m_wireframeModelDescriptorUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::WireframeModelDescriptor>>(1);
+	m_wireframeModelDescriptorUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::WireframeModelDescriptor>>(1, m_shaderProgram);
 }
 
 void GraphicEngine::OpenGL::OpenGLWireframeGraphicPipeline::draw()

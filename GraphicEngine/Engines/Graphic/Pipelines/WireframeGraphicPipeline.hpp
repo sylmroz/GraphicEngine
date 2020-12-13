@@ -5,6 +5,9 @@
 #include "../../../Scene/Resources/Mesh.hpp"
 #include "../../../Services/CameraControllerManager.hpp"
 #include "../Shaders/Models/WireframeModelDescriptor.hpp"
+#include <algorithm>
+
+#undef max
 
 namespace GraphicEngine::Engines::Graphic
 {
@@ -28,7 +31,9 @@ namespace GraphicEngine::Engines::Graphic
 		{
 			auto vertexBufferCollection = std::make_shared<WireframeVertexBufferCollection<VertexType, VertexBuffer>>();
 			vertexBufferCollection->vertexBuffer = vertexBuffer;
-			vertexBufferCollection->modelDescriptor.wireframeColor = mesh->getMaterial().solidColor;
+			glm::vec3 color = mesh->getMaterial().solidColor;
+			color = Core::changeContrast(color, glm::vec3(1.2f));
+			vertexBufferCollection->modelDescriptor.wireframeColor = color;
 			vertexBufferCollection->mesh = mesh;
 			m_vertexBufferCollection->addEntity(vertexBufferCollection);
 		}

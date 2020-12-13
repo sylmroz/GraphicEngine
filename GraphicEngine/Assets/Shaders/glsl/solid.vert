@@ -10,10 +10,10 @@ layout (std140, binding = 0) uniform ViewProjectionMatrix
     mat4 viewProjectionMatrix;
 } viewProjectionMatrix;
 
-layout(std140, binding = 4) uniform SolidColorModelDescriptor
+layout(std140) uniform SolidColorModelDescriptor
 {
     mat4 modelMatrix;
-    mat3 normalMatrix;
+    mat4 normalMatrix;
     vec3 color;
 } solidColorModelDescriptor;
 
@@ -24,7 +24,7 @@ layout (location = 2) out vec3 solidColor;
 void main()
 {
     solidColor = solidColorModelDescriptor.color;
-    normal = normalize(solidColorModelDescriptor.normalMatrix * inNormal);
+    normal = normalize(mat3(solidColorModelDescriptor.normalMatrix) * inNormal);
     position = vec3(solidColorModelDescriptor.modelMatrix * vec4(inPosition, 1.0));
     gl_Position = viewProjectionMatrix.viewProjectionMatrix * solidColorModelDescriptor.modelMatrix * vec4(inPosition, 1.0);
 }

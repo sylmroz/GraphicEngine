@@ -12,6 +12,6 @@ namespace GraphicEngine::OpenGL
 
 		virtual void draw() override;
 	private:
-		std::unique_ptr<OpenGLShaderProgram> m_shaderProgram;
+		std::shared_ptr<OpenGLShaderProgram> m_shaderProgram;
 	};
 }

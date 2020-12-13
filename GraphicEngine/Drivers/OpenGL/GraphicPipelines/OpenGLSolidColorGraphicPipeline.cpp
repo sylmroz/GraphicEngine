@@ -8,12 +8,12 @@ GraphicEngine::OpenGL::OpenGLSolidColorGraphicPipeline::OpenGLSolidColorGraphicP
 	OpenGLVertexShader vert(GraphicEngine::Core::IO::readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("solid.vert").string()));
 	OpenGLFragmentShader frag(GraphicEngine::Core::IO::readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("solid.frag").string()));
 
-	m_shaderProgram = std::make_unique<OpenGLShaderProgram>(std::vector<OpenGLShader>{ vert, frag });
+	m_shaderProgram = std::make_shared<OpenGLShaderProgram>(std::vector<OpenGLShader>{ vert, frag });
 
 	m_cameraUniformBuffer = std::make_shared<UniformBuffer<glm::mat4>>(0);
-	m_eyePositionUniformBuffer = std::make_shared<UniformBuffer<glm::vec3>>(2);
-	m_ligthUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::Light>>(3);
-	m_solidColorUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::SolidColorModelDescriptor>>(4);
+	m_eyePositionUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::Eye>>(2, m_shaderProgram);
+	m_ligthUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::Light>>(3, m_shaderProgram);
+	m_solidColorUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::SolidColorModelDescriptor>>(4, m_shaderProgram);
 }
 
 void GraphicEngine::OpenGL::OpenGLSolidColorGraphicPipeline::draw()
@@ -22,9 +22,10 @@ void GraphicEngine::OpenGL::OpenGLSolidColorGraphicPipeline::draw()
 	auto viewMatrix = m_cameraControllerManager->getActiveCamera()->getViewMatrix();
 	auto eyePosition = m_cameraControllerManager->getActiveCamera()->getPosition();
 	Engines::Graphic::Shaders::Light light{ eyePosition, glm::vec3{ 1.0f } };
+	Engines::Graphic::Shaders::Eye eye{ eyePosition };
 	auto cameraMatrix = m_cameraControllerManager->getActiveCamera()->getViewProjectionMatrix();
 	m_cameraUniformBuffer->update(&cameraMatrix);
-	m_eyePositionUniformBuffer->update(&eyePosition);
+	m_eyePositionUniformBuffer->update(&eye);
 	m_ligthUniformBuffer->update(&light);
 
 	m_vertexBufferCollection->forEachEntity([&](auto vertexBufferCollection)
