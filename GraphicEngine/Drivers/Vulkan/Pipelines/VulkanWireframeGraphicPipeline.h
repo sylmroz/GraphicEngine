@@ -1,36 +1,14 @@
 #pragma once
 
 #include "../../../Engines/Graphic/Pipelines/WireframeGraphicPipeline.hpp"
-#include "../VulkanFramework.hpp"
-#include "../VulkanUniformBuffer.hpp"
-#include "../VulkanVertexBuffer.hpp"
+#include "VulkanGraphicPipeline.hpp"
 
 namespace GraphicEngine::Vulkan
 {
-	template <typename VertexType>
-	struct VulkanGraphicPipelineInfo
-	{
-		using vertex_type = VertexType;
-		vk::UniquePipeline graphicPipeline;
-		vk::UniquePipelineCache pipelineCache;
-		vk::UniquePipelineLayout pipelineLayout;
-
-		VulkanGraphicPipelineInfo(std::shared_ptr<VulkanFramework> framework, vk::UniqueDescriptorSetLayout& descriptorSetLayout, const std::vector<ShaderInfo>& shadersInfo, vk::PrimitiveTopology primitiveTopology)
-		{
-			pipelineCache = framework->m_device->createPipelineCacheUnique(vk::PipelineCacheCreateInfo());
-			pipelineLayout = framework->m_device->createPipelineLayoutUnique(vk::PipelineLayoutCreateInfo(vk::PipelineLayoutCreateFlags(), 1, &descriptorSetLayout.get()));
-			graphicPipeline = createGraphicPipeline(framework->m_device, pipelineCache,
-				shadersInfo,
-				createVertexInputAttributeDescriptions(vertex_type::getSizeAndOffsets()),
-				vk::VertexInputBindingDescription(0, vertex_type::getStride()), true, vk::FrontFace::eClockwise, 
-				pipelineLayout, framework->m_renderPass, framework->m_msaaSamples, primitiveTopology);
-		}
-	};
-
 	class VulkanWireframeGraphicPipeline : public Engines::Graphic::WireframeGraphicPipeline<VertexBuffer, UniformBuffer, UniformBufferDynamic, vk::UniqueCommandBuffer&, int>
 	{
 	public:
-		VulkanWireframeGraphicPipeline(std::shared_ptr<VulkanFramework> framework, std::shared_ptr<UniformBuffer<glm::mat4>> cameraUniformBuffer, std::shared_ptr<Services::CameraControllerManager> cameraControllerManager);
+		VulkanWireframeGraphicPipeline(std::shared_ptr<VulkanFramework> framework, std::shared_ptr<UniformBuffer<glm::mat4>> cameraUniformBuffer);
 
 		template <typename VertexType>
 		void addVertexBuffer(std::shared_ptr<Scene::Mesh<VertexType>> mesh, std::shared_ptr<VertexBuffer<VertexType>> vertexBuffer)

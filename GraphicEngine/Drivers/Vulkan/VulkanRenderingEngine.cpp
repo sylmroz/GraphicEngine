@@ -25,9 +25,16 @@ bool GraphicEngine::Vulkan::VulkanRenderingEngine::drawFrame()
 	{
 		m_framework->acquireFrame();
 
-		m_uniformBuffer->updateAndSet(m_cameraControllerManager->getActiveCamera()->getViewProjectionMatrix());
+		auto eyePosition = m_cameraControllerManager->getActiveCamera()->getPosition();
+		Engines::Graphic::Shaders::Light light{ eyePosition, glm::vec3{ 1.0f } };
+		Engines::Graphic::Shaders::Eye eye{ eyePosition };
+		auto cameraMatrix = m_cameraControllerManager->getActiveCamera()->getViewProjectionMatrix();
+		m_uniformBuffer->updateAndSet(cameraMatrix);
+		m_eyePositionUniformBuffer->updateAndSet(eye);
+		m_lightUniformBuffer->updateAndSet(light);
 		
 		m_wireframeGraphicPipeline->updateDynamicUniforms();
+		m_solidColorraphicPipeline->updateDynamicUniforms();
 		m_framework->submitFrame();
 	}
 
@@ -51,14 +58,19 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 			.initalizeRenderingBarriers();
 
 		m_uniformBuffer = m_framework->getUniformBuffer<UniformBuffer, glm::mat4>();
+		m_lightUniformBuffer = m_framework->getUniformBuffer<UniformBuffer, Engines::Graphic::Shaders::Light>();
+		m_eyePositionUniformBuffer = m_framework->getUniformBuffer<UniformBuffer, Engines::Graphic::Shaders::Eye>();
 
-		m_wireframeGraphicPipeline = std::make_shared<VulkanWireframeGraphicPipeline>(m_framework, m_uniformBuffer, m_cameraControllerManager);
+		m_wireframeGraphicPipeline = std::make_shared<VulkanWireframeGraphicPipeline>(m_framework, m_uniformBuffer);
+		m_solidColorraphicPipeline = std::make_shared<VulkanSolidColorGraphicPipeline>(m_framework, m_uniformBuffer, m_lightUniformBuffer, m_eyePositionUniformBuffer, m_cameraControllerManager);
+
 		m_modelManager->getModelEntityContainer()->forEachEntity([&](auto model)
 		{
 			for (auto mesh : model->getMeshes())
 			{
 				auto vb = mesh->compile<VertexBufferFactory, VertexBuffer>(m_framework->m_physicalDevice, m_framework->m_device, m_framework->m_commandPool, m_framework->m_graphicQueue);
 				m_wireframeGraphicPipeline->addVertexBuffer<decltype(mesh)::element_type::vertex_type>(mesh, vb);
+				m_solidColorraphicPipeline->addVertexBuffer<decltype(mesh)::element_type::vertex_type>(mesh, vb);
 			}
 		});
 
@@ -117,6 +129,7 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::buildCommandBuffers()
 		commandBuffer->beginRenderPass(renderPassBeginInfo, vk::SubpassContents::eInline);
 
 		m_wireframeGraphicPipeline->draw(commandBuffer, i);
+		m_solidColorraphicPipeline->draw(commandBuffer, i);
 
 		commandBuffer->endRenderPass();
 

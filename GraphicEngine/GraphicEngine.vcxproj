@@ -187,6 +187,7 @@
     <ClCompile Include="Drivers\OpenGL\OpenGLRenderingEngine.cpp" />
     <ClCompile Include="Drivers\OpenGL\OpenGLShader.cpp" />
     <ClCompile Include="Drivers\OpenGL\OpenGLTexture.cpp" />
+    <ClCompile Include="Drivers\Vulkan\Pipelines\VulkanSolidColorGraphicPipeline.cpp" />
     <ClCompile Include="Drivers\Vulkan\Pipelines\VulkanWireframeGraphicPipeline.cpp" />
     <ClCompile Include="Drivers\Vulkan\VulkanFramework.cpp" />
     <ClCompile Include="Drivers\Vulkan\VulkanHelper.cpp" />
@@ -260,6 +261,8 @@
     <ClInclude Include="Drivers\OpenGL\OpenGLUniformBuffer.hpp" />
     <ClInclude Include="Drivers\OpenGL\OpenGLUniformData.hpp" />
     <ClInclude Include="Drivers\OpenGL\OpenGLVertexBufferFactory.hpp" />
+    <ClInclude Include="Drivers\Vulkan\Pipelines\VulkanGraphicPipeline.hpp" />
+    <ClInclude Include="Drivers\Vulkan\Pipelines\VulkanSolidColorGraphicPipeline.hpp" />
     <ClInclude Include="Drivers\Vulkan\Pipelines\VulkanWireframeGraphicPipeline.h" />
     <ClInclude Include="Drivers\Vulkan\VulkanFramework.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanShader.hpp" />

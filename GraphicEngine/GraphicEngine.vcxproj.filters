@@ -247,6 +247,9 @@
     <ClCompile Include="Drivers\OpenGL\GraphicPipelines\OpenGLSolidColorGraphicPipeline.cpp">
       <Filter>Drivers\OpenGL\GraphicPipelines</Filter>
     </ClCompile>
+    <ClCompile Include="Drivers\Vulkan\Pipelines\VulkanSolidColorGraphicPipeline.cpp">
+      <Filter>Drivers\Vulkan\Pipelines</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Input\Keyboard\KeyboardEnumKeys.hpp">
@@ -542,6 +545,12 @@
     </ClInclude>
     <ClInclude Include="Engines\Graphic\Shaders\Models\Eye.hpp">
       <Filter>Engines\Graphic\Shaders\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Drivers\Vulkan\Pipelines\VulkanSolidColorGraphicPipeline.hpp">
+      <Filter>Drivers\Vulkan\Pipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="Drivers\Vulkan\Pipelines\VulkanGraphicPipeline.hpp">
+      <Filter>Drivers\Vulkan\Pipelines</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

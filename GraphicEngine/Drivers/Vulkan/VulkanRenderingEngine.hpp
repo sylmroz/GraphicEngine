@@ -11,6 +11,7 @@
 #include "../../Engines/Graphic/Shaders/Models/ModelMatrices.hpp"
 
 #include "Pipelines/VulkanWireframeGraphicPipeline.h"
+#include "Pipelines/VulkanSolidColorGraphicPipeline.hpp"
 
 namespace GraphicEngine::Vulkan
 {
@@ -34,11 +35,14 @@ namespace GraphicEngine::Vulkan
 	private:
 		std::shared_ptr<VulkanFramework> m_framework;
 		std::shared_ptr<UniformBuffer<glm::mat4>> m_uniformBuffer;
+		std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::Light>> m_lightUniformBuffer;
+		std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::Eye>> m_eyePositionUniformBuffer;
 
 	private:
 		std::shared_ptr<VulkanWindowContext> m_vulkanWindowContext;
 
 	private:
 		std::shared_ptr<VulkanWireframeGraphicPipeline> m_wireframeGraphicPipeline;
+		std::shared_ptr<VulkanSolidColorGraphicPipeline> m_solidColorraphicPipeline;
 	};
 }

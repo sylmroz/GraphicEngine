@@ -2,7 +2,7 @@
 #include "../../../Core/IO/FileReader.hpp"
 #include "../../../Core/IO/FileSystem.hpp"
 
-GraphicEngine::Vulkan::VulkanWireframeGraphicPipeline::VulkanWireframeGraphicPipeline(std::shared_ptr<VulkanFramework> framework, std::shared_ptr<UniformBuffer<glm::mat4>> cameraUniformBuffer, std::shared_ptr<Services::CameraControllerManager> cameraControllerManager) :
+GraphicEngine::Vulkan::VulkanWireframeGraphicPipeline::VulkanWireframeGraphicPipeline(std::shared_ptr<VulkanFramework> framework, std::shared_ptr<UniformBuffer<glm::mat4>> cameraUniformBuffer) :
 	m_framework{ framework }
 {
 	m_vulkanGraphicPipelines = std::make_shared<Common::EntityByVertexTypeManager<VulkanGraphicPipelineInfo>>();
