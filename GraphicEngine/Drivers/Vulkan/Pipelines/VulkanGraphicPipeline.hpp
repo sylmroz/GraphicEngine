@@ -21,7 +21,7 @@ namespace GraphicEngine::Vulkan
 			graphicPipeline = createGraphicPipeline(framework->m_device, pipelineCache,
 				shadersInfo,
 				createVertexInputAttributeDescriptions(vertex_type::getSizeAndOffsets()),
-				vk::VertexInputBindingDescription(0, vertex_type::getStride()), true, vk::FrontFace::eClockwise,
+				vk::VertexInputBindingDescription(0, vertex_type::getStride()), true, vk::FrontFace::eCounterClockwise,
 				pipelineLayout, framework->m_renderPass, framework->m_msaaSamples, primitiveTopology);
 		}
 	};

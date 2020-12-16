@@ -55,6 +55,7 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LESS);
+		glFrontFace(GL_CCW);
 	}
 
 	catch (std::runtime_error& err)

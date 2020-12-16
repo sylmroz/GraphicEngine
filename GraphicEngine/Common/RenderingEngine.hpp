@@ -37,11 +37,11 @@ namespace GraphicEngine
 			m_models.front()->setPosition(Core::Utils::Converter::fromArrayToObject<glm::vec3, std::vector<float>, 3>(m_cfg->getProperty<std::vector<float>>("scene:object:position")));
 
 			m_models.front()->getMeshes().front()->setRotate(Core::Utils::Converter::fromArrayToObject<glm::vec3, std::vector<float>, 3>(m_cfg->getProperty<std::vector<float>>("scene:object:rotate")));*/
-			/*auto cube = Engines::Graphic::CuboidGenerator<Common::VertexPN>{}.getModel(glm::vec3(-0.25f), glm::vec3(0.25), glm::ivec3(1), Engines::Graphic::GeneratingPosition::Corner, Engines::Graphic::TriangleDirection::Clockwise);
-			m_modelManager->addModel(cube);*/
+			auto cube = Engines::Graphic::CuboidGenerator<Common::VertexPN>{}.getModel(glm::vec3(-0.25f), glm::vec3(0.25), glm::ivec3(3), Engines::Graphic::GeneratingPosition::Corner, Engines::Graphic::TriangleDirection::CounterClockwise);
+			m_modelManager->addModel(cube);
 
-			auto sphere = Engines::Graphic::SphereGenerator<Common::VertexPN>{}.getModel(glm::vec3(0.0f), 0.25, glm::ivec2(20), Engines::Graphic::TriangleDirection::CounterClockwise);
-			m_modelManager->addModel(sphere);
+			/*auto sphere = Engines::Graphic::SphereGenerator<Common::VertexPN>{}.getModel(glm::vec3(0.0f), 0.25, glm::ivec2(20), Engines::Graphic::TriangleDirection::CounterClockwise);
+			m_modelManager->addModel(sphere);*/
 		}
 
 		virtual bool drawFrame() = 0;

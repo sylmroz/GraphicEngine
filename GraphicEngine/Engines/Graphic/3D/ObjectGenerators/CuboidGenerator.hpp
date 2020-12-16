@@ -115,11 +115,11 @@ namespace GraphicEngine::Engines::Graphic
 				for (uint32_t x{ 0 }; x < scale.x; ++x)
 				{
 					uint32_t point = x + (z * (scale.x + 1));
-					faces.push_back(this->buildFace(point, point + 1, point + 2 + scale.x, triangleDirection));
-					faces.push_back(this->buildFace(point, point + 2 + scale.x, point + 1 + scale.x, triangleDirection));
-					point = x + (z * (scale.x + 1)) + offset;
-					faces.push_back(this->buildFace(point, point + 1 + scale.x, point + 2 + scale.x, triangleDirection));
 					faces.push_back(this->buildFace(point, point + 2 + scale.x, point + 1, triangleDirection));
+					faces.push_back(this->buildFace(point, point + 1 + scale.x, point + 2 + scale.x, triangleDirection));
+					point = x + (z * (scale.x + 1)) + offset;
+					faces.push_back(this->buildFace(point, point + 2 + scale.x, point + 1 + scale.x, triangleDirection));
+					faces.push_back(this->buildFace(point, point + 1, point + 2 + scale.x, triangleDirection));
 				}
 			}
 
@@ -131,11 +131,11 @@ namespace GraphicEngine::Engines::Graphic
 				for (uint32_t x{ 0 }; x < scale.x; ++x)
 				{
 					uint32_t point = x + (y * (scale.x + 1)) + offset;
-					faces.push_back(this->buildFace(point, point + 1 + scale.x, point + 2 + scale.x, triangleDirection));
-					faces.push_back(this->buildFace(point, point + 2 + scale.x, point + 1, triangleDirection));
-					point = x + (y * (scale.x + 1)) + baseOffset;
-					faces.push_back(this->buildFace(point, point + 1, point + 2 + scale.x, triangleDirection));
 					faces.push_back(this->buildFace(point, point + 2 + scale.x, point + 1 + scale.x, triangleDirection));
+					faces.push_back(this->buildFace(point, point + 1, point + 2 + scale.x, triangleDirection));
+					point = x + (y * (scale.x + 1)) + baseOffset;
+					faces.push_back(this->buildFace(point, point + 2 + scale.x, point + 1, triangleDirection));
+					faces.push_back(this->buildFace(point, point + 1 + scale.x, point + 2 + scale.x, triangleDirection));
 				}
 			}
 
@@ -147,11 +147,11 @@ namespace GraphicEngine::Engines::Graphic
 				for (uint32_t x{ 0 }; x < scale.x; ++x)
 				{
 					uint32_t point = x + (z * (scale.x + 1)) + offset;
-					faces.push_back(this->buildFace(point, point + 1 + scale.x, point + 2 + scale.x, triangleDirection));
-					faces.push_back(this->buildFace(point, point + 2 + scale.x, point + 1, triangleDirection));
-					point = x + (z * (scale.x + 1)) + baseOffset;
-					faces.push_back(this->buildFace(point, point + 1, point + 2 + scale.x, triangleDirection));
 					faces.push_back(this->buildFace(point, point + 2 + scale.x, point + 1 + scale.x, triangleDirection));
+					faces.push_back(this->buildFace(point, point + 1, point + 2 + scale.x, triangleDirection));
+					point = x + (z * (scale.x + 1)) + baseOffset;
+					faces.push_back(this->buildFace(point, point + 2 + scale.x, point + 1, triangleDirection));
+					faces.push_back(this->buildFace(point, point + 1 + scale.x, point + 2 + scale.x, triangleDirection));
 				}
 			}
 
