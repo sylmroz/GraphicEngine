@@ -495,9 +495,6 @@
     <ClInclude Include="Common\CameraController.hpp">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="Common\GraphicPipeline.hpp">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Utils\MemberTraits.hpp">
       <Filter>Core\Utils</Filter>
     </ClInclude>
@@ -551,6 +548,9 @@
     </ClInclude>
     <ClInclude Include="Drivers\Vulkan\Pipelines\VulkanGraphicPipeline.hpp">
       <Filter>Drivers\Vulkan\Pipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="Engines\Graphic\Pipelines\GraphicPipeline.hpp">
+      <Filter>Engines\Graphic\Pipelines</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

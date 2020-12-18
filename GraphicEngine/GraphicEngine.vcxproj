@@ -209,7 +209,6 @@
     <ClInclude Include="Common\Camera.hpp" />
     <ClInclude Include="Common\CameraController.hpp" />
     <ClInclude Include="Common\EntityByVertexTypeManager.hpp" />
-    <ClInclude Include="Common\GraphicPipeline.hpp" />
     <ClInclude Include="Common\Keyboard.hpp" />
     <ClInclude Include="Common\ModelImporter.hpp" />
     <ClInclude Include="Common\Mouse.hpp" />
@@ -282,6 +281,7 @@
     <ClInclude Include="Engines\Graphic\3D\ObjectGenerators\IObjectGenerator.hpp" />
     <ClInclude Include="Engines\Graphic\3D\ObjectGenerators\PlaneGenerator.hpp" />
     <ClInclude Include="Engines\Graphic\3D\ObjectGenerators\SphereGenerator.hpp" />
+    <ClInclude Include="Engines\Graphic\Pipelines\GraphicPipeline.hpp" />
     <ClInclude Include="Engines\Graphic\Pipelines\SolidColorGraphicPipeline.hpp" />
     <ClInclude Include="Engines\Graphic\Pipelines\WireframeGraphicPipeline.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\Eye.hpp" />
