@@ -1,6 +1,7 @@
 #include "VulkanSolidColorGraphicPipeline.hpp"
 #include "../../../Core/IO/FileReader.hpp"
 #include "../../../Core/IO/FileSystem.hpp"
+#include "../../../Core/Utils/MemberTraits.hpp"
 
 GraphicEngine::Vulkan::VulkanSolidColorGraphicPipeline::VulkanSolidColorGraphicPipeline(std::shared_ptr<VulkanFramework> framework, std::shared_ptr<UniformBuffer<glm::mat4>> cameraUniformBuffer,
 	std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::Light>> lightUniformBuffer, std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::Eye>> eyePositionUniformBuffer,
@@ -51,8 +52,11 @@ GraphicEngine::Vulkan::VulkanSolidColorGraphicPipeline::VulkanSolidColorGraphicP
 
 	Core::Utils::for_each(Common::VertexTypesRegister::types, [&](auto vertexType)
 	{
-		auto graphicPipeline = std::make_shared<VulkanGraphicPipelineInfo<decltype(vertexType)>>(m_framework, m_descriptorSetLayout, shaderInfos, vk::PrimitiveTopology::eTriangleList);
-		m_vulkanGraphicPipelines->addEntity(graphicPipeline);
+		if constexpr (Core::Utils::has_normal_member<decltype(vertexType)>::value)
+		{
+			auto graphicPipeline = std::make_shared<VulkanGraphicPipelineInfo<decltype(vertexType)>>(m_framework, m_descriptorSetLayout, shaderInfos, vk::PrimitiveTopology::eTriangleList);
+			m_vulkanGraphicPipelines->addEntity(graphicPipeline);
+		}
 	});
 }
 
@@ -102,4 +106,15 @@ void GraphicEngine::Vulkan::VulkanSolidColorGraphicPipeline::addUniformBuffer()
 
 void GraphicEngine::Vulkan::VulkanSolidColorGraphicPipeline::deleteUniformBuffer()
 {
+	if (m_solidColorModelDescriptors.size() > 0)
+	{
+		m_solidColorModelDescriptors.resize(m_solidColorModelDescriptors.size() - 1);
+		if (m_solidColorModelDescriptors.size() > 0)
+		{
+			m_solidColorUniformBuffer->deleteInstance();
+
+			std::vector<std::shared_ptr<IUniformBuffer>> uniformBuffers{ {m_cameraUniformBuffer, m_solidColorUniformBuffer} };
+			updateDescriptorSets(m_framework->m_device, m_descriptorPool, m_descriptorSetLayout, m_framework->m_maxFrames, m_descriptorSets, uniformBuffers, {});
+		}
+	}
 }

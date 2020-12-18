@@ -24,15 +24,15 @@ namespace GraphicEngine::Vulkan
 		template <typename VertexType>
 		void eraseVertexBuffer(std::shared_ptr<Scene::Mesh<VertexType>> mesh)
 		{
-			// Engines::Graphic::SolidColorGraphicPipeline<VertexBuffer, UniformBuffer, UniformBufferDynamic, vk::UniqueCommandBuffer&, int>::eraseVertexBuffer(mesh);
-			// deleteUniformBuffer();
+			Engines::Graphic::SolidColorGraphicPipeline<VertexBuffer, UniformBuffer, UniformBufferDynamic, vk::UniqueCommandBuffer&, int>::eraseVertexBuffer(mesh);
+			deleteUniformBuffer();
 		}
 
 		template <typename VertexType>
 		void eraseVertexBuffer(std::shared_ptr<VertexBuffer<VertexType>> vertexBuffer)
 		{
-			// Engines::Graphic::SolidColorGraphicPipeline<VertexBuffer, UniformBuffer, UniformBufferDynamic, vk::UniqueCommandBuffer&, int>::eraseVertexBuffer(vertexBuffer);
-			// deleteUniformBuffer();
+			Engines::Graphic::SolidColorGraphicPipeline<VertexBuffer, UniformBuffer, UniformBufferDynamic, vk::UniqueCommandBuffer&, int>::eraseVertexBuffer(vertexBuffer);
+			deleteUniformBuffer();
 		}
 
 		virtual void draw(vk::UniqueCommandBuffer& commandBuffer, int index) override;
