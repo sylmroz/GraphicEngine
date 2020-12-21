@@ -133,6 +133,18 @@
     <Filter Include="Drivers\Vulkan\Pipelines">
       <UniqueIdentifier>{f81bb5fe-27a7-4219-9a2c-37007ba1abc3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{11d6837b-1049-4324-9245-4575b1abaa46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Third">
+      <UniqueIdentifier>{e0496461-dd4e-4f23-8ef2-d6e575f90708}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Third\ImGUI">
+      <UniqueIdentifier>{bc31f60a-04fd-4329-abbd-f6c8d3134618}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\ImGui">
+      <UniqueIdentifier>{a9f914d0-057d-43ab-92f3-9c027f2bcf60}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -249,6 +261,30 @@
     </ClCompile>
     <ClCompile Include="Drivers\Vulkan\Pipelines\VulkanSolidColorGraphicPipeline.cpp">
       <Filter>Drivers\Vulkan\Pipelines</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\imgui\imgui.cpp">
+      <Filter>Third\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\imgui\backends\imgui_impl_glfw.cpp">
+      <Filter>Third\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\imgui\backends\imgui_impl_opengl3.cpp">
+      <Filter>Third\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\imgui\imgui_demo.cpp">
+      <Filter>Third\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\imgui\imgui_draw.cpp">
+      <Filter>Third\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\imgui\imgui_widgets.cpp">
+      <Filter>Third\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\imgui\backends\imgui_impl_vulkan.cpp">
+      <Filter>Third\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\ImGui\ImGuiImpl.cpp">
+      <Filter>UI\ImGui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -551,6 +587,39 @@
     </ClInclude>
     <ClInclude Include="Engines\Graphic\Pipelines\GraphicPipeline.hpp">
       <Filter>Engines\Graphic\Pipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libs\imgui\imgui.h">
+      <Filter>Third\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libs\imgui\backends\imgui_impl_glfw.h">
+      <Filter>Third\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libs\imgui\backends\imgui_impl_opengl3.h">
+      <Filter>Third\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libs\imgui\imconfig.h">
+      <Filter>Third\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libs\imgui\imgui_internal.h">
+      <Filter>Third\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libs\imgui\imstb_rectpack.h">
+      <Filter>Third\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libs\imgui\imstb_textedit.h">
+      <Filter>Third\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libs\imgui\imstb_truetype.h">
+      <Filter>Third\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libs\imgui\backends\imgui_impl_vulkan.h">
+      <Filter>Third\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ImGui\ImGuiImpl.hpp">
+      <Filter>UI\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\UI.hpp">
+      <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

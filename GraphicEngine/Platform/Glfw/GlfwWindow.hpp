@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "../../Common/WindowKeyboardMouse.hpp"
+#include "../../Common/UI.hpp"
 
 namespace GraphicEngine::GLFW
 {
@@ -18,7 +19,7 @@ namespace GraphicEngine::GLFW
 	class GlfwWindow : public Common::WindowKeyboardMouse
 	{
 	public:
-		GlfwWindow(std::shared_ptr<Core::Configuration> cfg) :WindowKeyboardMouse(cfg) {}
+		GlfwWindow(std::shared_ptr<Core::Configuration> cfg, std::shared_ptr<Common::UI> ui) :WindowKeyboardMouse(cfg), m_ui{ ui } {}
 		//From Keyboard interface
 		std::vector<Core::Inputs::KeyboardKey> getPressedKeys() override;
 
@@ -37,18 +38,21 @@ namespace GraphicEngine::GLFW
 			virtual ~WindowGlfwApi() = default;
 			virtual void init() = 0;
 			virtual void swapBuffers(GLFWwindow* window) = 0;
+			virtual void initUi(std::shared_ptr<GLFWwindow> window, std::shared_ptr<Common::UI> ui) = 0;
 		};
 
 		struct WindowGlfwOpenGL final : WindowGlfwApi
 		{
 			virtual void init() override;
 			virtual void swapBuffers(GLFWwindow* window) override;
+			virtual void initUi(std::shared_ptr<GLFWwindow> window, std::shared_ptr<Common::UI> ui) override;
 		};
 
 		struct WindowGlfwVulkan final : WindowGlfwApi
 		{
 			virtual void init() override;
 			virtual void swapBuffers(GLFWwindow* window) override;
+			virtual void initUi(std::shared_ptr<GLFWwindow> window, std::shared_ptr<Common::UI> ui) override;
 		};
 
 	public:
@@ -74,7 +78,9 @@ namespace GraphicEngine::GLFW
 		WindowGlfwProfile m_windowProfile = WindowGlfwProfile::None;
 
 		std::shared_ptr<WindowGlfwApi> m_specialApi;
+		std::shared_ptr<Common::UI> m_ui;
 
+	private:
 		const std::map<int, Core::Inputs::MouseButton> m_mappedButtons = {
 			{ GLFW_MOUSE_BUTTON_LEFT, Core::Inputs::MouseButton::buttonLeft },
 			{ GLFW_MOUSE_BUTTON_MIDDLE, Core::Inputs::MouseButton::butonMiddle },

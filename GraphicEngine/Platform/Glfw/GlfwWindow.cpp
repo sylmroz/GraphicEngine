@@ -1,29 +1,34 @@
 #include "GlfwWindow.hpp"
 #include <stdexcept>
 
+#include "../../UI/ImGui/ImGuiImpl.hpp"
+
 using namespace GraphicEngine::Core::Inputs;
 
 std::vector<KeyboardKey> GraphicEngine::GLFW::GlfwWindow::getPressedKeys()
 {
 	_keys.clear();
-	for (const auto& [key, value] : m_mappedKeys)
-	{
-		if (glfwGetKey(m_glfwWindow.get(), key) == GLFW_PRESS)
-			_keys.push_back(value);
+	if (!m_ui->isKeyboardBusy())
+	{		for (const auto& [key, value] : m_mappedKeys)
+		{
+			if (glfwGetKey(m_glfwWindow.get(), key) == GLFW_PRESS)
+				_keys.push_back(value);
+		}
 	}
-
 	return std::move(_keys);
 }
 
 std::vector<MouseButton> GraphicEngine::GLFW::GlfwWindow::getPressedButtons()
 {
 	m_pressedButtons.clear();
-	for (const auto& [key, value] : m_mappedButtons)
+	if (!m_ui->isMouseButtonBusy())
 	{
-		if (glfwGetMouseButton(m_glfwWindow.get(), key))
-			m_pressedButtons.push_back(value);
+		for (const auto& [key, value] : m_mappedButtons)
+		{
+			if (glfwGetMouseButton(m_glfwWindow.get(), key))
+				m_pressedButtons.push_back(value);
+		}
 	}
-
 
 	return std::move(m_pressedButtons);
 }
@@ -98,7 +103,7 @@ void GraphicEngine::GLFW::GlfwWindow::initialize()
 	};
 
 	auto positionFun = [](GLFWwindow* window, double xPos, double yPos)
-	{
+	{		
 		auto app = reinterpret_cast<GlfwWindow*>(glfwGetWindowUserPointer(window));
 		app->m_cursorPosition = glm::vec2(xPos, yPos);
 	};
@@ -107,6 +112,8 @@ void GraphicEngine::GLFW::GlfwWindow::initialize()
 	glfwSetCursorPosCallback(m_glfwWindow.get(), positionFun);
 
 	glfwSetFramebufferSizeCallback(m_glfwWindow.get(), resizeCallback);
+	m_specialApi->initUi(m_glfwWindow, m_ui);
+	glfwSwapInterval(0);
 }
 
 void GraphicEngine::GLFW::GlfwWindow::poolEvents()
@@ -144,6 +151,11 @@ void GraphicEngine::GLFW::GlfwWindow::WindowGlfwOpenGL::swapBuffers(GLFWwindow* 
 	glfwSwapBuffers(window);
 }
 
+void GraphicEngine::GLFW::GlfwWindow::WindowGlfwOpenGL::initUi(std::shared_ptr<GLFWwindow> window, std::shared_ptr<Common::UI> ui)
+{
+	ui->addWidow(std::make_shared<GUI::ImGuiImpl::GlfwOpenGlEngineBackend>(window));
+}
+
 void GraphicEngine::GLFW::GlfwWindow::WindowGlfwVulkan::init()
 {
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
@@ -152,4 +164,9 @@ void GraphicEngine::GLFW::GlfwWindow::WindowGlfwVulkan::init()
 void GraphicEngine::GLFW::GlfwWindow::WindowGlfwVulkan::swapBuffers(GLFWwindow* window)
 {
 	// Do nothing. Vulkan Rendering Engine take care about it
+}
+
+void GraphicEngine::GLFW::GlfwWindow::WindowGlfwVulkan::initUi(std::shared_ptr<GLFWwindow> window, std::shared_ptr<Common::UI> ui)
+{
+	ui->addWidow(std::make_shared<GUI::ImGuiImpl::GlfwVulkanEngineBackend>(window));
 }

@@ -12,12 +12,6 @@ GraphicEngine::Common::CameraController::CameraController(std::shared_ptr<Camera
 	m_prevMousePosition(glm::vec2(0.0f, 0.0f))
 {
 	setInitialMousePosition(glm::vec2(m_window->getWidth() / 2, m_window->getHeight() / 2));
-	updateCamera(
-		m_window->getCursorPosition(),
-		m_window->getScrollValue(),
-		m_window->getPressedButtons(),
-		m_window->getPressedKeys()
-	);
 
 	m_camera->setSensitivity(m_window->getSensitivity());
 

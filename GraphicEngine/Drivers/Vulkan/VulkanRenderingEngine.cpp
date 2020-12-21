@@ -12,10 +12,11 @@ GraphicEngine::Vulkan::VulkanRenderingEngine::VulkanRenderingEngine(std::shared_
 	std::shared_ptr<Services::CameraControllerManager> cameraControllerManager,
 	std::shared_ptr<Services::ModelManager> modelManager,
 	std::shared_ptr<Core::EventManager> eventManager,
+	std::shared_ptr<Common::UI> ui,
 	std::shared_ptr<Core::Configuration> cfg,
 	std::unique_ptr<Core::Logger<VulkanRenderingEngine>> logger) :
 	m_vulkanWindowContext(vulkanWindowContext),
-	RenderingEngine(cameraControllerManager, modelManager, eventManager, cfg)
+	RenderingEngine(cameraControllerManager, modelManager, eventManager, ui, cfg)
 {
 }
 
@@ -24,6 +25,7 @@ bool GraphicEngine::Vulkan::VulkanRenderingEngine::drawFrame()
 	try
 	{
 		m_framework->acquireFrame();
+		buildCommandBuffers();
 
 		auto eyePosition = m_cameraControllerManager->getActiveCamera()->getPosition();
 		Engines::Graphic::Shaders::Light light{ eyePosition, glm::vec3{ 1.0f } };
@@ -32,7 +34,7 @@ bool GraphicEngine::Vulkan::VulkanRenderingEngine::drawFrame()
 		m_uniformBuffer->updateAndSet(cameraMatrix);
 		m_eyePositionUniformBuffer->updateAndSet(eye);
 		m_lightUniformBuffer->updateAndSet(light);
-		
+
 		m_wireframeGraphicPipeline->updateDynamicUniforms();
 		m_solidColorraphicPipeline->updateDynamicUniforms();
 		m_framework->submitFrame();
@@ -73,8 +75,10 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 				m_solidColorraphicPipeline->addVertexBuffer<decltype(mesh)::element_type::vertex_type>(mesh, vb);
 			}
 		});
+		m_uiRenderingBackend = std::make_shared<GUI::ImGuiImpl::VulkanRenderEngineBackend>(m_framework);
+		m_ui->addBackend(m_uiRenderingBackend);
 
-		buildCommandBuffers();
+		// buildCommandBuffers();
 	}
 
 	catch (vk::SystemError& err)
@@ -117,6 +121,11 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::buildCommandBuffers()
 	clearValues[1].depthStencil = vk::ClearDepthStencilValue(1.0f, 0.0f);
 	clearValues[2].color = vk::ClearColorValue(std::array<float, 4>({ backgroudColor.r, backgroudColor.g, backgroudColor.b, backgroudColor.a }));
 	int i{ 0 };
+	m_framework->m_device->waitIdle();
+
+	m_ui->nextFrame();
+	m_ui->drawUi();
+
 	for (auto& commandBuffer : m_framework->m_commandBuffers)
 	{
 		commandBuffer->begin(vk::CommandBufferBeginInfo(vk::CommandBufferUsageFlags()));
@@ -130,6 +139,8 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::buildCommandBuffers()
 
 		m_wireframeGraphicPipeline->draw(commandBuffer, i);
 		m_solidColorraphicPipeline->draw(commandBuffer, i);
+
+		m_uiRenderingBackend->renderData(commandBuffer);
 
 		commandBuffer->endRenderPass();
 

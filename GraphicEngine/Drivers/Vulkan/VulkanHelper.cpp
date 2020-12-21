@@ -374,7 +374,7 @@ vk::UniquePipeline GraphicEngine::Vulkan::createGraphicPipeline(const vk::Unique
 		&pipelineVertexInputStateCreateInfo, &pipelineInputAssemblyStateCreateInfo, nullptr, &pipelineViewportCreateInfo, &pipelineRasterizationStateCreateInfo,
 		&pipelineMultisampleState, &pipelineDepthStencilCreateInfo, &pipelineColorBlendStateCreateInfo, &pipelineDynamicStateCreateInfo, pipelineLayout.get(), renderPass.get());
 
-	return device->createGraphicsPipelineUnique(pipeliceCache.get(), graphicPipelineCreateInfo);
+	return device->createGraphicsPipelineUnique(pipeliceCache.get(), graphicPipelineCreateInfo).value;
 }
 
 std::vector<vk::VertexInputAttributeDescription> GraphicEngine::Vulkan::createVertexInputAttributeDescriptions(const std::vector<std::pair<uint32_t, uint32_t>>& vertexSizeOffset)

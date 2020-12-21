@@ -6,6 +6,7 @@
 #include "../Core/Logger.hpp"
 #include "Vertex.hpp"
 #include "Camera.hpp"
+#include "UI.hpp"
 #include "../Scene/Resources/Model.hpp"
 #include "../Modules/Assimp/AssimpModelImporter.hpp"
 #include "../Core/Utils/ObjectConverter.hpp"
@@ -23,10 +24,12 @@ namespace GraphicEngine
 		RenderingEngine(std::shared_ptr<Services::CameraControllerManager> cameraControllerManager,
 			std::shared_ptr<Services::ModelManager> modelManager,
 			std::shared_ptr<Core::EventManager> eventManager,
+			std::shared_ptr<Common::UI> ui,
 			std::shared_ptr<Core::Configuration> cfg) :
 			m_cameraControllerManager{ cameraControllerManager },
 			m_modelManager{ modelManager },
 			m_eventManager{ eventManager },
+			m_ui{ ui },
 			m_cfg{ cfg }
 		{
 			/*auto cylinder = Engines::Graphic::ConeGenerator<Common::VertexPNW>{}.getModel(glm::vec3(0.0f), 0.5f, 2.0f, glm::ivec3(20, 2, 2), false, true, Engines::Graphic::TriangleDirection::CounterClockwise);
@@ -54,6 +57,7 @@ namespace GraphicEngine
 		std::shared_ptr<Services::CameraControllerManager> m_cameraControllerManager;
 		std::shared_ptr<Services::ModelManager> m_modelManager;
 		std::shared_ptr<Core::EventManager> m_eventManager;
+		std::shared_ptr<Common::UI> m_ui;
 		std::shared_ptr<Core::Configuration> m_cfg;
 
 		glm::vec4 backgroudColor{ 0.2f, 0.2f, 0.2f, 1.0f };

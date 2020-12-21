@@ -108,7 +108,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;USE_STB_IMAGE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\libs\glm;C:\VulkanSDK\1.2.135.0\Include;C:\libs\assimp\include\;C:\libs\opencv-4.2\include;C:\libs\glew-2.1.0\include;C:\libs\di\include;C:\libs\di\extension\include;C:\libs\spdlog\include;C:\libs\json\single_include;C:\libs\stb;C:\libs\imgui;C:\Projects\UtilityLib\UtilityLib\Utility;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\libs\glm;C:\VulkanSDK\1.2.162.0\Include;C:\libs\assimp\include\;C:\libs\opencv-4.2\include;C:\libs\glew-2.1.0\include;C:\libs\di\include;C:\libs\di\extension\include;C:\libs\spdlog\include;C:\libs\json\single_include;C:\libs\stb;C:\libs\imgui;C:\Projects\UtilityLib\UtilityLib\Utility;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
@@ -116,7 +116,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\libs\assimp\lib\x64;C:\VulkanSDK\1.2.135.0\Lib;C:\libs\opencv-4.2\lib;C:\libs\glew-2.1.0\lib\Release\x64;C:\libs\spdlog\build\Debug;%(AdditionalLibraryDirectories);C:\Projects\GraphicEngine\x64\Debug</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\libs\assimp\lib\x64;C:\VulkanSDK\1.2.162.0\Lib;C:\libs\opencv-4.2\lib;C:\libs\glew-2.1.0\lib\Release\x64;C:\libs\spdlog\build\Debug;%(AdditionalLibraryDirectories);C:\Projects\GraphicEngine\x64\Debug</AdditionalLibraryDirectories>
       <AdditionalDependencies>assimp-vc140-mt.lib;vulkan-1.lib;VkLayer_utils.lib;shaderc_combined.lib;opencv_world420d.lib;opengl32.lib;glew32.lib;glew32s.lib;spdlogd.lib;UtilityLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -171,6 +171,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\libs\imgui\backends\imgui_impl_glfw.cpp" />
+    <ClCompile Include="..\..\..\libs\imgui\backends\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="..\..\..\libs\imgui\backends\imgui_impl_vulkan.cpp" />
+    <ClCompile Include="..\..\..\libs\imgui\imgui.cpp" />
+    <ClCompile Include="..\..\..\libs\imgui\imgui_demo.cpp" />
+    <ClCompile Include="..\..\..\libs\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\..\..\libs\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Common\Camera.cpp" />
     <ClCompile Include="Common\CameraController.cpp" />
     <ClCompile Include="Common\Mouse.cpp" />
@@ -204,8 +211,18 @@
     <ClCompile Include="Platform\Glfw\Vulkan\GlfwVulkanWindowContext.cpp" />
     <ClCompile Include="Services\CameraControllerManager.cpp" />
     <ClCompile Include="Services\ModelManager.cpp" />
+    <ClCompile Include="UI\ImGui\ImGuiImpl.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\libs\imgui\backends\imgui_impl_glfw.h" />
+    <ClInclude Include="..\..\..\libs\imgui\backends\imgui_impl_opengl3.h" />
+    <ClInclude Include="..\..\..\libs\imgui\backends\imgui_impl_vulkan.h" />
+    <ClInclude Include="..\..\..\libs\imgui\imconfig.h" />
+    <ClInclude Include="..\..\..\libs\imgui\imgui.h" />
+    <ClInclude Include="..\..\..\libs\imgui\imgui_internal.h" />
+    <ClInclude Include="..\..\..\libs\imgui\imstb_rectpack.h" />
+    <ClInclude Include="..\..\..\libs\imgui\imstb_textedit.h" />
+    <ClInclude Include="..\..\..\libs\imgui\imstb_truetype.h" />
     <ClInclude Include="Common\Camera.hpp" />
     <ClInclude Include="Common\CameraController.hpp" />
     <ClInclude Include="Common\EntityByVertexTypeManager.hpp" />
@@ -216,6 +233,7 @@
     <ClInclude Include="Common\Shader.hpp" />
     <ClInclude Include="Common\TextureFactory.hpp" />
     <ClInclude Include="Common\TextureReader.hpp" />
+    <ClInclude Include="Common\UI.hpp" />
     <ClInclude Include="Common\Vertex.hpp" />
     <ClInclude Include="Common\VertexBuffer.hpp" />
     <ClInclude Include="Common\VertexBufferFactory.hpp" />
@@ -306,6 +324,7 @@
     <ClInclude Include="Scene\Resources\Transformation.hpp" />
     <ClInclude Include="Services\CameraControllerManager.hpp" />
     <ClInclude Include="Services\ModelManager.hpp" />
+    <ClInclude Include="UI\ImGui\ImGuiImpl.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\UtilityLib\UtilityLib\UtilityLib.vcxproj">

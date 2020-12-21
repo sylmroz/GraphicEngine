@@ -13,6 +13,8 @@
 #include "Pipelines/VulkanWireframeGraphicPipeline.h"
 #include "Pipelines/VulkanSolidColorGraphicPipeline.hpp"
 
+#include "../../UI/ImGui/ImGuiImpl.hpp"
+
 namespace GraphicEngine::Vulkan
 {
 	class VulkanRenderingEngine : public RenderingEngine
@@ -22,6 +24,7 @@ namespace GraphicEngine::Vulkan
 			std::shared_ptr<Services::CameraControllerManager> cameraControllerManager,
 			std::shared_ptr<Services::ModelManager> modelManager,
 			std::shared_ptr<Core::EventManager> eventManager,
+			std::shared_ptr<Common::UI> ui,
 			std::shared_ptr<Core::Configuration> cfg,
 			std::unique_ptr<Core::Logger<VulkanRenderingEngine>> logger);
 		virtual bool drawFrame() override;
@@ -44,5 +47,7 @@ namespace GraphicEngine::Vulkan
 	private:
 		std::shared_ptr<VulkanWireframeGraphicPipeline> m_wireframeGraphicPipeline;
 		std::shared_ptr<VulkanSolidColorGraphicPipeline> m_solidColorraphicPipeline;
+
+		std::shared_ptr<GUI::ImGuiImpl::VulkanRenderEngineBackend> m_uiRenderingBackend;
 	};
 }

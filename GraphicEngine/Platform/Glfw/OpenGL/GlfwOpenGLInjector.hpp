@@ -15,6 +15,7 @@ namespace GraphicEngine::GLFW
 		(
 			di::bind<GraphicEngine::Common::WindowKeyboardMouse, GraphicEngine::GLFW::GlfwWindow>.to<GraphicEngine::GLFW::GlfwOpenGLWindow>().in(di::singleton),
 			di::bind<GraphicEngine::RenderingEngine>.to<GraphicEngine::OpenGL::OpenGLRenderingEngine>().in(di::unique),
+			di::bind<GraphicEngine::Common::UI>.to<GraphicEngine::GUI::ImGuiImpl>().in(di::singleton),
 			di::bind<GraphicEngine::Core::EventManager>.in(di::singleton)
 		);
 	}

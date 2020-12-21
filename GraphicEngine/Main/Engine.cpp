@@ -9,6 +9,7 @@ GraphicEngine::Engine::Engine(std::shared_ptr<Common::WindowKeyboardMouse> windo
 	std::shared_ptr<Core::Inputs::MouseEventProxy> mouse,
 	std::shared_ptr<Services::CameraControllerManager> cameraControllerManager,
 	std::shared_ptr<Core::EventManager> eventManager,
+	std::shared_ptr<Common::UI> ui,
 	std::shared_ptr<Core::Timer> timer,
 	std::unique_ptr<Core::Logger<Engine>> logger) :
 	m_window(window),
@@ -16,6 +17,7 @@ GraphicEngine::Engine::Engine(std::shared_ptr<Common::WindowKeyboardMouse> windo
 	m_keyboard(keyboard),
 	m_mouse(mouse),
 	m_cameraControllerManager(cameraControllerManager),
+	m_ui{ ui },
 	m_eventManager(eventManager),
 	m_timer(timer),
 	m_logger(std::move(logger))
@@ -44,6 +46,8 @@ void GraphicEngine::Engine::initialize()
 		});
 
 	m_renderingEngine->init(m_window->getWidth(), m_window->getHeight());
+
+	m_ui->initialize();
 }
 
 void GraphicEngine::Engine::run()
@@ -59,6 +63,7 @@ void GraphicEngine::Engine::run()
 		m_eventManager->call();
 	}
 	m_renderingEngine->cleanup();
+	m_ui->shutdown();
 }
 
 std::unique_ptr<GraphicEngine::Engine> GraphicEngine::Engine::createEngine(std::string driverType, std::string windowType)
