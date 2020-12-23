@@ -1,6 +1,6 @@
 #pragma once
 
-#include <memory>
+#include "Widget.hpp"
 
 namespace GraphicEngine::Common
 {
@@ -52,6 +52,11 @@ namespace GraphicEngine::Common
 			m_windowBackend->nextFrame();
 		}
 
+		void addWidget(std::shared_ptr<GUI::Widget> widget)
+		{
+			m_widgets.push_back(widget);
+		}
+
 		virtual void drawUi() = 0;
 		virtual bool isKeyboardBusy() = 0;
 		virtual bool isMouseButtonBusy() = 0;
@@ -66,6 +71,8 @@ namespace GraphicEngine::Common
 	protected:
 		std::shared_ptr<EngineBackend> m_windowBackend;
 		std::shared_ptr<EngineBackend> m_renderingEnginebackend;
+
+		std::list<std::shared_ptr<GUI::Widget>> m_widgets;
 
 	private:
 	};

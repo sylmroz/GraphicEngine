@@ -8,8 +8,10 @@
 void GraphicEngine::GUI::ImGuiImpl::drawUi()
 {
 	ImGui::Begin("Demo window");
-	static glm::vec4 color;
-	ImGui::ColorEdit3("color", &color[0]);
+
+	for (auto& widget : m_widgets)
+		widget->draw();
+	
 	ImGui::End();
 
 	ImGui::Render();

@@ -145,6 +145,9 @@
     <Filter Include="UI\ImGui">
       <UniqueIdentifier>{a9f914d0-057d-43ab-92f3-9c027f2bcf60}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI\ImGui\Widgets">
+      <UniqueIdentifier>{5ea23d43-7a99-47c5-89d0-7c5c56038f40}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -285,6 +288,12 @@
     </ClCompile>
     <ClCompile Include="UI\ImGui\ImGuiImpl.cpp">
       <Filter>UI\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Widget.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\ImGui\Widgets\ColorEdit.cpp">
+      <Filter>UI\ImGui\Widgets</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -620,6 +629,12 @@
     </ClInclude>
     <ClInclude Include="Common\UI.hpp">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Widget.hpp">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ImGui\Widgets\ColorEdit.hpp">
+      <Filter>UI\ImGui\Widgets</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

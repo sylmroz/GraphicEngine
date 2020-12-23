@@ -182,6 +182,7 @@
     <ClCompile Include="Common\CameraController.cpp" />
     <ClCompile Include="Common\Mouse.cpp" />
     <ClCompile Include="Common\TextureReader.cpp" />
+    <ClCompile Include="Common\Widget.cpp" />
     <ClCompile Include="Core\Configuration.cpp" />
     <ClCompile Include="Core\IO\FileSystem.cpp" />
     <ClCompile Include="Core\LoggerCore\SourceFormatter.cpp" />
@@ -212,6 +213,7 @@
     <ClCompile Include="Services\CameraControllerManager.cpp" />
     <ClCompile Include="Services\ModelManager.cpp" />
     <ClCompile Include="UI\ImGui\ImGuiImpl.cpp" />
+    <ClCompile Include="UI\ImGui\Widgets\ColorEdit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\libs\imgui\backends\imgui_impl_glfw.h" />
@@ -237,6 +239,7 @@
     <ClInclude Include="Common\Vertex.hpp" />
     <ClInclude Include="Common\VertexBuffer.hpp" />
     <ClInclude Include="Common\VertexBufferFactory.hpp" />
+    <ClInclude Include="Common\Widget.hpp" />
     <ClInclude Include="Common\Window.hpp" />
     <ClInclude Include="Common\WindowKeyboardMouse.hpp" />
     <ClInclude Include="Core\Configuration.hpp" />
@@ -325,6 +328,7 @@
     <ClInclude Include="Services\CameraControllerManager.hpp" />
     <ClInclude Include="Services\ModelManager.hpp" />
     <ClInclude Include="UI\ImGui\ImGuiImpl.hpp" />
+    <ClInclude Include="UI\ImGui\Widgets\ColorEdit.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\UtilityLib\UtilityLib\UtilityLib.vcxproj">

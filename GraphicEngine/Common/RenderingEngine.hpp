@@ -16,6 +16,8 @@
 #include "../Engines/Graphic/3D/ObjectGenerator.hpp"
 #include "../Engines//Graphic/Shaders/Models/Light.hpp"
 
+#include "../UI/ImGui/Widgets/ColorEdit.hpp"
+
 namespace GraphicEngine
 {
 	class RenderingEngine
@@ -45,6 +47,12 @@ namespace GraphicEngine
 
 			/*auto sphere = Engines::Graphic::SphereGenerator<Common::VertexPN>{}.getModel(glm::vec3(0.0f), 0.25, glm::ivec2(20), Engines::Graphic::TriangleDirection::CounterClockwise);
 			m_modelManager->addModel(sphere);*/
+			auto backgroundColorEdit = std::make_shared<GUI::ColorEdit>(backgroudColor);
+			backgroundColorEdit->subscribe([&](glm::vec4 color)
+			{
+				backgroudColor = color;
+			});
+			m_ui->addWidget(backgroundColorEdit);
 		}
 
 		virtual bool drawFrame() = 0;
