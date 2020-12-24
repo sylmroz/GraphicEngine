@@ -9,7 +9,7 @@ layout (std140, binding = 0) uniform ViewProjectionMatrix
     mat4 viewProjectionMatrix;
 } viewProjectionMatrix;
 
-layout(std140, binding = 1) uniform WireframeModelDescriptor
+layout(std140) uniform WireframeModelDescriptor
 {
     mat4 modelMatrix;
     vec3 wireframeColor;

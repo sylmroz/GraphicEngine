@@ -9,7 +9,6 @@ GraphicEngine::OpenGL::OpenGLWireframeGraphicPipeline::OpenGLWireframeGraphicPip
 
 	m_shaderProgram = std::make_shared<OpenGLShaderProgram>(std::vector<OpenGLShader>{ vert, frag });
 	
-	m_cameraUniformBuffer = std::make_shared<UniformBuffer<glm::mat4>>(0);
 	m_wireframeModelDescriptorUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::WireframeModelDescriptor>>(1, m_shaderProgram);
 }
 

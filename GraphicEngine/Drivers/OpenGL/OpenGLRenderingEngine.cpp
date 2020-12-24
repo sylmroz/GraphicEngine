@@ -25,8 +25,10 @@ bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	m_ui->nextFrame();
+	
 	m_wireframeGraphicPipeline->draw();
 	m_solidColorGraphicPipeline->draw();
+	m_normalDebugGraphicPipeline->draw();
 
 	m_ui->drawUi();
 	m_uiRenderingBackend->renderData();
@@ -48,6 +50,7 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 	{
 		m_wireframeGraphicPipeline = std::make_unique<OpenGLWireframeGraphicPipeline>();
 		m_solidColorGraphicPipeline = std::make_unique<OpenGLSolidColorGraphicPipeline>(m_cameraControllerManager);
+		m_normalDebugGraphicPipeline = std::make_unique<OpenGLNormalDebugGraphicPipeline>(m_cameraControllerManager);
 		m_modelManager->getModelEntityContainer()->forEachEntity([&](auto model)
 		{
 			for (auto mesh : model->getMeshes())
@@ -55,6 +58,7 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 				auto vb = mesh->compile<VertexBufferFactory, VertexBuffer>();
 				m_wireframeGraphicPipeline->addVertexBuffer<decltype(mesh)::element_type::vertex_type>(mesh, vb);
 				m_solidColorGraphicPipeline->addVertexBuffer<decltype(mesh)::element_type::vertex_type>(mesh, vb);
+				m_normalDebugGraphicPipeline->addVertexBuffer<decltype(mesh)::element_type::vertex_type>(mesh, vb);
 			}
 		});
 

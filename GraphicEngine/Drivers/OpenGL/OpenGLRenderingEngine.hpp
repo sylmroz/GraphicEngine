@@ -12,6 +12,7 @@
 // Pipelines
 #include "GraphicPipelines/OpenGLWireframeGraphicPipeline.hpp"
 #include "GraphicPipelines/OpenGLSolidColorGraphicPipeline.hpp"
+#include "GraphicPipelines/OpenGLNormalDebugGraphicPileline.hpp"
 
 #include "../../UI/ImGui/ImGuiImpl.hpp"
 
@@ -39,6 +40,7 @@ namespace GraphicEngine::OpenGL
 
 		std::unique_ptr<OpenGLWireframeGraphicPipeline> m_wireframeGraphicPipeline;
 		std::unique_ptr<OpenGLSolidColorGraphicPipeline> m_solidColorGraphicPipeline;
+		std::unique_ptr<OpenGLNormalDebugGraphicPipeline> m_normalDebugGraphicPipeline;
 
 		std::shared_ptr<GUI::ImGuiImpl::OpenGlRenderEngineBackend> m_uiRenderingBackend;
 	};

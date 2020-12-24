@@ -111,15 +111,7 @@ namespace GraphicEngine::OpenGL
 	class OpenGLShaderProgram
 	{
 	public:
-		OpenGLShaderProgram(const std::vector<OpenGLShader>& shaders)
-		{
-			m_shaderProgramId = glCreateProgram();
-			for (const auto& shader : shaders)
-			{
-				glAttachShader(m_shaderProgramId, shader.getShaderId());
-			}
-			glLinkProgram(m_shaderProgramId);
-		}
+		OpenGLShaderProgram(const std::vector<OpenGLShader>& shaders);
 
 		uint32_t getShaderProgramId()
 		{

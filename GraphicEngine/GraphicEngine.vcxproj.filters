@@ -295,6 +295,9 @@
     <ClCompile Include="UI\ImGui\Widgets\ColorEdit.cpp">
       <Filter>UI\ImGui\Widgets</Filter>
     </ClCompile>
+    <ClCompile Include="Drivers\OpenGL\GraphicPipelines\OpenGLNormalDebugGraphicPileline.cpp">
+      <Filter>Drivers\OpenGL\GraphicPipelines</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Input\Keyboard\KeyboardEnumKeys.hpp">
@@ -635,6 +638,12 @@
     </ClInclude>
     <ClInclude Include="UI\ImGui\Widgets\ColorEdit.hpp">
       <Filter>UI\ImGui\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="Engines\Graphic\Pipelines\NormalDebugGraphicPileline.hpp">
+      <Filter>Engines\Graphic\Pipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="Drivers\OpenGL\GraphicPipelines\OpenGLNormalDebugGraphicPileline.hpp">
+      <Filter>Drivers\OpenGL\GraphicPipelines</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

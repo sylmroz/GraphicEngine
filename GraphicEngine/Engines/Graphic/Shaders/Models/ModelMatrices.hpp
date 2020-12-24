@@ -7,10 +7,10 @@ namespace GraphicEngine::Engines::Graphic::Shaders
 	struct ModelMartices
 	{
 		ModelMartices() = default;
-		ModelMartices(glm::mat4 modelMatrix, glm::mat3 normalMatrix) :
-			modelMatrix(modelMatrix), normalMatrix(normalMatrix)
+		ModelMartices(glm::mat4 modelMatrix, glm::mat4 normalMatrix) :
+			modelMatrix{ modelMatrix }, normalMatrix{ normalMatrix }
 		{}
 		alignas(16) glm::mat4 modelMatrix;
-		alignas(16) glm::mat3 normalMatrix;
+		alignas(16) glm::mat4 normalMatrix;
 	};
 }
