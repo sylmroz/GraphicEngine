@@ -1,10 +1,11 @@
-#version 430 core
-layout (triangles) in;
-layout (line_strip, max_vertices = 6) out;
+#version 440 core
 
 #extension GL_ARB_separate_shader_objects : enable
 
-in VS_OUT
+layout (triangles) in;
+layout (line_strip, max_vertices = 6) out;
+
+layout (location = 0) in VS_OUT
 {
     vec3 normal;
 } gs_in[];
@@ -24,5 +25,6 @@ void main()
 {
     generateLine(0);
     generateLine(1);
-    generateLine(2);    
+    generateLine(2);
+    EndPrimitive();
 }

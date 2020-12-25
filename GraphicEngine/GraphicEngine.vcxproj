@@ -196,6 +196,7 @@
     <ClCompile Include="Drivers\OpenGL\OpenGLRenderingEngine.cpp" />
     <ClCompile Include="Drivers\OpenGL\OpenGLShader.cpp" />
     <ClCompile Include="Drivers\OpenGL\OpenGLTexture.cpp" />
+    <ClCompile Include="Drivers\Vulkan\Pipelines\VulkanNormalDebugGraphicPileline.cpp" />
     <ClCompile Include="Drivers\Vulkan\Pipelines\VulkanSolidColorGraphicPipeline.cpp" />
     <ClCompile Include="Drivers\Vulkan\Pipelines\VulkanWireframeGraphicPipeline.cpp" />
     <ClCompile Include="Drivers\Vulkan\VulkanFramework.cpp" />
@@ -211,6 +212,7 @@
     <ClCompile Include="Platform\Glfw\OpenGL\GlfwOpenGLWindow.cpp" />
     <ClCompile Include="Platform\Glfw\Vulkan\GlfwVulkanWindow.cpp" />
     <ClCompile Include="Platform\Glfw\Vulkan\GlfwVulkanWindowContext.cpp" />
+    <ClCompile Include="Scene\Resources\Transformation.cpp" />
     <ClCompile Include="Services\CameraControllerManager.cpp" />
     <ClCompile Include="Services\ModelManager.cpp" />
     <ClCompile Include="UI\ImGui\ImGuiImpl.cpp" />
@@ -284,6 +286,7 @@
     <ClInclude Include="Drivers\OpenGL\OpenGLUniformData.hpp" />
     <ClInclude Include="Drivers\OpenGL\OpenGLVertexBufferFactory.hpp" />
     <ClInclude Include="Drivers\Vulkan\Pipelines\VulkanGraphicPipeline.hpp" />
+    <ClInclude Include="Drivers\Vulkan\Pipelines\VulkanNormalDebugGraphicPileline.hpp" />
     <ClInclude Include="Drivers\Vulkan\Pipelines\VulkanSolidColorGraphicPipeline.hpp" />
     <ClInclude Include="Drivers\Vulkan\Pipelines\VulkanWireframeGraphicPipeline.h" />
     <ClInclude Include="Drivers\Vulkan\VulkanFramework.hpp" />

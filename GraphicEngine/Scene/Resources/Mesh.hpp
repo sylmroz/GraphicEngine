@@ -25,7 +25,10 @@ namespace GraphicEngine::Scene
 	public:
 		using vertex_type = Vertex;
 	public:
-		Mesh() {}
+		Mesh() 
+		{
+			m_material.solidColor = Core::randomColor();;
+		}
 		Mesh(const std::vector<std::shared_ptr<Vertex>>& vertices, const std::vector<std::shared_ptr<Face>>& faces)
 		{
 			m_vertices = std::move(vertices);
@@ -71,6 +74,7 @@ namespace GraphicEngine::Scene
 		{
 			m_vertices.push_back(vertex);
 			m_boudingBox.extendBox(vertex->position);
+			m_pivotPoint = m_boudingBox.getCenter();
 		}
 
 		void resizeVertices(uint32_t size)

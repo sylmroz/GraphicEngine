@@ -10,6 +10,7 @@
 
 #include "../../Engines/Graphic/Shaders/Models/ModelMatrices.hpp"
 
+#include "Pipelines/VulkanNormalDebugGraphicPileline.hpp"
 #include "Pipelines/VulkanWireframeGraphicPipeline.h"
 #include "Pipelines/VulkanSolidColorGraphicPipeline.hpp"
 
@@ -47,6 +48,7 @@ namespace GraphicEngine::Vulkan
 	private:
 		std::shared_ptr<VulkanWireframeGraphicPipeline> m_wireframeGraphicPipeline;
 		std::shared_ptr<VulkanSolidColorGraphicPipeline> m_solidColorraphicPipeline;
+		std::shared_ptr<VulkanNormalDebugGraphicPipeline> m_normalDebugGraphicPipeline;
 
 		std::shared_ptr<GUI::ImGuiImpl::VulkanRenderEngineBackend> m_uiRenderingBackend;
 	};

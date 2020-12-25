@@ -298,6 +298,10 @@
     <ClCompile Include="Drivers\OpenGL\GraphicPipelines\OpenGLNormalDebugGraphicPileline.cpp">
       <Filter>Drivers\OpenGL\GraphicPipelines</Filter>
     </ClCompile>
+    <ClCompile Include="Scene\Resources\Transformation.cpp">
+      <Filter>Scene\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Drivers\Vulkan\Pipelines\VulkanNormalDebugGraphicPileline.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Input\Keyboard\KeyboardEnumKeys.hpp">
@@ -644,6 +648,9 @@
     </ClInclude>
     <ClInclude Include="Drivers\OpenGL\GraphicPipelines\OpenGLNormalDebugGraphicPileline.hpp">
       <Filter>Drivers\OpenGL\GraphicPipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="Drivers\Vulkan\Pipelines\VulkanNormalDebugGraphicPileline.hpp">
+      <Filter>Drivers\Vulkan\Pipelines</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

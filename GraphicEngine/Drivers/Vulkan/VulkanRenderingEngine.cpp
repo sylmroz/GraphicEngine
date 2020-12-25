@@ -37,6 +37,8 @@ bool GraphicEngine::Vulkan::VulkanRenderingEngine::drawFrame()
 
 		m_wireframeGraphicPipeline->updateDynamicUniforms();
 		m_solidColorraphicPipeline->updateDynamicUniforms();
+		m_normalDebugGraphicPipeline->updateDynamicUniforms();
+
 		m_framework->submitFrame();
 	}
 
@@ -65,6 +67,7 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 
 		m_wireframeGraphicPipeline = std::make_shared<VulkanWireframeGraphicPipeline>(m_framework, m_uniformBuffer);
 		m_solidColorraphicPipeline = std::make_shared<VulkanSolidColorGraphicPipeline>(m_framework, m_uniformBuffer, m_lightUniformBuffer, m_eyePositionUniformBuffer, m_cameraControllerManager);
+		m_normalDebugGraphicPipeline = std::make_shared<VulkanNormalDebugGraphicPipeline>(m_framework, m_uniformBuffer, m_cameraControllerManager);
 
 		m_modelManager->getModelEntityContainer()->forEachEntity([&](auto model)
 		{
@@ -73,6 +76,7 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 				auto vb = mesh->compile<VertexBufferFactory, VertexBuffer>(m_framework->m_physicalDevice, m_framework->m_device, m_framework->m_commandPool, m_framework->m_graphicQueue);
 				m_wireframeGraphicPipeline->addVertexBuffer<decltype(mesh)::element_type::vertex_type>(mesh, vb);
 				m_solidColorraphicPipeline->addVertexBuffer<decltype(mesh)::element_type::vertex_type>(mesh, vb);
+				m_normalDebugGraphicPipeline->addVertexBuffer<decltype(mesh)::element_type::vertex_type>(mesh, vb);
 			}
 		});
 		m_uiRenderingBackend = std::make_shared<GUI::ImGuiImpl::VulkanRenderEngineBackend>(m_framework);
@@ -137,8 +141,10 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::buildCommandBuffers()
 		vk::RenderPassBeginInfo renderPassBeginInfo(m_framework->m_renderPass.get(), m_framework->m_frameBuffers[i].get(), vk::Rect2D(vk::Offset2D(0, 0), m_framework->m_swapChainData.extent), static_cast<uint32_t>(clearValues.size()), clearValues.data());
 		commandBuffer->beginRenderPass(renderPassBeginInfo, vk::SubpassContents::eInline);
 
+		m_normalDebugGraphicPipeline->draw(commandBuffer, i);
 		m_wireframeGraphicPipeline->draw(commandBuffer, i);
 		m_solidColorraphicPipeline->draw(commandBuffer, i);
+		
 
 		m_uiRenderingBackend->renderData(commandBuffer);
 

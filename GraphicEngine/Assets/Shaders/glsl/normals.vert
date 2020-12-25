@@ -1,4 +1,4 @@
-#version 430 core
+#version 440 core
 
 #extension GL_ARB_separate_shader_objects : enable
 
@@ -10,13 +10,13 @@ layout (std140, binding = 0) uniform ViewProjectionMatrix
     mat4 viewProjectionMatrix;
 } viewProjectionMatrix;
 
-layout(std140, binding = 5) uniform ModelMartices
+layout(std140) uniform ModelMartices
 {
     mat4 modelMatrix;
     mat4 normalMatrix;
 } modelMartices;
 
-out VS_OUT
+layout (location = 0) out VS_OUT
 {
     vec3 normal;
 } vs_out;
