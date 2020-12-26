@@ -6,6 +6,7 @@
 #include "../Shaders/Models/Eye.hpp"
 #include "../../../Core/Math/ImageUtils.hpp"
 #include "../../../Services/CameraControllerManager.hpp"
+#include "../Shaders/Models/CameraMatrices.hpp"
 
 namespace GraphicEngine::Engines::Graphic
 {
@@ -40,7 +41,7 @@ namespace GraphicEngine::Engines::Graphic
 		virtual void draw(Args... args) = 0;
 
 	protected:
-		std::shared_ptr<UniformBuffer<glm::mat4>> m_cameraUniformBuffer;
+		std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::CameraMatrices>> m_cameraUniformBuffer;
 		std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::Eye>> m_eyePositionUniformBuffer;
 		std::shared_ptr<UniformBuffer<Shaders::Light>> m_ligthUniformBuffer;
 		std::shared_ptr<Services::CameraControllerManager> m_cameraControllerManager;

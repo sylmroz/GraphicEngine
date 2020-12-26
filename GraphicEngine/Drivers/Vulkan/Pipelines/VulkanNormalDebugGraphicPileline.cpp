@@ -2,7 +2,8 @@
 #include "../../../Core/IO/FileReader.hpp"
 #include "../../../Core/IO/FileSystem.hpp"
 
-GraphicEngine::Vulkan::VulkanNormalDebugGraphicPipeline::VulkanNormalDebugGraphicPipeline(std::shared_ptr<VulkanFramework> framework, std::shared_ptr<UniformBuffer<glm::mat4>> cameraUniformBuffer, std::shared_ptr<Services::CameraControllerManager> cameraControllerManager) :
+GraphicEngine::Vulkan::VulkanNormalDebugGraphicPipeline::VulkanNormalDebugGraphicPipeline(std::shared_ptr<VulkanFramework> framework, std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::CameraMatrices>> cameraUniformBuffer,
+	std::shared_ptr<Services::CameraControllerManager> cameraControllerManager) :
 	m_framework{ framework }
 {
 	m_cameraControllerManager = cameraControllerManager;

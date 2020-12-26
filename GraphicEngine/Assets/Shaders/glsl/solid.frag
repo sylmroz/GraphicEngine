@@ -1,4 +1,4 @@
-#version 430 core
+#version 450 core
 
 #extension GL_ARB_separate_shader_objects : enable
 
@@ -8,21 +8,21 @@ layout (location = 2) in vec3 solidColor;
 
 layout (std140) uniform Eye
 {
-    vec3 eyePosition;
+    vec4 eyePosition;
 } eye;
 
 layout (std140) uniform Light
 {
-    vec3 position;
-    vec3 color;
+    vec4 position;
+    vec4 color;
 } light;
 
 layout (location = 0) out vec4 outColor;
 
 void main()
 {
-    vec3 lightDir = normalize(eye.eyePosition - position);
+    vec3 lightDir = normalize(vec3(eye.eyePosition) - vec3(position));
     float I = max(dot(normal, lightDir), 0.0);
-    vec3 color = (I + 0.05) * solidColor;
+    vec3 color = clamp((I + 0.2),0 , 1) * solidColor;
     outColor = vec4(color, 1.0);
 }

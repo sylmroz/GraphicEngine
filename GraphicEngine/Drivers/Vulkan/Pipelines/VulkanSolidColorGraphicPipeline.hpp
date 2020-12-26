@@ -10,7 +10,7 @@ namespace GraphicEngine::Vulkan
 	class VulkanSolidColorGraphicPipeline : public Engines::Graphic::SolidColorGraphicPipeline<VertexBuffer, UniformBuffer, UniformBufferDynamic, vk::UniqueCommandBuffer&, int>
 	{
 	public:
-		VulkanSolidColorGraphicPipeline(std::shared_ptr<VulkanFramework> framework, std::shared_ptr<UniformBuffer<glm::mat4>> cameraUniformBuffer, 
+		VulkanSolidColorGraphicPipeline(std::shared_ptr<VulkanFramework> framework, std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::CameraMatrices>> cameraUniformBuffer,
 			std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::Light>> lightUniformBuffer, std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::Eye>> eyePositionUniformBuffer,
 		std::shared_ptr<Services::CameraControllerManager> cameraControllerManager);
 

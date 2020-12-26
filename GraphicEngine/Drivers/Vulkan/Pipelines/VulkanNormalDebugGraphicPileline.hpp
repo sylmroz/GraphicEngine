@@ -8,7 +8,7 @@ namespace GraphicEngine::Vulkan
 	class VulkanNormalDebugGraphicPipeline : public Engines::Graphic::NormalDebugGraphicPipeline<VertexBuffer, UniformBuffer, UniformBufferDynamic, vk::UniqueCommandBuffer&, int>
 	{
 	public:
-		VulkanNormalDebugGraphicPipeline(std::shared_ptr<VulkanFramework> framework, std::shared_ptr<UniformBuffer<glm::mat4>> cameraUniformBuffer, 
+		VulkanNormalDebugGraphicPipeline(std::shared_ptr<VulkanFramework> framework, std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::CameraMatrices>> cameraUniformBuffer,
 			std::shared_ptr<Services::CameraControllerManager> cameraControllerManager);
 
 		template <typename VertexType>

@@ -2,6 +2,7 @@
 
 #include "GraphicPipeline.hpp"
 #include "../Shaders/Models/ModelMatrices.hpp"
+#include "../Shaders/Models/CameraMatrices.hpp"
 
 namespace GraphicEngine::Engines::Graphic
 {
@@ -32,7 +33,7 @@ namespace GraphicEngine::Engines::Graphic
 		virtual void draw(Args... args) = 0;
 
 	protected:
-		std::shared_ptr<UniformBuffer<glm::mat4>> m_cameraUniformBuffer;
+		std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::CameraMatrices>> m_cameraUniformBuffer;
 		std::shared_ptr<Services::CameraControllerManager> m_cameraControllerManager;
 		std::shared_ptr<UniformBufferDynamic<Shaders::ModelMartices>> m_modelDescriptorUniformBuffer;
 	};

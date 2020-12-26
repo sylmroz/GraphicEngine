@@ -38,7 +38,7 @@ namespace GraphicEngine::Vulkan
 		void buildCommandBuffers();
 	private:
 		std::shared_ptr<VulkanFramework> m_framework;
-		std::shared_ptr<UniformBuffer<glm::mat4>> m_uniformBuffer;
+		std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::CameraMatrices>> m_cameraUniformBuffer;
 		std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::Light>> m_lightUniformBuffer;
 		std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::Eye>> m_eyePositionUniformBuffer;
 

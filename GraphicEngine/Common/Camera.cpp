@@ -142,7 +142,7 @@ void GraphicEngine::Common::Camera::move(const glm::vec2& offset)
 	}
 	if (offset.y != 0)
 	{
-		m_position = m_position + (glm::normalize(glm::cross(m_new_direction, glm::vec3(0.0f, 0.0f, 1.0f))) * offset.y * m_speed);
+		m_position = m_position + (glm::normalize(glm::cross(m_new_direction, glm::vec3(0.0f, 1.0f, 0.0f))) * offset.y * m_speed);
 	}
 
 	m_positionOffset -= offset;
@@ -170,8 +170,8 @@ glm::mat4 GraphicEngine::Common::Camera::calculateOrthographic()
 
 void GraphicEngine::Common::Camera::updateViewMatrix()
 {
-	glm::vec3 up = glm::vec3(0.0, 0.0, 1.0);
-	glm::vec3 right = glm::normalize(glm::cross(m_direction, up));
+	glm::vec3 up = glm::vec3(0.0, 1.0, 0.0);
+	glm::vec3 right = glm::normalize(glm::cross(glm::vec3(0.0,0.0,-1.0), up));
 	glm::quat yawQuat = glm::angleAxis(glm::radians(m_yawPitch.x), up);
 	glm::quat pitchQuat = glm::angleAxis(glm::radians(m_yawPitch.y), right);
 	if (yawQuat != glm::quat(1.0, 0.0, 0.0, 0.0) && pitchQuat != glm::quat(1.0, 0.0, 0.0, 0.0))
@@ -179,7 +179,8 @@ void GraphicEngine::Common::Camera::updateViewMatrix()
 		glm::quat rot = glm::normalize(glm::cross(yawQuat, pitchQuat));
 		m_new_direction = glm::normalize(glm::rotate(rot, m_direction));
 	}
-	m_viewMatrix = glm::lookAt(m_position, m_position + m_new_direction, up);
+	m_up = glm::normalize(glm::cross(glm::normalize(glm::cross(m_new_direction, up)), m_new_direction));
+	m_viewMatrix = glm::lookAt(m_position, m_position + m_new_direction, m_up);
 
 	m_yawPitchOffset = glm::vec2(0.0f, 0.0f);
 	m_shouldUpdateView = false;

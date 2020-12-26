@@ -301,7 +301,9 @@
     <ClCompile Include="Scene\Resources\Transformation.cpp">
       <Filter>Scene\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="Drivers\Vulkan\Pipelines\VulkanNormalDebugGraphicPileline.cpp" />
+    <ClCompile Include="Drivers\Vulkan\Pipelines\VulkanNormalDebugGraphicPileline.cpp">
+      <Filter>Drivers\Vulkan\Pipelines</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Input\Keyboard\KeyboardEnumKeys.hpp">
@@ -651,6 +653,9 @@
     </ClInclude>
     <ClInclude Include="Drivers\Vulkan\Pipelines\VulkanNormalDebugGraphicPileline.hpp">
       <Filter>Drivers\Vulkan\Pipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="Engines\Graphic\Shaders\Models\CameraMatrices.hpp">
+      <Filter>Engines\Graphic\Shaders\Models</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -27,11 +27,16 @@ bool GraphicEngine::Vulkan::VulkanRenderingEngine::drawFrame()
 		m_framework->acquireFrame();
 		buildCommandBuffers();
 
-		auto eyePosition = m_cameraControllerManager->getActiveCamera()->getPosition();
-		Engines::Graphic::Shaders::Light light{ eyePosition, glm::vec3{ 1.0f } };
+		auto view = m_cameraControllerManager->getActiveCamera()->getViewMatrix();
+		auto projection = m_cameraControllerManager->getActiveCamera()->getProjectionMatrix();
+
+		glm::vec4 eyePosition = projection* view * glm::vec4(m_cameraControllerManager->getActiveCamera()->getPosition(), 1.0);
+
+		Engines::Graphic::Shaders::Light light{ eyePosition, glm::vec4{ 1.0f } };
 		Engines::Graphic::Shaders::Eye eye{ eyePosition };
-		auto cameraMatrix = m_cameraControllerManager->getActiveCamera()->getViewProjectionMatrix();
-		m_uniformBuffer->updateAndSet(cameraMatrix);
+
+		Engines::Graphic::Shaders::CameraMatrices cameraMatrix(view, projection);
+		m_cameraUniformBuffer->updateAndSet(cameraMatrix);
 		m_eyePositionUniformBuffer->updateAndSet(eye);
 		m_lightUniformBuffer->updateAndSet(light);
 
@@ -61,13 +66,13 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 			.initializeFramebuffer()
 			.initalizeRenderingBarriers();
 
-		m_uniformBuffer = m_framework->getUniformBuffer<UniformBuffer, glm::mat4>();
+		m_cameraUniformBuffer = m_framework->getUniformBuffer<UniformBuffer,Engines::Graphic::Shaders::CameraMatrices>();
 		m_lightUniformBuffer = m_framework->getUniformBuffer<UniformBuffer, Engines::Graphic::Shaders::Light>();
 		m_eyePositionUniformBuffer = m_framework->getUniformBuffer<UniformBuffer, Engines::Graphic::Shaders::Eye>();
 
-		m_wireframeGraphicPipeline = std::make_shared<VulkanWireframeGraphicPipeline>(m_framework, m_uniformBuffer);
-		m_solidColorraphicPipeline = std::make_shared<VulkanSolidColorGraphicPipeline>(m_framework, m_uniformBuffer, m_lightUniformBuffer, m_eyePositionUniformBuffer, m_cameraControllerManager);
-		m_normalDebugGraphicPipeline = std::make_shared<VulkanNormalDebugGraphicPipeline>(m_framework, m_uniformBuffer, m_cameraControllerManager);
+		m_wireframeGraphicPipeline = std::make_shared<VulkanWireframeGraphicPipeline>(m_framework, m_cameraUniformBuffer);
+		m_solidColorraphicPipeline = std::make_shared<VulkanSolidColorGraphicPipeline>(m_framework, m_cameraUniformBuffer, m_lightUniformBuffer, m_eyePositionUniformBuffer, m_cameraControllerManager);
+		m_normalDebugGraphicPipeline = std::make_shared<VulkanNormalDebugGraphicPipeline>(m_framework, m_cameraUniformBuffer, m_cameraControllerManager);
 
 		m_modelManager->getModelEntityContainer()->forEachEntity([&](auto model)
 		{

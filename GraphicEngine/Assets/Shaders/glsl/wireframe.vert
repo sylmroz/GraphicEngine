@@ -1,13 +1,14 @@
-#version 430 core
+#version 450 core
 
 #extension GL_ARB_separate_shader_objects : enable
 
 layout (location = 0) in vec3 inPosition;
 
-layout (std140, binding = 0) uniform ViewProjectionMatrix
+layout (std140, binding = 0) uniform CameraMatrices
 {
-    mat4 viewProjectionMatrix;
-} viewProjectionMatrix;
+    mat4 view;
+    mat4 projection;
+} cameraMatrices;
 
 layout(std140) uniform WireframeModelDescriptor
 {
@@ -20,5 +21,5 @@ layout (location = 0) out vec3 wireframeColor;
 void main()
 {
     wireframeColor = wireframeModelDescriptor.wireframeColor;
-    gl_Position = viewProjectionMatrix.viewProjectionMatrix * wireframeModelDescriptor.modelMatrix * vec4(inPosition, 1.0);
+    gl_Position = cameraMatrices.projection * cameraMatrices.view * wireframeModelDescriptor.modelMatrix * vec4(inPosition, 1.0);
 }

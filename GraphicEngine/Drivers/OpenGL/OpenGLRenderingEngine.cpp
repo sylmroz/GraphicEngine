@@ -26,9 +26,9 @@ bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 
 	m_ui->nextFrame();
 	
-	m_normalDebugGraphicPipeline->draw();
 	m_wireframeGraphicPipeline->draw();
 	m_solidColorGraphicPipeline->draw();
+	m_normalDebugGraphicPipeline->draw();
 
 	m_ui->drawUi();
 	m_uiRenderingBackend->renderData();
