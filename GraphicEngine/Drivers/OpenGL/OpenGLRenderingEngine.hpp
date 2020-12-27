@@ -34,7 +34,7 @@ namespace GraphicEngine::OpenGL
 
 		virtual ~OpenGLRenderingEngine() = default;
 	private:
-		std::shared_ptr<UniformBuffer<glm::mat4>> m_cameraUniformBuffer;
+		std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::CameraMatrices>> m_cameraUniformBuffer;
 
 		std::unique_ptr<Core::Logger<OpenGLRenderingEngine>> m_logger;
 

@@ -10,7 +10,6 @@ GraphicEngine::OpenGL::OpenGLSolidColorGraphicPipeline::OpenGLSolidColorGraphicP
 
 	m_shaderProgram = std::make_shared<OpenGLShaderProgram>(std::vector<OpenGLShader>{ vert, frag });
 
-	m_cameraUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::CameraMatrices>>(0);
 	m_eyePositionUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::Eye>>(2, m_shaderProgram);
 	m_ligthUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::Light>>(3, m_shaderProgram);
 	m_solidColorUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::SolidColorModelDescriptor>>(4, m_shaderProgram);
@@ -25,8 +24,6 @@ void GraphicEngine::OpenGL::OpenGLSolidColorGraphicPipeline::draw()
 	Engines::Graphic::Shaders::Light light{ glm::vec4(eyePosition, 0.0), glm::vec4{ 1.0f } };
 	Engines::Graphic::Shaders::Eye eye{ projectionMatrix * viewMatrix * glm::vec4(eyePosition, 1.0) };
 	
-	Engines::Graphic::Shaders::CameraMatrices cameraMatrices(viewMatrix, projectionMatrix);
-	m_cameraUniformBuffer->update(&cameraMatrices);
 	m_eyePositionUniformBuffer->update(&eye);
 	m_ligthUniformBuffer->update(&light);
 

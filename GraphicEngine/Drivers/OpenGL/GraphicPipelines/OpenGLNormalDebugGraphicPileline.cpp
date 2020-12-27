@@ -18,6 +18,9 @@ void GraphicEngine::OpenGL::OpenGLNormalDebugGraphicPipeline::draw()
 {
 	m_shaderProgram->use();
 
+	auto viewMatrix = m_cameraControllerManager->getActiveCamera()->getViewMatrix();
+	auto projectionMatrix = m_cameraControllerManager->getActiveCamera()->getProjectionMatrix();
+
 	m_vertexBufferCollection->forEachEntity([&](auto vertexBufferCollection)
 	{
 		vertexBufferCollection->modelDescriptor.modelMatrix = vertexBufferCollection->mesh->getModelMatrix();

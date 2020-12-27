@@ -25,6 +25,12 @@ bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	m_ui->nextFrame();
+
+	auto viewMatrix = m_cameraControllerManager->getActiveCamera()->getViewMatrix();
+	auto projectionMatrix = m_cameraControllerManager->getActiveCamera()->getProjectionMatrix();
+
+	Engines::Graphic::Shaders::CameraMatrices cameraMatrices(viewMatrix, projectionMatrix);
+	m_cameraUniformBuffer->update(&cameraMatrices);
 	
 	if (displayNormal)
 		m_normalDebugGraphicPipeline->draw();
@@ -51,9 +57,12 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 
 	try
 	{
-		m_wireframeGraphicPipeline = std::make_unique<OpenGLWireframeGraphicPipeline>();
+		m_wireframeGraphicPipeline = std::make_unique<OpenGLWireframeGraphicPipeline>(m_cameraControllerManager);
 		m_solidColorGraphicPipeline = std::make_unique<OpenGLSolidColorGraphicPipeline>(m_cameraControllerManager);
 		m_normalDebugGraphicPipeline = std::make_unique<OpenGLNormalDebugGraphicPipeline>(m_cameraControllerManager);
+
+		m_cameraUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::CameraMatrices>>(0);
+
 		m_modelManager->getModelEntityContainer()->forEachEntity([&](auto model)
 		{
 			for (auto mesh : model->getMeshes())
@@ -68,6 +77,7 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LESS);
 		glFrontFace(GL_CCW);
+
 		m_uiRenderingBackend = std::make_shared<GUI::ImGuiImpl::OpenGlRenderEngineBackend>();
 		m_ui->addBackend(m_uiRenderingBackend);
 	}
