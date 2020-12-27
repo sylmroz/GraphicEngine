@@ -17,6 +17,7 @@
 #include "../Engines//Graphic/Shaders/Models/Light.hpp"
 
 #include "../UI/ImGui/Widgets/ColorEdit.hpp"
+#include "../UI/ImGui/Widgets/Checkbox.hpp"
 
 namespace GraphicEngine
 {
@@ -61,6 +62,27 @@ namespace GraphicEngine
 				backgroudColor = color;
 			});
 			m_ui->addWidget(backgroundColorEdit);
+
+			auto displayWireframeCheckbox = std::make_shared<GUI::Checkbox>("wireframe", displayWireframe);
+			displayWireframeCheckbox->subscribe([&](bool checked)
+			{
+				displayWireframe = checked;
+			});
+			m_ui->addWidget(displayWireframeCheckbox);
+
+			auto displaySolidCheckbox = std::make_shared<GUI::Checkbox>("solid", displaySolid);
+			displaySolidCheckbox->subscribe([&](bool checked)
+			{
+				displaySolid = checked;
+			});
+			m_ui->addWidget(displaySolidCheckbox);
+
+			auto displayNormalCheckbox = std::make_shared<GUI::Checkbox>("normal", displayNormal);
+			displayNormalCheckbox->subscribe([&](bool checked)
+			{
+				displayNormal = checked;
+			});
+			m_ui->addWidget(displayNormalCheckbox);
 		}
 
 		virtual bool drawFrame() = 0;
@@ -77,5 +99,9 @@ namespace GraphicEngine
 		std::shared_ptr<Core::Configuration> m_cfg;
 
 		glm::vec4 backgroudColor{ 0.2f, 0.2f, 0.2f, 1.0f };
+
+		bool displayWireframe{ true };
+		bool displaySolid{ true };
+		bool displayNormal{ true };
 	};
 }

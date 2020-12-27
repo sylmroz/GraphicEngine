@@ -40,9 +40,13 @@ bool GraphicEngine::Vulkan::VulkanRenderingEngine::drawFrame()
 		m_eyePositionUniformBuffer->updateAndSet(eye);
 		m_lightUniformBuffer->updateAndSet(light);
 
-		m_wireframeGraphicPipeline->updateDynamicUniforms();
-		m_solidColorraphicPipeline->updateDynamicUniforms();
-		m_normalDebugGraphicPipeline->updateDynamicUniforms();
+		if (displayNormal)
+			m_normalDebugGraphicPipeline->updateDynamicUniforms();
+		if (displayWireframe)
+			m_wireframeGraphicPipeline->updateDynamicUniforms();
+		if (displaySolid)
+			m_solidColorraphicPipeline->updateDynamicUniforms();
+		
 
 		m_framework->submitFrame();
 	}
@@ -146,9 +150,12 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::buildCommandBuffers()
 		vk::RenderPassBeginInfo renderPassBeginInfo(m_framework->m_renderPass.get(), m_framework->m_frameBuffers[i].get(), vk::Rect2D(vk::Offset2D(0, 0), m_framework->m_swapChainData.extent), static_cast<uint32_t>(clearValues.size()), clearValues.data());
 		commandBuffer->beginRenderPass(renderPassBeginInfo, vk::SubpassContents::eInline);
 
-		m_normalDebugGraphicPipeline->draw(commandBuffer, i);
-		m_wireframeGraphicPipeline->draw(commandBuffer, i);
-		m_solidColorraphicPipeline->draw(commandBuffer, i);
+		if (displayNormal)
+			m_normalDebugGraphicPipeline->draw(commandBuffer, i);
+		if (displayWireframe)
+			m_wireframeGraphicPipeline->draw(commandBuffer, i);
+		if (displaySolid)
+			m_solidColorraphicPipeline->draw(commandBuffer, i);
 		
 
 		m_uiRenderingBackend->renderData(commandBuffer);

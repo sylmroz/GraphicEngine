@@ -216,6 +216,7 @@
     <ClCompile Include="Services\CameraControllerManager.cpp" />
     <ClCompile Include="Services\ModelManager.cpp" />
     <ClCompile Include="UI\ImGui\ImGuiImpl.cpp" />
+    <ClCompile Include="UI\ImGui\Widgets\Checkbox.cpp" />
     <ClCompile Include="UI\ImGui\Widgets\ColorEdit.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -335,6 +336,7 @@
     <ClInclude Include="Services\CameraControllerManager.hpp" />
     <ClInclude Include="Services\ModelManager.hpp" />
     <ClInclude Include="UI\ImGui\ImGuiImpl.hpp" />
+    <ClInclude Include="UI\ImGui\Widgets\Checkbox.hpp" />
     <ClInclude Include="UI\ImGui\Widgets\ColorEdit.hpp" />
   </ItemGroup>
   <ItemGroup>

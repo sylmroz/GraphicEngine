@@ -304,6 +304,9 @@
     <ClCompile Include="Drivers\Vulkan\Pipelines\VulkanNormalDebugGraphicPileline.cpp">
       <Filter>Drivers\Vulkan\Pipelines</Filter>
     </ClCompile>
+    <ClCompile Include="UI\ImGui\Widgets\Checkbox.cpp">
+      <Filter>UI\ImGui\Widgets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Input\Keyboard\KeyboardEnumKeys.hpp">
@@ -656,6 +659,9 @@
     </ClInclude>
     <ClInclude Include="Engines\Graphic\Shaders\Models\CameraMatrices.hpp">
       <Filter>Engines\Graphic\Shaders\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ImGui\Widgets\Checkbox.hpp">
+      <Filter>UI\ImGui\Widgets</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
