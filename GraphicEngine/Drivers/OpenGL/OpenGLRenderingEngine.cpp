@@ -30,6 +30,7 @@ bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 	auto projectionMatrix = m_cameraControllerManager->getActiveCamera()->getProjectionMatrix();
 
 	Engines::Graphic::Shaders::CameraMatrices cameraMatrices(viewMatrix, projectionMatrix);
+	
 	m_cameraUniformBuffer->update(&cameraMatrices);
 	
 	if (displayNormal)
@@ -38,6 +39,8 @@ bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 		m_wireframeGraphicPipeline->draw();
 	if (displaySolid)
 		m_solidColorGraphicPipeline->draw();
+
+	m_skyboxGraphicPipeline->draw();
 
 	m_ui->drawUi();
 	m_uiRenderingBackend->renderData();
@@ -60,6 +63,7 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 		m_wireframeGraphicPipeline = std::make_unique<OpenGLWireframeGraphicPipeline>(m_cameraControllerManager);
 		m_solidColorGraphicPipeline = std::make_unique<OpenGLSolidColorGraphicPipeline>(m_cameraControllerManager);
 		m_normalDebugGraphicPipeline = std::make_unique<OpenGLNormalDebugGraphicPipeline>(m_cameraControllerManager);
+		m_skyboxGraphicPipeline = std::make_unique<OpenGLSkyboxGraphicPipeline>(m_cfg->getProperty<std::string>("scene:skybox:base path"));
 
 		m_cameraUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::CameraMatrices>>(0);
 

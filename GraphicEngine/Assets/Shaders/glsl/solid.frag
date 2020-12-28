@@ -21,7 +21,7 @@ layout (location = 0) out vec4 outColor;
 
 void main()
 {
-    vec3 lightDir = normalize(vec3(eye.eyePosition) - vec3(position));
+    vec3 lightDir = normalize(position - vec3(eye.eyePosition));
     float I = max(dot(normal, lightDir), 0.0);
     vec3 color = clamp((I + 0.2),0 , 1) * solidColor;
     outColor = vec4(color, 1.0);

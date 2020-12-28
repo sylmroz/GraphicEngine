@@ -307,6 +307,12 @@
     <ClCompile Include="UI\ImGui\Widgets\Checkbox.cpp">
       <Filter>UI\ImGui\Widgets</Filter>
     </ClCompile>
+    <ClCompile Include="Drivers\OpenGL\OpenGLTextureCube.cpp">
+      <Filter>Drivers\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Drivers\OpenGL\GraphicPipelines\OpenGLSkyboxGraphicPipeline.cpp">
+      <Filter>Drivers\OpenGL\GraphicPipelines</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Input\Keyboard\KeyboardEnumKeys.hpp">
@@ -662,6 +668,15 @@
     </ClInclude>
     <ClInclude Include="UI\ImGui\Widgets\Checkbox.hpp">
       <Filter>UI\ImGui\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="Drivers\OpenGL\OpenGLTextureCube.hpp">
+      <Filter>Drivers\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engines\Graphic\Pipelines\SkyboxGraphicPipeline.hpp">
+      <Filter>Engines\Graphic\Pipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="Drivers\OpenGL\GraphicPipelines\OpenGLSkyboxGraphicPipeline.hpp">
+      <Filter>Drivers\OpenGL\GraphicPipelines</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

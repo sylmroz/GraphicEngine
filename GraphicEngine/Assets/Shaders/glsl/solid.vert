@@ -26,6 +26,6 @@ void main()
 {
     solidColor = solidColorModelDescriptor.color;
     normal = normalize(mat3(solidColorModelDescriptor.normalMatrix) * inNormal);
-    position = vec3(solidColorModelDescriptor.modelMatrix * vec4(inPosition, 1.0));
     gl_Position = cameraMatrices.projection * cameraMatrices.view * solidColorModelDescriptor.modelMatrix * vec4(inPosition, 1.0);
+    position = gl_Position.xyz;
 }

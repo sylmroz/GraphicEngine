@@ -6,11 +6,11 @@
 
 namespace GraphicEngine::OpenGL
 {
-	class Texture2D
+	class TextureCube
 	{
 	public:
-		Texture2D(const std::string& path);
-		Texture2D(const uint8_t* data, int width, int height, int channels);
+		TextureCube(const std::array<std::string, 6>& faces);
+		TextureCube(const std::array<std::tuple<uint8_t*, int, int, int>, 6>& faces);
 		void use();
 		void use(int layer);
 
