@@ -4,13 +4,11 @@
 
 namespace GraphicEngine::Vulkan
 {
-	class Texture2D : public ImageData
+	class Texture2D : public Texture
 	{
 	public:
 		Texture2D(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::UniqueCommandPool& commandPool, vk::Queue queue,
 			const uint8_t* data, int width, int height, int channels);
-
-		vk::UniqueSampler sampler;
 
 		virtual ~Texture2D() = default;
 

@@ -417,7 +417,7 @@ vk::UniqueDescriptorSetLayout GraphicEngine::Vulkan::createDescriptorSetLayout(c
 }
 
 void GraphicEngine::Vulkan::updateDescriptorSets(const vk::UniqueDevice& device, const vk::UniqueDescriptorPool& descriptorPool, const vk::UniqueDescriptorSetLayout& descriptorSetLayout, uint32_t layoutCount,
-	const std::vector<vk::UniqueDescriptorSet>& descriptorSets, const std::vector<std::shared_ptr<IUniformBuffer>>& uniformBuffers, const std::vector<std::shared_ptr<Texture2D>>& imageUniforms)
+	const std::vector<vk::UniqueDescriptorSet>& descriptorSets, const std::vector<std::shared_ptr<IUniformBuffer>>& uniformBuffers, const std::vector<std::shared_ptr<Texture>>& imageUniforms)
 {
 	std::vector<vk::DescriptorSetLayout> layouts(layoutCount, descriptorSetLayout.get());
 
@@ -456,11 +456,11 @@ void GraphicEngine::Vulkan::updateDescriptorSets(const vk::UniqueDevice& device,
 }
 
 void GraphicEngine::Vulkan::transitionImageLayout(const vk::UniqueDevice& device, const vk::UniqueCommandPool& commandPool, const vk::Queue& graphicQueue,
-	vk::UniqueImage& image, vk::Format format, vk::ImageLayout oldLayout, vk::ImageLayout newLayout, uint32_t mipLevels)
+	vk::UniqueImage& image, vk::Format format, vk::ImageLayout oldLayout, vk::ImageLayout newLayout, uint32_t mipLevels, uint32_t arrayCount)
 {
 	singleTimeCommand(device, commandPool, graphicQueue, [&](const vk::UniqueCommandBuffer& commandBuffer)
 		{
-			vk::ImageSubresourceRange subresourceRange(vk::ImageAspectFlagBits::eColor, 0, mipLevels, 0, 1);
+			vk::ImageSubresourceRange subresourceRange(vk::ImageAspectFlagBits::eColor, 0, mipLevels, 0, arrayCount);
 			vk::ImageMemoryBarrier memoryBarrier({}, {}, oldLayout, newLayout, VK_QUEUE_FAMILY_IGNORED, VK_QUEUE_FAMILY_IGNORED, image.get(), subresourceRange);
 
 			vk::PipelineStageFlags sourceStage;
@@ -685,11 +685,16 @@ GraphicEngine::Vulkan::SwapChainSupportDetails::SwapChainSupportDetails(vk::Surf
 
 GraphicEngine::Vulkan::ImageData::ImageData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::Extent3D extent, vk::Format format, vk::SampleCountFlagBits numOfSamples,
 	vk::MemoryPropertyFlags memoryProperty, vk::ImageUsageFlags imageUsage, vk::ImageTiling tiling,
-	uint32_t mipLevel, vk::ImageLayout layout, vk::ImageAspectFlags aspectFlags, vk::ImageType imageType)
+	uint32_t mipLevel, uint32_t arrayCount, vk::ImageLayout layout, vk::ImageAspectFlags aspectFlags, vk::ImageType imageType, vk::ImageViewType imageViewType, vk::ImageCreateFlags flags)
+{
+	initImageData(physicalDevice, device, extent, format, numOfSamples, memoryProperty, imageUsage, tiling, mipLevel, arrayCount, layout, aspectFlags, imageType, imageViewType, flags);
+}
+
+void GraphicEngine::Vulkan::ImageData::initImageData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::Extent3D extent, vk::Format format, vk::SampleCountFlagBits numOfSamples, vk::MemoryPropertyFlags memoryProperty, vk::ImageUsageFlags imageUsage, vk::ImageTiling tiling, uint32_t mipLevel, uint32_t arrayCount, vk::ImageLayout layout, vk::ImageAspectFlags aspectFlags, vk::ImageType imageType, vk::ImageViewType imageViewType, vk::ImageCreateFlags flags)
 {
 	this->format = format;
 
-	vk::ImageCreateInfo imageCreateInfo(vk::ImageCreateFlags(), imageType, format, extent, mipLevel, 1, numOfSamples, tiling, imageUsage, vk::SharingMode::eExclusive, 0, nullptr, layout);
+	vk::ImageCreateInfo imageCreateInfo(flags, imageType, format, extent, mipLevel, arrayCount, numOfSamples, tiling, imageUsage, vk::SharingMode::eExclusive, 0, nullptr, layout);
 
 	this->image = device->createImageUnique(imageCreateInfo);
 	this->deviceMemory = allocateMemory(physicalDevice, device, memoryProperty, device->getImageMemoryRequirements(image.get()));
@@ -697,14 +702,14 @@ GraphicEngine::Vulkan::ImageData::ImageData(const vk::PhysicalDevice& physicalDe
 	device->bindImageMemory(image.get(), deviceMemory.get(), 0);
 
 	vk::ComponentMapping componentMapping(vk::ComponentSwizzle::eR, vk::ComponentSwizzle::eG, vk::ComponentSwizzle::eB, vk::ComponentSwizzle::eA);
-	vk::ImageSubresourceRange subResourceRange(aspectFlags, 0, mipLevel, 0, 1);
-	vk::ImageViewCreateInfo createInfo(vk::ImageViewCreateFlags(), image.get(), vk::ImageViewType::e2D, this->format, componentMapping, subResourceRange);
+	vk::ImageSubresourceRange subResourceRange(aspectFlags, 0, mipLevel, 0, arrayCount);
+	vk::ImageViewCreateInfo createInfo(vk::ImageViewCreateFlags(), image.get(), imageViewType, this->format, componentMapping, subResourceRange);
 	imageView = device->createImageViewUnique(createInfo);
 }
 
 GraphicEngine::Vulkan::DepthBufferData::DepthBufferData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::Extent3D extent, vk::Format format, vk::SampleCountFlagBits numOfSamples) :
 	ImageData(physicalDevice, device, extent, format, numOfSamples,
-		vk::MemoryPropertyFlagBits::eDeviceLocal, vk::ImageUsageFlagBits::eDepthStencilAttachment, vk::ImageTiling::eOptimal, 1, vk::ImageLayout::eUndefined, vk::ImageAspectFlagBits::eDepth)
+		vk::MemoryPropertyFlagBits::eDeviceLocal, vk::ImageUsageFlagBits::eDepthStencilAttachment, vk::ImageTiling::eOptimal, 1, 1, vk::ImageLayout::eUndefined, vk::ImageAspectFlagBits::eDepth)
 {
 }
 
@@ -730,4 +735,9 @@ GraphicEngine::Vulkan::RenderingBarriers::RenderingBarriers(const vk::UniqueDevi
 		vk::FenceCreateInfo fenceCreateInfo(vk::FenceCreateFlagBits::eSignaled);
 		inFlightFences.push_back(device->createFenceUnique(fenceCreateInfo));
 	}
+}
+
+GraphicEngine::Vulkan::Texture::Texture(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::Extent3D extent, vk::Format format, vk::SampleCountFlagBits numOfSamples, vk::MemoryPropertyFlags memoryProperty, vk::ImageUsageFlags imageUsage, vk::ImageTiling tiling, uint32_t mipLevel, uint32_t arrayCount, vk::ImageLayout layout, vk::ImageAspectFlags aspectFlags, vk::ImageType imageType, vk::ImageViewType imageViewType, vk::ImageCreateFlags flags) :
+	ImageData{ physicalDevice, device, extent, format, numOfSamples, memoryProperty, imageUsage, tiling, mipLevel, arrayCount, layout, aspectFlags, imageType, imageViewType, flags }
+{
 }

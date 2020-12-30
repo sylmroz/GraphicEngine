@@ -4,9 +4,9 @@
 
 GraphicEngine::Vulkan::Texture2D::Texture2D(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::UniqueCommandPool& commandPool, vk::Queue queue,
 	const uint8_t* data, int width, int height, int channels) :
-	ImageData(physicalDevice, device, vk::Extent3D(width, height, 1), getFormat(channels), vk::SampleCountFlagBits::e1, vk::MemoryPropertyFlagBits::eDeviceLocal,
+	Texture(physicalDevice, device, vk::Extent3D(width, height, 1), getFormat(channels), vk::SampleCountFlagBits::e1, vk::MemoryPropertyFlagBits::eDeviceLocal,
 		vk::ImageUsageFlagBits::eTransferSrc | vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled,
-		vk::ImageTiling::eOptimal, Core::calculateMipLevels(width, height), vk::ImageLayout::eUndefined, vk::ImageAspectFlagBits::eColor, vk::ImageType::e2D)
+		vk::ImageTiling::eOptimal, Core::calculateMipLevels(width, height), 1, vk::ImageLayout::eUndefined, vk::ImageAspectFlagBits::eColor, vk::ImageType::e2D, vk::ImageViewType::e2D)
 {
 	int size = width * height * channels;
 	int mipLevels = Core::calculateMipLevels(width, height);
@@ -28,5 +28,4 @@ GraphicEngine::Vulkan::Texture2D::Texture2D(const vk::PhysicalDevice& physicalDe
 		vk::SamplerAddressMode::eRepeat, vk::SamplerAddressMode::eRepeat, vk::SamplerAddressMode::eRepeat,
 		0.0f, true, 16.0f, false, vk::CompareOp::eAlways, 0.0f, static_cast<float>(mipLevels), vk::BorderColor::eIntOpaqueBlack, false);
 	sampler = device->createSamplerUnique(samplerCreateInfo);
-
 }

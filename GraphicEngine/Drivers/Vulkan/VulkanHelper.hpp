@@ -11,13 +11,20 @@
 namespace GraphicEngine::Vulkan
 {
 	template <typename T>
-	void copyMemoryToDevice(const vk::UniqueDevice& device, const vk::UniqueDeviceMemory& memory, const T* data, uint32_t count)
+	void copyMemoryToDevice(const vk::UniqueDevice& device, const vk::UniqueDeviceMemory& memory, const T* data, uint32_t count, uint32_t offset)
 	{
 		uint32_t deviceSize = sizeof(T) * count;
+		uint32_t deviceOffset = sizeof(T) * offset;
 		void* _data;
-		device->mapMemory(memory.get(), 0, deviceSize, vk::MemoryMapFlags(), &_data);
+		device->mapMemory(memory.get(), deviceOffset, deviceSize, vk::MemoryMapFlags(), &_data);
 		memcpy(_data, data, deviceSize);
 		device->unmapMemory(memory.get());
+	}
+
+	template <typename T>
+	void copyMemoryToDevice(const vk::UniqueDevice& device, const vk::UniqueDeviceMemory& memory, const T* data, uint32_t count)
+	{
+		copyMemoryToDevice<T>(device, memory, data, count, 0);
 	}
 
 	template <typename F, typename... Args>
@@ -126,14 +133,35 @@ namespace GraphicEngine::Vulkan
 	class ImageData
 	{
 	public:
+		ImageData() = default;
 		ImageData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::Extent3D extent, vk::Format format, vk::SampleCountFlagBits numOfSamples,
 			vk::MemoryPropertyFlags memoryProperty, vk::ImageUsageFlags imageUsage, vk::ImageTiling tiling,
-			uint32_t mipLevel, vk::ImageLayout layout, vk::ImageAspectFlags aspectFlags, vk::ImageType imageType = vk::ImageType::e2D);
+			uint32_t mipLevel, uint32_t arrayCount, vk::ImageLayout layout, vk::ImageAspectFlags aspectFlags, vk::ImageType imageType = vk::ImageType::e2D, vk::ImageViewType imageViewType = vk::ImageViewType::e2D,
+			vk::ImageCreateFlags flags = vk::ImageCreateFlags());
+
+		void initImageData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::Extent3D extent, vk::Format format, vk::SampleCountFlagBits numOfSamples,
+			vk::MemoryPropertyFlags memoryProperty, vk::ImageUsageFlags imageUsage, vk::ImageTiling tiling,
+			uint32_t mipLevel, uint32_t arrayCount, vk::ImageLayout layout, vk::ImageAspectFlags aspectFlags, vk::ImageType imageType = vk::ImageType::e2D, vk::ImageViewType imageViewType = vk::ImageViewType::e2D,
+			vk::ImageCreateFlags flags = vk::ImageCreateFlags());
 
 		vk::Format format;
 		vk::UniqueDeviceMemory deviceMemory;
 		vk::UniqueImage image;
 		vk::UniqueImageView imageView;
+	};
+
+	class Texture : public ImageData
+	{
+	public:
+		Texture() = default;
+		Texture(const vk::PhysicalDevice & physicalDevice, const vk::UniqueDevice & device, vk::Extent3D extent, vk::Format format, vk::SampleCountFlagBits numOfSamples,
+			vk::MemoryPropertyFlags memoryProperty, vk::ImageUsageFlags imageUsage, vk::ImageTiling tiling,
+			uint32_t mipLevel, uint32_t arrayCount, vk::ImageLayout layout, vk::ImageAspectFlags aspectFlags, vk::ImageType imageType = vk::ImageType::e2D, vk::ImageViewType imageViewType = vk::ImageViewType::e2D,
+			vk::ImageCreateFlags flags = vk::ImageCreateFlags());
+
+		vk::UniqueSampler sampler;
+
+		virtual ~Texture() = default;
 	};
 
 	class DepthBufferData : public ImageData
@@ -142,7 +170,6 @@ namespace GraphicEngine::Vulkan
 		DepthBufferData(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device, vk::Extent3D extent, vk::Format format, vk::SampleCountFlagBits numOfSamples);
 	};
 
-	class Texture2D;
 	class IUniformBuffer;
 
 	std::vector<const char*> getDeviceExtension();
@@ -200,10 +227,10 @@ namespace GraphicEngine::Vulkan
 		const std::vector<std::tuple<vk::DescriptorType, uint32_t, vk::ShaderStageFlags>>& bindingData, vk::DescriptorSetLayoutCreateFlags flags);
 
 	void updateDescriptorSets(const vk::UniqueDevice& device, const vk::UniqueDescriptorPool& descriptorPool, const vk::UniqueDescriptorSetLayout& descriptorSetLayout, uint32_t layoutCount,
-		const std::vector<vk::UniqueDescriptorSet>& descriptorSets, const std::vector<std::shared_ptr<IUniformBuffer>>& uniformBuffers, const std::vector<std::shared_ptr<Texture2D>>& imageUniforms);
+		const std::vector<vk::UniqueDescriptorSet>& descriptorSets, const std::vector<std::shared_ptr<IUniformBuffer>>& uniformBuffers, const std::vector<std::shared_ptr<Texture>>& imageUniforms);
 
 	void transitionImageLayout(const vk::UniqueDevice& device, const vk::UniqueCommandPool& commandPool, const vk::Queue& graphicQueue, 
-		vk::UniqueImage& image, vk::Format format, vk::ImageLayout oldLayout, vk::ImageLayout newLayout, uint32_t mipLevels);
+		vk::UniqueImage& image, vk::Format format, vk::ImageLayout oldLayout, vk::ImageLayout newLayout, uint32_t mipLevels, uint32_t arrayCount = 1);
 
 	void generateMipmaps(const vk::PhysicalDevice& physicalDevice, const vk::UniqueDevice& device,
 		const vk::UniqueCommandPool& commandPool, const vk::Queue& queue,

@@ -7,12 +7,24 @@
 
 namespace GraphicEngine::Engines::Graphic
 {
-	template <template <typename> typename VertexBuffer, typename TextureCube, typename... Args>
+	template <typename SkyboxGraphicPipelineImpl, template <typename> typename VertexBuffer, typename TextureCube, typename... Args>
 	class SkyboxGraphicPipeline
 	{
-	public:
-		SkyboxGraphicPipeline(const std::string& basePath)
-		{
+	public:		
+
+        virtual void draw(Args... args) = 0;
+
+        std::unique_ptr<VertexBuffer<Common::VertexP>> produceVertexBuffer(std::vector<Common::VertexP> skyBoxVertices)
+        {
+            return static_cast<SkyboxGraphicPipelineImpl*>(this)->produceVertexBuffer(skyBoxVertices);
+        }
+        std::shared_ptr<TextureCube> produceTextureCube(std::array<std::string, 6> faces)
+        {
+            return static_cast<SkyboxGraphicPipelineImpl*>(this)->produceTextureCube(faces);
+        }
+
+        void initialize(const std::string& basePath)
+        {
             std::vector<Common::VertexP> skyBoxVertices =
             { {
                 glm::vec3{ -1.0f,  1.0f, -1.0f },
@@ -58,8 +70,8 @@ namespace GraphicEngine::Engines::Graphic
                 glm::vec3{ 1.0f, -1.0f,  1.0f }
             } };
 
-            m_cubeVertexBuffer = std::make_unique<VertexBuffer<Common::VertexP>>(skyBoxVertices);
-            m_textureCube = std::make_unique<TextureCube>(
+            m_cubeVertexBuffer = produceVertexBuffer(skyBoxVertices);
+            m_textureCube = produceTextureCube(
                 std::array<std::string, 6>{ {
                         basePath + "//px.png",
                             basePath + "//nx.png",
@@ -69,12 +81,10 @@ namespace GraphicEngine::Engines::Graphic
                             basePath + "//nz.png"
                     }}
             );
-        };
-
-        virtual void draw(Args... args) = 0;
+        }
 
 	protected:
-		std::unique_ptr<TextureCube> m_textureCube;
+		std::shared_ptr<TextureCube> m_textureCube;
 		std::unique_ptr<VertexBuffer<Common::VertexP>> m_cubeVertexBuffer;
 	};
 }

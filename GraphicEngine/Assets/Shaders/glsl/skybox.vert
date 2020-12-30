@@ -15,7 +15,7 @@ layout (location = 0) out vec3 texCoord;
 void main()
 {
     texCoord = inPosition;
-    mat4 view = mat4(mat4(cameraMatrices.view));
+    mat4 view = mat4(mat3(cameraMatrices.view));
     vec4 position = cameraMatrices.projection * view * vec4(inPosition * 250, 1.0);
     gl_Position = position.xyww;
 }

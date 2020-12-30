@@ -60,7 +60,7 @@ GraphicEngine::Vulkan::VulkanFramework& GraphicEngine::Vulkan::VulkanFramework::
 	m_image = std::make_unique<ImageData>(m_physicalDevice, m_device,
 		vk::Extent3D(m_swapChainData.extent, 1), m_swapChainData.format, m_msaaSamples,
 		vk::MemoryPropertyFlagBits::eDeviceLocal, vk::ImageUsageFlagBits::eColorAttachment | vk::ImageUsageFlagBits::eTransientAttachment,
-		vk::ImageTiling::eOptimal, 1, vk::ImageLayout::eUndefined, vk::ImageAspectFlagBits::eColor);
+		vk::ImageTiling::eOptimal, 1, 1, vk::ImageLayout::eUndefined, vk::ImageAspectFlagBits::eColor);
 	m_frameBuffers = createFrameBuffers(m_device, m_renderPass, m_swapChainData.extent, 1, m_image->imageView, m_depthBuffer->imageView, m_swapChainData.imageViews);
 
 	return *this;

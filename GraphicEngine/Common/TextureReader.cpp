@@ -26,7 +26,11 @@ void GraphicEngine::Common::Details::OpenCVTextureReder::read(const std::string&
 
 void GraphicEngine::Common::Details::StbTextureReader::read(const std::string& path)
 {
-	data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+	data = stbi_load(path.c_str(), &width, &height, &channels, STBI_rgb_alpha);
+	if (channels == 3)
+	{
+		channels++;
+	}
 	if (!data)
 	{
 		std::string err = "Cannot open image in path " + path;

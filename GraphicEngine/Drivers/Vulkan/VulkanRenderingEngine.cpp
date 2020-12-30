@@ -77,6 +77,7 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 		m_wireframeGraphicPipeline = std::make_shared<VulkanWireframeGraphicPipeline>(m_framework, m_cameraUniformBuffer);
 		m_solidColorraphicPipeline = std::make_shared<VulkanSolidColorGraphicPipeline>(m_framework, m_cameraUniformBuffer, m_lightUniformBuffer, m_eyePositionUniformBuffer, m_cameraControllerManager);
 		m_normalDebugGraphicPipeline = std::make_shared<VulkanNormalDebugGraphicPipeline>(m_framework, m_cameraUniformBuffer, m_cameraControllerManager);
+		m_skyboxGraphicPipeline = std::make_unique<VulkanSkyboxGraphicPipeline>(m_framework, m_cameraUniformBuffer, m_cfg->getProperty<std::string>("scene:skybox:base path"));
 
 		m_modelManager->getModelEntityContainer()->forEachEntity([&](auto model)
 		{
@@ -150,12 +151,15 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::buildCommandBuffers()
 		vk::RenderPassBeginInfo renderPassBeginInfo(m_framework->m_renderPass.get(), m_framework->m_frameBuffers[i].get(), vk::Rect2D(vk::Offset2D(0, 0), m_framework->m_swapChainData.extent), static_cast<uint32_t>(clearValues.size()), clearValues.data());
 		commandBuffer->beginRenderPass(renderPassBeginInfo, vk::SubpassContents::eInline);
 
+		m_skyboxGraphicPipeline->draw(commandBuffer, i);
+
 		if (displayNormal)
 			m_normalDebugGraphicPipeline->draw(commandBuffer, i);
 		if (displayWireframe)
 			m_wireframeGraphicPipeline->draw(commandBuffer, i);
 		if (displaySolid)
 			m_solidColorraphicPipeline->draw(commandBuffer, i);
+		
 		
 
 		m_uiRenderingBackend->renderData(commandBuffer);

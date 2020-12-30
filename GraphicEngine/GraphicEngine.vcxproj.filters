@@ -313,6 +313,12 @@
     <ClCompile Include="Drivers\OpenGL\GraphicPipelines\OpenGLSkyboxGraphicPipeline.cpp">
       <Filter>Drivers\OpenGL\GraphicPipelines</Filter>
     </ClCompile>
+    <ClCompile Include="Drivers\Vulkan\VulkanTextureCube.cpp">
+      <Filter>Drivers\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="Drivers\Vulkan\Pipelines\VulkanSkyboxGraphicPipeline.cpp">
+      <Filter>Drivers\Vulkan\Pipelines</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Input\Keyboard\KeyboardEnumKeys.hpp">
@@ -677,6 +683,12 @@
     </ClInclude>
     <ClInclude Include="Drivers\OpenGL\GraphicPipelines\OpenGLSkyboxGraphicPipeline.hpp">
       <Filter>Drivers\OpenGL\GraphicPipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="Drivers\Vulkan\VulkanTextureCube.hpp">
+      <Filter>Drivers\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Drivers\Vulkan\Pipelines\VulkanSkyboxGraphicPipeline.hpp">
+      <Filter>Drivers\Vulkan\Pipelines</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

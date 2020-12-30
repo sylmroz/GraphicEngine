@@ -13,6 +13,7 @@
 #include "Pipelines/VulkanNormalDebugGraphicPileline.hpp"
 #include "Pipelines/VulkanWireframeGraphicPipeline.h"
 #include "Pipelines/VulkanSolidColorGraphicPipeline.hpp"
+#include "Pipelines/VulkanSkyboxGraphicPipeline.hpp"
 
 #include "../../UI/ImGui/ImGuiImpl.hpp"
 
@@ -49,6 +50,7 @@ namespace GraphicEngine::Vulkan
 		std::shared_ptr<VulkanWireframeGraphicPipeline> m_wireframeGraphicPipeline;
 		std::shared_ptr<VulkanSolidColorGraphicPipeline> m_solidColorraphicPipeline;
 		std::shared_ptr<VulkanNormalDebugGraphicPipeline> m_normalDebugGraphicPipeline;
+		std::shared_ptr<VulkanSkyboxGraphicPipeline> m_skyboxGraphicPipeline;
 
 		std::shared_ptr<GUI::ImGuiImpl::VulkanRenderEngineBackend> m_uiRenderingBackend;
 	};
