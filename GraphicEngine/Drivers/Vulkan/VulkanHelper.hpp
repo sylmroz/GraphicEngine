@@ -217,7 +217,7 @@ namespace GraphicEngine::Vulkan
 		std::vector<vk::VertexInputAttributeDescription> attributeDescriptions, const vk::VertexInputBindingDescription& bindingDescription,
 		bool depthBuffered, const vk::FrontFace& frontFace, const vk::UniquePipelineLayout& pipelineLayout,
 		const vk::UniqueRenderPass& renderPass, vk::SampleCountFlagBits msaaSample, vk::PrimitiveTopology primitiveTopology = vk::PrimitiveTopology::eTriangleList, vk::CullModeFlags cullMode = vk::CullModeFlagBits::eNone, bool depthBoundsTestEnable = false,
-		bool stencilTestEnable = false);
+		bool stencilTestEnable = false, vk::CompareOp depthCompareOp = vk::CompareOp::eLess);
 
 	std::vector<vk::VertexInputAttributeDescription> createVertexInputAttributeDescriptions(const std::vector<std::pair<uint32_t, uint32_t>>& vertexSizeOffset);
 

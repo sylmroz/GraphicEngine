@@ -40,8 +40,11 @@ GraphicEngine::Vulkan::VulkanNormalDebugGraphicPipeline::VulkanNormalDebugGraphi
 
 	Core::Utils::for_each(Common::VertexTypesRegister::types, [&](auto vertexType)
 	{
-		auto graphicPipeline = std::make_shared<VulkanGraphicPipelineInfo<decltype(vertexType)>>(m_framework, m_descriptorSetLayout, shaderInfos, vk::PrimitiveTopology::eTriangleList);
-		m_vulkanGraphicPipelines->addEntity(graphicPipeline);
+		if constexpr (Core::Utils::has_normal_member<decltype(vertexType)>::value)
+		{
+			auto graphicPipeline = std::make_shared<VulkanGraphicPipelineInfo<decltype(vertexType)>>(m_framework, m_descriptorSetLayout, shaderInfos, vk::PrimitiveTopology::eTriangleList);
+			m_vulkanGraphicPipelines->addEntity(graphicPipeline);
+		}
 	});
 }
 

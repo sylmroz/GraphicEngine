@@ -151,8 +151,6 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::buildCommandBuffers()
 		vk::RenderPassBeginInfo renderPassBeginInfo(m_framework->m_renderPass.get(), m_framework->m_frameBuffers[i].get(), vk::Rect2D(vk::Offset2D(0, 0), m_framework->m_swapChainData.extent), static_cast<uint32_t>(clearValues.size()), clearValues.data());
 		commandBuffer->beginRenderPass(renderPassBeginInfo, vk::SubpassContents::eInline);
 
-		m_skyboxGraphicPipeline->draw(commandBuffer, i);
-
 		if (displayNormal)
 			m_normalDebugGraphicPipeline->draw(commandBuffer, i);
 		if (displayWireframe)
@@ -160,7 +158,7 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::buildCommandBuffers()
 		if (displaySolid)
 			m_solidColorraphicPipeline->draw(commandBuffer, i);
 		
-		
+		m_skyboxGraphicPipeline->draw(commandBuffer, i);
 
 		m_uiRenderingBackend->renderData(commandBuffer);
 

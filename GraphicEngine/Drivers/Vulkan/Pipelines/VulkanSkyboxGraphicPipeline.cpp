@@ -31,7 +31,7 @@ GraphicEngine::Vulkan::VulkanSkyboxGraphicPipeline::VulkanSkyboxGraphicPipeline(
 	std::vector<ShaderInfo> shaderInfos = { { ShaderInfo{ vertexShader->shaderModule.get(),vk::SpecializationInfo(), vertexShader->getVulkanShaderType() },
 											ShaderInfo{ fragmentShader->shaderModule.get(),vk::SpecializationInfo(), fragmentShader->getVulkanShaderType() } } };
 
-	m_graphicPipeline = std::make_unique<VulkanGraphicPipelineInfo<Common::VertexP>>(m_framework, m_descriptorSetLayout, shaderInfos, vk::PrimitiveTopology::eTriangleList);
+	m_graphicPipeline = std::make_unique<VulkanGraphicPipelineInfo<Common::VertexP>>(m_framework, m_descriptorSetLayout, shaderInfos, vk::PrimitiveTopology::eTriangleList, true, vk::CullModeFlagBits::eNone, false, false, vk::CompareOp::eLessOrEqual);
 }
 
 void GraphicEngine::Vulkan::VulkanSkyboxGraphicPipeline::draw(vk::UniqueCommandBuffer& commandBuffer, int index)

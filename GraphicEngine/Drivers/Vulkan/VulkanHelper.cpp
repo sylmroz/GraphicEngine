@@ -330,7 +330,7 @@ std::vector<vk::UniqueFramebuffer> GraphicEngine::Vulkan::createFrameBuffers(con
 	return frameBuffers;
 }
 
-vk::UniquePipeline GraphicEngine::Vulkan::createGraphicPipeline(const vk::UniqueDevice& device, const vk::UniquePipelineCache& pipeliceCache, const std::vector<ShaderInfo>& shadersInfo, std::vector<vk::VertexInputAttributeDescription> attributeDescriptions, const vk::VertexInputBindingDescription& bindingDescription, bool depthBuffered, const vk::FrontFace& frontFace, const vk::UniquePipelineLayout& pipelineLayout, const vk::UniqueRenderPass& renderPass, vk::SampleCountFlagBits msaaSample, vk::PrimitiveTopology primitiveTopology, vk::CullModeFlags cullMode, bool depthBoundsTestEnable, bool stencilTestEnable)
+vk::UniquePipeline GraphicEngine::Vulkan::createGraphicPipeline(const vk::UniqueDevice& device, const vk::UniquePipelineCache& pipeliceCache, const std::vector<ShaderInfo>& shadersInfo, std::vector<vk::VertexInputAttributeDescription> attributeDescriptions, const vk::VertexInputBindingDescription& bindingDescription, bool depthBuffered, const vk::FrontFace& frontFace, const vk::UniquePipelineLayout& pipelineLayout, const vk::UniqueRenderPass& renderPass, vk::SampleCountFlagBits msaaSample, vk::PrimitiveTopology primitiveTopology, vk::CullModeFlags cullMode, bool depthBoundsTestEnable, bool stencilTestEnable, vk::CompareOp depthCompareOp)
 {
 	std::vector<vk::PipelineShaderStageCreateInfo> pipelineShaderCreateInfos;
 	pipelineShaderCreateInfos.reserve(shadersInfo.size());
@@ -368,7 +368,7 @@ vk::UniquePipeline GraphicEngine::Vulkan::createGraphicPipeline(const vk::Unique
 
 	vk::StencilOpState stencilOpState(vk::StencilOp::eKeep, vk::StencilOp::eKeep, vk::StencilOp::eKeep, vk::CompareOp::eAlways);
 	vk::PipelineDepthStencilStateCreateInfo pipelineDepthStencilCreateInfo(vk::PipelineDepthStencilStateCreateFlags(), depthBuffered, depthBuffered,
-		vk::CompareOp::eLess, depthBoundsTestEnable, stencilTestEnable, stencilOpState, stencilOpState, 0.0f, 1.0f);
+		depthCompareOp, depthBoundsTestEnable, stencilTestEnable, stencilOpState, stencilOpState, 0.0f, 1.0f);
 
 	vk::GraphicsPipelineCreateInfo graphicPipelineCreateInfo(vk::PipelineCreateFlags(), static_cast<uint32_t>(pipelineShaderCreateInfos.size()), pipelineShaderCreateInfos.data(),
 		&pipelineVertexInputStateCreateInfo, &pipelineInputAssemblyStateCreateInfo, nullptr, &pipelineViewportCreateInfo, &pipelineRasterizationStateCreateInfo,
