@@ -30,7 +30,7 @@ namespace GraphicEngine::Engines::Graphic
 
 			auto thick = std::max(scale.x, scale.y) * 0.01f;
 
-			Core::BoudingBox3D boudingBox(glm::vec3(from, -thick), glm::vec3(to, thick));
+			Core::BoudingBox3D boudingBox(glm::vec3(from.x, -thick, from.y), glm::vec3(to.x, thick, to.y));
 
 			glm::vec2 step(to - from);
 			step.x /= scale.x;
@@ -43,6 +43,7 @@ namespace GraphicEngine::Engines::Graphic
 				{
 					auto v = std::make_shared<Vertex>();
 					v->position = glm::vec3(from + step * glm::vec2(x, y), 0.0f);
+					std::swap(v->position.y, v->position.z);
 					vertices.push_back(v);
 				}
 			}

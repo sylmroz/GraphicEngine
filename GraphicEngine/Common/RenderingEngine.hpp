@@ -13,7 +13,6 @@
 #include "../Services/CameraControllerManager.hpp"
 #include "../Services/ModelManager.hpp"
 
-#include "../Engines/Graphic/3D/ObjectGenerator.hpp"
 #include "../Engines//Graphic/Shaders/Models/Light.hpp"
 
 #include "../UI/ImGui/Widgets/ColorEdit.hpp"

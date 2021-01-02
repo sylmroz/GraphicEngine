@@ -24,7 +24,7 @@ namespace GraphicEngine::Engines::Graphic
 			float thetaStep = 180.f / (scale.y + 1);
 
 			auto v1 = std::make_shared<Vertex>();
-			v1->position = glm::vec3(centerPosition.x, centerPosition.y, centerPosition.z - radius);
+			v1->position = glm::vec3(centerPosition.x, centerPosition.z - radius, centerPosition.y);
 			vertices.push_back(v1);
 
 			for (float theta = -180.0f + thetaStep; theta < -0.1f; theta += thetaStep)
@@ -38,18 +38,18 @@ namespace GraphicEngine::Engines::Graphic
 					float sinFi = std::sin(radFi);
 					float cosFi = std::cos(radFi);
 					auto v3 = std::make_shared<Vertex>();
-					v3->position = glm::vec3(radius * sinTheta * cosFi, radius * sinTheta * sinFi, radius * cosTheta) + centerPosition;
+					v3->position = glm::vec3(radius * sinTheta * cosFi, radius * cosTheta, radius * sinTheta * sinFi) + centerPosition;
 					vertices.push_back(v3);
 				}
 			}
 
 			auto v2 = std::make_shared<Vertex>();
-			v2->position = glm::vec3(centerPosition.x, centerPosition.y, centerPosition.z + radius);
+			v2->position = glm::vec3(centerPosition.x, centerPosition.z + radius, centerPosition.y);
 			vertices.push_back(v2);
 
 			for (uint32_t i{ 0 }; i < scale.x + 1; ++i)
 			{
-				faces.push_back(this->buildFace(0, i + 1, i == scale.x ? 1 : i + 2, triangleDirection));
+				faces.push_back(this->buildFace(0, i == scale.x ? 1 : i + 2, i + 1, triangleDirection));
 			}
 
 			for (uint32_t y{ 0 }; y < scale.y - 1; ++y)
@@ -57,8 +57,8 @@ namespace GraphicEngine::Engines::Graphic
 				for (uint32_t x{ 0 }; x < scale.x + 1; ++x)
 				{
 					uint32_t point = x + (y * (scale.x + 1)) + 1;
-					faces.push_back(this->buildFace(point, point + 1 + scale.x, (x == scale.x ? point + 1 : point + 2 + scale.x), triangleDirection));
-					faces.push_back(this->buildFace(point, (x == scale.x ? point + 1 : point + 2 + scale.x), (x == scale.x ? (point - scale.x) : (point + 1)), triangleDirection));
+					faces.push_back(this->buildFace(point, (x == scale.x ? point + 1 : point + 2 + scale.x), point + 1 + scale.x, triangleDirection));
+					faces.push_back(this->buildFace(point, (x == scale.x ? (point - scale.x) : (point + 1)), (x == scale.x ? point + 1 : point + 2 + scale.x), triangleDirection));
 				}
 			}
 
@@ -66,10 +66,10 @@ namespace GraphicEngine::Engines::Graphic
 			uint32_t offset = last - (scale.x + 1);
 			for (uint32_t i{ offset }; i < last - 1; ++i)
 			{
-				faces.push_back(this->buildFace(i, last, i + 1, triangleDirection));
+				faces.push_back(this->buildFace(i, i + 1, last, triangleDirection));
 			}
 
-			faces.push_back(this->buildFace(last -1, last, offset, triangleDirection));
+			faces.push_back(this->buildFace(last -1, offset, last, triangleDirection));
 
 			return std::make_tuple(vertices, faces, boudingBox, centerPosition);
 		}

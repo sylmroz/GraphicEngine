@@ -22,7 +22,7 @@ namespace GraphicEngine::Engines::Graphic
 			float secondRadiusStep{ (radiusBottom - radiusTop) / (scale.z + 1) };
 			float boudingBoxRadius{ std::max(radiusBottom, radiusTop) };
 
-			Core::BoudingBox3D boudingBox(glm::vec3(-boudingBoxRadius, -boudingBoxRadius, 0.0f) + center, glm::vec3(boudingBoxRadius, boudingBoxRadius, height) + center);
+			Core::BoudingBox3D boudingBox(glm::vec3(-boudingBoxRadius, 0.0f, -boudingBoxRadius) + center, glm::vec3(boudingBoxRadius, height, boudingBoxRadius) + center);
 
 			std::vector<std::shared_ptr<Vertex>> vertices;
 			std::vector<std::shared_ptr<Scene::Face>> faces;
@@ -46,14 +46,14 @@ namespace GraphicEngine::Engines::Graphic
 					{
 						float internalFi{ glm::radians(x * fiStep) };
 						auto v2 = std::make_shared<Vertex>();
-						v2->position = glm::vec3(internalRadius * std::cos(internalFi), internalRadius * std::sin(internalFi), 0.0f) + center;
+						v2->position = glm::vec3(internalRadius * std::cos(internalFi), 0.0f, internalRadius * std::sin(internalFi)) + center;
 						vertices.push_back(v2);
 					}
 				}
 
 				for (uint32_t i{ 0 }; i < scale.x + 1; ++i)
 				{
-					faces.push_back(this->buildFace(verticesOffset - 1, verticesOffset + i + 1, verticesOffset + (i == scale.x ? 1 : i + 2), triangleDirection));
+					faces.push_back(this->buildFace(verticesOffset - 1, verticesOffset + (i == scale.x ? 1 : i + 2), verticesOffset + i + 1, triangleDirection));
 				}
 
 				for (uint32_t y{ 0 }; y < scale.y; ++y)
@@ -61,8 +61,8 @@ namespace GraphicEngine::Engines::Graphic
 					for (uint32_t x{ 0 }; x < scale.x + 1; ++x)
 					{
 						uint32_t point = x + (y * (scale.x + 1)) + 1;
-						faces.push_back(this->buildFace(point, point + 1 + scale.x, (x == scale.x ? point + 1 : point + 2 + scale.x), triangleDirection));
-						faces.push_back(this->buildFace(point, (x == scale.x ? point + 1 : point + 2 + scale.x), (x == scale.x ? (point - scale.x) : (point + 1)), triangleDirection));
+						faces.push_back(this->buildFace(point, (x == scale.x ? point + 1 : point + 2 + scale.x), point + 1 + scale.x, triangleDirection));
+						faces.push_back(this->buildFace(point, (x == scale.x ? (point - scale.x) : (point + 1)), (x == scale.x ? point + 1 : point + 2 + scale.x), triangleDirection));
 					}
 				}
 			}
@@ -78,7 +78,7 @@ namespace GraphicEngine::Engines::Graphic
 					{
 						float internalFi{ glm::radians(x * fiStep) };
 						auto v2 = std::make_shared<Vertex>();
-						v2->position = glm::vec3(internalRadius * std::cos(internalFi), internalRadius * std::sin(internalFi), z * heightStep) + center;
+						v2->position = glm::vec3(internalRadius * std::cos(internalFi), z * heightStep, internalRadius * std::sin(internalFi)) + center;
 						vertices.push_back(v2);
 					}
 				}
@@ -88,8 +88,8 @@ namespace GraphicEngine::Engines::Graphic
 					for (uint32_t x{ 0 }; x < scale.x + 1; ++x)
 					{
 						uint32_t point = x + (z * (scale.x + 1)) + verticesOffset;
-						faces.push_back(this->buildFace(point, point + 1 + scale.x, (x == scale.x ? point + 1 : point + 2 + scale.x), triangleDirection));
-						faces.push_back(this->buildFace(point, (x == scale.x ? point + 1 : point + 2 + scale.x), (x == scale.x ? (point - scale.x) : (point + 1)), triangleDirection));
+						faces.push_back(this->buildFace(point, (x == scale.x ? point + 1 : point + 2 + scale.x), point + 1 + scale.x, triangleDirection));
+						faces.push_back(this->buildFace(point, (x == scale.x ? (point - scale.x) : (point + 1)), (x == scale.x ? point + 1 : point + 2 + scale.x), triangleDirection));
 					}
 				}
 			}
@@ -99,7 +99,7 @@ namespace GraphicEngine::Engines::Graphic
 				verticesOffset = vertices.size();
 
 				auto v3 = std::make_shared<Vertex>();
-				v3->position = center + glm::vec3(0.0f, 0.0f, height);
+				v3->position = center + glm::vec3(0.0f, height, 0.0f);
 				vertices.push_back(v3);
 
 				verticesOffset = vertices.size();
@@ -111,14 +111,14 @@ namespace GraphicEngine::Engines::Graphic
 					{
 						float internalFi{ glm::radians(x * fiStep) };
 						auto v2 = std::make_shared<Vertex>();
-						v2->position = glm::vec3(internalRadius * std::cos(internalFi), internalRadius * std::sin(internalFi), height) + center;
+						v2->position = glm::vec3(internalRadius * std::cos(internalFi), height, internalRadius * std::sin(internalFi)) + center;
 						vertices.push_back(v2);
 					}
 				}
 
 				for (uint32_t i{ 0 }; i < scale.x + 1; ++i)
 				{
-					faces.push_back(this->buildFace(verticesOffset - 1, verticesOffset + (i == scale.x ? 1 : i + 2), verticesOffset + i + 1, triangleDirection));
+					faces.push_back(this->buildFace(verticesOffset - 1, verticesOffset + i + 1, verticesOffset + (i == scale.x ? 1 : i + 2), triangleDirection));
 				}
 
 				for (uint32_t y{ 0 }; y < scale.y; ++y)
@@ -126,8 +126,8 @@ namespace GraphicEngine::Engines::Graphic
 					for (uint32_t x{ 0 }; x < scale.x + 1; ++x)
 					{
 						uint32_t point = x + (y * (scale.x + 1)) + verticesOffset;
-						faces.push_back(this->buildFace(point, (x == scale.x ? point + 1 : point + 2 + scale.x), point + 1 + scale.x, triangleDirection));
-						faces.push_back(this->buildFace(point, (x == scale.x ? (point - scale.x) : (point + 1)), (x == scale.x ? point + 1 : point + 2 + scale.x), triangleDirection));
+						faces.push_back(this->buildFace(point, point + 1 + scale.x, (x == scale.x ? point + 1 : point + 2 + scale.x), triangleDirection));
+						faces.push_back(this->buildFace(point, (x == scale.x ? point + 1 : point + 2 + scale.x), (x == scale.x ? (point - scale.x) : (point + 1)), triangleDirection));
 					}
 				}
 			}
