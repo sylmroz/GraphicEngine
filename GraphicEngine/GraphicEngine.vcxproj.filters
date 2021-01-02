@@ -319,6 +319,7 @@
     <ClCompile Include="Drivers\Vulkan\Pipelines\VulkanSkyboxGraphicPipeline.cpp">
       <Filter>Drivers\Vulkan\Pipelines</Filter>
     </ClCompile>
+    <ClCompile Include="Common\RenderingEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Input\Keyboard\KeyboardEnumKeys.hpp">

@@ -181,6 +181,7 @@
     <ClCompile Include="Common\Camera.cpp" />
     <ClCompile Include="Common\CameraController.cpp" />
     <ClCompile Include="Common\Mouse.cpp" />
+    <ClCompile Include="Common\RenderingEngine.cpp" />
     <ClCompile Include="Common\TextureReader.cpp" />
     <ClCompile Include="Common\Widget.cpp" />
     <ClCompile Include="Core\Configuration.cpp" />

@@ -97,7 +97,7 @@ void GraphicEngine::Vulkan::VulkanSolidColorGraphicPipeline::addUniformBuffer()
 	{
 		m_solidColorUniformBuffer->addInstance();
 
-		std::vector<std::shared_ptr<IUniformBuffer>> uniformBuffers{ {m_cameraUniformBuffer, m_solidColorUniformBuffer} };
+		std::vector<std::shared_ptr<IUniformBuffer>> uniformBuffers{ {m_cameraUniformBuffer, m_ligthUniformBuffer, m_eyePositionUniformBuffer, m_solidColorUniformBuffer} };
 		updateDescriptorSets(m_framework->m_device, m_descriptorPool, m_descriptorSetLayout, m_framework->m_maxFrames, m_descriptorSets, uniformBuffers, {});
 	}
 
@@ -113,7 +113,7 @@ void GraphicEngine::Vulkan::VulkanSolidColorGraphicPipeline::deleteUniformBuffer
 		{
 			m_solidColorUniformBuffer->deleteInstance();
 
-			std::vector<std::shared_ptr<IUniformBuffer>> uniformBuffers{ {m_cameraUniformBuffer, m_solidColorUniformBuffer} };
+			std::vector<std::shared_ptr<IUniformBuffer>> uniformBuffers{ {m_cameraUniformBuffer, m_ligthUniformBuffer, m_eyePositionUniformBuffer, m_solidColorUniformBuffer} };
 			updateDescriptorSets(m_framework->m_device, m_descriptorPool, m_descriptorSetLayout, m_framework->m_maxFrames, m_descriptorSets, uniformBuffers, {});
 		}
 	}
