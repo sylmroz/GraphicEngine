@@ -322,6 +322,9 @@
     <ClCompile Include="Common\RenderingEngine.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="Services\LightManager.cpp">
+      <Filter>Services</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Input\Keyboard\KeyboardEnumKeys.hpp">
@@ -692,6 +695,12 @@
     </ClInclude>
     <ClInclude Include="Drivers\Vulkan\Pipelines\VulkanSkyboxGraphicPipeline.hpp">
       <Filter>Drivers\Vulkan\Pipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="Drivers\OpenGL\OpenGLShaderStorageBufferObject.hpp">
+      <Filter>Drivers\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Services\LightManager.hpp">
+      <Filter>Services</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

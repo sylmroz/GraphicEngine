@@ -14,8 +14,8 @@ void GraphicEngine::OpenGL::OpenGLShader::compile()
 	if (!succes)
 	{
 		std::string infoLog;
-		infoLog.reserve(512);
-		glGetShaderInfoLog(_shaderId, 512, nullptr, &infoLog[0]);
+		infoLog.reserve(1024);
+		glGetShaderInfoLog(_shaderId, 1024, nullptr, &infoLog[0]);
 		std::string error = std::string("OpenGL shader compilation error! ");
 		error += infoLog;
 		throw std::runtime_error(infoLog);
@@ -50,7 +50,7 @@ GraphicEngine::OpenGL::OpenGLShaderProgram::OpenGLShaderProgram(const std::vecto
 	if (!succes)
 	{
 		std::string infoLog;
-		infoLog.reserve(512);
+		infoLog.reserve(1024);
 		glGetProgramInfoLog(m_shaderProgramId, 1024, nullptr, &infoLog[0]);
 		std::string error = std::string("OpenGL program compilation error! ");
 		error += infoLog;

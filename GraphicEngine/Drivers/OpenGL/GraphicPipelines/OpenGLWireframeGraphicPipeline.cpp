@@ -20,7 +20,7 @@ void GraphicEngine::OpenGL::OpenGLWireframeGraphicPipeline::draw()
 	m_vertexBufferCollection->forEachEntity([&](auto vertexBufferCollection)
 	{
 		vertexBufferCollection->modelDescriptor.modelMatrix = vertexBufferCollection->mesh->getModelMatrix();
-		vertexBufferCollection->modelDescriptor.wireframeColor = Core::changeContrast(vertexBufferCollection->mesh->getMaterial().solidColor, glm::vec3(1.2f));
+		vertexBufferCollection->modelDescriptor.wireframeColor = glm::vec4(Core::changeContrast(glm::vec3(vertexBufferCollection->mesh->getMaterial().solidColor), glm::vec3(1.2f)), 1.0f);
 		m_wireframeModelDescriptorUniformBuffer->update(&vertexBufferCollection->modelDescriptor);
 		vertexBufferCollection->vertexBuffer->drawEdges(GL_LINES);
 	});

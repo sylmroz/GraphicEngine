@@ -219,6 +219,7 @@
     <ClCompile Include="Platform\Glfw\Vulkan\GlfwVulkanWindowContext.cpp" />
     <ClCompile Include="Scene\Resources\Transformation.cpp" />
     <ClCompile Include="Services\CameraControllerManager.cpp" />
+    <ClCompile Include="Services\LightManager.cpp" />
     <ClCompile Include="Services\ModelManager.cpp" />
     <ClCompile Include="UI\ImGui\ImGuiImpl.cpp" />
     <ClCompile Include="UI\ImGui\Widgets\Checkbox.cpp" />
@@ -284,6 +285,7 @@
     <ClInclude Include="Drivers\OpenGL\GraphicPipelines\OpenGLSkyboxGraphicPipeline.hpp" />
     <ClInclude Include="Drivers\OpenGL\GraphicPipelines\OpenGLSolidColorGraphicPipeline.hpp" />
     <ClInclude Include="Drivers\OpenGL\GraphicPipelines\OpenGLWireframeGraphicPipeline.hpp" />
+    <ClInclude Include="Drivers\OpenGL\OpenGLShaderStorageBufferObject.hpp" />
     <ClInclude Include="Drivers\OpenGL\OpenGLTextureCube.hpp" />
     <ClInclude Include="Drivers\OpenGL\OpenGLVertexBuffer.hpp" />
     <ClInclude Include="Drivers\OpenGL\OpenGLRenderingEngine.hpp" />
@@ -344,6 +346,7 @@
     <ClInclude Include="Scene\Resources\MeshMaterial.hpp" />
     <ClInclude Include="Scene\Resources\Transformation.hpp" />
     <ClInclude Include="Services\CameraControllerManager.hpp" />
+    <ClInclude Include="Services\LightManager.hpp" />
     <ClInclude Include="Services\ModelManager.hpp" />
     <ClInclude Include="UI\ImGui\ImGuiImpl.hpp" />
     <ClInclude Include="UI\ImGui\Widgets\Checkbox.hpp" />

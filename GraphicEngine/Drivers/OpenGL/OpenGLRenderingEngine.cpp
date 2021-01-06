@@ -9,12 +9,13 @@
 GraphicEngine::OpenGL::OpenGLRenderingEngine::OpenGLRenderingEngine(
 	std::shared_ptr<Services::CameraControllerManager> cameraControllerManager,
 	std::shared_ptr<Services::ModelManager> modelManager,
+	std::shared_ptr<Services::LightManager> lightManager,
 	std::shared_ptr<Core::EventManager> eventManager,
 	std::shared_ptr<Common::UI> ui,
 	std::shared_ptr<Core::Configuration> cfg,
 	std::unique_ptr<Core::Logger<OpenGLRenderingEngine>> logger) :
 	m_logger(std::move(logger)),
-	RenderingEngine(cameraControllerManager, modelManager, eventManager, ui, cfg)
+	RenderingEngine(cameraControllerManager, modelManager, lightManager, eventManager, ui, cfg)
 {
 	m_logger->info(__FILE__, __LINE__, __FUNCTION__, "Create OpenGL rendering engine instance.");
 }
@@ -29,7 +30,7 @@ bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 	auto viewMatrix = m_cameraControllerManager->getActiveCamera()->getViewMatrix();
 	auto projectionMatrix = m_cameraControllerManager->getActiveCamera()->getProjectionMatrix();
 
-	Engines::Graphic::Shaders::CameraMatrices cameraMatrices(viewMatrix, projectionMatrix);
+	Engines::Graphic::Shaders::CameraMatrices cameraMatrices{ viewMatrix, projectionMatrix };
 	
 	m_cameraUniformBuffer->update(&cameraMatrices);
 	
@@ -66,6 +67,16 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 		m_skyboxGraphicPipeline = std::make_unique<OpenGLSkyboxGraphicPipeline>(m_cfg->getProperty<std::string>("scene:skybox:base path"));
 
 		m_cameraUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::CameraMatrices>>(0);
+
+		m_directionalLight = std::make_shared<ShaderStorageBufferObject<Engines::Graphic::Shaders::DirectionalLight>>(7);
+		m_pointLights = std::make_shared<ShaderStorageBufferObject<Engines::Graphic::Shaders::PointLight>>(8);
+		m_spotLight = std::make_shared<ShaderStorageBufferObject<Engines::Graphic::Shaders::SpotLight>>(9);
+
+		m_directionalLight->update(m_lightManager->getDirectionalLights());
+
+		m_pointLights->update(m_lightManager->getPointLights());
+
+		m_spotLight->update(m_lightManager->getSpotLights());
 
 		m_modelManager->getModelEntityContainer()->forEachEntity([&](auto model)
 		{

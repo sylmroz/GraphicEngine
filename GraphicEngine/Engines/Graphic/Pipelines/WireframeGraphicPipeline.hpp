@@ -26,10 +26,8 @@ namespace GraphicEngine::Engines::Graphic
 		{
 			auto vertexBufferCollection = std::make_shared<WireframeVertexBufferCollection<VertexType, VertexBuffer>>();
 			vertexBufferCollection->vertexBuffer = vertexBuffer;
-			glm::vec3 color = mesh->getMaterial().solidColor;
-			color = Core::changeContrast(color, glm::vec3(1.2f));
-			vertexBufferCollection->modelDescriptor.wireframeColor = color;
 			vertexBufferCollection->mesh = mesh;
+			vertexBufferCollection->modelDescriptor.wireframeColor = glm::vec4(Core::changeContrast(glm::vec3(vertexBufferCollection->mesh->getMaterial().solidColor), glm::vec3(1.2f)), 1.0f);
 			return vertexBufferCollection;
 		}
 

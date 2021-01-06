@@ -14,5 +14,10 @@ namespace GraphicEngine::Core::Utils::Converter
 		{
 			return Obj(arr[0], arr[1], arr[2]);
 		}
+
+		if constexpr (N == 4)
+		{
+			return Obj(arr[0], arr[1], arr[2], arr[3]);
+		}
 	}
 }

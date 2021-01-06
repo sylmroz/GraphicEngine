@@ -6,6 +6,6 @@ namespace GraphicEngine::Scene
 {
 	struct MeshMaterial
 	{
-		glm::vec3 solidColor;
+		glm::vec4 solidColor;
 	};
 }

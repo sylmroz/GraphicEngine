@@ -12,6 +12,7 @@
 #include "../Core/Utils/ObjectConverter.hpp"
 #include "../Services/CameraControllerManager.hpp"
 #include "../Services/ModelManager.hpp"
+#include "../Services/LightManager.hpp"
 
 #include "../Engines//Graphic/Shaders/Models/Light.hpp"
 
@@ -25,6 +26,7 @@ namespace GraphicEngine
 	public:
 		RenderingEngine(std::shared_ptr<Services::CameraControllerManager> cameraControllerManager,
 			std::shared_ptr<Services::ModelManager> modelManager,
+			std::shared_ptr<Services::LightManager> lightManager,
 			std::shared_ptr<Core::EventManager> eventManager,
 			std::shared_ptr<Common::UI> ui,
 			std::shared_ptr<Core::Configuration> cfg);
@@ -38,6 +40,7 @@ namespace GraphicEngine
 	protected:
 		std::shared_ptr<Services::CameraControllerManager> m_cameraControllerManager;
 		std::shared_ptr<Services::ModelManager> m_modelManager;
+		std::shared_ptr<Services::LightManager> m_lightManager;
 		std::shared_ptr<Core::EventManager> m_eventManager;
 		std::shared_ptr<Common::UI> m_ui;
 		std::shared_ptr<Core::Configuration> m_cfg;

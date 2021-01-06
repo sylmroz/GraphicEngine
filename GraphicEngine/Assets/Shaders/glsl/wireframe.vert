@@ -13,13 +13,13 @@ layout (std140, binding = 0) uniform CameraMatrices
 layout(std140) uniform WireframeModelDescriptor
 {
     mat4 modelMatrix;
-    vec3 wireframeColor;
+    vec4 wireframeColor;
 } wireframeModelDescriptor;
 
 layout (location = 0) out vec3 wireframeColor;
 
 void main()
 {
-    wireframeColor = wireframeModelDescriptor.wireframeColor;
+    wireframeColor = vec3(wireframeModelDescriptor.wireframeColor);
     gl_Position = cameraMatrices.projection * cameraMatrices.view * wireframeModelDescriptor.modelMatrix * vec4(inPosition, 1.0);
 }

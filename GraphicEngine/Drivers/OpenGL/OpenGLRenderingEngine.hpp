@@ -8,6 +8,7 @@
 #include "OpenGLTexture.hpp"
 #include "OpenGLUniformBuffer.hpp"
 #include "OpenGLVertexBuffer.hpp"
+#include "OpenGLShaderStorageBufferObject.hpp"
 
 // Pipelines
 #include "GraphicPipelines/OpenGLWireframeGraphicPipeline.hpp"
@@ -24,6 +25,7 @@ namespace GraphicEngine::OpenGL
 	public:
 		OpenGLRenderingEngine(std::shared_ptr<Services::CameraControllerManager> cameraControllerManager,
 			std::shared_ptr<Services::ModelManager> modelManager,
+			std::shared_ptr<Services::LightManager> lightManager,
 			std::shared_ptr<Core::EventManager> eventManager,
 			std::shared_ptr<Common::UI> ui,
 			std::shared_ptr<Core::Configuration> cfg,
@@ -36,6 +38,9 @@ namespace GraphicEngine::OpenGL
 		virtual ~OpenGLRenderingEngine() = default;
 	private:
 		std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::CameraMatrices>> m_cameraUniformBuffer;
+		std::shared_ptr<ShaderStorageBufferObject<Engines::Graphic::Shaders::DirectionalLight>> m_directionalLight;
+		std::shared_ptr<ShaderStorageBufferObject<Engines::Graphic::Shaders::PointLight>> m_pointLights;
+		std::shared_ptr<ShaderStorageBufferObject<Engines::Graphic::Shaders::SpotLight>> m_spotLight;
 
 		std::unique_ptr<Core::Logger<OpenGLRenderingEngine>> m_logger;
 

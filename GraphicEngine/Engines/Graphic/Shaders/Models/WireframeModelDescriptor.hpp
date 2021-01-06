@@ -6,11 +6,11 @@ namespace GraphicEngine::Engines::Graphic::Shaders
 	struct WireframeModelDescriptor
 	{
 		WireframeModelDescriptor() = default;
-		WireframeModelDescriptor(glm::vec3 wireframeColor) :
+		WireframeModelDescriptor(glm::vec4 wireframeColor) :
 			wireframeColor{ wireframeColor },
 			modelMatrix{} {}
 
 		alignas(16) glm::mat4 modelMatrix;
-		alignas(16) glm::vec3 wireframeColor;
+		alignas(16) glm::vec4 wireframeColor;
 	};
 }

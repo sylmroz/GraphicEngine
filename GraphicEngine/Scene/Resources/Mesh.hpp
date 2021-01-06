@@ -27,14 +27,14 @@ namespace GraphicEngine::Scene
 	public:
 		Mesh() 
 		{
-			m_material.solidColor = Core::randomColor();;
+			m_material.solidColor = glm::vec4(Core::randomColor(), 1.0f);
 		}
 		Mesh(const std::vector<std::shared_ptr<Vertex>>& vertices, const std::vector<std::shared_ptr<Face>>& faces)
 		{
 			m_vertices = std::move(vertices);
 			m_faces = std::move(faces);
 			generateBoudingBox();
-			m_material.solidColor = Core::randomColor();;
+			m_material.solidColor = glm::vec4(Core::randomColor(), 1.0f);
 		}
 
 		Mesh(const std::vector<std::shared_ptr<Vertex>>& vertices, const std::vector<std::shared_ptr<Face>>& faces, Core::BoudingBox3D boudingBox)
@@ -43,7 +43,7 @@ namespace GraphicEngine::Scene
 			m_faces = std::move(faces);
 			m_boudingBox = boudingBox;
 			m_pivotPoint = boudingBox.getCenter();
-			m_material.solidColor = Core::randomColor();;
+			m_material.solidColor = glm::vec4(Core::randomColor(), 1.0f);
 		}
 
 		Mesh(const std::vector<std::shared_ptr<Vertex>>& vertices, const std::vector<std::shared_ptr<Face>>& faces, glm::vec3 centralPosition)
@@ -52,7 +52,7 @@ namespace GraphicEngine::Scene
 			m_faces = std::move(faces);
 			generateBoudingBox(false);
 			m_pivotPoint = centralPosition;
-			m_material.solidColor = Core::randomColor();;
+			m_material.solidColor = glm::vec4(Core::randomColor(), 1.0f);
 		}
 
 		Mesh(const std::vector<std::shared_ptr<Vertex>>& vertices, const std::vector<std::shared_ptr<Face>>& faces, Core::BoudingBox3D boudingBox, glm::vec3 centralPosition)
@@ -61,7 +61,7 @@ namespace GraphicEngine::Scene
 			m_faces = std::move(faces);
 			m_boudingBox = boudingBox;
 			m_pivotPoint = centralPosition;
-			m_material.solidColor = Core::randomColor();;
+			m_material.solidColor = glm::vec4(Core::randomColor(), 1.0f);
 		}
 
 		template <template<typename> typename VertexBufferFactory, template<typename> typename VertexBuffer, typename... Args>
