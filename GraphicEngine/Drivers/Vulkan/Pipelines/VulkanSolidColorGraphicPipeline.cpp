@@ -4,14 +4,19 @@
 #include "../../../Core/Utils/MemberTraits.hpp"
 
 GraphicEngine::Vulkan::VulkanSolidColorGraphicPipeline::VulkanSolidColorGraphicPipeline(std::shared_ptr<VulkanFramework> framework, std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::CameraMatrices>> cameraUniformBuffer,
-	std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::Light>> lightUniformBuffer, std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::Eye>> eyePositionUniformBuffer,
+	std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::Eye>> eyePositionUniformBuffer,
+	std::shared_ptr<ShaderStorageBufferObject<Engines::Graphic::Shaders::DirectionalLight>> directionalLight, std::shared_ptr<ShaderStorageBufferObject<Engines::Graphic::Shaders::PointLight>> pointLights,
+	std::shared_ptr<ShaderStorageBufferObject<Engines::Graphic::Shaders::SpotLight>> spotLight,
 	std::shared_ptr<Services::CameraControllerManager> cameraControllerManager):
 	Engines::Graphic::SolidColorGraphicPipeline<VertexBuffer, UniformBuffer, UniformBufferDynamic, vk::UniqueCommandBuffer&, int>{ cameraControllerManager },
 	m_framework{ framework }
 {
 	m_cameraUniformBuffer = cameraUniformBuffer;
-	m_ligthUniformBuffer = lightUniformBuffer;
 	m_eyePositionUniformBuffer = eyePositionUniformBuffer;
+
+	m_directionalLight = directionalLight;
+	m_pointLights = pointLights;
+	m_spotLight = spotLight;
 
 	m_vulkanGraphicPipelines = std::make_shared<Common::EntityByVertexTypeManager<VulkanGraphicPipelineInfo>>();
 	
@@ -22,7 +27,9 @@ GraphicEngine::Vulkan::VulkanSolidColorGraphicPipeline::VulkanSolidColorGraphicP
 	m_descriptorSetLayout = createDescriptorSetLayout(m_framework->m_device,
 		{ 
 			{ m_cameraUniformBuffer->getDescriptorType(), 1, vk::ShaderStageFlagBits::eVertex },
-			{ m_ligthUniformBuffer->getDescriptorType(), 1, vk::ShaderStageFlagBits::eFragment },
+			{ m_directionalLight->getDescriptorType(), 1, vk::ShaderStageFlagBits::eFragment },
+			{ m_pointLights->getDescriptorType(), 1, vk::ShaderStageFlagBits::eFragment },
+			{ m_spotLight->getDescriptorType(), 1, vk::ShaderStageFlagBits::eFragment },
 			{ m_eyePositionUniformBuffer->getDescriptorType(), 1, vk::ShaderStageFlagBits::eFragment },
 			{ m_solidColorUniformBuffer->getDescriptorType(), 1, vk::ShaderStageFlagBits::eVertex }
 		},
@@ -31,7 +38,9 @@ GraphicEngine::Vulkan::VulkanSolidColorGraphicPipeline::VulkanSolidColorGraphicP
 	m_descriptorPool = createDescriptorPool(m_framework->m_device,
 		{ 
 			vk::DescriptorPoolSize(m_cameraUniformBuffer->getDescriptorType(), m_framework->m_maxFrames),
-			vk::DescriptorPoolSize(m_ligthUniformBuffer->getDescriptorType(), m_framework->m_maxFrames),
+			vk::DescriptorPoolSize(m_directionalLight->getDescriptorType(), m_framework->m_maxFrames),
+			vk::DescriptorPoolSize(m_pointLights->getDescriptorType(), m_framework->m_maxFrames),
+			vk::DescriptorPoolSize(m_spotLight->getDescriptorType(), m_framework->m_maxFrames),
 			vk::DescriptorPoolSize(m_eyePositionUniformBuffer->getDescriptorType(), m_framework->m_maxFrames),
 			vk::DescriptorPoolSize(m_solidColorUniformBuffer->getDescriptorType(), m_framework->m_maxFrames) 
 		});
@@ -40,7 +49,7 @@ GraphicEngine::Vulkan::VulkanSolidColorGraphicPipeline::VulkanSolidColorGraphicP
 
 	m_descriptorSets = m_framework->m_device->allocateDescriptorSetsUnique(vk::DescriptorSetAllocateInfo(m_descriptorPool.get(), layouts.size(), layouts.data()));
 
-	std::vector<std::shared_ptr<IUniformBuffer>> uniformBuffers{ {m_cameraUniformBuffer, m_ligthUniformBuffer, m_eyePositionUniformBuffer, m_solidColorUniformBuffer} };
+	std::vector<std::shared_ptr<IUniformBuffer>> uniformBuffers{ {m_cameraUniformBuffer, m_directionalLight, m_pointLights, m_spotLight, m_eyePositionUniformBuffer, m_solidColorUniformBuffer} };
 
 	updateDescriptorSets(m_framework->m_device, m_descriptorPool, m_descriptorSetLayout, m_framework->m_maxFrames, m_descriptorSets, uniformBuffers, {});
 
@@ -97,7 +106,7 @@ void GraphicEngine::Vulkan::VulkanSolidColorGraphicPipeline::addUniformBuffer()
 	{
 		m_solidColorUniformBuffer->addInstance();
 
-		std::vector<std::shared_ptr<IUniformBuffer>> uniformBuffers{ {m_cameraUniformBuffer, m_ligthUniformBuffer, m_eyePositionUniformBuffer, m_solidColorUniformBuffer} };
+		std::vector<std::shared_ptr<IUniformBuffer>> uniformBuffers{ {m_cameraUniformBuffer, m_directionalLight, m_pointLights, m_spotLight, m_eyePositionUniformBuffer, m_solidColorUniformBuffer} };
 		updateDescriptorSets(m_framework->m_device, m_descriptorPool, m_descriptorSetLayout, m_framework->m_maxFrames, m_descriptorSets, uniformBuffers, {});
 	}
 
@@ -113,7 +122,7 @@ void GraphicEngine::Vulkan::VulkanSolidColorGraphicPipeline::deleteUniformBuffer
 		{
 			m_solidColorUniformBuffer->deleteInstance();
 
-			std::vector<std::shared_ptr<IUniformBuffer>> uniformBuffers{ {m_cameraUniformBuffer, m_ligthUniformBuffer, m_eyePositionUniformBuffer, m_solidColorUniformBuffer} };
+			std::vector<std::shared_ptr<IUniformBuffer>> uniformBuffers{ {m_cameraUniformBuffer, m_directionalLight, m_pointLights, m_spotLight, m_eyePositionUniformBuffer, m_solidColorUniformBuffer} };
 			updateDescriptorSets(m_framework->m_device, m_descriptorPool, m_descriptorSetLayout, m_framework->m_maxFrames, m_descriptorSets, uniformBuffers, {});
 		}
 	}

@@ -31,7 +31,7 @@ bool GraphicEngine::Vulkan::VulkanRenderingEngine::drawFrame()
 		auto view = m_cameraControllerManager->getActiveCamera()->getViewMatrix();
 		auto projection = m_cameraControllerManager->getActiveCamera()->getProjectionMatrix();
 
-		glm::vec4 eyePosition = projection* view * glm::vec4(m_cameraControllerManager->getActiveCamera()->getPosition(), 1.0);
+		glm::vec4 eyePosition = glm::vec4(m_cameraControllerManager->getActiveCamera()->getPosition(), 1.0);
 
 		Engines::Graphic::Shaders::Light light{ eyePosition, glm::vec4{ 1.0f } };
 		Engines::Graphic::Shaders::Eye eye{ eyePosition };
@@ -39,7 +39,9 @@ bool GraphicEngine::Vulkan::VulkanRenderingEngine::drawFrame()
 		Engines::Graphic::Shaders::CameraMatrices cameraMatrix(view, projection);
 		m_cameraUniformBuffer->updateAndSet(cameraMatrix);
 		m_eyePositionUniformBuffer->updateAndSet(eye);
-		m_lightUniformBuffer->updateAndSet(light);
+		m_directionalLight->update(m_lightManager->getDirectionalLights());
+		//m_pointLights->update(m_lightManager->getPointLights());
+		//m_spotLight->update(m_lightManager->getSpotLights());
 
 		if (displayNormal)
 			m_normalDebugGraphicPipeline->updateDynamicUniforms();
@@ -72,11 +74,14 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 			.initalizeRenderingBarriers();
 
 		m_cameraUniformBuffer = m_framework->getUniformBuffer<UniformBuffer,Engines::Graphic::Shaders::CameraMatrices>();
-		m_lightUniformBuffer = m_framework->getUniformBuffer<UniformBuffer, Engines::Graphic::Shaders::Light>();
+		m_directionalLight = std::make_shared<ShaderStorageBufferObject<Engines::Graphic::Shaders::DirectionalLight>>(m_framework.get());
+		m_pointLights = std::make_shared<ShaderStorageBufferObject<Engines::Graphic::Shaders::PointLight>>(m_framework.get());
+		m_spotLight = std::make_shared<ShaderStorageBufferObject<Engines::Graphic::Shaders::SpotLight>>(m_framework.get());
+		
 		m_eyePositionUniformBuffer = m_framework->getUniformBuffer<UniformBuffer, Engines::Graphic::Shaders::Eye>();
 
 		m_wireframeGraphicPipeline = std::make_shared<VulkanWireframeGraphicPipeline>(m_framework, m_cameraUniformBuffer);
-		m_solidColorraphicPipeline = std::make_shared<VulkanSolidColorGraphicPipeline>(m_framework, m_cameraUniformBuffer, m_lightUniformBuffer, m_eyePositionUniformBuffer, m_cameraControllerManager);
+		m_solidColorraphicPipeline = std::make_shared<VulkanSolidColorGraphicPipeline>(m_framework, m_cameraUniformBuffer, m_eyePositionUniformBuffer, m_directionalLight, m_pointLights, m_spotLight, m_cameraControllerManager);
 		m_normalDebugGraphicPipeline = std::make_shared<VulkanNormalDebugGraphicPipeline>(m_framework, m_cameraUniformBuffer, m_cameraControllerManager);
 		m_skyboxGraphicPipeline = std::make_unique<VulkanSkyboxGraphicPipeline>(m_framework, m_cameraUniformBuffer, m_cfg->getProperty<std::string>("scene:skybox:base path"));
 
@@ -92,8 +97,6 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 		});
 		m_uiRenderingBackend = std::make_shared<GUI::ImGuiImpl::VulkanRenderEngineBackend>(m_framework);
 		m_ui->addBackend(m_uiRenderingBackend);
-
-		// buildCommandBuffers();
 	}
 
 	catch (vk::SystemError& err)

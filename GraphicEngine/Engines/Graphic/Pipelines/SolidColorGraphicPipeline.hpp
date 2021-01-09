@@ -43,7 +43,6 @@ namespace GraphicEngine::Engines::Graphic
 	protected:
 		std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::CameraMatrices>> m_cameraUniformBuffer;
 		std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::Eye>> m_eyePositionUniformBuffer;
-		std::shared_ptr<UniformBuffer<Shaders::Light>> m_ligthUniformBuffer;
 		std::shared_ptr<Services::CameraControllerManager> m_cameraControllerManager;
 		std::shared_ptr<UniformBufferDynamic<Shaders::SolidColorModelDescriptor>> m_solidColorUniformBuffer;
 	};

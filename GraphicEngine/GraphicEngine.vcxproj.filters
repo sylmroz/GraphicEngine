@@ -702,5 +702,8 @@
     <ClInclude Include="Services\LightManager.hpp">
       <Filter>Services</Filter>
     </ClInclude>
+    <ClInclude Include="Drivers\Vulkan\VulkanShaderStorageBufferObject.hpp">
+      <Filter>Drivers\Vulkan</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

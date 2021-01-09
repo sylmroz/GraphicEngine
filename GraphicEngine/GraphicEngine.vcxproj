@@ -305,6 +305,7 @@
     <ClInclude Include="Drivers\Vulkan\VulkanHelper.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanRenderingEngine.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanShaderFactory.hpp" />
+    <ClInclude Include="Drivers\Vulkan\VulkanShaderStorageBufferObject.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanTexture.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanTextureCube.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanTextureFactory.hpp" />

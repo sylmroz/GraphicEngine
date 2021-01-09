@@ -2,6 +2,7 @@
 
 #include "../../../Engines/Graphic/Pipelines/SolidColorGraphicPipeline.hpp"
 #include "VulkanGraphicPipeline.hpp"
+#include "../VulkanShaderStorageBufferObject.hpp"
 
 #include <array>
 
@@ -11,7 +12,9 @@ namespace GraphicEngine::Vulkan
 	{
 	public:
 		VulkanSolidColorGraphicPipeline(std::shared_ptr<VulkanFramework> framework, std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::CameraMatrices>> cameraUniformBuffer,
-			std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::Light>> lightUniformBuffer, std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::Eye>> eyePositionUniformBuffer,
+			std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::Eye>> eyePositionUniformBuffer,
+			std::shared_ptr<ShaderStorageBufferObject<Engines::Graphic::Shaders::DirectionalLight>> directionalLight, std::shared_ptr<ShaderStorageBufferObject<Engines::Graphic::Shaders::PointLight>> pointLights,
+			std::shared_ptr<ShaderStorageBufferObject<Engines::Graphic::Shaders::SpotLight>> spotLight,
 		std::shared_ptr<Services::CameraControllerManager> cameraControllerManager);
 
 		template <typename VertexType>
@@ -48,6 +51,9 @@ namespace GraphicEngine::Vulkan
 		std::shared_ptr<Common::EntityByVertexTypeManager<VulkanGraphicPipelineInfo>> m_vulkanGraphicPipelines;
 		uint32_t alignedSize;
 		std::vector<Engines::Graphic::Shaders::SolidColorModelDescriptor> m_solidColorModelDescriptors;
+		std::shared_ptr<ShaderStorageBufferObject<Engines::Graphic::Shaders::DirectionalLight>> m_directionalLight;
+		std::shared_ptr<ShaderStorageBufferObject<Engines::Graphic::Shaders::PointLight>> m_pointLights;
+		std::shared_ptr<ShaderStorageBufferObject<Engines::Graphic::Shaders::SpotLight>> m_spotLight;
 
 	private:
 		vk::UniqueDescriptorPool m_descriptorPool;

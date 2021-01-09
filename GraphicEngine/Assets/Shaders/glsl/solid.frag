@@ -6,17 +6,6 @@ layout (location = 0) in vec3 position;
 layout (location = 1) in vec3 normal;
 layout (location = 2) in vec3 solidColor;
 
-layout (std140) uniform Eye
-{
-    vec4 eyePosition;
-} eye;
-
-/*layout (std140) uniform Light
-{
-    vec4 position;
-    vec4 color;
-} light;*/
-
 struct LightColor
 {
     vec4 diffuse;
@@ -69,6 +58,12 @@ layout (std430, binding = 9) buffer SpotLight
     SpotLightBuffer spotLights[];
 } spotLight;
 
+layout (std140) uniform Eye
+{
+    vec4 eyePosition;
+} eye;
+
+
 layout (location = 0) out vec4 outColor;
 
 vec3 CalcDirectionalLight(DirectionalLightBuffer light)
@@ -110,9 +105,9 @@ vec3 CalcSpotLight(SpotLightBuffer light)
 void main()
 {
     if (directionalLight.light_length == 0 &&
-        pointLight.pointLights.length() == 0 &&
-        spotLight.spotLights.length() == 0)
-    { 
+        pointLight.light_length == 0 &&
+        spotLight.light_length == 0)
+    {
         vec3 lightDir = normalize(vec3(eye.eyePosition) - position);
         float I = max(dot(normal, lightDir), 0.0);
         vec3 color = clamp((I + 0.2), 0 , 1) * solidColor;
@@ -137,6 +132,6 @@ void main()
             lightStrength += CalcSpotLight(spotLight.spotLights[i]);
         }
 
-        outColor = vec4(clamp(lightStrength, 0.0, 1.0), 1.0);
+        outColor = vec4(lightStrength, 1.0);
     }
 }

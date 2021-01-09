@@ -8,9 +8,10 @@ namespace GraphicEngine::Vulkan
 	class IUniformBuffer
 	{
 	public:
-		IUniformBuffer(VulkanFramework* framework, vk::DescriptorType descriptorType): 
-			m_descriptorType{descriptorType},
-			m_framework{framework}
+		IUniformBuffer(VulkanFramework* framework, vk::DescriptorType descriptorType, vk::BufferUsageFlags usageFlags):
+			m_descriptorType{ descriptorType },
+			m_framework{ framework },
+			m_usageFlags{ usageFlags }
 		{}
 
 		vk::DescriptorType getDescriptorType()
@@ -30,12 +31,13 @@ namespace GraphicEngine::Vulkan
 			bufferData.clear();
 			for (uint32_t i{ 0 }; i < m_framework->m_maxFrames; ++i)
 			{
-				bufferData.emplace_back(std::make_shared<BufferData>(m_framework->m_physicalDevice, m_framework->m_device, vk::BufferUsageFlagBits::eUniformBuffer,
+				bufferData.emplace_back(std::make_shared<BufferData>(m_framework->m_physicalDevice, m_framework->m_device, m_usageFlags,
 					vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent, size));
 			}
 		}
 	protected:
 		vk::DescriptorType m_descriptorType;
+		vk::BufferUsageFlags m_usageFlags;
 		VulkanFramework* m_framework;
 	};
 
@@ -43,7 +45,7 @@ namespace GraphicEngine::Vulkan
 	class UniformBuffer : public IUniformBuffer
 	{
 	public:
-		UniformBuffer(VulkanFramework* framework) : IUniformBuffer(framework, vk::DescriptorType::eUniformBuffer)
+		UniformBuffer(VulkanFramework* framework) : IUniformBuffer(framework, vk::DescriptorType::eUniformBuffer, vk::BufferUsageFlagBits::eUniformBuffer)
 		{
 			initializeBufferData(sizeof(T));
 		}
@@ -77,7 +79,7 @@ namespace GraphicEngine::Vulkan
 	class UniformBufferDynamic : public IUniformBuffer
 	{
 	public:
-		UniformBufferDynamic(VulkanFramework* framework, uint32_t instances) : IUniformBuffer(framework, vk::DescriptorType::eUniformBufferDynamic)
+		UniformBufferDynamic(VulkanFramework* framework, uint32_t instances) : IUniformBuffer(framework, vk::DescriptorType::eUniformBufferDynamic, vk::BufferUsageFlagBits::eUniformBuffer)
 		{
 			m_aligmentSize = getDynamicAligmentSize<T>(framework->m_physicalDevice);
 			resizeInstancesCount(instances);

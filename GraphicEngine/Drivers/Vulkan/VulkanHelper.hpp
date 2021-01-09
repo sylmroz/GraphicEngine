@@ -14,7 +14,7 @@ namespace GraphicEngine::Vulkan
 	void copyMemoryToDevice(const vk::UniqueDevice& device, const vk::UniqueDeviceMemory& memory, const T* data, uint32_t count, uint32_t offset)
 	{
 		uint32_t deviceSize = sizeof(T) * count;
-		uint32_t deviceOffset = sizeof(T) * offset;
+		uint32_t deviceOffset = offset;
 		void* _data;
 		device->mapMemory(memory.get(), deviceOffset, deviceSize, vk::MemoryMapFlags(), &_data);
 		memcpy(_data, data, deviceSize);
