@@ -36,11 +36,14 @@ namespace GraphicEngine::OpenGL
 
 		void update(std::vector<T> values)
 		{
-			glBindBuffer(GL_SHADER_STORAGE_BUFFER, m_ssbo);
-			auto size = values.size();
-			glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, sizeof(unsigned int), &size);
-			glBufferSubData(GL_SHADER_STORAGE_BUFFER, 4 * sizeof(float), sizeof(T) * values.size(), &values[0]);
-			glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+			if (values.size() > 0)
+			{
+				glBindBuffer(GL_SHADER_STORAGE_BUFFER, m_ssbo);
+				auto size = values.size();
+				glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, sizeof(unsigned int), &size);
+				glBufferSubData(GL_SHADER_STORAGE_BUFFER, 4 * sizeof(float), sizeof(T) * values.size(), &values[0]);
+				glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+			}
 		}
 
 		void update(T& val, uint32_t index)

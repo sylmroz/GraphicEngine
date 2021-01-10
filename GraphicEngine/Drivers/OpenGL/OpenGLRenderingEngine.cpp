@@ -52,6 +52,8 @@ bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t height)
 {
 	m_logger->info(__FILE__, __LINE__, __FUNCTION__, "Initialize OpenGL rendering engine instance.");
+	
+	glewExperimental = GL_TRUE;
 
 	if (glewInit() != GLEW_OK)
 	{

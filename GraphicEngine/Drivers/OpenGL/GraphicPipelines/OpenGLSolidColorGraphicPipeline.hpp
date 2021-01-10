@@ -13,5 +13,6 @@ namespace GraphicEngine::OpenGL
 		virtual void draw() override;
 	private:
 		std::shared_ptr<OpenGLShaderProgram> m_shaderProgram;
+		GLuint m_diffuseOnlyIndex;
 	};
 }

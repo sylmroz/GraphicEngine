@@ -13,11 +13,16 @@ GraphicEngine::OpenGL::OpenGLSolidColorGraphicPipeline::OpenGLSolidColorGraphicP
 	m_eyePositionUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::Eye>>(2, m_shaderProgram);
 	// m_ligthUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::Light>>(3, m_shaderProgram);
 	m_solidColorUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::SolidColorModelDescriptor>>(4, m_shaderProgram);
+	m_shaderProgram->use();
+	m_diffuseOnlyIndex = glGetSubroutineIndex(m_shaderProgram->getShaderProgramId(), GL_FRAGMENT_SHADER, "BlinnPhong");
 }
 
 void GraphicEngine::OpenGL::OpenGLSolidColorGraphicPipeline::draw()
 {
 	m_shaderProgram->use();
+
+	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &m_diffuseOnlyIndex);
+
 	auto viewMatrix = m_cameraControllerManager->getActiveCamera()->getViewMatrix();
 	auto projectionMatrix = m_cameraControllerManager->getActiveCamera()->getProjectionMatrix();
 	auto eyePosition = m_cameraControllerManager->getActiveCamera()->getPosition();
