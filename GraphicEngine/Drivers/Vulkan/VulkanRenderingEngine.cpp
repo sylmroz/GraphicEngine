@@ -12,12 +12,13 @@ GraphicEngine::Vulkan::VulkanRenderingEngine::VulkanRenderingEngine(std::shared_
 	std::shared_ptr<Services::CameraControllerManager> cameraControllerManager,
 	std::shared_ptr<Services::ModelManager> modelManager,
 	std::shared_ptr<Services::LightManager> lightManager,
+	std::shared_ptr<Services::ViewportManager> viewportManager,
 	std::shared_ptr<Core::EventManager> eventManager,
 	std::shared_ptr<Common::UI> ui,
 	std::shared_ptr<Core::Configuration> cfg,
 	std::unique_ptr<Core::Logger<VulkanRenderingEngine>> logger) :
 	m_vulkanWindowContext(vulkanWindowContext),
-	RenderingEngine(cameraControllerManager, modelManager, lightManager, eventManager, ui, cfg)
+	RenderingEngine(cameraControllerManager, modelManager, lightManager, viewportManager, eventManager, ui, cfg)
 {
 }
 
@@ -43,11 +44,11 @@ bool GraphicEngine::Vulkan::VulkanRenderingEngine::drawFrame()
 		//m_pointLights->update(m_lightManager->getPointLights());
 		//m_spotLight->update(m_lightManager->getSpotLights());
 
-		if (displayNormal)
+		if (m_viewportManager->displayNormal)
 			m_normalDebugGraphicPipeline->updateDynamicUniforms();
-		if (displayWireframe)
+		if (m_viewportManager->displayWireframe)
 			m_wireframeGraphicPipeline->updateDynamicUniforms();
-		if (displaySolid)
+		if (m_viewportManager->displaySolid)
 			m_solidColorraphicPipeline->updateDynamicUniforms();
 		
 
@@ -135,9 +136,9 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::buildCommandBuffers()
 {
 	std::array<vk::ClearValue, 3> clearValues;
 
-	clearValues[0].color = vk::ClearColorValue(std::array<float, 4>({ backgroudColor.r, backgroudColor.g, backgroudColor.b, backgroudColor.a }));
+	clearValues[0].color = vk::ClearColorValue(std::array<float, 4>({ m_viewportManager->backgroudColor.r, m_viewportManager->backgroudColor.g, m_viewportManager->backgroudColor.b, m_viewportManager->backgroudColor.a }));
 	clearValues[1].depthStencil = vk::ClearDepthStencilValue(1.0f, 0.0f);
-	clearValues[2].color = vk::ClearColorValue(std::array<float, 4>({ backgroudColor.r, backgroudColor.g, backgroudColor.b, backgroudColor.a }));
+	clearValues[2].color = vk::ClearColorValue(std::array<float, 4>({ m_viewportManager->backgroudColor.r, m_viewportManager->backgroudColor.g, m_viewportManager->backgroudColor.b, m_viewportManager->backgroudColor.a }));
 	int i{ 0 };
 	m_framework->m_device->waitIdle();
 
@@ -155,14 +156,14 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::buildCommandBuffers()
 		vk::RenderPassBeginInfo renderPassBeginInfo(m_framework->m_renderPass.get(), m_framework->m_frameBuffers[i].get(), vk::Rect2D(vk::Offset2D(0, 0), m_framework->m_swapChainData.extent), static_cast<uint32_t>(clearValues.size()), clearValues.data());
 		commandBuffer->beginRenderPass(renderPassBeginInfo, vk::SubpassContents::eInline);
 
-		if (displayNormal)
+		if (m_viewportManager->displayNormal)
 			m_normalDebugGraphicPipeline->draw(commandBuffer, i);
-		if (displayWireframe)
+		if (m_viewportManager->displayWireframe)
 			m_wireframeGraphicPipeline->draw(commandBuffer, i);
-		if (displaySolid)
+		if (m_viewportManager->displaySolid)
 			m_solidColorraphicPipeline->draw(commandBuffer, i);
-		
-		m_skyboxGraphicPipeline->draw(commandBuffer, i);
+		if (m_viewportManager->displaySkybox)
+			m_skyboxGraphicPipeline->draw(commandBuffer, i);
 
 		m_uiRenderingBackend->renderData(commandBuffer);
 

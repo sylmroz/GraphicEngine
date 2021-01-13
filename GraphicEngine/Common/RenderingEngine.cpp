@@ -2,10 +2,11 @@
 
 #include "../Engines/Graphic/3D/ObjectGenerator.hpp"
 
-GraphicEngine::RenderingEngine::RenderingEngine(std::shared_ptr<Services::CameraControllerManager> cameraControllerManager, std::shared_ptr<Services::ModelManager> modelManager, std::shared_ptr<Services::LightManager> lightManager, std::shared_ptr<Core::EventManager> eventManager, std::shared_ptr<Common::UI> ui, std::shared_ptr<Core::Configuration> cfg) :
+GraphicEngine::RenderingEngine::RenderingEngine(std::shared_ptr<Services::CameraControllerManager> cameraControllerManager, std::shared_ptr<Services::ModelManager> modelManager, std::shared_ptr<Services::LightManager> lightManager, std::shared_ptr<Services::ViewportManager> viewportManager, std::shared_ptr<Core::EventManager> eventManager, std::shared_ptr<Common::UI> ui, std::shared_ptr<Core::Configuration> cfg) :
 	m_cameraControllerManager{ cameraControllerManager },
 	m_lightManager{ lightManager },
 	m_modelManager{ modelManager },
+	m_viewportManager{ viewportManager },
 	m_eventManager{ eventManager },
 	m_ui{ ui },
 	m_cfg{ cfg }
@@ -33,31 +34,5 @@ GraphicEngine::RenderingEngine::RenderingEngine(std::shared_ptr<Services::Camera
 	auto plane = Engines::Graphic::PlaneGenerator<Common::VertexPN>{}.getModel(glm::vec2(-300), glm::vec2(300), glm::ivec2(8), Engines::Graphic::GeneratingPosition::Corner, Engines::Graphic::TriangleDirection::CounterClockwise);
 	m_modelManager->addModel(plane);
 
-	auto backgroundColorEdit = std::make_shared<GUI::ColorEdit>(backgroudColor);
-	backgroundColorEdit->subscribe([&](glm::vec4 color)
-	{
-		backgroudColor = color;
-	});
-	m_ui->addWidget(backgroundColorEdit);
 
-	auto displayWireframeCheckbox = std::make_shared<GUI::Checkbox>("wireframe", displayWireframe);
-	displayWireframeCheckbox->subscribe([&](bool checked)
-	{
-		displayWireframe = checked;
-	});
-	m_ui->addWidget(displayWireframeCheckbox);
-
-	auto displaySolidCheckbox = std::make_shared<GUI::Checkbox>("solid", displaySolid);
-	displaySolidCheckbox->subscribe([&](bool checked)
-	{
-		displaySolid = checked;
-	});
-	m_ui->addWidget(displaySolidCheckbox);
-
-	auto displayNormalCheckbox = std::make_shared<GUI::Checkbox>("normal", displayNormal);
-	displayNormalCheckbox->subscribe([&](bool checked)
-	{
-		displayNormal = checked;
-	});
-	m_ui->addWidget(displayNormalCheckbox);
 }

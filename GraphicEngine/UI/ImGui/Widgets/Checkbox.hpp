@@ -8,7 +8,6 @@ namespace GraphicEngine::GUI
 	class Checkbox : public Widget
 	{
 	public:
-		Checkbox() = default;
 		Checkbox(std::string label, bool initialChecked);
 		// Inherited via Widget
 		virtual void draw() override;

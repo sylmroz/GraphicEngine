@@ -13,6 +13,7 @@
 #include "../Services/CameraControllerManager.hpp"
 #include "../Services/ModelManager.hpp"
 #include "../Services/LightManager.hpp"
+#include "../Services/ViewportManager.hpp"
 
 #include "../Engines//Graphic/Shaders/Models/Light.hpp"
 
@@ -27,6 +28,7 @@ namespace GraphicEngine
 		RenderingEngine(std::shared_ptr<Services::CameraControllerManager> cameraControllerManager,
 			std::shared_ptr<Services::ModelManager> modelManager,
 			std::shared_ptr<Services::LightManager> lightManager,
+			std::shared_ptr<Services::ViewportManager> viewportManager,
 			std::shared_ptr<Core::EventManager> eventManager,
 			std::shared_ptr<Common::UI> ui,
 			std::shared_ptr<Core::Configuration> cfg);
@@ -44,11 +46,6 @@ namespace GraphicEngine
 		std::shared_ptr<Core::EventManager> m_eventManager;
 		std::shared_ptr<Common::UI> m_ui;
 		std::shared_ptr<Core::Configuration> m_cfg;
-
-		glm::vec4 backgroudColor{ 0.2f, 0.2f, 0.2f, 1.0f };
-
-		bool displayWireframe{ true };
-		bool displaySolid{ true };
-		bool displayNormal{ true };
+		std::shared_ptr<Services::ViewportManager> m_viewportManager;
 	};
 }

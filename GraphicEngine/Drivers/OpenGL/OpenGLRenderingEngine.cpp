@@ -10,19 +10,20 @@ GraphicEngine::OpenGL::OpenGLRenderingEngine::OpenGLRenderingEngine(
 	std::shared_ptr<Services::CameraControllerManager> cameraControllerManager,
 	std::shared_ptr<Services::ModelManager> modelManager,
 	std::shared_ptr<Services::LightManager> lightManager,
+	std::shared_ptr<Services::ViewportManager> viewportManager,
 	std::shared_ptr<Core::EventManager> eventManager,
 	std::shared_ptr<Common::UI> ui,
 	std::shared_ptr<Core::Configuration> cfg,
 	std::unique_ptr<Core::Logger<OpenGLRenderingEngine>> logger) :
 	m_logger(std::move(logger)),
-	RenderingEngine(cameraControllerManager, modelManager, lightManager, eventManager, ui, cfg)
+	RenderingEngine(cameraControllerManager, modelManager, lightManager, viewportManager, eventManager, ui, cfg)
 {
 	m_logger->info(__FILE__, __LINE__, __FUNCTION__, "Create OpenGL rendering engine instance.");
 }
 
 bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 {
-	glClearColor(backgroudColor.r, backgroudColor.g, backgroudColor.b, backgroudColor.a);
+	glClearColor(m_viewportManager->backgroudColor.r, m_viewportManager->backgroudColor.g, m_viewportManager->backgroudColor.b, m_viewportManager->backgroudColor.a);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	m_ui->nextFrame();
@@ -34,14 +35,14 @@ bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 	
 	m_cameraUniformBuffer->update(&cameraMatrices);
 	
-	if (displayNormal)
+	if (m_viewportManager->displayNormal)
 		m_normalDebugGraphicPipeline->draw();
-	if (displayWireframe)
+	if (m_viewportManager->displayWireframe)
 		m_wireframeGraphicPipeline->draw();
-	if (displaySolid)
+	if (m_viewportManager->displaySolid)
 		m_solidColorGraphicPipeline->draw();
-
-	m_skyboxGraphicPipeline->draw();
+	if(m_viewportManager->displaySkybox)
+		m_skyboxGraphicPipeline->draw();
 
 	m_ui->drawUi();
 	m_uiRenderingBackend->renderData();

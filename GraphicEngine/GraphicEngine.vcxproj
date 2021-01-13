@@ -221,9 +221,14 @@
     <ClCompile Include="Services\CameraControllerManager.cpp" />
     <ClCompile Include="Services\LightManager.cpp" />
     <ClCompile Include="Services\ModelManager.cpp" />
+    <ClCompile Include="Services\ViewportManager.cpp" />
+    <ClCompile Include="UI\ImGui\Components\SettingsWindow.cpp" />
+    <ClCompile Include="UI\ImGui\Components\ViewportSettingsWindow.cpp" />
     <ClCompile Include="UI\ImGui\ImGuiImpl.cpp" />
     <ClCompile Include="UI\ImGui\Widgets\Checkbox.cpp" />
+    <ClCompile Include="UI\ImGui\Widgets\CollapsingHeader.cpp" />
     <ClCompile Include="UI\ImGui\Widgets\ColorEdit.cpp" />
+    <ClCompile Include="UI\ImGui\Widgets\WindowBody.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\libs\imgui\backends\imgui_impl_glfw.h" />
@@ -349,9 +354,14 @@
     <ClInclude Include="Services\CameraControllerManager.hpp" />
     <ClInclude Include="Services\LightManager.hpp" />
     <ClInclude Include="Services\ModelManager.hpp" />
+    <ClInclude Include="Services\ViewportManager.hpp" />
+    <ClInclude Include="UI\ImGui\Components\SettingsWindow.hpp" />
+    <ClInclude Include="UI\ImGui\Components\ViewportSettingsWindow.hpp" />
     <ClInclude Include="UI\ImGui\ImGuiImpl.hpp" />
     <ClInclude Include="UI\ImGui\Widgets\Checkbox.hpp" />
+    <ClInclude Include="UI\ImGui\Widgets\CollapsingHeader.hpp" />
     <ClInclude Include="UI\ImGui\Widgets\ColorEdit.hpp" />
+    <ClInclude Include="UI\ImGui\Widgets\WindowBody.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\UtilityLib\UtilityLib\UtilityLib.vcxproj">

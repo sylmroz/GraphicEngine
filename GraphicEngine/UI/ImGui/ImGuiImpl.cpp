@@ -5,14 +5,15 @@
 #include <glm/vec4.hpp>
 #include <GLFW/glfw3.h>
 
+GraphicEngine::GUI::ImGuiImpl::ImGuiImpl(std::shared_ptr<SettingWindow> settingWindow)
+{
+	addWidget(settingWindow);
+}
+
 void GraphicEngine::GUI::ImGuiImpl::drawUi()
 {
-	ImGui::Begin("Demo window");
-
 	for (auto& widget : m_widgets)
 		widget->draw();
-	
-	ImGui::End();
 
 	ImGui::Render();
 }

@@ -99,13 +99,15 @@ void GraphicEngine::GLFW::GlfwWindow::initialize()
 	auto scrollFun = [](GLFWwindow* window, double xOffset, double yOffset)
 	{
 		auto app = reinterpret_cast<GlfwWindow*>(glfwGetWindowUserPointer(window));
-		app->m_scrollValues = glm::vec2(xOffset, yOffset);
+		if (!app->m_ui->isMouseButtonBusy())
+			app->m_scrollValues = glm::vec2(xOffset, yOffset);
 	};
 
 	auto positionFun = [](GLFWwindow* window, double xPos, double yPos)
 	{		
 		auto app = reinterpret_cast<GlfwWindow*>(glfwGetWindowUserPointer(window));
-		app->m_cursorPosition = glm::vec2(xPos, yPos);
+		if (!app->m_ui->isMouseButtonBusy())
+			app->m_cursorPosition = glm::vec2(xPos, yPos);
 	};
 
 	glfwSetScrollCallback(m_glfwWindow.get(), scrollFun);

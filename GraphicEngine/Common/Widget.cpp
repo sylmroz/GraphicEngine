@@ -3,8 +3,9 @@
 void GraphicEngine::GUI::Widget::addParent(std::shared_ptr<Widget> parent)
 {
     m_parent = parent;
-    if (m_parent)
-        parent->addChildren(shared_from_this());
+    // TODO - should be implamented different way
+    /*if (m_parent)
+        parent->addChildren(shared_from_this());*/
 }
 
 std::shared_ptr<GraphicEngine::GUI::Widget> GraphicEngine::GUI::Widget::getParent()

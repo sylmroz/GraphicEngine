@@ -2,7 +2,7 @@
 
 #include "../../Common/UI.hpp"
 #include "../../Drivers/Vulkan/VulkanFramework.hpp"
-//#include <GLFW/glfw3.h>
+#include "Components/SettingsWindow.hpp"
 
 struct GLFWwindow;
 
@@ -59,6 +59,7 @@ namespace GraphicEngine::GUI
 		};
 
 	public:
+		ImGuiImpl(std::shared_ptr<SettingWindow> settingWindow);
 		virtual void drawUi() override;
 		virtual bool isKeyboardBusy() override;
 		virtual bool isMouseButtonBusy() override;
