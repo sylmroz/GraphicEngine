@@ -56,6 +56,8 @@ namespace GraphicEngine
 
 		virtual void initialize() = 0;
 
+		virtual ~Window() = default;
+
 	protected:
 		size_t m_width{ 0 };
 		size_t m_height{ 0 };

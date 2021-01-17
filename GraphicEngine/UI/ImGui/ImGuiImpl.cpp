@@ -5,11 +5,6 @@
 #include <glm/vec4.hpp>
 #include <GLFW/glfw3.h>
 
-GraphicEngine::GUI::ImGuiImpl::ImGuiImpl(std::shared_ptr<SettingWindow> settingWindow)
-{
-	addWidget(settingWindow);
-}
-
 void GraphicEngine::GUI::ImGuiImpl::drawUi()
 {
 	for (auto& widget : m_widgets)

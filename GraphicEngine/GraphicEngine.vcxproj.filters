@@ -151,6 +151,9 @@
     <Filter Include="UI\ImGui\Components">
       <UniqueIdentifier>{b769772f-3388-4ecc-9681-ae80faaab2bd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI\ImGui\Components\Lights">
+      <UniqueIdentifier>{d34df17d-8e16-4e0c-acaa-51913d3f9df9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -342,6 +345,39 @@
     </ClCompile>
     <ClCompile Include="UI\ImGui\Components\ViewportSettingsWindow.cpp">
       <Filter>UI\ImGui\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\ImGui\Widgets\ComboBox.cpp">
+      <Filter>UI\ImGui\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\ImGui\Components\CameraManagerWindow.cpp">
+      <Filter>UI\ImGui\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\ImGui\Components\LightManagerWindow.cpp">
+      <Filter>UI\ImGui\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\ImGui\Widgets\TabBar.cpp">
+      <Filter>UI\ImGui\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\ImGui\Widgets\TabBarItem.cpp">
+      <Filter>UI\ImGui\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\ImGui\Components\Lights\SpotLightComponent.cpp">
+      <Filter>UI\ImGui\Components\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\ImGui\Components\Lights\PointLightCompoment.cpp">
+      <Filter>UI\ImGui\Components\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\ImGui\Components\Lights\DirectionalLightComponent.cpp">
+      <Filter>UI\ImGui\Components\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\ImGui\Widgets\Button.cpp">
+      <Filter>UI\ImGui\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\ImGui\Widgets\InputFloat.cpp">
+      <Filter>UI\ImGui\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\ImGui\Components\Lights\LightComponent.cpp">
+      <Filter>UI\ImGui\Components\Lights</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -737,6 +773,39 @@
     </ClInclude>
     <ClInclude Include="UI\ImGui\Components\ViewportSettingsWindow.hpp">
       <Filter>UI\ImGui\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ImGui\Widgets\ComboBox.hpp">
+      <Filter>UI\ImGui\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ImGui\Components\CameraManagerWindow.hpp">
+      <Filter>UI\ImGui\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ImGui\Components\LightManagerWindow.hpp">
+      <Filter>UI\ImGui\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ImGui\Widgets\TabBar.hpp">
+      <Filter>UI\ImGui\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ImGui\Widgets\TabBarItem.hpp">
+      <Filter>UI\ImGui\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ImGui\Components\Lights\DirectionalLightComponent.hpp">
+      <Filter>UI\ImGui\Components\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ImGui\Components\Lights\LightComponent.hpp">
+      <Filter>UI\ImGui\Components\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ImGui\Components\Lights\PointLightCompoment.hpp">
+      <Filter>UI\ImGui\Components\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ImGui\Components\Lights\SpotLightComponent.hpp">
+      <Filter>UI\ImGui\Components\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ImGui\Widgets\Button.hpp">
+      <Filter>UI\ImGui\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ImGui\Widgets\InputFloat.hpp">
+      <Filter>UI\ImGui\Widgets</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

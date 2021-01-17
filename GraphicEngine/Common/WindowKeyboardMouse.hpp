@@ -10,5 +10,7 @@ namespace GraphicEngine::Common
 	{
 	public:
 		WindowKeyboardMouse(std::shared_ptr<Core::Configuration> cfg) :Window(cfg), Mouse(cfg) {}
+
+		virtual ~WindowKeyboardMouse() = default;
 	};
 }

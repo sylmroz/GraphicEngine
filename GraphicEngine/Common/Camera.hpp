@@ -103,6 +103,5 @@ namespace GraphicEngine::Common
 		};
 
 		std::shared_ptr<Core::Configuration> m_cfg;
-		std::shared_ptr<Services::CameraControllerManager> m_logger;
 	};
 }

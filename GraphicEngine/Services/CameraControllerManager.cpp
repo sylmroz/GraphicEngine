@@ -15,8 +15,8 @@ GraphicEngine::Services::CameraControllerManager::CameraControllerManager(std::s
 		m_cameraControllers.push_back(std::move(createCameraController(std::move(createCamera(cameraParameters)))));
 	}
 
-	auto activeCameraIndex = cfg->getProperty<int>("active camera") - 1;
-	m_activeCamera = m_cameraControllers[activeCameraIndex];
+	m_currentCameraIndex = cfg->getProperty<int>("active camera") - 1;
+	m_activeCamera = m_cameraControllers[m_currentCameraIndex];
 	m_activeCamera->activate();
 
 	// TODO - dynamic
@@ -58,14 +58,28 @@ void GraphicEngine::Services::CameraControllerManager::deleteCameraController(Ut
 
 void GraphicEngine::Services::CameraControllerManager::activateCameraController(uint32_t index)
 {
-	m_activeCamera->deactivate();
-	m_activeCamera = m_cameraControllers[index - 1];
-	m_activeCamera->activate();
+	if (m_currentCameraIndex != index && index <= m_cameraControllers.size())
+	{
+		m_activeCamera->deactivate();
+		m_activeCamera = m_cameraControllers[index - 1];
+		m_activeCamera->activate();
+		m_currentCameraIndex = index;
+	}
 }
 
 std::shared_ptr<GraphicEngine::Common::Camera> GraphicEngine::Services::CameraControllerManager::getActiveCamera()
 {
 	return m_activeCamera->getCamera();
+}
+
+std::vector<std::shared_ptr<GraphicEngine::Common::CameraController>> GraphicEngine::Services::CameraControllerManager::getCameraControllers()
+{
+	return m_cameraControllers;
+}
+
+uint32_t GraphicEngine::Services::CameraControllerManager::getActiveCameraIndex()
+{
+	return m_currentCameraIndex;
 }
 
 std::shared_ptr<GraphicEngine::Common::Camera> GraphicEngine::Services::CameraControllerManager::createCamera(json parameters)

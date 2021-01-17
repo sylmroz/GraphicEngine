@@ -11,6 +11,7 @@
 #include "../Core/Timer.hpp"
 #include "../Services/CameraControllerManager.hpp"
 #include "../Common/UI.hpp"
+#include "../UI/ImGui/Components/SettingsWindow.hpp"
 
 #include <memory>
 
@@ -25,9 +26,9 @@ namespace GraphicEngine
 			std::shared_ptr<RenderingEngine> renderingEngine,
 			std::shared_ptr<Core::Inputs::KeyboardEventProxy> keyboard,
 			std::shared_ptr<Core::Inputs::MouseEventProxy> mouse,
-			std::shared_ptr<Services::CameraControllerManager> cameraControllerManager,
 			std::shared_ptr<Core::EventManager> eventManager,
 			std::shared_ptr<Common::UI> ui,
+			std::shared_ptr<GUI::SettingWindow> settingWindow,
 			std::shared_ptr<Core::Timer> timer,
 			std::unique_ptr<Core::Logger<Engine>> logger);
 
@@ -43,9 +44,9 @@ namespace GraphicEngine
 		std::shared_ptr<RenderingEngine> m_renderingEngine;
 		std::shared_ptr<Core::Inputs::KeyboardEventProxy> m_keyboard;
 		std::shared_ptr<Core::Inputs::MouseEventProxy> m_mouse;
-		std::shared_ptr<Services::CameraControllerManager> m_cameraControllerManager;
 		std::shared_ptr<Core::EventManager> m_eventManager;
 		std::shared_ptr<Common::UI> m_ui;
+		std::shared_ptr<GUI::SettingWindow> m_settingWindow;
 		std::shared_ptr<Core::Timer> m_timer;
 		std::unique_ptr<Core::Logger<Engine>> m_logger;
 

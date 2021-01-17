@@ -59,7 +59,6 @@ namespace GraphicEngine::GUI
 		};
 
 	public:
-		ImGuiImpl(std::shared_ptr<SettingWindow> settingWindow);
 		virtual void drawUi() override;
 		virtual bool isKeyboardBusy() override;
 		virtual bool isMouseButtonBusy() override;

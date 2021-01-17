@@ -76,10 +76,34 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 		m_spotLight = std::make_shared<ShaderStorageBufferObject<Engines::Graphic::Shaders::SpotLight>>(9);
 
 		m_directionalLight->update(m_lightManager->getDirectionalLights());
+		m_lightManager->onUpdateDirectiionalLight([&](uint32_t index, Engines::Graphic::Shaders::DirectionalLight light)
+		{
+			m_directionalLight->update(light, index);
+		});
+		m_lightManager->onUpdateDirectiionalLights([&](std::vector<Engines::Graphic::Shaders::DirectionalLight> lights)
+		{
+			m_directionalLight->update(lights);
+		});
 
 		m_pointLights->update(m_lightManager->getPointLights());
+		m_lightManager->onUpdatePointLight([&](uint32_t index, Engines::Graphic::Shaders::PointLight light)
+		{
+			m_pointLights->update(light, index);
+		});
+		m_lightManager->onUpdatePointLights([&](std::vector<Engines::Graphic::Shaders::PointLight> lights)
+		{
+			m_pointLights->update(lights);
+		});
 
 		m_spotLight->update(m_lightManager->getSpotLights());
+		m_lightManager->onUpdateSpotlLight([&](uint32_t index, Engines::Graphic::Shaders::SpotLight light)
+		{
+			m_spotLight->update(light, index);
+		});
+		m_lightManager->onUpdateSpotlLights([&](std::vector<Engines::Graphic::Shaders::SpotLight> lights)
+		{
+			m_spotLight->update(lights);
+		});
 
 		m_modelManager->getModelEntityContainer()->forEachEntity([&](auto model)
 		{

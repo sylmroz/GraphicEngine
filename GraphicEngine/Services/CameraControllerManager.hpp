@@ -22,6 +22,9 @@ namespace GraphicEngine::Services
 
 		std::shared_ptr<Common::Camera> getActiveCamera();
 
+		std::vector<std::shared_ptr<Common::CameraController>> getCameraControllers();
+		uint32_t getActiveCameraIndex();
+
 	private:
 		std::shared_ptr<Common::Camera> createCamera(json parameters);
 		std::shared_ptr<Common::CameraController> createCameraController(std::shared_ptr<Common::Camera> camera);
@@ -34,5 +37,7 @@ namespace GraphicEngine::Services
 		std::shared_ptr<Common::CameraController> m_activeCamera;
 		std::shared_ptr<Core::Timer> m_timer;
 		std::shared_ptr<Core::Logger<CameraControllerManager>> m_logger;
+
+		uint32_t m_currentCameraIndex;
 	};
 }

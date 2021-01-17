@@ -1,5 +1,5 @@
 #pragma once
-
+#define BOOST_DI_CFG_DIAGNOSTICS_LEVEL 2
 #include <boost/di.hpp>
 
 #include "../../../Drivers/OpenGL/OpenGLRenderingEngine.hpp"

@@ -11,7 +11,7 @@ namespace GraphicEngine::GUI
 	{
 	public:
 		ColorEdit() = default;
-		ColorEdit(glm::vec4 initialColor);
+		ColorEdit(std::string label, glm::vec4 initialColor);
 		// Inherited via Widget
 		virtual void draw() override;
 
@@ -20,9 +20,10 @@ namespace GraphicEngine::GUI
 		{
 			m_colorSelectorEventListener.subscribe(callback);
 		}
-
-	private:
+		// Properties
 		glm::vec4 color{};
+	private:
 		Core::Subject<glm::vec4> m_colorSelectorEventListener;
+		std::string label;
 	};
 }

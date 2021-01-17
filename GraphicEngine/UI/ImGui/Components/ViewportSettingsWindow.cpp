@@ -5,7 +5,7 @@ GraphicEngine::GUI::ViewportSettingWindow::ViewportSettingWindow(std::shared_ptr
 {
 	m_container = std::make_shared<CollapsingHeader>("Viewport settings");
 
-	auto backgroundColorEdit = std::make_shared<GUI::ColorEdit>(m_viewportManager->backgroudColor);
+	auto backgroundColorEdit = std::make_shared<GUI::ColorEdit>("Background color", m_viewportManager->backgroudColor);
 	backgroundColorEdit->subscribe([&](glm::vec4 color)
 	{
 		m_viewportManager->backgroudColor = color;

@@ -2,13 +2,13 @@
 
 #include <imgui.h>
 
-GraphicEngine::GUI::ColorEdit::ColorEdit(glm::vec4 initialColor):
-	color{ initialColor }
+GraphicEngine::GUI::ColorEdit::ColorEdit(std::string label, glm::vec4 initialColor):
+	label{ label }, color { initialColor }
 {
 }
 
 void GraphicEngine::GUI::ColorEdit::draw()
 {
-	ImGui::ColorEdit3("color", &color[0]);
-	m_colorSelectorEventListener.notify(color);
+	if (ImGui::ColorEdit4(label.c_str(), &color[0]))
+		m_colorSelectorEventListener.notify(color);
 }
