@@ -22,9 +22,9 @@ namespace GraphicEngine::Engines::Graphic::Shaders
 		LightColor(glm::vec4 diffuse, glm::vec4 ambient, glm::vec4 specular) :
 			diffuse{ diffuse }, ambient{ ambient }, specular{ specular } {}
 		
-		alignas(16) glm::vec4 diffuse;
-		alignas(16) glm::vec4 ambient;
-		alignas(16) glm::vec4 specular;
+		alignas(16) glm::vec4 diffuse{ 0.5f, 0.5f, 0.5f, 1.0f };
+		alignas(16) glm::vec4 ambient{ 0.1f, 0.1f, 0.1f, 1.0f };
+		alignas(16) glm::vec4 specular{ 0.5f, 0.5f, 0.5f, 1.0f };
 	};
 
 	struct DirectionalLight
@@ -41,7 +41,7 @@ namespace GraphicEngine::Engines::Graphic::Shaders
 		DirectionalLight(glm::vec4 direction, LightColor color) :
 			direction{ direction }, color{ color } {}
 		
-		alignas(16) glm::vec4 direction;
+		alignas(16) glm::vec4 direction{ 1.0f, -1.0f, 1.0f, 1.0f };
 		alignas(16) LightColor color;
 	};
 
@@ -61,10 +61,10 @@ namespace GraphicEngine::Engines::Graphic::Shaders
 		PointLight(glm::vec4 position, float constant, float linear, float quadric, LightColor color) :
 			position{ position }, constant{ constant }, linear{ linear }, quadric{ quadric }, color{ color } {}
 
-		alignas(16) glm::vec4 position;
-		float constant;
-		float linear;
-		float quadric;
+		alignas(16) glm::vec4 position{ 2.0f, 2.0f, 2.0f, 1.0f };
+		float constant{ 1.0f };
+		float linear{ 0.22 };
+		float quadric{ 0.2 };
 		LightColor color;
 	};
 
@@ -87,13 +87,13 @@ namespace GraphicEngine::Engines::Graphic::Shaders
 		SpotLight(glm::vec4 position, glm::vec4 direction, float innerCutOff, float outterCutOff, float constant, float linear, float quadric, LightColor color) :
 			position{ position }, direction{ direction }, innerCutOff{ innerCutOff }, outterCutOff{ outterCutOff }, constant{ constant }, linear{ linear }, quadric{ quadric }, color{ color } {}
 
-		alignas(16) glm::vec4 position;
-		alignas(16) glm::vec4 direction;
-		float innerCutOff;
-		float outterCutOff;
-		float constant;
-		float linear;
-		float quadric;
+		alignas(16) glm::vec4 position{ 0.0f, 8.0f, 8.0f, 1.0f };
+		alignas(16) glm::vec4 direction{ 0.0f, -1.0f, -1.0f, 1.0f };
+		float innerCutOff{ 1.0f };
+		float outterCutOff{ 12.5f };
+		float constant{ 1.0f };
+		float linear{ 0.22 };
+		float quadric{ 0.2 };
 		LightColor color;
 	};
 

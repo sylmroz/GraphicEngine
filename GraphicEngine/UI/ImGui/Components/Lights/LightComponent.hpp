@@ -38,8 +38,11 @@ namespace GraphicEngine::GUI
 			m_lightColorComponent = std::make_shared<LightColorComponent>(currentLightParameters.color);
 			m_lightColorComponent->onLightColor([&](Engines::Graphic::Shaders::LightColor color)
 			{
-				currentLightParameters.color = color;
-				m_lightEditedSubject.notify(selectedItem, currentLightParameters);
+				if (selectedItem > -1)
+				{
+					currentLightParameters.color = color;
+					m_lightEditedSubject.notify(selectedItem, currentLightParameters);
+				}
 			});
 		}
 		// Inherited via Widget
@@ -57,10 +60,7 @@ namespace GraphicEngine::GUI
 				{
 					if (ImGui::IsMouseDoubleClicked(0))
 					{
-						selectedItem = i;
-						m_selectedItemSubject.notify(selectedItem);
-						m_lightColorComponent->setCurrentColors(currentLightParameters.color);
-						updateRestComponents();
+						setSelectedItem(i);
 					}
 				}
 			}
@@ -86,8 +86,7 @@ namespace GraphicEngine::GUI
 
 		void onLightEdited(std::function<void(int, LightType)> callback)
 		{
-			if (selectedItem > -1)
-				m_lightEditedSubject.subscribe(callback);
+			m_lightEditedSubject.subscribe(callback);
 		}
 
 		void onDeleteLightClicked(std::function<void(int)> callback)
@@ -101,6 +100,14 @@ namespace GraphicEngine::GUI
 					selectedItem = -1;
 				}
 			});
+		}
+
+		void setSelectedItem(int i)
+		{
+			selectedItem = i;
+			m_selectedItemSubject.notify(selectedItem);
+			m_lightColorComponent->setCurrentColors(currentLightParameters.color);
+			updateRestComponents();
 		}
 
 	protected:
