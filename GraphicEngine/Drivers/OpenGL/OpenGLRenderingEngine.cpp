@@ -23,8 +23,15 @@ GraphicEngine::OpenGL::OpenGLRenderingEngine::OpenGLRenderingEngine(
 
 bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 {
+	// Create shadow map
+	m_shadowMapGraphicPipeline->draw();
+
+
+	// Render Normal Scene
+	glViewport(0, 0, m_width, m_height);
 	glClearColor(m_viewportManager->backgroudColor.r, m_viewportManager->backgroudColor.g, m_viewportManager->backgroudColor.b, m_viewportManager->backgroudColor.a);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glDrawBuffer(GL_FRONT_AND_BACK);
 
 	m_ui->nextFrame();
 
@@ -60,7 +67,7 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 	{
 		throw std::runtime_error("OpenGL initialization failed!");
 	}
-	glViewport(0, 0, width, height);
+	resizeFrameBuffer(width, height);
 
 	try
 	{
@@ -68,6 +75,7 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 		m_solidColorGraphicPipeline = std::make_unique<OpenGLSolidColorGraphicPipeline>(m_cameraControllerManager);
 		m_normalDebugGraphicPipeline = std::make_unique<OpenGLNormalDebugGraphicPipeline>(m_cameraControllerManager);
 		m_skyboxGraphicPipeline = std::make_unique<OpenGLSkyboxGraphicPipeline>(m_cfg->getProperty<std::string>("scene:skybox:base path"));
+		m_shadowMapGraphicPipeline = std::make_unique<OpenGLShadowMapGraphicPipeline>(m_lightManager);
 
 		m_cameraUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::CameraMatrices>>(0);
 
@@ -113,6 +121,7 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 				m_wireframeGraphicPipeline->addVertexBuffer<decltype(mesh)::element_type::vertex_type>(mesh, vb);
 				m_solidColorGraphicPipeline->addVertexBuffer<decltype(mesh)::element_type::vertex_type>(mesh, vb);
 				m_normalDebugGraphicPipeline->addVertexBuffer<decltype(mesh)::element_type::vertex_type>(mesh, vb);
+				m_shadowMapGraphicPipeline->addVertexBuffer<decltype(mesh)::element_type::vertex_type>(mesh, vb);
 			}
 		});
 
@@ -133,7 +142,9 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 
 void GraphicEngine::OpenGL::OpenGLRenderingEngine::resizeFrameBuffer(size_t width, size_t height)
 {
-	glViewport(0, 0, width, height);
+	m_width = width;
+	m_height = height;
+	glViewport(0, 0, m_width, m_height);
 }
 
 void GraphicEngine::OpenGL::OpenGLRenderingEngine::cleanup()

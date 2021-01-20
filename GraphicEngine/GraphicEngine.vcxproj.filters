@@ -379,6 +379,9 @@
     <ClCompile Include="UI\ImGui\Components\Lights\LightComponent.cpp">
       <Filter>UI\ImGui\Components\Lights</Filter>
     </ClCompile>
+    <ClCompile Include="Drivers\OpenGL\GraphicPipelines\OpenGLShadowMapGraphicPipeline.cpp">
+      <Filter>Drivers\OpenGL\GraphicPipelines</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Input\Keyboard\KeyboardEnumKeys.hpp">
@@ -806,6 +809,15 @@
     </ClInclude>
     <ClInclude Include="UI\ImGui\Widgets\InputFloat.hpp">
       <Filter>UI\ImGui\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="Engines\Graphic\Shaders\Models\LightSpaceModelMatrices.hpp">
+      <Filter>Engines\Graphic\Shaders\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Engines\Graphic\Pipelines\ShadowMapGraphicPipeline.hpp">
+      <Filter>Engines\Graphic\Pipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="Drivers\OpenGL\GraphicPipelines\OpenGLShadowMapGraphicPipeline.hpp">
+      <Filter>Drivers\OpenGL\GraphicPipelines</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

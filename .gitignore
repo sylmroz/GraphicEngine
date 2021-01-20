@@ -359,3 +359,4 @@ MigrationBackup/
 
 # Texture path
 ./GraphicEngine/GraphicEngine/Assets/Images
+.VSCodeCounter/

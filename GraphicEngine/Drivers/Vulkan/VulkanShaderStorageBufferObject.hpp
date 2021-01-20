@@ -21,7 +21,8 @@ namespace GraphicEngine::Vulkan
 		{
 			uint32_t count = data.size();
 			copyMemoryToDevice<uint32_t>(m_framework->m_device, bufferData[m_framework->m_imageIndex.value]->memory, &count, 1);
-			copyMemoryToDevice<T>(m_framework->m_device, bufferData[m_framework->m_imageIndex.value]->memory, &data[0], data.size(), 4 * sizeof(float));
+			if (data.size() > 0)
+				copyMemoryToDevice<T>(m_framework->m_device, bufferData[m_framework->m_imageIndex.value]->memory, &data[0], data.size(), 4 * sizeof(float));
 		}
 		virtual int size()
 		{

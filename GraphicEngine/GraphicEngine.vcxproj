@@ -192,6 +192,7 @@
     <ClCompile Include="Core\Math\Geometry\3D\BoudingCube.cpp" />
     <ClCompile Include="Core\Math\ImageUtils.cpp" />
     <ClCompile Include="Drivers\OpenGL\GraphicPipelines\OpenGLNormalDebugGraphicPileline.cpp" />
+    <ClCompile Include="Drivers\OpenGL\GraphicPipelines\OpenGLShadowMapGraphicPipeline.cpp" />
     <ClCompile Include="Drivers\OpenGL\GraphicPipelines\OpenGLSkyboxGraphicPipeline.cpp" />
     <ClCompile Include="Drivers\OpenGL\GraphicPipelines\OpenGLSolidColorGraphicPipeline.cpp" />
     <ClCompile Include="Drivers\OpenGL\GraphicPipelines\OpenGLWireframeGraphicPipeline.cpp" />
@@ -298,6 +299,7 @@
     <ClInclude Include="Core\Utils\UniqueIdentifier.hpp" />
     <ClInclude Include="Drivers\OpenGL\GraphicPipelines\OpenGLGraphicPipeline.hpp" />
     <ClInclude Include="Drivers\OpenGL\GraphicPipelines\OpenGLNormalDebugGraphicPileline.hpp" />
+    <ClInclude Include="Drivers\OpenGL\GraphicPipelines\OpenGLShadowMapGraphicPipeline.hpp" />
     <ClInclude Include="Drivers\OpenGL\GraphicPipelines\OpenGLSkyboxGraphicPipeline.hpp" />
     <ClInclude Include="Drivers\OpenGL\GraphicPipelines\OpenGLSolidColorGraphicPipeline.hpp" />
     <ClInclude Include="Drivers\OpenGL\GraphicPipelines\OpenGLWireframeGraphicPipeline.hpp" />
@@ -338,12 +340,14 @@
     <ClInclude Include="Engines\Graphic\3D\ObjectGenerators\SphereGenerator.hpp" />
     <ClInclude Include="Engines\Graphic\Pipelines\GraphicPipeline.hpp" />
     <ClInclude Include="Engines\Graphic\Pipelines\NormalDebugGraphicPileline.hpp" />
+    <ClInclude Include="Engines\Graphic\Pipelines\ShadowMapGraphicPipeline.hpp" />
     <ClInclude Include="Engines\Graphic\Pipelines\SkyboxGraphicPipeline.hpp" />
     <ClInclude Include="Engines\Graphic\Pipelines\SolidColorGraphicPipeline.hpp" />
     <ClInclude Include="Engines\Graphic\Pipelines\WireframeGraphicPipeline.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\CameraMatrices.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\Eye.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\Light.hpp" />
+    <ClInclude Include="Engines\Graphic\Shaders\Models\LightSpaceModelMatrices.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\ModelMatrices.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\SolidColorModelDescriptor.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\WireframeModelDescriptor.hpp" />
