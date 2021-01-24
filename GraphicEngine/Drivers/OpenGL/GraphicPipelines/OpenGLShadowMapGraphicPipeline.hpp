@@ -9,7 +9,7 @@ namespace GraphicEngine::OpenGL
 	class OpenGLShadowMapGraphicPipeline : public Engines::Graphic::ShadowMapGraphicPipeline<VertexBuffer, UniformBuffer, UniformBuffer>
 	{
 	public:
-		OpenGLShadowMapGraphicPipeline(std::shared_ptr<Services::LightManager> cameraControllerManager);
+		OpenGLShadowMapGraphicPipeline(std::shared_ptr<Services::LightManager> cameraControllerManager, std::shared_ptr<TextureDepth> depthTexture);
 
 		virtual void draw() override;
 	private:

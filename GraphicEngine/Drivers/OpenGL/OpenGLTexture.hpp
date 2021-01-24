@@ -15,6 +15,9 @@ namespace GraphicEngine::OpenGL
 
 		GLuint getTexture();
 
+		int getWidth();
+		int getHeight();
+
 	protected:
 		GLuint texture;
 		int width{ 0 };

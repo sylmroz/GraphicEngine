@@ -2,17 +2,19 @@
 
 #include "OpenGLGraphicPipeline.hpp"
 #include "../../../Engines/Graphic/Pipelines/SolidColorGraphicPipeline.hpp"
+#include "../OpenGLTexture.hpp"
 
 namespace GraphicEngine::OpenGL
 {
 	class OpenGLSolidColorGraphicPipeline : public Engines::Graphic::SolidColorGraphicPipeline<VertexBuffer, UniformBuffer, UniformBuffer>
 	{
 	public:
-		OpenGLSolidColorGraphicPipeline(std::shared_ptr<Services::CameraControllerManager> cameraControllerManager);
+		OpenGLSolidColorGraphicPipeline(std::shared_ptr<Services::CameraControllerManager> cameraControllerManager, std::shared_ptr<TextureDepth> depthTexture);
 
 		virtual void draw() override;
 	private:
 		std::shared_ptr<OpenGLShaderProgram> m_shaderProgram;
 		GLuint m_diffuseOnlyIndex;
+		std::shared_ptr<TextureDepth> m_depthTexture;
 	};
 }

@@ -15,6 +15,7 @@ struct LightColor
 
 struct DirectionalLightBuffer
 {
+    mat4 lightSpace;
 	vec4 direction;
 	LightColor color;
 };
@@ -63,6 +64,7 @@ layout (std140) uniform Eye
     vec4 eyePosition;
 } eye;
 
+uniform sampler2DShadow shadowMap;
 
 const float Pi = 3.14159265;
 
@@ -70,7 +72,8 @@ const float specularStrength = 0.5;
 const float shininess = 32;
 
 
-float when_gt(float x) {
+float when_gt(float x) 
+{
   if (x > 0)
   {
       return 1.0;
@@ -79,21 +82,75 @@ float when_gt(float x) {
   return 0.0;
 }
 
+const int numOfSamples = 8;
+
+vec2 poissonDisk[16] = vec2[]( 
+   vec2( -0.94201624, -0.39906216 ), 
+   vec2( 0.94558609, -0.76890725 ), 
+   vec2( -0.094184101, -0.92938870 ), 
+   vec2( 0.34495938, 0.29387760 ), 
+   vec2( -0.91588581, 0.45771432 ), 
+   vec2( -0.81544232, -0.87912464 ), 
+   vec2( -0.38277543, 0.27676845 ), 
+   vec2( 0.97484398, 0.75648379 ), 
+   vec2( 0.44323325, -0.97511554 ), 
+   vec2( 0.53742981, -0.47373420 ), 
+   vec2( -0.26496911, -0.41893023 ), 
+   vec2( 0.79197514, 0.19090188 ), 
+   vec2( -0.24188840, 0.99706507 ), 
+   vec2( -0.81409955, 0.91437590 ), 
+   vec2( 0.19984126, 0.78641367 ), 
+   vec2( 0.14383161, -0.14100790 ) 
+);
+
+// https://github.com/opengl-tutorials/ogl/blob/master/tutorial16_shadowmaps/ShadowMapping.fragmentshader
+float random(vec3 seed, int i){
+	vec4 seed4 = vec4(seed,i);
+	float dot_product = dot(seed4, vec4(12.9898,78.233,45.164,94.673));
+	return fract(sin(dot_product) * 43758.5453);
+}
+
+float ShadowMapCalculation(vec4 fragPosLightSpace, vec3 lightDir)
+{
+    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+    // transform to [0,1] range
+    projCoords = projCoords * 0.5 + 0.5;
+
+    float bias = max(0.005 * (1.0 - dot(normal, lightDir)), 0.005);
+    float currentDepth = projCoords.z;
+    float shadow = 0.0;
+   
+    vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
+
+    for (int i = 0; i < numOfSamples; ++i)
+    {
+        int index = int(16.0 * random(floor(position * 1000.0), i)) % 16;
+        float pcfDepth = texture(shadowMap, projCoords.xyz + vec3(poissonDisk[index], 0) * vec3(texelSize, 0), bias).r;
+        shadow += currentDepth > pcfDepth  ? 1.0 : 0.0;    
+    }
+    shadow /= numOfSamples;
+    
+    if(projCoords.z > 1.0)
+        shadow = 0.0;
+        
+    return shadow;
+}
+
 layout (location = 0) out vec4 outColor;
 
-subroutine vec3 LightShadingEffectType_t(vec3 normal, vec3 lightDir, vec3 diffuseLight, vec3 specularLight, vec3 ambientLight);
+subroutine vec3 LightShadingEffectType_t(vec3 normal, vec3 lightDir, vec3 diffuseLight, vec3 specularLight, vec3 ambientLight, float shadow);
 
 subroutine(LightShadingEffectType_t)
-vec3 DiffuseOnly(vec3 normal, vec3 lightDir, vec3 diffuseLight, vec3 specularLight, vec3 ambientLight)
+vec3 DiffuseOnly(vec3 normal, vec3 lightDir, vec3 diffuseLight, vec3 specularLight, vec3 ambientLight, float shadow)
 {
     float I = max(dot(normal, lightDir), 0.0);
     vec3 diffuse = I * solidColor * diffuseLight;
 
-    return (diffuse + ambientLight);
+    return ((1.0 - shadow) * diffuse + ambientLight);
 }
 
 subroutine(LightShadingEffectType_t)
-vec3 Phong(vec3 normal, vec3 lightDir, vec3 diffuseLight, vec3 specularLight, vec3 ambientLight)
+vec3 Phong(vec3 normal, vec3 lightDir, vec3 diffuseLight, vec3 specularLight, vec3 ambientLight, float shadow)
 {
     float I = max(dot(normal, lightDir), 0.0);
     vec3 diffuse = I * solidColor * diffuseLight;
@@ -105,11 +162,11 @@ vec3 Phong(vec3 normal, vec3 lightDir, vec3 diffuseLight, vec3 specularLight, ve
     float spec = energyConservation * pow(max(dot(viewDir, reflectDir), 0.0), shininess) * when_gt(I);
     vec3 specular = specularStrength * spec * specularLight;
 
-    return (diffuse + specular + ambientLight);
+    return ((1.0 - shadow) * (diffuse + specular) + ambientLight);
 }
 
 subroutine(LightShadingEffectType_t)
-vec3 BlinnPhong(vec3 normal, vec3 lightDir, vec3 diffuseLight, vec3 specularLight, vec3 ambientLight)
+vec3 BlinnPhong(vec3 normal, vec3 lightDir, vec3 diffuseLight, vec3 specularLight, vec3 ambientLight, float shadow)
 {
     float I = max(dot(normal, lightDir), 0.0);
     vec3 diffuse = I * solidColor * diffuseLight;
@@ -121,14 +178,17 @@ vec3 BlinnPhong(vec3 normal, vec3 lightDir, vec3 diffuseLight, vec3 specularLigh
     float spec = energyConservation * pow(max(dot(normal, halfwayDir), 0.0), shininess) * when_gt(I);
     vec3 specular = specularStrength * spec * specularLight;
 
-    return (diffuse + specular + ambientLight);
+    return ((1.0 - shadow) * (diffuse + specular) + ambientLight);
 }
 
 subroutine uniform LightShadingEffectType_t LightShadingEffectType;
 
 vec3 CalcDirectionalLight(DirectionalLightBuffer light)
 {
-    return LightShadingEffectType(normal, normalize(vec3(-light.direction)), vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient));
+    vec3 lightDir = normalize(vec3(-light.direction));
+    vec4 fragPositionightSpace = light.lightSpace * vec4(position, 1.0);
+    float shadow = ShadowMapCalculation(fragPositionightSpace, lightDir);
+    return LightShadingEffectType(normal, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow);
 }
 
 vec3 CalcPointLight(PointLightBuffer light)
@@ -138,7 +198,7 @@ vec3 CalcPointLight(PointLightBuffer light)
     float dist = length(position - vec3(light.position));
     float attenaution = 1.0 / (light.constant + light.linear * dist + light.quadric * (dist * dist));
 
-    return LightShadingEffectType(normal, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient)) * attenaution;
+    return LightShadingEffectType(normal, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), 0.0) * attenaution;
 }
 
 vec3 CalcSpotLight(SpotLightBuffer light)
@@ -152,7 +212,7 @@ vec3 CalcSpotLight(SpotLightBuffer light)
     float dist = length(position - vec3(light.position));
     float attenaution = 1.0 / (light.constant + light.linear * dist + light.quadric * (dist * dist));
 
-    return LightShadingEffectType(normal, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient)) * intesity * attenaution;
+    return LightShadingEffectType(normal, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), 0.0) * intesity * attenaution;
 }
 
 void main()

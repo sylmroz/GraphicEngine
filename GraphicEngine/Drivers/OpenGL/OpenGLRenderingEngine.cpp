@@ -23,15 +23,15 @@ GraphicEngine::OpenGL::OpenGLRenderingEngine::OpenGLRenderingEngine(
 
 bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 {
+	glClearColor(m_viewportManager->backgroudColor.r, m_viewportManager->backgroudColor.g, m_viewportManager->backgroudColor.b, m_viewportManager->backgroudColor.a);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	// Create shadow map
 	m_shadowMapGraphicPipeline->draw();
 
 
 	// Render Normal Scene
 	glViewport(0, 0, m_width, m_height);
-	glClearColor(m_viewportManager->backgroudColor.r, m_viewportManager->backgroudColor.g, m_viewportManager->backgroudColor.b, m_viewportManager->backgroudColor.a);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glDrawBuffer(GL_FRONT_AND_BACK);
 
 	m_ui->nextFrame();
 
@@ -48,7 +48,7 @@ bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 		m_wireframeGraphicPipeline->draw();
 	if (m_viewportManager->displaySolid)
 		m_solidColorGraphicPipeline->draw();
-	if(m_viewportManager->displaySkybox)
+	if (m_viewportManager->displaySkybox)
 		m_skyboxGraphicPipeline->draw();
 
 	m_ui->drawUi();
@@ -69,13 +69,18 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 	}
 	resizeFrameBuffer(width, height);
 
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+	glFrontFace(GL_CCW);
+
 	try
 	{
+		m_depthTexture = std::make_shared<TextureDepth>(1024, 1024);
 		m_wireframeGraphicPipeline = std::make_unique<OpenGLWireframeGraphicPipeline>(m_cameraControllerManager);
-		m_solidColorGraphicPipeline = std::make_unique<OpenGLSolidColorGraphicPipeline>(m_cameraControllerManager);
+		m_solidColorGraphicPipeline = std::make_unique<OpenGLSolidColorGraphicPipeline>(m_cameraControllerManager, m_depthTexture);
 		m_normalDebugGraphicPipeline = std::make_unique<OpenGLNormalDebugGraphicPipeline>(m_cameraControllerManager);
 		m_skyboxGraphicPipeline = std::make_unique<OpenGLSkyboxGraphicPipeline>(m_cfg->getProperty<std::string>("scene:skybox:base path"));
-		m_shadowMapGraphicPipeline = std::make_unique<OpenGLShadowMapGraphicPipeline>(m_lightManager);
+		m_shadowMapGraphicPipeline = std::make_unique<OpenGLShadowMapGraphicPipeline>(m_lightManager, m_depthTexture);
 
 		m_cameraUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::CameraMatrices>>(0);
 
@@ -124,10 +129,6 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 				m_shadowMapGraphicPipeline->addVertexBuffer<decltype(mesh)::element_type::vertex_type>(mesh, vb);
 			}
 		});
-
-		glEnable(GL_DEPTH_TEST);
-		glDepthFunc(GL_LESS);
-		glFrontFace(GL_CCW);
 
 		m_uiRenderingBackend = std::make_shared<GUI::ImGuiImpl::OpenGlRenderEngineBackend>();
 		m_ui->addBackend(m_uiRenderingBackend);

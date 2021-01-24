@@ -7,6 +7,7 @@ GraphicEngine::GUI::DirectionalLightComponent::DirectionalLightComponent():
 	m_inputScalar->onInputScalarEdit([&](glm::vec4 value)
 	{
 		currentLightParameters.direction = value;
+		currentLightParameters.calculateLigthSpace();
 		m_lightEditedSubject.notify(selectedItem, currentLightParameters);
 	});
 }

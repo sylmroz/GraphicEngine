@@ -211,6 +211,7 @@
     <ClCompile Include="Drivers\Vulkan\VulkanShaderFactory.cpp" />
     <ClCompile Include="Drivers\Vulkan\VulkanTexture.cpp" />
     <ClCompile Include="Drivers\Vulkan\VulkanTextureCube.cpp" />
+    <ClCompile Include="Engines\Graphic\Shaders\Models\Light.cpp" />
     <ClCompile Include="Main\Application.cpp" />
     <ClCompile Include="Main\Engine.cpp" />
     <ClCompile Include="Main\main.cpp" />
