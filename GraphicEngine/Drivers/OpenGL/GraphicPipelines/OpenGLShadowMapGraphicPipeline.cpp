@@ -24,25 +24,28 @@ GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::OpenGLShadowMapGraphicPip
 
 void GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::draw()
 {
-	glEnable(GL_CULL_FACE);
-	m_shaderProgram->use();
-	glViewport(0, 0, m_depthTexture->getWidth(), m_depthTexture->getHeight());
-	glBindFramebuffer(GL_FRAMEBUFFER, dephMapFBO);
-	glClear(GL_DEPTH_BUFFER_BIT);
-	glCullFace(GL_FRONT);
-
-	m_depthTexture->use(0);
-
-	auto dirLight = m_lightManager->getDirectionalLight(0);
-	
-	m_vertexBufferCollection->forEachEntity([&](auto vertexBufferCollection)
+	if (m_lightManager->getDirectionalLights().size() > 0)
 	{
-		vertexBufferCollection->modelDescriptor.model = vertexBufferCollection->mesh->getModelMatrix();
-		vertexBufferCollection->modelDescriptor.lightSpace = dirLight.lightSpace;
-		m_modelDescriptorUniformBuffer->update(&vertexBufferCollection->modelDescriptor);
-		vertexBufferCollection->vertexBuffer->drawElements(GL_TRIANGLES);
-	});
+		glEnable(GL_CULL_FACE);
+		m_shaderProgram->use();
+		glViewport(0, 0, m_depthTexture->getWidth(), m_depthTexture->getHeight());
+		glBindFramebuffer(GL_FRAMEBUFFER, dephMapFBO);
+		glClear(GL_DEPTH_BUFFER_BIT);
+		glCullFace(GL_FRONT);
 
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glDisable(GL_CULL_FACE);
+		m_depthTexture->use(0);
+
+		auto dirLight = m_lightManager->getDirectionalLight(0);
+
+		m_vertexBufferCollection->forEachEntity([&](auto vertexBufferCollection)
+			{
+				vertexBufferCollection->modelDescriptor.model = vertexBufferCollection->mesh->getModelMatrix();
+				vertexBufferCollection->modelDescriptor.lightSpace = dirLight.lightSpace;
+				m_modelDescriptorUniformBuffer->update(&vertexBufferCollection->modelDescriptor);
+				vertexBufferCollection->vertexBuffer->drawElements(GL_TRIANGLES);
+			});
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glDisable(GL_CULL_FACE);
+	}
 }
