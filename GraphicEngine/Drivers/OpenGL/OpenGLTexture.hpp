@@ -25,6 +25,15 @@ namespace GraphicEngine::OpenGL
 		int channels{ 0 };
 	};
 
+	class TextureArray : public Texture
+	{
+	public:
+		int getLayers();
+
+	protected:
+		int layers;
+	};
+
 	class Texture2D : public Texture
 	{
 	public:
@@ -40,9 +49,28 @@ namespace GraphicEngine::OpenGL
 		static constexpr std::array<GLenum, 4> internalFormats = { {GL_R, GL_RG, GL_RGB, GL_RGBA} };
 	};
 
+	class Texture2DArray : public TextureArray
+	{
+		Texture2DArray(const std::string& path);
+		Texture2DArray(const uint8_t* data, int width, int height, int layers, int channels);
+
+		static auto getFormat(int channels)
+		{
+			return internalFormats.at(static_cast<size_t>(channels) - 1);
+		}
+
+		static constexpr std::array<GLenum, 4> internalFormats = { {GL_R, GL_RG, GL_RGB, GL_RGBA} };
+	};
+
 	class TextureDepth : public Texture
 	{
 	public:
 		TextureDepth(int width, int height);
+	};
+
+	class TextureDepthArray : public TextureArray
+	{
+	public:
+		TextureDepthArray(int width, int height, int layers);
 	};
 }

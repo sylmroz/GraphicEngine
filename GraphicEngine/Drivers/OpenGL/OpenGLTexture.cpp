@@ -99,3 +99,37 @@ GraphicEngine::OpenGL::TextureDepth::TextureDepth(int width, int height)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 }
+
+GraphicEngine::OpenGL::Texture2DArray::Texture2DArray(const std::string& path)
+{
+}
+
+GraphicEngine::OpenGL::Texture2DArray::Texture2DArray(const uint8_t* data, int width, int height, int layers, int channels)
+{
+}
+
+GraphicEngine::OpenGL::TextureDepthArray::TextureDepthArray(int width, int height, int layers)
+{
+	this->width = width;
+	this->height = height;
+	this->layers = layers;
+
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D_ARRAY, texture);
+
+	glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_DEPTH_COMPONENT, width, height, layers, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+
+	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	glTexParameterfv(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_BORDER_COLOR, borderColor);
+
+
+	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+}
+
+int GraphicEngine::OpenGL::TextureArray::getLayers()
+{
+	return this->layers;
+}

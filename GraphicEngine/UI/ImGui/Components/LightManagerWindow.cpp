@@ -39,7 +39,7 @@ GraphicEngine::GUI::LightManagerWindow::LightManagerWindow(std::shared_ptr<Servi
 	m_pointLightComponent->onAddLightClicked([&]() {
 		m_lightManager->addPointLight(Engines::Graphic::Shaders::PointLight());
 		m_pointLightComponent->elementsCount = m_lightManager->getPointLights().size();
-		m_pointLightComponent->setSelectedItem(m_directionalLightComponent->elementsCount - 1);
+		m_pointLightComponent->setSelectedItem(m_pointLightComponent->elementsCount - 1);
 	});
 	m_pointLightComponent->onDeleteLightClicked([&](int index) {
 		m_lightManager->deletePointLight(index);
@@ -62,7 +62,7 @@ GraphicEngine::GUI::LightManagerWindow::LightManagerWindow(std::shared_ptr<Servi
 	m_spotLightComponent->onAddLightClicked([&]() {
 		m_lightManager->addSpotLight(Engines::Graphic::Shaders::SpotLight());
 		m_spotLightComponent->elementsCount = m_lightManager->getSpotLights().size();
-		m_pointLightComponent->setSelectedItem(m_directionalLightComponent->elementsCount - 1);
+		m_pointLightComponent->setSelectedItem(m_spotLightComponent->elementsCount - 1);
 	});
 	m_spotLightComponent->onDeleteLightClicked([&](int index) {
 		m_lightManager->deleteSpotLight(index);
