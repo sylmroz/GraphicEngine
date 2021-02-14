@@ -822,5 +822,14 @@
     <ClInclude Include="Drivers\OpenGL\GraphicPipelines\OpenGLShadowMapGraphicPipeline.hpp">
       <Filter>Drivers\OpenGL\GraphicPipelines</Filter>
     </ClInclude>
+    <ClInclude Include="Engines\Graphic\Shaders\Models\LightSpaceMatrix.hpp">
+      <Filter>Engines\Graphic\Shaders\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Engines\Graphic\Shaders\Models\ModelMatrix.hpp">
+      <Filter>Engines\Graphic\Shaders\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Engines\Graphic\Shaders\Models\TypeArray.hpp">
+      <Filter>Engines\Graphic\Shaders\Models</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

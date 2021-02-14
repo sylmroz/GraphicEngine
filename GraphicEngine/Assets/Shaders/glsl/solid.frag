@@ -64,7 +64,7 @@ layout (std140) uniform Eye
     vec4 eyePosition;
 } eye;
 
-uniform sampler2DShadow shadowMap;
+uniform sampler2DArray shadowMap;
 
 const float Pi = 3.14159265;
 
@@ -110,28 +110,26 @@ float random(vec3 seed, int i){
 	return fract(sin(dot_product) * 43758.5453);
 }
 
-float ShadowMapCalculation(vec4 fragPosLightSpace, vec3 lightDir)
+
+float ShadowMapCalculation(vec4 fragPosLightSpace, vec3 lightDir, int layer)
 {
     vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
-    // transform to [0,1] range
     projCoords = projCoords * 0.5 + 0.5;
+    
+    if (projCoords.z > 1.0)
+        return 0.0;
 
-    float bias = max(0.005 * (1.0 - dot(normal, lightDir)), 0.005);
-    float currentDepth = projCoords.z;
+    float closestDepth = texture(shadowMap, vec3(projCoords.xy, layer)).r;
+
     float shadow = 0.0;
-   
-    vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
-
+    vec2 texelSize = 1.0 / textureSize(shadowMap, 0).xy;
     for (int i = 0; i < numOfSamples; ++i)
     {
         int index = int(16.0 * random(floor(position * 1000.0), i)) % 16;
-        float pcfDepth = texture(shadowMap, projCoords.xyz + vec3(poissonDisk[index], 0) * vec3(texelSize, 0), bias).r;
-        shadow += currentDepth > pcfDepth  ? 1.0 : 0.0;    
+        float depth = texture(shadowMap, vec3(projCoords.xy + poissonDisk[index] * texelSize, layer)).r;
+        shadow += projCoords.z > depth ? 1.0 : 0.0;
     }
     shadow /= numOfSamples;
-    
-    if(projCoords.z > 1.0)
-        shadow = 0.0;
         
     return shadow;
 }
@@ -183,11 +181,11 @@ vec3 BlinnPhong(vec3 normal, vec3 lightDir, vec3 diffuseLight, vec3 specularLigh
 
 subroutine uniform LightShadingEffectType_t LightShadingEffectType;
 
-vec3 CalcDirectionalLight(DirectionalLightBuffer light)
+vec3 CalcDirectionalLight(DirectionalLightBuffer light, int layer)
 {
     vec3 lightDir = normalize(vec3(-light.direction));
     vec4 fragPositionightSpace = light.lightSpace * vec4(position, 1.0);
-    float shadow = ShadowMapCalculation(fragPositionightSpace, lightDir);
+    float shadow = ShadowMapCalculation(fragPositionightSpace, lightDir, layer);
     return LightShadingEffectType(normal, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow);
 }
 
@@ -232,7 +230,7 @@ void main()
         vec3 lightStrength;
         for (int i = 0; i < directionalLight.light_length; i++ )
         { 
-            lightStrength += CalcDirectionalLight(directionalLight.directionalLights[i]);
+            lightStrength += CalcDirectionalLight(directionalLight.directionalLights[i], i);
         }
 
         for (int i = 0; i < pointLight.light_length; i++ )

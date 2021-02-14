@@ -4,13 +4,21 @@
 
 layout (location = 0) in vec3 inPosition;
 
-layout(std140) uniform LightSpaceModelMatrices
+layout (std140) uniform LightSpaceModelMatrices
 {
     mat4 lightSpace;
     mat4 model;
 } lightSpaceModelMatrices;
 
+layout (std140) uniform ModelMatrix
+{
+    mat4 model;
+} modelMatrix;
+
+//layout (location = 0) out mat4 lightUbo;
+
 void main()
 {
-    gl_Position = lightSpaceModelMatrices.lightSpace * lightSpaceModelMatrices.model * vec4(inPosition, 1.0);
+    //lightUbo = lightSpaceModelMatrices.lightSpace;
+    gl_Position = modelMatrix.model * vec4(inPosition, 1.0);
 }

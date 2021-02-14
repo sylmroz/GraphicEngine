@@ -44,7 +44,7 @@ namespace GraphicEngine::OpenGL
 		std::shared_ptr<ShaderStorageBufferObject<Engines::Graphic::Shaders::PointLight>> m_pointLights;
 		std::shared_ptr<ShaderStorageBufferObject<Engines::Graphic::Shaders::SpotLight>> m_spotLight;
 
-		std::shared_ptr<TextureDepth> m_depthTexture;
+		std::shared_ptr<Texture> m_depthTexture;
 
 		std::unique_ptr<Core::Logger<OpenGLRenderingEngine>> m_logger;
 

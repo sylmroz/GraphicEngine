@@ -348,9 +348,12 @@
     <ClInclude Include="Engines\Graphic\Shaders\Models\CameraMatrices.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\Eye.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\Light.hpp" />
+    <ClInclude Include="Engines\Graphic\Shaders\Models\LightSpaceMatrix.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\LightSpaceModelMatrices.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\ModelMatrices.hpp" />
+    <ClInclude Include="Engines\Graphic\Shaders\Models\ModelMatrix.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\SolidColorModelDescriptor.hpp" />
+    <ClInclude Include="Engines\Graphic\Shaders\Models\TypeArray.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\WireframeModelDescriptor.hpp" />
     <ClInclude Include="Main\Application.hpp" />
     <ClInclude Include="Main\Engine.hpp" />

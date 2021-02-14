@@ -1,6 +1,8 @@
 #pragma once
 
 #include "GraphicPipeline.hpp"
+#include "../Shaders/Models/ModelMatrix.hpp"
+#include "../Shaders/Models/LightSpaceMatrix.hpp"
 #include "../Shaders/Models/LightSpaceModelMatrices.hpp"
 #include "../../../Services/LightManager.hpp"
 
@@ -34,6 +36,8 @@ namespace GraphicEngine::Engines::Graphic
 
 	protected:
 		std::shared_ptr<Services::LightManager> m_lightManager;
+		
+		std::shared_ptr<UniformBuffer<Shaders::ModelMatrix>> m_modelMatrix;
 		std::shared_ptr<UniformBufferDynamic<Shaders::LightSpaceModelMatrices>> m_modelDescriptorUniformBuffer;
 	};
 }
