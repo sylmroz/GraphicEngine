@@ -1,13 +1,14 @@
 #include "OpenGLShadowMapGraphicPipeline.hpp"
 #include "../../../Core/IO/FileReader.hpp"
 #include "../../../Core/IO/FileSystem.hpp"
+#include "../../../Core/Utils/TokenRepleacer.hpp"
 
 GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::OpenGLShadowMapGraphicPipeline(std::shared_ptr<Services::LightManager> lightManager, std::shared_ptr<Texture> depthTexture)
 {
 	m_lightManager = lightManager;
 	OpenGLVertexShader vert(GraphicEngine::Core::IO::readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("shadowmap.vert").string()));
-	OpenGLGeometryShader geom(GraphicEngine::Core::IO::readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("shadowmap.geom").string()));
-	//OpenGLFragmentShader frag(GraphicEngine::Core::IO::readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("shadowmap.frag").string()));
+	std::string baseShader = GraphicEngine::Core::IO::readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("shadowmap.geom.template").string());
+	OpenGLGeometryShader geom(Core::Utils::tokenRepleacer(baseShader, { {"<<PLACEHOLDER_1>>", "5"} }));
 
 	m_shaderProgram = std::make_shared<OpenGLShaderProgram>(std::vector<OpenGLShader>{ vert, geom });
 

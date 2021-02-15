@@ -385,6 +385,7 @@
     <ClCompile Include="Engines\Graphic\Shaders\Models\Light.cpp">
       <Filter>Engines\Graphic\Shaders\Models</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Utils\TokenRepleacer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Input\Keyboard\KeyboardEnumKeys.hpp">
@@ -830,6 +831,9 @@
     </ClInclude>
     <ClInclude Include="Engines\Graphic\Shaders\Models\TypeArray.hpp">
       <Filter>Engines\Graphic\Shaders\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Utils\TokenRepleacer.hpp">
+      <Filter>Core\Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
