@@ -7,6 +7,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <memory>
 
 namespace GraphicEngine::OpenGL
 {
@@ -112,6 +113,7 @@ namespace GraphicEngine::OpenGL
 	{
 	public:
 		OpenGLShaderProgram(const std::vector<OpenGLShader>& shaders);
+		OpenGLShaderProgram(const std::vector<std::shared_ptr<OpenGLShader>>& shaders);
 
 		uint32_t getShaderProgramId()
 		{

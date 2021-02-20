@@ -35,8 +35,6 @@ namespace GraphicEngine::Engines::Graphic
 		virtual void draw(Args... args) = 0;
 
 	protected:
-		std::shared_ptr<Services::LightManager> m_lightManager;
-		
 		std::shared_ptr<UniformBuffer<Shaders::ModelMatrix>> m_modelMatrix;
 		std::shared_ptr<UniformBufferDynamic<Shaders::LightSpaceModelMatrices>> m_modelDescriptorUniformBuffer;
 	};

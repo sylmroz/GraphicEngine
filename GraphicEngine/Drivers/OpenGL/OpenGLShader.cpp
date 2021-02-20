@@ -57,3 +57,25 @@ GraphicEngine::OpenGL::OpenGLShaderProgram::OpenGLShaderProgram(const std::vecto
 		throw std::runtime_error(infoLog);
 	}
 }
+
+GraphicEngine::OpenGL::OpenGLShaderProgram::OpenGLShaderProgram(const std::vector<std::shared_ptr<OpenGLShader>>& shaders)
+{
+	m_shaderProgramId = glCreateProgram();
+	for (const auto& shader : shaders)
+	{
+		glAttachShader(m_shaderProgramId, shader->getShaderId());
+	}
+	glLinkProgram(m_shaderProgramId);
+
+	int succes;
+	glGetProgramiv(m_shaderProgramId, GL_LINK_STATUS, &succes);
+	if (!succes)
+	{
+		std::string infoLog;
+		infoLog.reserve(1024);
+		glGetProgramInfoLog(m_shaderProgramId, 1024, nullptr, &infoLog[0]);
+		std::string error = std::string("OpenGL program compilation error! ");
+		error += infoLog;
+		throw std::runtime_error(infoLog);
+	}
+}

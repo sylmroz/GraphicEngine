@@ -80,7 +80,12 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 		m_solidColorGraphicPipeline = std::make_unique<OpenGLSolidColorGraphicPipeline>(m_cameraControllerManager, m_depthTexture);
 		m_normalDebugGraphicPipeline = std::make_unique<OpenGLNormalDebugGraphicPipeline>(m_cameraControllerManager);
 		m_skyboxGraphicPipeline = std::make_unique<OpenGLSkyboxGraphicPipeline>(m_cfg->getProperty<std::string>("scene:skybox:base path"));
-		m_shadowMapGraphicPipeline = std::make_unique<OpenGLShadowMapGraphicPipeline>(m_lightManager, m_depthTexture);
+		Engines::Graphic::Shaders::LightSpaceMatrixArray lightSpaceMatrixArray;
+		for (auto& dirLight : m_lightManager->getDirectionalLights())
+		{
+			lightSpaceMatrixArray.data.push_back(dirLight.lightSpace);
+		}
+		m_shadowMapGraphicPipeline = std::make_unique<OpenGLShadowMapGraphicPipeline>(m_depthTexture, lightSpaceMatrixArray);
 
 		m_cameraUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::CameraMatrices>>(0);
 
@@ -92,10 +97,17 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 		m_lightManager->onUpdateDirectiionalLight([&](uint32_t index, Engines::Graphic::Shaders::DirectionalLight light)
 		{
 			m_directionalLight->update(light, index);
+			m_shadowMapGraphicPipeline->updateLight(light.lightSpace, index);
 		});
 		m_lightManager->onUpdateDirectiionalLights([&](std::vector<Engines::Graphic::Shaders::DirectionalLight> lights)
 		{
 			m_directionalLight->update(lights);
+			Engines::Graphic::Shaders::LightSpaceMatrixArray lightSpaceMatrixArray;
+			for (auto& dirLight : lights)
+			{
+				lightSpaceMatrixArray.data.push_back(dirLight.lightSpace);
+			}
+			m_shadowMapGraphicPipeline->updateLights(lightSpaceMatrixArray);
 		});
 
 		m_pointLights->update(m_lightManager->getPointLights());
