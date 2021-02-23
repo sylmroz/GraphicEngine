@@ -62,7 +62,7 @@ GraphicEngine::GUI::LightManagerWindow::LightManagerWindow(std::shared_ptr<Servi
 	m_spotLightComponent->onAddLightClicked([&]() {
 		m_lightManager->addSpotLight(Engines::Graphic::Shaders::SpotLight());
 		m_spotLightComponent->elementsCount = m_lightManager->getSpotLights().size();
-		m_pointLightComponent->setSelectedItem(m_spotLightComponent->elementsCount - 1);
+		m_spotLightComponent->setSelectedItem(m_spotLightComponent->elementsCount - 1);
 	});
 	m_spotLightComponent->onDeleteLightClicked([&](int index) {
 		m_lightManager->deleteSpotLight(index);

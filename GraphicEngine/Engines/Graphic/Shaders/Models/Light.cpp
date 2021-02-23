@@ -33,13 +33,9 @@ GraphicEngine::Engines::Graphic::Shaders::DirectionalLight::DirectionalLight(glm
 
 void GraphicEngine::Engines::Graphic::Shaders::DirectionalLight::calculateLigthSpace()
 {
-	glm::vec3 lightPos(-2.0f, 4.0f, -1.0f);
-
 	float near_plane = 1.0f, far_plane = 7.5f;
-	glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, -10.0f, 20.0f); //glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
-	glm::mat4 lightView = glm::lookAt(7.5f * glm::vec3(-glm::normalize(direction)), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	//glm::mat4 lightProjection = glm::ortho(-10.0f, 100.0f, -100.0f, 100.0f, near_plane, far_plane);
-	//glm::mat4 lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
+	glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, -10.0f, 20.0f);
+	glm::mat4 lightView = glm::lookAt(far_plane * glm::vec3(-glm::normalize(direction)), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	lightSpace = lightProjection * lightView;
 }
 
@@ -57,7 +53,12 @@ GraphicEngine::Engines::Graphic::Shaders::PointLight::PointLight(std::shared_ptr
 GraphicEngine::Engines::Graphic::Shaders::PointLight::PointLight(glm::vec4 position, float constant, float linear, float quadric, LightColor color) :
 	position{ position }, constant{ constant }, linear{ linear }, quadric{ quadric }, color{ color } {}
 
-GraphicEngine::Engines::Graphic::Shaders::SpotLight::SpotLight(std::shared_ptr<Core::Configuration> cfg) 
+GraphicEngine::Engines::Graphic::Shaders::SpotLight::SpotLight()
+{
+	calculateLigthSpace();
+}
+
+GraphicEngine::Engines::Graphic::Shaders::SpotLight::SpotLight(std::shared_ptr<Core::Configuration> cfg)
 {
 	position = glm::vec4(Core::Utils::Converter::fromArrayToObject<glm::vec3, std::vector<float>, 3>(cfg->getProperty<std::vector<float>>("position")), 1.0f);
 	direction = glm::vec4(Core::Utils::Converter::fromArrayToObject<glm::vec3, std::vector<float>, 3>(cfg->getProperty<std::vector<float>>("direction")), 1.0f);
@@ -69,7 +70,18 @@ GraphicEngine::Engines::Graphic::Shaders::SpotLight::SpotLight(std::shared_ptr<C
 	auto props = cfg->getProperty<json>("color");
 	props.items();
 	color = LightColor(std::make_shared<Core::Configuration>(props));
+	calculateLigthSpace();
 }
 
 GraphicEngine::Engines::Graphic::Shaders::SpotLight::SpotLight(glm::vec4 position, glm::vec4 direction, float innerCutOff, float outterCutOff, float constant, float linear, float quadric, LightColor color) :
-	position{ position }, direction{ direction }, innerCutOff{ innerCutOff }, outterCutOff{ outterCutOff }, constant{ constant }, linear{ linear }, quadric{ quadric }, color{ color } {}
+	position{ position }, direction{ direction }, innerCutOff{ innerCutOff }, outterCutOff{ outterCutOff }, constant{ constant }, linear{ linear }, quadric{ quadric }, color{ color } 
+{
+	calculateLigthSpace();
+}
+
+void GraphicEngine::Engines::Graphic::Shaders::SpotLight::calculateLigthSpace()
+{
+	glm::mat4 lightProjection = glm::perspective(2*glm::radians(glm::degrees(glm::acos(outterCutOff))), 1.0f, 2.0f, 50.0f);
+	glm::mat4 lightView = glm::lookAt(glm::vec3(position), glm::vec3(position) + glm::normalize(glm::vec3(direction)), glm::vec3(0.0f, 1.0f, 0.0f));
+	lightSpace = lightProjection * lightView;
+}

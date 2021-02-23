@@ -28,6 +28,10 @@ bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 	// Create shadow map
 	m_shadowMapGraphicPipeline->draw();
 
+	glClearColor(m_viewportManager->backgroudColor.r, m_viewportManager->backgroudColor.g, m_viewportManager->backgroudColor.b, m_viewportManager->backgroudColor.a);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	m_spotLightshadowMapGraphicPipeline->draw();
+
 
 	// Render Normal Scene
 	glViewport(0, 0, m_width, m_height);
@@ -76,8 +80,9 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 	try
 	{
 		m_depthTexture = std::make_shared<TextureDepthArray>(1024, 1024, 5);
+		m_spotLightdepthTexture = std::make_shared<TextureDepthArray>(512, 512, 5);
 		m_wireframeGraphicPipeline = std::make_unique<OpenGLWireframeGraphicPipeline>(m_cameraControllerManager);
-		m_solidColorGraphicPipeline = std::make_unique<OpenGLSolidColorGraphicPipeline>(m_cameraControllerManager, m_depthTexture);
+		m_solidColorGraphicPipeline = std::make_unique<OpenGLSolidColorGraphicPipeline>(m_cameraControllerManager, m_depthTexture, m_spotLightdepthTexture);
 		m_normalDebugGraphicPipeline = std::make_unique<OpenGLNormalDebugGraphicPipeline>(m_cameraControllerManager);
 		m_skyboxGraphicPipeline = std::make_unique<OpenGLSkyboxGraphicPipeline>(m_cfg->getProperty<std::string>("scene:skybox:base path"));
 		Engines::Graphic::Shaders::LightSpaceMatrixArray lightSpaceMatrixArray;
@@ -86,6 +91,15 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 			lightSpaceMatrixArray.data.push_back(dirLight.lightSpace);
 		}
 		m_shadowMapGraphicPipeline = std::make_unique<OpenGLShadowMapGraphicPipeline>(m_depthTexture, lightSpaceMatrixArray);
+
+		Engines::Graphic::Shaders::LightSpaceMatrixArray spotLightSpaceMatrixArray;
+		Engines::Graphic::Shaders::LightPositionFarPlaneArray spotLightPositionFarPlaneArray;
+		for (auto& spotLight : m_lightManager->getSpotLights())
+		{
+			spotLightSpaceMatrixArray.data.push_back(spotLight.lightSpace);
+			spotLightPositionFarPlaneArray.data.push_back(glm::vec4(glm::vec3(spotLight.position), spotLight.position.w));
+		}
+		m_spotLightshadowMapGraphicPipeline = std::make_unique<OpenGLShadowMapGraphicPipeline>(m_spotLightdepthTexture, spotLightSpaceMatrixArray, spotLightPositionFarPlaneArray);
 
 		m_cameraUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::CameraMatrices>>(0);
 
@@ -124,10 +138,19 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 		m_lightManager->onUpdateSpotlLight([&](uint32_t index, Engines::Graphic::Shaders::SpotLight light)
 		{
 			m_spotLight->update(light, index);
+			m_spotLightshadowMapGraphicPipeline->updateLight(light.lightSpace, index, glm::vec4(glm::vec3(light.position), light.position.w));
 		});
 		m_lightManager->onUpdateSpotlLights([&](std::vector<Engines::Graphic::Shaders::SpotLight> lights)
 		{
 			m_spotLight->update(lights);
+			Engines::Graphic::Shaders::LightSpaceMatrixArray spotLightSpaceMatrixArray;
+			Engines::Graphic::Shaders::LightPositionFarPlaneArray spotLightPositionFarPlaneArray;
+			for (auto& spotLight : lights)
+			{
+				spotLightSpaceMatrixArray.data.push_back(spotLight.lightSpace);
+				spotLightPositionFarPlaneArray.data.push_back(glm::vec4(glm::vec3(spotLight.position), spotLight.position.w));
+			}
+			m_spotLightshadowMapGraphicPipeline->updateLights(spotLightSpaceMatrixArray, spotLightPositionFarPlaneArray);
 		});
 
 		m_modelManager->getModelEntityContainer()->forEachEntity([&](auto model)
@@ -139,6 +162,7 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 				m_solidColorGraphicPipeline->addVertexBuffer<decltype(mesh)::element_type::vertex_type>(mesh, vb);
 				m_normalDebugGraphicPipeline->addVertexBuffer<decltype(mesh)::element_type::vertex_type>(mesh, vb);
 				m_shadowMapGraphicPipeline->addVertexBuffer<decltype(mesh)::element_type::vertex_type>(mesh, vb);
+				m_spotLightshadowMapGraphicPipeline->addVertexBuffer<decltype(mesh)::element_type::vertex_type>(mesh, vb);
 			}
 		});
 

@@ -350,6 +350,7 @@
     <ClInclude Include="Engines\Graphic\Shaders\Models\CameraMatrices.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\Eye.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\Light.hpp" />
+    <ClInclude Include="Engines\Graphic\Shaders\Models\LightPositionFarPlane.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\LightSpaceMatrix.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\LightSpaceModelMatrices.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\ModelMatrices.hpp" />

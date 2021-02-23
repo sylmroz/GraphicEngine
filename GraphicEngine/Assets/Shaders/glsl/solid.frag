@@ -31,6 +31,7 @@ struct PointLightBuffer
 
 struct SpotLightBuffer
 {
+    mat4 lightSpace;
 	vec4 position;
 	vec4 direction;
 	float innerCutOff;
@@ -65,6 +66,7 @@ layout (std140) uniform Eye
 } eye;
 
 uniform sampler2DArray shadowMap;
+uniform sampler2DArray spotLightShadowMap;
 
 const float Pi = 3.14159265;
 
@@ -82,7 +84,7 @@ float when_gt(float x)
   return 0.0;
 }
 
-const int numOfSamples = 8;
+const int numOfSamples = 4;
 
 vec2 poissonDisk[16] = vec2[]( 
    vec2( -0.94201624, -0.39906216 ), 
@@ -110,8 +112,13 @@ float random(vec3 seed, int i){
 	return fract(sin(dot_product) * 43758.5453);
 }
 
+float LinearizeDepth(float depth)
+{
+    float z = depth * 2.0 - 1.0; // Back to NDC 
+    return (200.0) / (52.0 - z * (48.0));
+}
 
-float ShadowMapCalculation(vec4 fragPosLightSpace, vec3 lightDir, int layer)
+float ShadowMapCalculation(sampler2DArray tex, vec4 fragPosLightSpace, vec3 lightDir, int layer)
 {
     vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
     projCoords = projCoords * 0.5 + 0.5;
@@ -119,14 +126,14 @@ float ShadowMapCalculation(vec4 fragPosLightSpace, vec3 lightDir, int layer)
     if (projCoords.z > 1.0)
         return 0.0;
 
-    float closestDepth = texture(shadowMap, vec3(projCoords.xy, layer)).r;
-
     float shadow = 0.0;
-    vec2 texelSize = 1.0 / textureSize(shadowMap, 0).xy;
+    vec2 texelSize = 1.0 / textureSize(tex, 0).xy;
+    float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
     for (int i = 0; i < numOfSamples; ++i)
     {
         int index = int(16.0 * random(floor(position * 1000.0), i)) % 16;
-        float depth = texture(shadowMap, vec3(projCoords.xy + poissonDisk[index] * texelSize, layer)).r;
+        float depth = texture(tex, vec3(projCoords.xy + poissonDisk[index] * texelSize, layer)).r;
+        //float depth = LinearizeDepth(texture(tex, vec3(projCoords.xy + poissonDisk[index] * texelSize, layer)).r)/50.0;
         shadow += projCoords.z > depth ? 1.0 : 0.0;
     }
     shadow /= numOfSamples;
@@ -185,7 +192,7 @@ vec3 CalcDirectionalLight(DirectionalLightBuffer light, int layer)
 {
     vec3 lightDir = normalize(vec3(-light.direction));
     vec4 fragPositionightSpace = light.lightSpace * vec4(position, 1.0);
-    float shadow = ShadowMapCalculation(fragPositionightSpace, lightDir, layer);
+    float shadow = ShadowMapCalculation(shadowMap, fragPositionightSpace, lightDir, layer);
     return LightShadingEffectType(normal, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow);
 }
 
@@ -199,7 +206,7 @@ vec3 CalcPointLight(PointLightBuffer light)
     return LightShadingEffectType(normal, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), 0.0) * attenaution;
 }
 
-vec3 CalcSpotLight(SpotLightBuffer light)
+vec3 CalcSpotLight(SpotLightBuffer light, int layer)
 {
     vec3 lightDir = normalize(vec3(light.position) - position); 
 
@@ -210,7 +217,9 @@ vec3 CalcSpotLight(SpotLightBuffer light)
     float dist = length(position - vec3(light.position));
     float attenaution = 1.0 / (light.constant + light.linear * dist + light.quadric * (dist * dist));
 
-    return LightShadingEffectType(normal, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), 0.0) * intesity * attenaution;
+    vec4 fragPositionightSpace = light.lightSpace * vec4(position, 1.0);
+    float shadow = ShadowMapCalculation(spotLightShadowMap, fragPositionightSpace, lightDir, layer);
+    return LightShadingEffectType(normal, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow) * intesity * attenaution;
 }
 
 void main()
@@ -240,7 +249,7 @@ void main()
 
         for (int i = 0; i < spotLight.light_length; i++ )
         { 
-            lightStrength += CalcSpotLight(spotLight.spotLights[i]);
+            lightStrength += CalcSpotLight(spotLight.spotLights[i], i);
         }
 
         outColor = vec4(mix(vec3(0.0), vec3(1.0), lightStrength), 1.0);

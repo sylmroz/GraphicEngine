@@ -50,10 +50,13 @@ namespace GraphicEngine::Engines::Graphic::Shaders
 
 	struct SpotLight
 	{
-		SpotLight() = default;
+		SpotLight();
 		SpotLight(std::shared_ptr<Core::Configuration> cfg);
 		SpotLight(glm::vec4 position, glm::vec4 direction, float innerCutOff, float outterCutOff, float constant, float linear, float quadric, LightColor color);
 
+		void calculateLigthSpace();
+
+		alignas(16) glm::mat4 lightSpace;
 		alignas(16) glm::vec4 position{ 0.0f, 8.0f, 8.0f, 1.0f };
 		alignas(16) glm::vec4 direction{ 0.0f, -1.0f, -1.0f, 1.0f };
 		float innerCutOff{ glm::cos(glm::radians(1.0f)) };

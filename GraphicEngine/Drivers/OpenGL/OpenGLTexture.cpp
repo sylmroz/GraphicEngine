@@ -6,6 +6,7 @@ constexpr std::array<GLenum, 4> GraphicEngine::OpenGL::Texture2D::internalFormat
 
 GraphicEngine::OpenGL::Texture2D::Texture2D(const std::string& path)
 {
+	textureType = GL_TEXTURE_2D;
 	try
 	{
 		Common::TextureReader textureReader(path);
@@ -38,6 +39,7 @@ GraphicEngine::OpenGL::Texture2D::Texture2D(const std::string& path)
 
 GraphicEngine::OpenGL::Texture2D::Texture2D(const uint8_t* data, int width, int height, int channels)
 {
+	textureType = GL_TEXTURE_2D;
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
@@ -56,13 +58,13 @@ GraphicEngine::OpenGL::Texture2D::Texture2D(const uint8_t* data, int width, int 
 
 void GraphicEngine::OpenGL::Texture::use()
 {
-	glBindTexture(GL_TEXTURE_2D, texture);
+	glBindTexture(textureType, texture);
 }
 
 void GraphicEngine::OpenGL::Texture::use(int layer)
 {
 	glActiveTexture(GL_TEXTURE0 + layer);
-	glBindTexture(GL_TEXTURE_2D, texture);
+	glBindTexture(textureType, texture);
 }
 
 GLuint GraphicEngine::OpenGL::Texture::getTexture()
@@ -82,6 +84,7 @@ int GraphicEngine::OpenGL::Texture::getHeight()
 
 GraphicEngine::OpenGL::TextureDepth::TextureDepth(int width, int height)
 {
+	textureType = GL_TEXTURE_2D;
 	this->width = width;
 	this->height = height;
 	
@@ -102,14 +105,17 @@ GraphicEngine::OpenGL::TextureDepth::TextureDepth(int width, int height)
 
 GraphicEngine::OpenGL::Texture2DArray::Texture2DArray(const std::string& path)
 {
+	textureType = GL_TEXTURE_2D_ARRAY;
 }
 
 GraphicEngine::OpenGL::Texture2DArray::Texture2DArray(const uint8_t* data, int width, int height, int layers, int channels)
 {
+	textureType = GL_TEXTURE_2D_ARRAY;
 }
 
 GraphicEngine::OpenGL::TextureDepthArray::TextureDepthArray(int width, int height, int layers)
 {
+	textureType = GL_TEXTURE_2D_ARRAY;
 	this->width = width;
 	this->height = height;
 	this->layers = layers;

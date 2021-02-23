@@ -23,6 +23,7 @@ namespace GraphicEngine::OpenGL
 		int width{ 0 };
 		int height{ 0 };
 		int channels{ 0 };
+		int textureType;
 	};
 
 	class TextureArray : public Texture

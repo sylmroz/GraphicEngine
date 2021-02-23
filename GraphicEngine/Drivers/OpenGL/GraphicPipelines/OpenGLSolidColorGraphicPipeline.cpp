@@ -2,7 +2,7 @@
 #include "../../../Core/IO/FileReader.hpp"
 #include "../../../Core/IO/FileSystem.hpp"
 
-GraphicEngine::OpenGL::OpenGLSolidColorGraphicPipeline::OpenGLSolidColorGraphicPipeline(std::shared_ptr<Services::CameraControllerManager> cameraControllerManager, std::shared_ptr<Texture> depthTexture) :
+GraphicEngine::OpenGL::OpenGLSolidColorGraphicPipeline::OpenGLSolidColorGraphicPipeline(std::shared_ptr<Services::CameraControllerManager> cameraControllerManager, std::shared_ptr<Texture> depthTexture, std::shared_ptr<Texture> spotLightShadowMaps) :
 	Engines::Graphic::SolidColorGraphicPipeline<VertexBuffer, UniformBuffer, UniformBuffer>{ cameraControllerManager }
 {
 	OpenGLVertexShader vert(GraphicEngine::Core::IO::readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("solid.vert").string()));
@@ -10,14 +10,19 @@ GraphicEngine::OpenGL::OpenGLSolidColorGraphicPipeline::OpenGLSolidColorGraphicP
 
 	m_shaderProgram = std::make_shared<OpenGLShaderProgram>(std::vector<OpenGLShader>{ vert, frag });
 
+	m_depthTexture = depthTexture;
+	m_spotLightShadowMaps = spotLightShadowMaps;
 	m_eyePositionUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::Eye>>(2, m_shaderProgram);
 	m_solidColorUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::SolidColorModelDescriptor>>(4, m_shaderProgram);
 	m_shaderProgram->use();
 	m_diffuseOnlyIndex = glGetSubroutineIndex(m_shaderProgram->getShaderProgramId(), GL_FRAGMENT_SHADER, "BlinnPhong");
 	auto id = glGetUniformLocation(m_shaderProgram->getShaderProgramId(), "shadowMap");
 	glUniform1i(id, 0);
+	m_depthTexture->use(0);
 
-	m_depthTexture = depthTexture;
+	auto id2 = glGetUniformLocation(m_shaderProgram->getShaderProgramId(), "spotLightShadowMap");
+	glUniform1i(id2, 1);
+	m_spotLightShadowMaps->use(1);
 }
 
 void GraphicEngine::OpenGL::OpenGLSolidColorGraphicPipeline::draw()
@@ -25,8 +30,6 @@ void GraphicEngine::OpenGL::OpenGLSolidColorGraphicPipeline::draw()
 	m_shaderProgram->use();
 
 	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &m_diffuseOnlyIndex);
-
-	//m_depthTexture->use(0);
 
 	auto viewMatrix = m_cameraControllerManager->getActiveCamera()->getViewMatrix();
 	auto projectionMatrix = m_cameraControllerManager->getActiveCamera()->getProjectionMatrix();

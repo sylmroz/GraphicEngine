@@ -7,6 +7,7 @@ GraphicEngine::GUI::SpotLightComponent::SpotLightComponent() :
 	m_positionInput->onInputScalarEdit([&](glm::vec4 value)
 	{
 		currentLightParameters.position = value;
+		currentLightParameters.calculateLigthSpace();
 		m_lightEditedSubject.notify(selectedItem, currentLightParameters);
 	});
 
@@ -14,6 +15,7 @@ GraphicEngine::GUI::SpotLightComponent::SpotLightComponent() :
 	m_directionInput->onInputScalarEdit([&](glm::vec4 value)
 	{
 		currentLightParameters.direction = value;
+		currentLightParameters.calculateLigthSpace();
 		m_lightEditedSubject.notify(selectedItem, currentLightParameters);
 	});
 
@@ -28,6 +30,7 @@ GraphicEngine::GUI::SpotLightComponent::SpotLightComponent() :
 	m_outterCutoffInput->onInputScalarEdit([&](float value)
 	{
 		currentLightParameters.outterCutOff = glm::cos(glm::radians(value));
+		currentLightParameters.calculateLigthSpace();
 		m_lightEditedSubject.notify(selectedItem, currentLightParameters);
 	});
 

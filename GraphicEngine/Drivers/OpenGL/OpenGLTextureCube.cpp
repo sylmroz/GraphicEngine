@@ -64,6 +64,7 @@ GraphicEngine::OpenGL::TextureCube::TextureCube(const std::array<std::tuple<uint
 
 void GraphicEngine::OpenGL::TextureCube::use()
 {
+	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
 }
 

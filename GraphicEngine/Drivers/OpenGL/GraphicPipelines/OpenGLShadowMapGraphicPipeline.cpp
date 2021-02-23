@@ -3,20 +3,39 @@
 #include "../../../Core/IO/FileSystem.hpp"
 #include "../../../Core/Utils/TokenRepleacer.hpp"
 
-GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::OpenGLShadowMapGraphicPipeline(std::shared_ptr<Texture> depthTexture, Engines::Graphic::Shaders::LightSpaceMatrixArray lightSpaceMatrixArray)
+GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::OpenGLShadowMapGraphicPipeline(std::shared_ptr<Texture> depthTexture, Engines::Graphic::Shaders::LightSpaceMatrixArray lightSpaceMatrixArray, Engines::Graphic::Shaders::LightPositionFarPlaneArray lightPositionFarPlaneArray)
 {
 	m_lightSpaceMatrixArray = lightSpaceMatrixArray;
+	m_lightPositionFarPlaneArray = lightPositionFarPlaneArray;
 	auto vert = std::make_shared<OpenGLVertexShader>(GraphicEngine::Core::IO::readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("shadowmap.vert").string()));
 	m_shaders.push_back(vert);
 	m_shaderTemplate = GraphicEngine::Core::IO::readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("shadowmap.geom.template").string());
 	uint32_t lightCount = lightSpaceMatrixArray.data.size() > 0 ? lightSpaceMatrixArray.data.size() : 1;
-	auto geom = std::make_shared<OpenGLGeometryShader>(Core::Utils::tokenRepleacer(m_shaderTemplate, { {"<<PLACEHOLDER_1>>", std::to_string(lightCount)} }));
+	auto geom = std::make_shared<OpenGLGeometryShader>(Core::Utils::tokenRepleacer(m_shaderTemplate,
+		{
+			{"<<PLACEHOLDER_1>>", std::to_string(lightCount)},
+			{"<<PLACEHOLDER_2>>", m_lightPositionFarPlaneArray.data.size() > 0 ? "FRAG" : "NON_FRAG"}
+		}));
 	m_shaders.push_back(geom);
+	if (m_lightPositionFarPlaneArray.data.size() > 0)
+	{
+		m_shaders.push_back(std::make_shared<OpenGLFragmentShader>(GraphicEngine::Core::IO::readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("shadowmap.frag").string())));
+	}
 	m_shaderProgram = std::make_shared<OpenGLShaderProgram>(m_shaders);
 
-	m_modelDescriptorUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::LightSpaceModelMatrices>>(12, m_shaderProgram);
-	m_modelMatrix = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::ModelMatrix>>(13, m_shaderProgram);
-	m_lightSpaceMatrixArrayUniform = std::make_shared<UniformBufferArray<Engines::Graphic::Shaders::LightSpaceMatrixArray>>(14, m_shaderProgram);
+	int offset = m_lightPositionFarPlaneArray.data.size() > 0 ? 10 : 0;
+
+	m_modelDescriptorUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::LightSpaceModelMatrices>>(12 + offset, m_shaderProgram);
+	m_modelMatrix = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::ModelMatrix>>(13 + offset, m_shaderProgram);
+	m_lightSpaceMatrixArrayUniform = std::make_shared<UniformBufferArray<Engines::Graphic::Shaders::LightSpaceMatrixArray>>(14 + offset, m_shaderProgram);
+
+	m_lightSpaceMatrixArrayUniform->update(m_lightSpaceMatrixArray.data.data(), m_lightSpaceMatrixArray.data.size(), 0);
+
+	if (m_lightPositionFarPlaneArray.data.size() > 0)
+	{
+		m_lightPositionFarPlaneArrayUniform = std::make_shared<UniformBufferArray<Engines::Graphic::Shaders::LightPositionFarPlaneArray>>(15 + offset, m_shaderProgram);
+		m_lightPositionFarPlaneArrayUniform->update(m_lightPositionFarPlaneArray.data.data(), m_lightPositionFarPlaneArray.data.size(), 0);
+	}
 
 	m_depthTexture = depthTexture;
 
@@ -39,8 +58,6 @@ void GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::draw()
 		glClear(GL_DEPTH_BUFFER_BIT); 
 		glCullFace(GL_FRONT);
 
-		m_lightSpaceMatrixArrayUniform->update(m_lightSpaceMatrixArray.data.data(), m_lightSpaceMatrixArray.data.size(), 0);
-
 		m_vertexBufferCollection->forEachEntity([&](auto vertexBufferCollection)
 			{
 				vertexBufferCollection->modelDescriptor.model = vertexBufferCollection->mesh->getModelMatrix();
@@ -55,18 +72,38 @@ void GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::draw()
 	}
 }
 
-void GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::updateLights(Engines::Graphic::Shaders::LightSpaceMatrixArray lightSpaceMatrixArray)
+void GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::updateLights(Engines::Graphic::Shaders::LightSpaceMatrixArray lightSpaceMatrixArray, Engines::Graphic::Shaders::LightPositionFarPlaneArray lightPositionFarPlaneArray)
 {
 	m_lightSpaceMatrixArray = lightSpaceMatrixArray;
+	m_lightPositionFarPlaneArray = lightPositionFarPlaneArray;
 	uint32_t lightCount = m_lightSpaceMatrixArray.data.size() > 0 ? m_lightSpaceMatrixArray.data.size() : 1;
-	m_shaders[1] = std::make_shared<OpenGLGeometryShader>(Core::Utils::tokenRepleacer(m_shaderTemplate, { {"<<PLACEHOLDER_1>>", std::to_string(lightCount)} }));
+	m_shaders[1] = std::make_shared<OpenGLGeometryShader>(Core::Utils::tokenRepleacer(m_shaderTemplate,
+		{
+			{"<<PLACEHOLDER_1>>", std::to_string(lightCount)},
+			{"<<PLACEHOLDER_2>>", m_lightPositionFarPlaneArray.data.size() > 0 ? "FRAG" : "NON_FRAG"}
+		}));
 	m_shaderProgram = std::make_shared<OpenGLShaderProgram>(m_shaders);
 	m_modelDescriptorUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::LightSpaceModelMatrices>>(12, m_shaderProgram);
 	m_modelMatrix = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::ModelMatrix>>(13, m_shaderProgram);
 	m_lightSpaceMatrixArrayUniform = std::make_shared<UniformBufferArray<Engines::Graphic::Shaders::LightSpaceMatrixArray>>(14, m_shaderProgram);
+
+	m_lightSpaceMatrixArrayUniform->update(m_lightSpaceMatrixArray.data.data(), m_lightSpaceMatrixArray.data.size(), 0);
+
+	if (m_lightPositionFarPlaneArray.data.size() > 0)
+	{
+		m_lightPositionFarPlaneArrayUniform = std::make_shared<UniformBufferArray<Engines::Graphic::Shaders::LightPositionFarPlaneArray>>(15, m_shaderProgram);
+		m_lightPositionFarPlaneArrayUniform->update(m_lightPositionFarPlaneArray.data.data(), m_lightPositionFarPlaneArray.data.size(), 0);
+	}
 }
 
-void GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::updateLight(Engines::Graphic::Shaders::LightSpaceMatrix lightSpaceMatrix, uint32_t index)
+void GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::updateLight(Engines::Graphic::Shaders::LightSpaceMatrix lightSpaceMatrix, uint32_t index, Engines::Graphic::Shaders::LightPositionFarPlane lightPositionFarPlane)
 {
 	m_lightSpaceMatrixArray.data[index] = lightSpaceMatrix;
+	m_lightSpaceMatrixArrayUniform->update(m_lightSpaceMatrixArray.data.data(), m_lightSpaceMatrixArray.data.size(), 0);
+
+	if (m_lightPositionFarPlaneArray.data.size() > 0)
+	{
+		m_lightPositionFarPlaneArray.data[index] = lightPositionFarPlane;
+		m_lightPositionFarPlaneArrayUniform->update(m_lightPositionFarPlaneArray.data.data(), m_lightPositionFarPlaneArray.data.size(), 0);
+	}
 }
