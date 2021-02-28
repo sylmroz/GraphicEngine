@@ -14,6 +14,7 @@
 #include "../Services/ModelManager.hpp"
 #include "../Services/LightManager.hpp"
 #include "../Services/ViewportManager.hpp"
+#include "../Services/RenderingOptionsManager.hpp"
 
 #include "../Engines//Graphic/Shaders/Models/Light.hpp"
 
@@ -29,6 +30,7 @@ namespace GraphicEngine
 			std::shared_ptr<Services::ModelManager> modelManager,
 			std::shared_ptr<Services::LightManager> lightManager,
 			std::shared_ptr<Services::ViewportManager> viewportManager,
+			std::shared_ptr<Services::RenderingOptionsManager> renderingOptionsManager,
 			std::shared_ptr<Core::EventManager> eventManager,
 			std::shared_ptr<Common::UI> ui,
 			std::shared_ptr<Core::Configuration> cfg);
@@ -47,5 +49,6 @@ namespace GraphicEngine
 		std::shared_ptr<Common::UI> m_ui;
 		std::shared_ptr<Core::Configuration> m_cfg;
 		std::shared_ptr<Services::ViewportManager> m_viewportManager;
+		std::shared_ptr<Services::RenderingOptionsManager> m_renderingOptionsManager;
 	};
 }

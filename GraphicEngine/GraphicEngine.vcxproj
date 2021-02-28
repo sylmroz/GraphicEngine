@@ -224,6 +224,7 @@
     <ClCompile Include="Services\CameraControllerManager.cpp" />
     <ClCompile Include="Services\LightManager.cpp" />
     <ClCompile Include="Services\ModelManager.cpp" />
+    <ClCompile Include="Services\RenderingOptionsManager.cpp" />
     <ClCompile Include="Services\ViewportManager.cpp" />
     <ClCompile Include="UI\ImGui\Components\CameraManagerWindow.cpp" />
     <ClCompile Include="UI\ImGui\Components\LightManagerWindow.cpp" />
@@ -231,6 +232,7 @@
     <ClCompile Include="UI\ImGui\Components\Lights\LightComponent.cpp" />
     <ClCompile Include="UI\ImGui\Components\Lights\PointLightCompoment.cpp" />
     <ClCompile Include="UI\ImGui\Components\Lights\SpotLightComponent.cpp" />
+    <ClCompile Include="UI\ImGui\Components\RenderingSettingsWindow.cpp" />
     <ClCompile Include="UI\ImGui\Components\SettingsWindow.cpp" />
     <ClCompile Include="UI\ImGui\Components\ViewportSettingsWindow.cpp" />
     <ClCompile Include="UI\ImGui\ImGuiImpl.cpp" />
@@ -355,6 +357,7 @@
     <ClInclude Include="Engines\Graphic\Shaders\Models\LightSpaceModelMatrices.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\ModelMatrices.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\ModelMatrix.hpp" />
+    <ClInclude Include="Engines\Graphic\Shaders\Models\RenderingOptions.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\SolidColorModelDescriptor.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\TypeArray.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\WireframeModelDescriptor.hpp" />
@@ -376,6 +379,7 @@
     <ClInclude Include="Services\CameraControllerManager.hpp" />
     <ClInclude Include="Services\LightManager.hpp" />
     <ClInclude Include="Services\ModelManager.hpp" />
+    <ClInclude Include="Services\RenderingOptionsManager.hpp" />
     <ClInclude Include="Services\ViewportManager.hpp" />
     <ClInclude Include="UI\ImGui\Components\CameraManagerWindow.hpp" />
     <ClInclude Include="UI\ImGui\Components\LightManagerWindow.hpp" />
@@ -383,6 +387,7 @@
     <ClInclude Include="UI\ImGui\Components\Lights\LightComponent.hpp" />
     <ClInclude Include="UI\ImGui\Components\Lights\PointLightCompoment.hpp" />
     <ClInclude Include="UI\ImGui\Components\Lights\SpotLightComponent.hpp" />
+    <ClInclude Include="UI\ImGui\Components\RenderingSettingsWindow.hpp" />
     <ClInclude Include="UI\ImGui\Components\SettingsWindow.hpp" />
     <ClInclude Include="UI\ImGui\Components\ViewportSettingsWindow.hpp" />
     <ClInclude Include="UI\ImGui\ImGuiImpl.hpp" />

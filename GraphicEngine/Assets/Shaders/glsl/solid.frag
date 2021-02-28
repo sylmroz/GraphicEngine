@@ -65,6 +65,20 @@ layout (std140) uniform Eye
     vec4 eyePosition;
 } eye;
 
+struct ShadowRenderingOptions
+{
+    bool directional;
+    bool point;
+    bool spot;
+};
+
+layout (std140) uniform RenderingOptions
+{
+    ShadowRenderingOptions shadowRendering;
+    bool ambientOcclusion;
+    bool globalIllumination;
+} renderingOptions;
+
 uniform sampler2DArray shadowMap;
 uniform sampler2DArray spotLightShadowMap;
 
@@ -112,12 +126,6 @@ float random(vec3 seed, int i){
 	return fract(sin(dot_product) * 43758.5453);
 }
 
-float LinearizeDepth(float depth)
-{
-    float z = depth * 2.0 - 1.0; // Back to NDC 
-    return (200.0) / (52.0 - z * (48.0));
-}
-
 float ShadowMapCalculation(sampler2DArray tex, vec4 fragPosLightSpace, vec3 lightDir, int layer)
 {
     vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
@@ -133,7 +141,6 @@ float ShadowMapCalculation(sampler2DArray tex, vec4 fragPosLightSpace, vec3 ligh
     {
         int index = int(16.0 * random(floor(position * 1000.0), i)) % 16;
         float depth = texture(tex, vec3(projCoords.xy + poissonDisk[index] * texelSize, layer)).r;
-        //float depth = LinearizeDepth(texture(tex, vec3(projCoords.xy + poissonDisk[index] * texelSize, layer)).r)/50.0;
         shadow += projCoords.z > depth ? 1.0 : 0.0;
     }
     shadow /= numOfSamples;
@@ -192,7 +199,9 @@ vec3 CalcDirectionalLight(DirectionalLightBuffer light, int layer)
 {
     vec3 lightDir = normalize(vec3(-light.direction));
     vec4 fragPositionightSpace = light.lightSpace * vec4(position, 1.0);
-    float shadow = ShadowMapCalculation(shadowMap, fragPositionightSpace, lightDir, layer);
+    float shadow = 0.0;
+    if (renderingOptions.shadowRendering.directional)
+        shadow = ShadowMapCalculation(shadowMap, fragPositionightSpace, lightDir, layer);
     return LightShadingEffectType(normal, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow);
 }
 
@@ -203,7 +212,11 @@ vec3 CalcPointLight(PointLightBuffer light)
     float dist = length(position - vec3(light.position));
     float attenaution = 1.0 / (light.constant + light.linear * dist + light.quadric * (dist * dist));
 
-    return LightShadingEffectType(normal, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), 0.0) * attenaution;
+    float shadow = 0.0;
+    if (renderingOptions.shadowRendering.point)
+        shadow = 0.0; //ShadowMapCalculation(shadowMap, fragPositionightSpace, lightDir, layer);
+
+    return LightShadingEffectType(normal, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow) * attenaution;
 }
 
 vec3 CalcSpotLight(SpotLightBuffer light, int layer)
@@ -218,7 +231,9 @@ vec3 CalcSpotLight(SpotLightBuffer light, int layer)
     float attenaution = 1.0 / (light.constant + light.linear * dist + light.quadric * (dist * dist));
 
     vec4 fragPositionightSpace = light.lightSpace * vec4(position, 1.0);
-    float shadow = ShadowMapCalculation(spotLightShadowMap, fragPositionightSpace, lightDir, layer);
+    float shadow = 0.0;
+    if (renderingOptions.shadowRendering.spot)
+        shadow = ShadowMapCalculation(spotLightShadowMap, fragPositionightSpace, lightDir, layer);
     return LightShadingEffectType(normal, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow) * intesity * attenaution;
 }
 

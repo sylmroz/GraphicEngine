@@ -11,27 +11,33 @@ GraphicEngine::OpenGL::OpenGLRenderingEngine::OpenGLRenderingEngine(
 	std::shared_ptr<Services::ModelManager> modelManager,
 	std::shared_ptr<Services::LightManager> lightManager,
 	std::shared_ptr<Services::ViewportManager> viewportManager,
+	std::shared_ptr<Services::RenderingOptionsManager> renderingOptionsManager,
 	std::shared_ptr<Core::EventManager> eventManager,
 	std::shared_ptr<Common::UI> ui,
 	std::shared_ptr<Core::Configuration> cfg,
 	std::unique_ptr<Core::Logger<OpenGLRenderingEngine>> logger) :
 	m_logger(std::move(logger)),
-	RenderingEngine(cameraControllerManager, modelManager, lightManager, viewportManager, eventManager, ui, cfg)
+	RenderingEngine(cameraControllerManager, modelManager, lightManager, viewportManager, renderingOptionsManager, eventManager, ui, cfg)
 {
 	m_logger->info(__FILE__, __LINE__, __FUNCTION__, "Create OpenGL rendering engine instance.");
 }
 
 bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 {
-	glClearColor(m_viewportManager->backgroudColor.r, m_viewportManager->backgroudColor.g, m_viewportManager->backgroudColor.b, m_viewportManager->backgroudColor.a);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	// Create shadow map
-	m_shadowMapGraphicPipeline->draw();
+	if (m_renderingOptionsManager->renderingOptions.shadowRendering.directional)
+	{
+		glClearColor(m_viewportManager->backgroudColor.r, m_viewportManager->backgroudColor.g, m_viewportManager->backgroudColor.b, m_viewportManager->backgroudColor.a);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		// Create shadow map
+		m_shadowMapGraphicPipeline->draw();
+	}
 
-	glClearColor(m_viewportManager->backgroudColor.r, m_viewportManager->backgroudColor.g, m_viewportManager->backgroudColor.b, m_viewportManager->backgroudColor.a);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	m_spotLightshadowMapGraphicPipeline->draw();
-
+	if (m_renderingOptionsManager->renderingOptions.shadowRendering.spot)
+	{
+		glClearColor(m_viewportManager->backgroudColor.r, m_viewportManager->backgroudColor.g, m_viewportManager->backgroudColor.b, m_viewportManager->backgroudColor.a);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		m_spotLightshadowMapGraphicPipeline->draw();
+	}
 
 	// Render Normal Scene
 	glViewport(0, 0, m_width, m_height);
@@ -82,7 +88,7 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 		m_depthTexture = std::make_shared<TextureDepthArray>(1024, 1024, 5);
 		m_spotLightdepthTexture = std::make_shared<TextureDepthArray>(512, 512, 5);
 		m_wireframeGraphicPipeline = std::make_unique<OpenGLWireframeGraphicPipeline>(m_cameraControllerManager);
-		m_solidColorGraphicPipeline = std::make_unique<OpenGLSolidColorGraphicPipeline>(m_cameraControllerManager, m_depthTexture, m_spotLightdepthTexture);
+		m_solidColorGraphicPipeline = std::make_unique<OpenGLSolidColorGraphicPipeline>(m_cameraControllerManager, m_renderingOptionsManager, m_depthTexture, m_spotLightdepthTexture);
 		m_normalDebugGraphicPipeline = std::make_unique<OpenGLNormalDebugGraphicPipeline>(m_cameraControllerManager);
 		m_skyboxGraphicPipeline = std::make_unique<OpenGLSkyboxGraphicPipeline>(m_cfg->getProperty<std::string>("scene:skybox:base path"));
 		Engines::Graphic::Shaders::LightSpaceMatrixArray lightSpaceMatrixArray;

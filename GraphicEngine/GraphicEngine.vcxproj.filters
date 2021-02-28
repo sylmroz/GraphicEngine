@@ -388,6 +388,12 @@
     <ClCompile Include="Core\Utils\TokenRepleacer.cpp">
       <Filter>Core\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Services\RenderingOptionsManager.cpp">
+      <Filter>Services</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\ImGui\Components\RenderingSettingsWindow.cpp">
+      <Filter>UI\ImGui\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Input\Keyboard\KeyboardEnumKeys.hpp">
@@ -839,6 +845,15 @@
     </ClInclude>
     <ClInclude Include="Engines\Graphic\Shaders\Models\LightPositionFarPlane.hpp">
       <Filter>Engines\Graphic\Shaders\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Engines\Graphic\Shaders\Models\RenderingOptions.hpp">
+      <Filter>Engines\Graphic\Shaders\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Services\RenderingOptionsManager.hpp">
+      <Filter>Services</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ImGui\Components\RenderingSettingsWindow.hpp">
+      <Filter>UI\ImGui\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
