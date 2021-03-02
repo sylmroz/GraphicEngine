@@ -67,16 +67,16 @@ layout (std140) uniform Eye
 
 struct ShadowRenderingOptions
 {
-    bool directional;
-    bool point;
-    bool spot;
+    int directional;
+    int point;
+    int spot;
 };
 
 layout (std140) uniform RenderingOptions
 {
     ShadowRenderingOptions shadowRendering;
-    bool ambientOcclusion;
-    bool globalIllumination;
+    int ambientOcclusion;
+    int globalIllumination;
 } renderingOptions;
 
 uniform sampler2DArray shadowMap;
@@ -200,7 +200,7 @@ vec3 CalcDirectionalLight(DirectionalLightBuffer light, int layer)
     vec3 lightDir = normalize(vec3(-light.direction));
     vec4 fragPositionightSpace = light.lightSpace * vec4(position, 1.0);
     float shadow = 0.0;
-    if (renderingOptions.shadowRendering.directional)
+    if (renderingOptions.shadowRendering.directional > 0)
         shadow = ShadowMapCalculation(shadowMap, fragPositionightSpace, lightDir, layer);
     return LightShadingEffectType(normal, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow);
 }
@@ -213,7 +213,7 @@ vec3 CalcPointLight(PointLightBuffer light)
     float attenaution = 1.0 / (light.constant + light.linear * dist + light.quadric * (dist * dist));
 
     float shadow = 0.0;
-    if (renderingOptions.shadowRendering.point)
+    if (renderingOptions.shadowRendering.point > 0)
         shadow = 0.0; //ShadowMapCalculation(shadowMap, fragPositionightSpace, lightDir, layer);
 
     return LightShadingEffectType(normal, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow) * attenaution;
@@ -232,7 +232,7 @@ vec3 CalcSpotLight(SpotLightBuffer light, int layer)
 
     vec4 fragPositionightSpace = light.lightSpace * vec4(position, 1.0);
     float shadow = 0.0;
-    if (renderingOptions.shadowRendering.spot)
+    if (renderingOptions.shadowRendering.spot > 0)
         shadow = ShadowMapCalculation(spotLightShadowMap, fragPositionightSpace, lightDir, layer);
     return LightShadingEffectType(normal, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow) * intesity * attenaution;
 }

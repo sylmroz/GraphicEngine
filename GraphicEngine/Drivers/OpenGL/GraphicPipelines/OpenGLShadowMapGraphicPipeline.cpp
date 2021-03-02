@@ -3,10 +3,11 @@
 #include "../../../Core/IO/FileSystem.hpp"
 #include "../../../Core/Utils/TokenRepleacer.hpp"
 
-GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::OpenGLShadowMapGraphicPipeline(std::shared_ptr<Texture> depthTexture, Engines::Graphic::Shaders::LightSpaceMatrixArray lightSpaceMatrixArray, Engines::Graphic::Shaders::LightPositionFarPlaneArray lightPositionFarPlaneArray)
+GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::OpenGLShadowMapGraphicPipeline(std::shared_ptr<Texture> depthTexture, Engines::Graphic::Shaders::LightSpaceMatrixArray lightSpaceMatrixArray, LightTypeShadow type, Engines::Graphic::Shaders::LightPositionFarPlaneArray lightPositionFarPlaneArray)
 {
 	m_lightSpaceMatrixArray = lightSpaceMatrixArray;
 	m_lightPositionFarPlaneArray = lightPositionFarPlaneArray;
+	m_type = type;
 	auto vert = std::make_shared<OpenGLVertexShader>(GraphicEngine::Core::IO::readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("shadowmap.vert").string()));
 	m_shaders.push_back(vert);
 	m_shaderTemplate = GraphicEngine::Core::IO::readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("shadowmap.geom.template").string());
@@ -14,7 +15,7 @@ GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::OpenGLShadowMapGraphicPip
 	auto geom = std::make_shared<OpenGLGeometryShader>(Core::Utils::tokenRepleacer(m_shaderTemplate,
 		{
 			{"<<PLACEHOLDER_1>>", std::to_string(lightCount)},
-			{"<<PLACEHOLDER_2>>", m_lightPositionFarPlaneArray.data.size() > 0 ? "FRAG" : "NON_FRAG"}
+			{"<<PLACEHOLDER_2>>", getShaderTypePlaceholder()}
 		}));
 	m_shaders.push_back(geom);
 	if (m_lightPositionFarPlaneArray.data.size() > 0)
@@ -23,17 +24,15 @@ GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::OpenGLShadowMapGraphicPip
 	}
 	m_shaderProgram = std::make_shared<OpenGLShaderProgram>(m_shaders);
 
-	int offset = m_lightPositionFarPlaneArray.data.size() > 0 ? 10 : 0;
-
-	m_modelDescriptorUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::LightSpaceModelMatrices>>(12 + offset, m_shaderProgram);
-	m_modelMatrix = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::ModelMatrix>>(13 + offset, m_shaderProgram);
-	m_lightSpaceMatrixArrayUniform = std::make_shared<UniformBufferArray<Engines::Graphic::Shaders::LightSpaceMatrixArray>>(14 + offset, m_shaderProgram);
+	m_modelDescriptorUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::LightSpaceModelMatrices>>(12 + getOffset(), m_shaderProgram);
+	m_modelMatrix = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::ModelMatrix>>(13 + getOffset(), m_shaderProgram);
+	m_lightSpaceMatrixArrayUniform = std::make_shared<UniformBufferArray<Engines::Graphic::Shaders::LightSpaceMatrixArray>>(14 + getOffset(), m_shaderProgram);
 
 	m_lightSpaceMatrixArrayUniform->update(m_lightSpaceMatrixArray.data.data(), m_lightSpaceMatrixArray.data.size(), 0);
 
-	if (m_lightPositionFarPlaneArray.data.size() > 0)
+	if (m_type != LightTypeShadow::directional)
 	{
-		m_lightPositionFarPlaneArrayUniform = std::make_shared<UniformBufferArray<Engines::Graphic::Shaders::LightPositionFarPlaneArray>>(15 + offset, m_shaderProgram);
+		m_lightPositionFarPlaneArrayUniform = std::make_shared<UniformBufferArray<Engines::Graphic::Shaders::LightPositionFarPlaneArray>>(15 + getOffset(), m_shaderProgram);
 		m_lightPositionFarPlaneArrayUniform->update(m_lightPositionFarPlaneArray.data.data(), m_lightPositionFarPlaneArray.data.size(), 0);
 	}
 
@@ -80,18 +79,18 @@ void GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::updateLights(Engines
 	m_shaders[1] = std::make_shared<OpenGLGeometryShader>(Core::Utils::tokenRepleacer(m_shaderTemplate,
 		{
 			{"<<PLACEHOLDER_1>>", std::to_string(lightCount)},
-			{"<<PLACEHOLDER_2>>", m_lightPositionFarPlaneArray.data.size() > 0 ? "FRAG" : "NON_FRAG"}
+			{"<<PLACEHOLDER_2>>", getShaderTypePlaceholder()}
 		}));
 	m_shaderProgram = std::make_shared<OpenGLShaderProgram>(m_shaders);
-	m_modelDescriptorUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::LightSpaceModelMatrices>>(12, m_shaderProgram);
-	m_modelMatrix = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::ModelMatrix>>(13, m_shaderProgram);
-	m_lightSpaceMatrixArrayUniform = std::make_shared<UniformBufferArray<Engines::Graphic::Shaders::LightSpaceMatrixArray>>(14, m_shaderProgram);
+	m_modelDescriptorUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::LightSpaceModelMatrices>>(12 + getOffset(), m_shaderProgram);
+	m_modelMatrix = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::ModelMatrix>>(13 + getOffset(), m_shaderProgram);
+	m_lightSpaceMatrixArrayUniform = std::make_shared<UniformBufferArray<Engines::Graphic::Shaders::LightSpaceMatrixArray>>(14 + getOffset(), m_shaderProgram);
 
 	m_lightSpaceMatrixArrayUniform->update(m_lightSpaceMatrixArray.data.data(), m_lightSpaceMatrixArray.data.size(), 0);
 
-	if (m_lightPositionFarPlaneArray.data.size() > 0)
+	if (m_type != LightTypeShadow::directional)
 	{
-		m_lightPositionFarPlaneArrayUniform = std::make_shared<UniformBufferArray<Engines::Graphic::Shaders::LightPositionFarPlaneArray>>(15, m_shaderProgram);
+		m_lightPositionFarPlaneArrayUniform = std::make_shared<UniformBufferArray<Engines::Graphic::Shaders::LightPositionFarPlaneArray>>(15 + getOffset(), m_shaderProgram);
 		m_lightPositionFarPlaneArrayUniform->update(m_lightPositionFarPlaneArray.data.data(), m_lightPositionFarPlaneArray.data.size(), 0);
 	}
 }
@@ -106,4 +105,19 @@ void GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::updateLight(Engines:
 		m_lightPositionFarPlaneArray.data[index] = lightPositionFarPlane;
 		m_lightPositionFarPlaneArrayUniform->update(m_lightPositionFarPlaneArray.data.data(), m_lightPositionFarPlaneArray.data.size(), 0);
 	}
+}
+
+uint32_t GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::getOffset()
+{
+	if (m_type == LightTypeShadow::directional)
+		return 0;
+	if (m_type == LightTypeShadow::point)
+		return 3;
+	if (m_type == LightTypeShadow::spot)
+		return 7;
+}
+
+std::string GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::getShaderTypePlaceholder()
+{
+	return m_type == LightTypeShadow::directional ? "NON_FRAG" : "FRAG";
 }

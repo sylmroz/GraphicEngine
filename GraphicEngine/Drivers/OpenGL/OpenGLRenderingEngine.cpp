@@ -105,7 +105,7 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 			spotLightSpaceMatrixArray.data.push_back(spotLight.lightSpace);
 			spotLightPositionFarPlaneArray.data.push_back(glm::vec4(glm::vec3(spotLight.position), spotLight.position.w));
 		}
-		m_spotLightshadowMapGraphicPipeline = std::make_unique<OpenGLShadowMapGraphicPipeline>(m_spotLightdepthTexture, spotLightSpaceMatrixArray, spotLightPositionFarPlaneArray);
+		m_spotLightshadowMapGraphicPipeline = std::make_unique<OpenGLShadowMapGraphicPipeline>(m_spotLightdepthTexture, spotLightSpaceMatrixArray, LightTypeShadow::spot, spotLightPositionFarPlaneArray);
 
 		m_cameraUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::CameraMatrices>>(0);
 
