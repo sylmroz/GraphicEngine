@@ -81,6 +81,7 @@ layout (std140) uniform RenderingOptions
 
 uniform sampler2DArray shadowMap;
 uniform sampler2DArray spotLightShadowMap;
+uniform samplerCubeArray poinLightShadowMap;
 
 const float Pi = 3.14159265;
 
@@ -148,6 +149,12 @@ float ShadowMapCalculation(sampler2DArray tex, vec4 fragPosLightSpace, vec3 ligh
     return shadow;
 }
 
+float PointShadowMapCalculation(samplerCubeArray tex, vec4 fragPosLightSpace, float currentDepth, int layer)
+{
+    float closestDepth = texture(tex, fragPosLightSpace, layer).r;
+    return currentDepth > closestDepth ? 1.0 : 0.0;
+}
+
 layout (location = 0) out vec4 outColor;
 
 subroutine vec3 LightShadingEffectType_t(vec3 normal, vec3 lightDir, vec3 diffuseLight, vec3 specularLight, vec3 ambientLight, float shadow);
@@ -205,7 +212,7 @@ vec3 CalcDirectionalLight(DirectionalLightBuffer light, int layer)
     return LightShadingEffectType(normal, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow);
 }
 
-vec3 CalcPointLight(PointLightBuffer light)
+vec3 CalcPointLight(PointLightBuffer light, int layer)
 {
     vec3 lightDir = normalize(vec3(light.position) - position);
 
@@ -214,7 +221,7 @@ vec3 CalcPointLight(PointLightBuffer light)
 
     float shadow = 0.0;
     if (renderingOptions.shadowRendering.point > 0)
-        shadow = 0.0; //ShadowMapCalculation(shadowMap, fragPositionightSpace, lightDir, layer);
+        shadow = PointShadowMapCalculation(poinLightShadowMap, vec4(position, 1.0) - light.position, length(position - vec3(light.position)), layer);
 
     return LightShadingEffectType(normal, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow) * attenaution;
 }
@@ -259,7 +266,7 @@ void main()
 
         for (int i = 0; i < pointLight.light_length; i++ )
         { 
-            lightStrength += CalcPointLight(pointLight.pointLights[i]);
+            lightStrength += CalcPointLight(pointLight.pointLights[i], i);
         }
 
         for (int i = 0; i < spotLight.light_length; i++ )

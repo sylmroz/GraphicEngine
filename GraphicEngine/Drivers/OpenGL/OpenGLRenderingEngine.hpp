@@ -45,8 +45,9 @@ namespace GraphicEngine::OpenGL
 		std::shared_ptr<ShaderStorageBufferObject<Engines::Graphic::Shaders::PointLight>> m_pointLights;
 		std::shared_ptr<ShaderStorageBufferObject<Engines::Graphic::Shaders::SpotLight>> m_spotLight;
 
-		std::shared_ptr<Texture> m_depthTexture;
+		std::shared_ptr<Texture> m_directionalLightDepthTexture;
 		std::shared_ptr<Texture> m_spotLightdepthTexture;
+		std::shared_ptr<Texture> m_pointightdepthTexture;
 
 		std::unique_ptr<Core::Logger<OpenGLRenderingEngine>> m_logger;
 
@@ -56,6 +57,7 @@ namespace GraphicEngine::OpenGL
 		std::unique_ptr<OpenGLSkyboxGraphicPipeline> m_skyboxGraphicPipeline;
 		std::unique_ptr<OpenGLShadowMapGraphicPipeline> m_shadowMapGraphicPipeline;
 		std::unique_ptr<OpenGLShadowMapGraphicPipeline> m_spotLightshadowMapGraphicPipeline;
+		std::unique_ptr<OpenGLShadowMapGraphicPipeline> m_pointLightshadowMapGraphicPipeline;
 
 		std::shared_ptr<GUI::ImGuiImpl::OpenGlRenderEngineBackend> m_uiRenderingBackend;
 

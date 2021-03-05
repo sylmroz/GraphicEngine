@@ -4,13 +4,14 @@
 
 #define LIGHT_COUNT <<PLACEHOLDER_1>>
 #define <<PLACEHOLDER_2>>
+#define DEPTH <<PLACEHOLDER_3>>
 
 layout (triangles, invocations = LIGHT_COUNT) in;
-layout (triangle_strip, max_vertices = 3) out;
+layout (triangle_strip, max_vertices = 3 * DEPTH) out;
 
 layout (std140) uniform LightSpaceMatrixArray
 {
-    mat4 lightSpace[LIGHT_COUNT];
+    mat4 lightSpace[LIGHT_COUNT * DEPTH];
 } lightSpaceMatrix;
 
 #ifdef FRAG
@@ -26,16 +27,19 @@ layout (location = 1) out float fragDepth;
 
 void main()
 {
-    for (int i = 0; i < gl_in.length(); ++i)
+    for (int face = 0; face < DEPTH; ++face)
     {
-        gl_Layer = gl_InvocationID;
-        gl_Position = lightSpaceMatrix.lightSpace[gl_InvocationID] * gl_in[i].gl_Position;
-        #ifdef FRAG
-        vec3 lightPosition = lightPositionFarPlane.lightPosFarPlane[gl_InvocationID].xyz;
-        float farPlane = lightPositionFarPlane.lightPosFarPlane[gl_InvocationID].w;
-        fragDepth = length(fragPos[i] - lightPosition) / farPlane;
-        #endif
-        EmitVertex();
+        gl_Layer = gl_InvocationID * DEPTH + face;
+        for (int i = 0; i < 3; ++i)
+        {
+            gl_Position = lightSpaceMatrix.lightSpace[gl_Layer] * gl_in[i].gl_Position;
+            #ifdef FRAG
+            vec3 lightPosition = lightPositionFarPlane.lightPosFarPlane[gl_Layer].xyz;
+            float farPlane = lightPositionFarPlane.lightPosFarPlane[gl_Layer].w;
+            fragDepth = length(fragPos[i] - lightPosition) / farPlane;
+            #endif
+            EmitVertex();
+        }
+        EndPrimitive();
     }
-    EndPrimitive();
 }

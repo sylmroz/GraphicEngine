@@ -91,7 +91,7 @@ GraphicEngine::OpenGL::TextureDepth::TextureDepth(int width, int height)
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
@@ -123,7 +123,7 @@ GraphicEngine::OpenGL::TextureDepthArray::TextureDepthArray(int width, int heigh
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D_ARRAY, texture);
 
-	glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_DEPTH_COMPONENT, width, height, layers, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_DEPTH_COMPONENT, width, height, layers, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
 
 	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
 	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
@@ -138,4 +138,33 @@ GraphicEngine::OpenGL::TextureDepthArray::TextureDepthArray(int width, int heigh
 int GraphicEngine::OpenGL::TextureArray::getLayers()
 {
 	return this->layers;
+}
+
+GraphicEngine::OpenGL::TextureCubeArray::TextureCubeArray(int width, int height, int layers)
+{
+	textureType = GL_TEXTURE_CUBE_MAP_ARRAY;
+}
+
+GraphicEngine::OpenGL::TextureCubeDepthArray::TextureCubeDepthArray(int width, int height, int layers)
+{
+	textureType = GL_TEXTURE_CUBE_MAP_ARRAY;
+	this->width = width;
+	this->height = height;
+	this->layers = layers;
+
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_CUBE_MAP_ARRAY, texture);
+
+	//for (uint32_t i{ 0 }; i < 6; ++i) 
+	//{
+		glTexImage3D(GL_TEXTURE_CUBE_MAP_ARRAY, 0, GL_DEPTH_COMPONENT, width, height, layers, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+	//}
+
+	glTexParameteri(GL_TEXTURE_CUBE_MAP_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP_ARRAY, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER);
+
+
+	glTexParameteri(GL_TEXTURE_CUBE_MAP_ARRAY, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 }

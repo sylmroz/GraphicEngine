@@ -12,10 +12,15 @@ GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::OpenGLShadowMapGraphicPip
 	m_shaders.push_back(vert);
 	m_shaderTemplate = GraphicEngine::Core::IO::readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("shadowmap.geom.template").string());
 	uint32_t lightCount = lightSpaceMatrixArray.data.size() > 0 ? lightSpaceMatrixArray.data.size() : 1;
+	if (lightPositionFarPlaneArray.data.size() < lightSpaceMatrixArray.data.size())
+	{
+		lightCount = lightPositionFarPlaneArray.data.size() > 0 ? lightPositionFarPlaneArray.data.size() : 1;
+	}
 	auto geom = std::make_shared<OpenGLGeometryShader>(Core::Utils::tokenRepleacer(m_shaderTemplate,
 		{
 			{"<<PLACEHOLDER_1>>", std::to_string(lightCount)},
-			{"<<PLACEHOLDER_2>>", getShaderTypePlaceholder()}
+			{"<<PLACEHOLDER_2>>", getShaderTypePlaceholder()},
+			{"<<PLACEHOLDER_3>>", getDepth()}
 		}));
 	m_shaders.push_back(geom);
 	if (m_lightPositionFarPlaneArray.data.size() > 0)
@@ -79,7 +84,8 @@ void GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::updateLights(Engines
 	m_shaders[1] = std::make_shared<OpenGLGeometryShader>(Core::Utils::tokenRepleacer(m_shaderTemplate,
 		{
 			{"<<PLACEHOLDER_1>>", std::to_string(lightCount)},
-			{"<<PLACEHOLDER_2>>", getShaderTypePlaceholder()}
+			{"<<PLACEHOLDER_2>>", getShaderTypePlaceholder()},
+			{"<<PLACEHOLDER_3>>", getDepth()}
 		}));
 	m_shaderProgram = std::make_shared<OpenGLShaderProgram>(m_shaders);
 	m_modelDescriptorUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::LightSpaceModelMatrices>>(12 + getOffset(), m_shaderProgram);
@@ -120,4 +126,11 @@ uint32_t GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::getOffset()
 std::string GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::getShaderTypePlaceholder()
 {
 	return m_type == LightTypeShadow::directional ? "NON_FRAG" : "FRAG";
+}
+
+std::string GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::getDepth()
+{
+	if (m_type == LightTypeShadow::point)
+		return "6";
+	return "1";
 }

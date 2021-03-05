@@ -26,6 +26,7 @@ namespace GraphicEngine::OpenGL
 
 		uint32_t getOffset();
 		std::string getShaderTypePlaceholder();
+		std::string getDepth();
 	private:
 		std::shared_ptr<OpenGLShaderProgram> m_shaderProgram;
 		std::shared_ptr<UniformBufferArray<Engines::Graphic::Shaders::LightSpaceMatrixArray>> m_lightSpaceMatrixArrayUniform;

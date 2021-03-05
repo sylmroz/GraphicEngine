@@ -74,4 +74,16 @@ namespace GraphicEngine::OpenGL
 	public:
 		TextureDepthArray(int width, int height, int layers);
 	};
+
+	class TextureCubeArray : public TextureArray
+	{
+	public:
+		TextureCubeArray(int width, int height, int layers);
+	};
+
+	class TextureCubeDepthArray : public TextureArray
+	{
+	public:
+		TextureCubeDepthArray(int width, int height, int layers);
+	};
 }
