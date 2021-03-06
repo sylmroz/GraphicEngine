@@ -81,7 +81,7 @@ layout (std140) uniform RenderingOptions
 
 uniform sampler2DArray shadowMap;
 uniform sampler2DArray spotLightShadowMap;
-uniform samplerCubeArray poinLightShadowMap;
+uniform samplerCubeArray pointLightShadowMap;
 
 const float Pi = 3.14159265;
 
@@ -151,8 +151,10 @@ float ShadowMapCalculation(sampler2DArray tex, vec4 fragPosLightSpace, vec3 ligh
 
 float PointShadowMapCalculation(samplerCubeArray tex, vec4 fragPosLightSpace, float currentDepth, int layer)
 {
-    float closestDepth = texture(tex, fragPosLightSpace, layer).r;
-    return currentDepth > closestDepth ? 1.0 : 0.0;
+    float closestDepth = 100 * texture(tex, fragPosLightSpace, layer).r;
+    float bias = 0.05; 
+    float shadow = currentDepth -  bias > closestDepth ? 1.0 : 0.0;
+    return shadow;
 }
 
 layout (location = 0) out vec4 outColor;
@@ -221,7 +223,7 @@ vec3 CalcPointLight(PointLightBuffer light, int layer)
 
     float shadow = 0.0;
     if (renderingOptions.shadowRendering.point > 0)
-        shadow = PointShadowMapCalculation(poinLightShadowMap, vec4(position, 1.0) - light.position, length(position - vec3(light.position)), layer);
+        shadow = PointShadowMapCalculation(pointLightShadowMap, vec4(position, 1.0) - light.position, dist, layer);
 
     return LightShadingEffectType(normal, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow) * attenaution;
 }

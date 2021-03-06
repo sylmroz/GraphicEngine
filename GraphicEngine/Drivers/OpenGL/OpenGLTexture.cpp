@@ -155,10 +155,7 @@ GraphicEngine::OpenGL::TextureCubeDepthArray::TextureCubeDepthArray(int width, i
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_CUBE_MAP_ARRAY, texture);
 
-	//for (uint32_t i{ 0 }; i < 6; ++i) 
-	//{
-		glTexImage3D(GL_TEXTURE_CUBE_MAP_ARRAY, 0, GL_DEPTH_COMPONENT, width, height, layers, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
-	//}
+	glTexImage3D(GL_TEXTURE_CUBE_MAP_ARRAY, 0, GL_DEPTH_COMPONENT, width, height, layers * 6, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
 
 	glTexParameteri(GL_TEXTURE_CUBE_MAP_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
