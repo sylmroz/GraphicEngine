@@ -278,6 +278,6 @@ void main()
             lightStrength += CalcSpotLight(spotLight.spotLights[i], i);
         }
 
-        //outColor = vec4(mix(vec3(0.0), vec3(1.0), lightStrength), 1.0);
+        outColor = vec4(mix(vec3(0.0), vec3(1.0), lightStrength), 1.0);
     }
 }
