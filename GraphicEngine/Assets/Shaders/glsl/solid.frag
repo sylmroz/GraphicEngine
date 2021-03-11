@@ -149,15 +149,17 @@ float ShadowMapCalculation(sampler2DArray tex, vec4 fragPosLightSpace, vec3 ligh
     return shadow;
 }
 
+layout (location = 0) out vec4 outColor;
+
 float PointShadowMapCalculation(samplerCubeArray tex, vec4 fragPosLightSpace, float currentDepth, int layer)
 {
-    float closestDepth = 100 * texture(tex, fragPosLightSpace, layer).r;
+    float closestDepth = texture(tex, vec4(fragPosLightSpace.xyz, 1.0), layer).r;
+    closestDepth *= 25.0f;
     float bias = 0.05; 
-    float shadow = currentDepth -  bias > closestDepth ? 1.0 : 0.0;
+    float shadow = currentDepth > closestDepth ? 1.0 : 0.0;
+    outColor = vec4(vec3(closestDepth / 25.0f), 1.0);
     return shadow;
 }
-
-layout (location = 0) out vec4 outColor;
 
 subroutine vec3 LightShadingEffectType_t(vec3 normal, vec3 lightDir, vec3 diffuseLight, vec3 specularLight, vec3 ambientLight, float shadow);
 
@@ -223,7 +225,7 @@ vec3 CalcPointLight(PointLightBuffer light, int layer)
 
     float shadow = 0.0;
     if (renderingOptions.shadowRendering.point > 0)
-        shadow = PointShadowMapCalculation(pointLightShadowMap, vec4(position, 1.0) - light.position, dist, layer);
+        shadow = PointShadowMapCalculation(pointLightShadowMap, vec4(position - light.position.xyz, 1.0), dist, layer);
 
     return LightShadingEffectType(normal, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow) * attenaution;
 }
@@ -276,6 +278,6 @@ void main()
             lightStrength += CalcSpotLight(spotLight.spotLights[i], i);
         }
 
-        outColor = vec4(mix(vec3(0.0), vec3(1.0), lightStrength), 1.0);
+        //outColor = vec4(mix(vec3(0.0), vec3(1.0), lightStrength), 1.0);
     }
 }

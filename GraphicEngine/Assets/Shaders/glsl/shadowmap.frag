@@ -6,5 +6,5 @@ layout (location = 0) in float fragDepth;
 
 void main()
 {
-    //gl_FragDepth = fragDepth;
+    gl_FragDepth = fragDepth;
 }

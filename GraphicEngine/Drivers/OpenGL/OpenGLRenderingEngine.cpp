@@ -94,7 +94,7 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 	{
 		m_directionalLightDepthTexture = std::make_shared<TextureDepthArray>(2048, 2048, 5);
 		m_spotLightdepthTexture = std::make_shared<TextureDepthArray>(256, 256, 5);
-		m_pointightdepthTexture = std::make_shared<TextureCubeDepthArray>(128, 128, 5);
+		m_pointightdepthTexture = std::make_shared<TextureCubeDepthArray>(256, 256, 5);
 
 		m_wireframeGraphicPipeline = std::make_unique<OpenGLWireframeGraphicPipeline>(m_cameraControllerManager);
 		m_solidColorGraphicPipeline = std::make_unique<OpenGLSolidColorGraphicPipeline>(m_cameraControllerManager, m_renderingOptionsManager, m_directionalLightDepthTexture, m_spotLightdepthTexture, m_pointightdepthTexture);
@@ -113,7 +113,7 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 		for (auto& spotLight : m_lightManager->getSpotLights())
 		{
 			spotLightSpaceMatrixArray.data.push_back(spotLight.lightSpace);
-			spotLightPositionFarPlaneArray.data.push_back(glm::vec4(glm::vec3(spotLight.position), spotLight.position.w));
+			spotLightPositionFarPlaneArray.data.push_back(glm::vec4(glm::vec3(spotLight.position), 50.0f));
 		}
 		m_spotLightshadowMapGraphicPipeline = std::make_unique<OpenGLShadowMapGraphicPipeline>(m_spotLightdepthTexture, spotLightSpaceMatrixArray, LightTypeShadow::spot, spotLightPositionFarPlaneArray);
 
@@ -128,7 +128,7 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 			pointLightSpaceMatrixArray.data.push_back(shadowProj * glm::lookAt(glm::vec3(pointLight.position), glm::vec3(pointLight.position) + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f)));
 			pointLightSpaceMatrixArray.data.push_back(shadowProj * glm::lookAt(glm::vec3(pointLight.position), glm::vec3(pointLight.position) + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
 			pointLightSpaceMatrixArray.data.push_back(shadowProj * glm::lookAt(glm::vec3(pointLight.position), glm::vec3(pointLight.position) + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
-			pointLightPositionFarPlaneArray.data.push_back(glm::vec4(glm::vec3(pointLight.position), pointLight.position.w));
+			pointLightPositionFarPlaneArray.data.push_back(glm::vec4(glm::vec3(pointLight.position), 25.0f));
 		}
 		m_pointLightshadowMapGraphicPipeline = std::make_unique<OpenGLShadowMapGraphicPipeline>(m_pointightdepthTexture, pointLightSpaceMatrixArray, LightTypeShadow::point, pointLightPositionFarPlaneArray);
 
@@ -167,14 +167,14 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 			Engines::Graphic::Shaders::LightPositionFarPlaneArray pointLightPositionFarPlaneArray;
 			for (auto& pointLight : lights)
 			{
-				glm::mat4 shadowProj = glm::perspective(glm::radians(90.0f), 1.0f, 2.0f, 50.0f);
+				glm::mat4 shadowProj = glm::perspective(glm::radians(90.0f), 1.0f, 1.0f, 25.0f);
 				pointLightSpaceMatrixArray.data.push_back(shadowProj * glm::lookAt(glm::vec3(pointLight.position), glm::vec3(pointLight.position) + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
 				pointLightSpaceMatrixArray.data.push_back(shadowProj * glm::lookAt(glm::vec3(pointLight.position), glm::vec3(pointLight.position) + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
 				pointLightSpaceMatrixArray.data.push_back(shadowProj * glm::lookAt(glm::vec3(pointLight.position), glm::vec3(pointLight.position) + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
 				pointLightSpaceMatrixArray.data.push_back(shadowProj * glm::lookAt(glm::vec3(pointLight.position), glm::vec3(pointLight.position) + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f)));
 				pointLightSpaceMatrixArray.data.push_back(shadowProj * glm::lookAt(glm::vec3(pointLight.position), glm::vec3(pointLight.position) + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
 				pointLightSpaceMatrixArray.data.push_back(shadowProj * glm::lookAt(glm::vec3(pointLight.position), glm::vec3(pointLight.position) + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
-				pointLightPositionFarPlaneArray.data.push_back(glm::vec4(glm::vec3(pointLight.position), pointLight.position.w));
+				pointLightPositionFarPlaneArray.data.push_back(glm::vec4(glm::vec3(pointLight.position), 25.0f));
 			}
 			m_pointLightshadowMapGraphicPipeline->updateLights(pointLightSpaceMatrixArray, pointLightPositionFarPlaneArray);
 		});
@@ -193,7 +193,7 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 			for (auto& spotLight : lights)
 			{
 				spotLightSpaceMatrixArray.data.push_back(spotLight.lightSpace);
-				spotLightPositionFarPlaneArray.data.push_back(glm::vec4(glm::vec3(spotLight.position), spotLight.position.w));
+				spotLightPositionFarPlaneArray.data.push_back(glm::vec4(glm::vec3(spotLight.position), 50.0f));
 			}
 			m_spotLightshadowMapGraphicPipeline->updateLights(spotLightSpaceMatrixArray, spotLightPositionFarPlaneArray);
 		});

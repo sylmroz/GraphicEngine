@@ -16,18 +16,18 @@ GraphicEngine::OpenGL::Texture2D::Texture2D(const std::string& path)
 		channels = c;
 		
 		glGenTextures(1, &texture);
-		glBindTexture(GL_TEXTURE_2D, texture);
+		glBindTexture(textureType, texture);
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(textureType, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(textureType, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(textureType, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(textureType, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		if (data)
 		{
-			glTexImage2D(GL_TEXTURE_2D, 0, getFormat(channels), width, height, 0, getFormat(channels), GL_UNSIGNED_BYTE, data);
-			glGenerateMipmap(GL_TEXTURE_2D);
+			glTexImage2D(textureType, 0, getFormat(channels), width, height, 0, getFormat(channels), GL_UNSIGNED_BYTE, data);
+			glGenerateMipmap(textureType);
 		}
 	}
 
@@ -41,18 +41,18 @@ GraphicEngine::OpenGL::Texture2D::Texture2D(const uint8_t* data, int width, int 
 {
 	textureType = GL_TEXTURE_2D;
 	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
+	glBindTexture(textureType, texture);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(textureType, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(textureType, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(textureType, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(textureType, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	if (data)
 	{
-		glTexImage2D(GL_TEXTURE_2D, 0, getFormat(channels), width, height, 0, getFormat(channels), GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
+		glTexImage2D(textureType, 0, getFormat(channels), width, height, 0, getFormat(channels), GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(textureType);
 	}
 }
 
@@ -89,18 +89,18 @@ GraphicEngine::OpenGL::TextureDepth::TextureDepth(int width, int height)
 	this->height = height;
 	
 	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
+	glBindTexture(textureType, texture);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+	glTexImage2D(textureType, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	glTexParameteri(textureType, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(textureType, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 	float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+	glTexParameterfv(textureType, GL_TEXTURE_BORDER_COLOR, borderColor);
 
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(textureType, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(textureType, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 }
 
 GraphicEngine::OpenGL::Texture2DArray::Texture2DArray(const std::string& path)
@@ -121,18 +121,18 @@ GraphicEngine::OpenGL::TextureDepthArray::TextureDepthArray(int width, int heigh
 	this->layers = layers;
 
 	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D_ARRAY, texture);
+	glBindTexture(textureType, texture);
 
-	glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_DEPTH_COMPONENT, width, height, layers, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+	glTexImage3D(textureType, 0, GL_DEPTH_COMPONENT, width, height, layers, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
 
-	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	glTexParameteri(textureType, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(textureType, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 	float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	glTexParameterfv(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_BORDER_COLOR, borderColor);
+	glTexParameterfv(textureType, GL_TEXTURE_BORDER_COLOR, borderColor);
 
 
-	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(textureType, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(textureType, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 }
 
 int GraphicEngine::OpenGL::TextureArray::getLayers()
@@ -153,15 +153,17 @@ GraphicEngine::OpenGL::TextureCubeDepthArray::TextureCubeDepthArray(int width, i
 	this->layers = layers;
 
 	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_CUBE_MAP_ARRAY, texture);
+	glBindTexture(textureType, texture);
 
-	glTexImage3D(GL_TEXTURE_CUBE_MAP_ARRAY, 0, GL_DEPTH_COMPONENT, width, height, layers * 6, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+	glTexImage3D(textureType, 0, GL_DEPTH_COMPONENT, width, height, layers * 6, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
 
-	glTexParameteri(GL_TEXTURE_CUBE_MAP_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP_ARRAY, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER);
+	glTexParameteri(textureType, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(textureType, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	glTexParameteri(textureType, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER);
+	float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	glTexParameterfv(textureType, GL_TEXTURE_BORDER_COLOR, borderColor);
 
 
-	glTexParameteri(GL_TEXTURE_CUBE_MAP_ARRAY, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(textureType, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(textureType, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 }

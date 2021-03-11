@@ -23,7 +23,7 @@ GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::OpenGLShadowMapGraphicPip
 			{"<<PLACEHOLDER_3>>", getDepth()}
 		}));
 	m_shaders.push_back(geom);
-	if (m_lightPositionFarPlaneArray.data.size() > 0)
+	if (m_type == LightTypeShadow::point)
 	{
 		m_shaders.push_back(std::make_shared<OpenGLFragmentShader>(GraphicEngine::Core::IO::readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("shadowmap.frag").string())));
 	}
@@ -125,7 +125,7 @@ uint32_t GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::getOffset()
 
 std::string GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::getShaderTypePlaceholder()
 {
-	return m_type == LightTypeShadow::directional ? "NON_FRAG" : "FRAG";
+	return (m_type == LightTypeShadow::directional || m_type == LightTypeShadow::spot) ? "NON_FRAG" : "FRAG";
 }
 
 std::string GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::getDepth()
