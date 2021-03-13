@@ -85,7 +85,7 @@ void GraphicEngine::Vulkan::VulkanRenderingEngine::init(size_t width, size_t hei
 		m_wireframeGraphicPipeline = std::make_shared<VulkanWireframeGraphicPipeline>(m_framework, m_cameraUniformBuffer);
 		m_solidColorraphicPipeline = std::make_shared<VulkanSolidColorGraphicPipeline>(m_framework, m_cameraUniformBuffer, m_eyePositionUniformBuffer, m_directionalLight, m_pointLights, m_spotLight, m_cameraControllerManager);
 		m_normalDebugGraphicPipeline = std::make_shared<VulkanNormalDebugGraphicPipeline>(m_framework, m_cameraUniformBuffer, m_cameraControllerManager);
-		m_skyboxGraphicPipeline = std::make_unique<VulkanSkyboxGraphicPipeline>(m_framework, m_cameraUniformBuffer, m_cfg->getProperty<std::string>("scene:skybox:base path"));
+		m_skyboxGraphicPipeline = std::make_unique<VulkanSkyboxGraphicPipeline>(m_framework, m_cameraUniformBuffer, m_cfg->getProperty<std::string>("scene:skybox:texture path"));
 
 		m_modelManager->getModelEntityContainer()->forEachEntity([&](auto model)
 		{

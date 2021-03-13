@@ -99,7 +99,7 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 		m_wireframeGraphicPipeline = std::make_unique<OpenGLWireframeGraphicPipeline>(m_cameraControllerManager);
 		m_solidColorGraphicPipeline = std::make_unique<OpenGLSolidColorGraphicPipeline>(m_cameraControllerManager, m_renderingOptionsManager, m_directionalLightDepthTexture, m_spotLightdepthTexture, m_pointightdepthTexture);
 		m_normalDebugGraphicPipeline = std::make_unique<OpenGLNormalDebugGraphicPipeline>(m_cameraControllerManager);
-		m_skyboxGraphicPipeline = std::make_unique<OpenGLSkyboxGraphicPipeline>(m_cfg->getProperty<std::string>("scene:skybox:base path"));
+		m_skyboxGraphicPipeline = std::make_unique<OpenGLSkyboxGraphicPipeline>(m_cfg->getProperty<std::string>("scene:skybox:texture path"));
 
 		Engines::Graphic::Shaders::LightSpaceMatrixArray lightSpaceMatrixArray;
 		for (auto& dirLight : m_lightManager->getDirectionalLights())
