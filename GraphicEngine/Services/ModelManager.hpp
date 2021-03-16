@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../Common/EntityByVertexTypeManager.hpp"
+#include "../Core/Configuration.hpp"
+#include "../Core/Logger.hpp"
 #include "../Scene/Resources/Model.hpp"
 
 namespace GraphicEngine::Services
@@ -9,6 +11,8 @@ namespace GraphicEngine::Services
 	class ModelManager
 	{
 	public:
+		ModelManager(std::shared_ptr<Core::Configuration> cfg, std::unique_ptr<Core::Logger<ModelManager>> logger);
+
 		template <typename VertexType>
 		void addModel(std::shared_ptr<Scene::Model<VertexType>> model)
 		{
@@ -29,5 +33,6 @@ namespace GraphicEngine::Services
 	protected:
 	private:
 		std::shared_ptr<ModelEntityContainer> m_modelContainer = std::make_shared<ModelEntityContainer>();;
+		std::unique_ptr<Core::Logger<ModelManager>> m_logger;
 	};
 }

@@ -19,7 +19,7 @@ GraphicEngine::RenderingEngine::RenderingEngine(std::shared_ptr<Services::Camera
 	m_ui{ ui },
 	m_cfg{ cfg }
 {
-	auto models = Modules::AssimpModelImporter<Common::VertexPN>{}.read(m_cfg->getProperty<std::string>("scene:object:path"));
+	/*auto models = Modules::AssimpModelImporter<Common::VertexPN>{}.read(m_cfg->getProperty<std::string>("scene:object:path"));
 	models.front()->setScale(m_cfg->getProperty<float>("scene:object:scale"));
 	models.front()->setRotate(Core::Utils::Converter::fromArrayToObject<glm::vec3, std::vector<float>, 3>(m_cfg->getProperty<std::vector<float>>("scene:object:rotate")));
 	models.front()->setPosition(Core::Utils::Converter::fromArrayToObject<glm::vec3, std::vector<float>, 3>(m_cfg->getProperty<std::vector<float>>("scene:object:position")));
@@ -40,5 +40,5 @@ GraphicEngine::RenderingEngine::RenderingEngine(std::shared_ptr<Services::Camera
 	m_modelManager->addModel(cylinder);
 
 	auto plane = Engines::Graphic::PlaneGenerator<Common::VertexPN>{}.getModel(glm::vec2(-300), glm::vec2(300), glm::ivec2(8), Engines::Graphic::GeneratingPosition::Corner, Engines::Graphic::TriangleDirection::CounterClockwise);
-	m_modelManager->addModel(plane);
+	m_modelManager->addModel(plane);*/
 }
