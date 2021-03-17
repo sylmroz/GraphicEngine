@@ -2,7 +2,7 @@
 #include <imgui.h>
 
 GraphicEngine::GUI::CollapsingHeader::CollapsingHeader(std::string label):
-	label{ label }
+	Widget{ label }
 {
 }
 

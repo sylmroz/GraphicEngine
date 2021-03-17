@@ -2,7 +2,7 @@
 #include <imgui.h>
 
 GraphicEngine::GUI::ComboBox::ComboBox(std::string label, std::vector<std::string> labels, int selectedItemIndex):
-	label{ label },
+	Widget{ label },
 	labels{ labels },
 	selectedItemIndex{ selectedItemIndex }
 {

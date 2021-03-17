@@ -2,7 +2,7 @@
 #include <imgui.h>
 
 GraphicEngine::GUI::TabBar::TabBar(std::string label) :
-	label{ label }
+	Widget{ label }
 {
 }
 

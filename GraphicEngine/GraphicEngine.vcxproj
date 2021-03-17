@@ -244,6 +244,7 @@
     <ClCompile Include="UI\ImGui\Widgets\InputFloat.cpp" />
     <ClCompile Include="UI\ImGui\Widgets\TabBar.cpp" />
     <ClCompile Include="UI\ImGui\Widgets\TabBarItem.cpp" />
+    <ClCompile Include="UI\ImGui\Widgets\TreeNode.cpp" />
     <ClCompile Include="UI\ImGui\Widgets\WindowBody.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -399,6 +400,7 @@
     <ClInclude Include="UI\ImGui\Widgets\InputFloat.hpp" />
     <ClInclude Include="UI\ImGui\Widgets\TabBar.hpp" />
     <ClInclude Include="UI\ImGui\Widgets\TabBarItem.hpp" />
+    <ClInclude Include="UI\ImGui\Widgets\TreeNode.hpp" />
     <ClInclude Include="UI\ImGui\Widgets\WindowBody.hpp" />
   </ItemGroup>
   <ItemGroup>

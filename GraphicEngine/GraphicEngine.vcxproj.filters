@@ -394,6 +394,9 @@
     <ClCompile Include="UI\ImGui\Components\RenderingSettingsWindow.cpp">
       <Filter>UI\ImGui\Components</Filter>
     </ClCompile>
+    <ClCompile Include="UI\ImGui\Widgets\TreeNode.cpp">
+      <Filter>UI\ImGui\Widgets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Input\Keyboard\KeyboardEnumKeys.hpp">
@@ -854,6 +857,9 @@
     </ClInclude>
     <ClInclude Include="UI\ImGui\Components\RenderingSettingsWindow.hpp">
       <Filter>UI\ImGui\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ImGui\Widgets\TreeNode.hpp">
+      <Filter>UI\ImGui\Widgets</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

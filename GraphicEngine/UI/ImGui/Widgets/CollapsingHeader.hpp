@@ -10,7 +10,5 @@ namespace GraphicEngine::GUI
 		CollapsingHeader(std::string label);
 		// Inherited via Widget
 		virtual void draw() override;
-	private:
-		std::string label;
 	};
 }

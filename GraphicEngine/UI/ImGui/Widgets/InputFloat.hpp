@@ -36,6 +36,5 @@ namespace GraphicEngine::GUI
 	private:	
 		Core::Subject<glm::vec4> m_inputScalarSubject;
 		float step{};
-		std::string label;
 	};
 }

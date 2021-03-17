@@ -24,6 +24,5 @@ namespace GraphicEngine::GUI
 		glm::vec4 color{};
 	private:
 		Core::Subject<glm::vec4> m_colorSelectorEventListener;
-		std::string label;
 	};
 }

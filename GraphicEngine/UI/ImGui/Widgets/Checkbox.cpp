@@ -2,7 +2,7 @@
 #include <imgui.h>
 
 GraphicEngine::GUI::Checkbox::Checkbox(std::string label, bool initialChecked):
-	label{ label }, checked{ initialChecked }
+	Widget{ label }, checked{ initialChecked }
 {
 }
 

@@ -15,7 +15,6 @@ namespace GraphicEngine::GUI
 
 		void onClicked(std::function<void(void)> callback);
 	private:
-		std::string label;
         Core::Subject<> m_clickedSubject;
 	};
 }

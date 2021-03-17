@@ -2,7 +2,7 @@
 #include <imgui.h>
 
 GraphicEngine::GUI::InputScalar4::InputScalar4(std::string label, glm::vec4 initialValue, float step) :
-	value{ initialValue }, step{ step }, label{ label }
+	value{ initialValue }, step{ step }, Widget{ label }
 {
 }
 
@@ -18,7 +18,7 @@ void GraphicEngine::GUI::InputScalar4::onInputScalarEdit(std::function<void(glm:
 }
 
 GraphicEngine::GUI::InputScalar::InputScalar(std::string label, float initialValue, float step) :
-	value{ initialValue }, step{ step }, label{ label }
+	value{ initialValue }, step{ step }, Widget{ label }
 {
 }
 

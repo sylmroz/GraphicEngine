@@ -1,5 +1,10 @@
 #include "Widget.hpp"
 
+GraphicEngine::GUI::Widget::Widget(const std::string& label) :
+    label{ label }
+{
+}
+
 void GraphicEngine::GUI::Widget::addParent(std::shared_ptr<Widget> parent)
 {
     m_parent = parent;

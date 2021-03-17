@@ -2,7 +2,7 @@
 #include <imgui.h>
 
 GraphicEngine::GUI::WindowBody::WindowBody(std::string label, bool open):
-	label{ label }, open{ open }
+	Widget{ label }, open{ open }
 {
 }
 

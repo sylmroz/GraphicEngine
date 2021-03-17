@@ -3,7 +3,7 @@
 #include <imgui.h>
 
 GraphicEngine::GUI::ColorEdit::ColorEdit(std::string label, glm::vec4 initialColor):
-	label{ label }, color { initialColor }
+	Widget{ label }, color { initialColor }
 {
 }
 

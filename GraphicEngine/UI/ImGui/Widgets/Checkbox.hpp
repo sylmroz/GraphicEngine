@@ -20,7 +20,6 @@ namespace GraphicEngine::GUI
 
 	private:
 		bool checked;
-		std::string label;
 		Core::Subject<bool> m_checkboxEventListener;
 	};
 }

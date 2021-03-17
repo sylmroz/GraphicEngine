@@ -12,7 +12,5 @@ namespace GraphicEngine::GUI
 
 		// Inherited via Widget
 		virtual void draw() override;
-	private:
-		std::string label;
 	};
 }

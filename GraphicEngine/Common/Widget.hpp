@@ -11,6 +11,8 @@ namespace GraphicEngine::GUI
 	class Widget : public std::enable_shared_from_this<Widget>
 	{
 	public:
+		Widget() = default;
+		Widget(const std::string& label);
 		virtual void draw() = 0;
 		void addParent(std::shared_ptr<Widget> parent);
 		std::shared_ptr<Widget> getParent();
@@ -20,5 +22,6 @@ namespace GraphicEngine::GUI
 	protected:
 		std::shared_ptr<Widget> m_parent;
 		std::list<std::shared_ptr<Widget>> m_childrens;
+		std::string label;
 	};
 }

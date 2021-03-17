@@ -18,7 +18,6 @@ namespace GraphicEngine::GUI
 	private:
 		int selectedItemIndex;
 		std::vector<std::string> labels;
-		std::string label;
 		Core::Subject<int> m_selectedItemEventListener;
 	};
 }

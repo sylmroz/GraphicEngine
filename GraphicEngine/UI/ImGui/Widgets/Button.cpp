@@ -3,7 +3,7 @@
 #include <imgui.h>
 
 GraphicEngine::GUI::Button::Button(std::string label):
-	label{ label }
+	Widget{ label }
 {
 }
 
