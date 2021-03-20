@@ -2,6 +2,7 @@
 
 #include <functional>
 #include <vector>
+#include <execution>
 
 namespace GraphicEngine::Core
 {

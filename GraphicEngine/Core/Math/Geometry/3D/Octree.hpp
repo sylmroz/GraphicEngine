@@ -6,8 +6,12 @@
 #include <map>
 #include <memory>
 #include <variant>
+#include <execution>
+#include <mutex>
 
 #include "BoudingBox3D.hpp"
+
+#include <AsyncContainers/list.hpp>
 
 namespace GraphicEngine::Core
 {
@@ -26,9 +30,9 @@ namespace GraphicEngine::Core
 	template <typename T>
 	struct Octan
 	{
-		std::variant<std::list<std::shared_ptr<T>>, std::shared_ptr<T>> element;
+		std::variant<UtilityLib::Threading::list<std::shared_ptr<T>>, std::shared_ptr<T>> element;
 		std::shared_ptr<Octan<T>> parent;
-		std::array<std::shared_ptr<Octan<T>>,8> childrens;
+		std::array<std::shared_ptr<Octan<T>>, 8> childrens;
 		BoudingBox3D aabb;
 		bool hasValue{ false };
 		bool hasChildrens{ false };
@@ -139,15 +143,22 @@ namespace GraphicEngine::Core
 	}
 
 	template<typename T, int Levels, bool DynamicCreation>
-	inline Octree<T, Levels, DynamicCreation>::Octree(BoudingBox3D aabb, std::vector<std::shared_ptr<T>> points):
-		Octree<T,Levels>(aabb)
+	inline Octree<T, Levels, DynamicCreation>::Octree(BoudingBox3D aabb, std::vector<std::shared_ptr<T>> points) :
+		Octree<T, Levels>(aabb)
 	{
-		for (auto p : points)
+
+		//std::mutex m;
+		std::for_each(std::execution::seq, std::begin(points), std::end(points), [&](auto p)
+			{
+				//std::lock_guard guard(m);
+				insertPoint(p);
+			});
+		/*for (auto p : points)
 		{
 			insertPoint(p);
-		}
+		}*/
 	}
-	
+
 	template<typename T, int Levels, bool DynamicCreation>
 	inline std::shared_ptr<Octan<T>> Octree<T, Levels, DynamicCreation>::createNode(BoudingBox3D aabb, std::shared_ptr<Octan<T>> parent)
 	{
@@ -161,11 +172,11 @@ namespace GraphicEngine::Core
 
 		else
 		{
-			octan->element = std::list<std::shared_ptr<T>>();
+			octan->element = UtilityLib::Threading::list<std::shared_ptr<T>>();
 		}
 		return octan;
 	}
-	
+
 	template<typename T, int Levels, bool DynamicCreation>
 	inline void Octree<T, Levels, DynamicCreation>::generateChildrens(std::shared_ptr<Octan<T>> parent)
 	{
@@ -177,13 +188,13 @@ namespace GraphicEngine::Core
 		}
 		parent->hasChildrens = true;
 	}
-	
+
 	template<typename T, int Levels, bool DynamicCreation>
 	inline BoudingBox3D Octree<T, Levels, DynamicCreation>::generateAABBForNode(BoudingBox3D parentAABB, Node3DOctan part)
 	{
 		return m_boudingBoxGenerators[part](parentAABB.getLeft(), parentAABB.getCenter(), parentAABB.getRight());
 	}
-	
+
 	template<typename T, int Levels, bool DynamicCreation>
 	inline void Octree<T, Levels, DynamicCreation>::insertPoint(std::shared_ptr<T> point)
 	{
@@ -207,12 +218,12 @@ namespace GraphicEngine::Core
 
 		else if constexpr (DynamicCreation)
 		{
-			std::list<std::shared_ptr<T>>& points = std::get<std::list<std::shared_ptr<T>>>(node->element);
+			UtilityLib::Threading::list<std::shared_ptr<T>>& points = std::get<UtilityLib::Threading::list<std::shared_ptr<T>>>(node->element);
 			if (level <= Levels)
 			{
 				if (points.size() == 0 || level == Levels)
 				{
-					points.push_back(point);
+					points.pushBack(point);
 					return;
 				}
 				generateChildrens(node);
@@ -226,13 +237,13 @@ namespace GraphicEngine::Core
 
 			else
 			{
-				points.push_back(point);
+				points.pushBack(point);
 			}
 		}
 
 		else
 		{
-			std::get<std::list<std::shared_ptr<T>>>(node->element).push_back(point);
+			std::get<UtilityLib::Threading::list<std::shared_ptr<T>>>(node->element).pushBack(point);
 		}
 	}
 

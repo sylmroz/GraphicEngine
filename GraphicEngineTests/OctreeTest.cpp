@@ -78,7 +78,7 @@ TEST(OctreeTest, Static_InsertPoint_CheckAreOnTheList)
 	p_octree.insertPoint(point3);
 
 	auto [node, level] = p_octree.findNode(point2);
-	std::list<std::shared_ptr<VertexP>> points = std::get<std::list<std::shared_ptr<VertexP>>>(node->element);
+	UtilityLib::Threading::list<std::shared_ptr<VertexP>> points = std::get<UtilityLib::Threading::list<std::shared_ptr<VertexP>>>(node->element);
 	std::vector<std::shared_ptr<VertexP>> expectedPoints{ point2, point3 };
 
 	int i{ 0 };
@@ -112,7 +112,7 @@ TEST(OctreeTest, Dynamic_InsertPointCheckNodeStoreCorrectPoint)
 
 TEST(OctreeTest, Dynamic_Octree_transform_test)
 {
-	auto [vertices, indices, boudingBox] = PlaneGenerator<VertexP>{}.getObject(glm::vec2(-5), glm::vec2(5), glm::vec2(10));
+	auto [vertices, indices, boudingBox, center] = PlaneGenerator<VertexP>{}.getObject(glm::vec2(-5), glm::vec2(5), glm::vec2(10));
 	Octree<VertexP, 4> p_octree(boudingBox, vertices);
 
 	p_octree.transform(glm::scale(glm::vec3(2)));

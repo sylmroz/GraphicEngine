@@ -20,7 +20,6 @@ namespace GraphicEngine::GUI
 	private:
 		Core::Subject<float> m_inputScalarSubject;
 		float step{};
-		std::string label;
 	};
 
 	class InputScalar4 : public Widget
