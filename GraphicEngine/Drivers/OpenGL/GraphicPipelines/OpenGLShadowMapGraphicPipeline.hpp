@@ -5,6 +5,8 @@
 #include "../OpenGLTexture.hpp"
 #include "../../../Engines/Graphic/Shaders/Models/LightPositionFarPlane.hpp"
 
+#include <array>
+
 namespace GraphicEngine::OpenGL
 {
 	enum class LightTypeShadow
@@ -23,6 +25,7 @@ namespace GraphicEngine::OpenGL
 
 		void updateLights(Engines::Graphic::Shaders::LightSpaceMatrixArray lightSpaceMatrixArray, Engines::Graphic::Shaders::LightPositionFarPlaneArray lightPositionFarPlaneArray = {});
 		void updateLight(Engines::Graphic::Shaders::LightSpaceMatrix lightSpaceMatrix, uint32_t index, Engines::Graphic::Shaders::LightPositionFarPlane lightPositionFarPlane = {});
+		void updateLight(std::array<Engines::Graphic::Shaders::LightSpaceMatrix, 6> lightSpaceMatrices, uint32_t index, Engines::Graphic::Shaders::LightPositionFarPlane lightPositionFarPlane = {});
 
 		uint32_t getOffset();
 		std::string getShaderTypePlaceholder();

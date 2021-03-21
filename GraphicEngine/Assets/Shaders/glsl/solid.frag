@@ -153,11 +153,9 @@ layout (location = 0) out vec4 outColor;
 
 float PointShadowMapCalculation(samplerCubeArray tex, vec4 fragPosLightSpace, float currentDepth, int layer)
 {
-    float closestDepth = texture(tex, vec4(fragPosLightSpace.xyz, 1.0), layer).r;
-    closestDepth *= 25.0f;
+    float closestDepth = texture(tex, vec4(fragPosLightSpace.xyz, layer)).r * 25.0;
     float bias = 0.05; 
-    float shadow = currentDepth > closestDepth ? 1.0 : 0.0;
-    outColor = vec4(vec3(closestDepth / 25.0f), 1.0);
+    float shadow = currentDepth  - bias > closestDepth ? 1.0 : 0.0;
     return shadow;
 }
 
@@ -213,7 +211,8 @@ vec3 CalcDirectionalLight(DirectionalLightBuffer light, int layer)
     float shadow = 0.0;
     if (renderingOptions.shadowRendering.directional > 0)
         shadow = ShadowMapCalculation(shadowMap, fragPositionightSpace, lightDir, layer);
-    return LightShadingEffectType(normal, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow);
+    vec3 n = gl_FrontFacing == true ? normal : -normal;
+    return LightShadingEffectType(n, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow);
 }
 
 vec3 CalcPointLight(PointLightBuffer light, int layer)
@@ -226,8 +225,8 @@ vec3 CalcPointLight(PointLightBuffer light, int layer)
     float shadow = 0.0;
     if (renderingOptions.shadowRendering.point > 0)
         shadow = PointShadowMapCalculation(pointLightShadowMap, vec4(position - light.position.xyz, 1.0), dist, layer);
-
-    return LightShadingEffectType(normal, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow) * attenaution;
+    vec3 n = gl_FrontFacing == true ? normal : -normal;
+    return LightShadingEffectType(n, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow) * attenaution;
 }
 
 vec3 CalcSpotLight(SpotLightBuffer light, int layer)
@@ -245,7 +244,8 @@ vec3 CalcSpotLight(SpotLightBuffer light, int layer)
     float shadow = 0.0;
     if (renderingOptions.shadowRendering.spot > 0)
         shadow = ShadowMapCalculation(spotLightShadowMap, fragPositionightSpace, lightDir, layer);
-    return LightShadingEffectType(normal, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow) * intesity * attenaution;
+    vec3 n = gl_FrontFacing == true ? normal : -normal;
+    return LightShadingEffectType(n, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow) * intesity * attenaution;
 }
 
 void main()

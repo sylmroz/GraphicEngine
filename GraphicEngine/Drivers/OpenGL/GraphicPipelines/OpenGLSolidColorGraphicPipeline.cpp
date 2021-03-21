@@ -38,7 +38,7 @@ GraphicEngine::OpenGL::OpenGLSolidColorGraphicPipeline::OpenGLSolidColorGraphicP
 	m_spotLightShadowMaps->use(1);
 
 	auto id3 = glGetUniformLocation(m_shaderProgram->getShaderProgramId(), "pointLightShadowMap");
-	glUniform1i(id3, 1);
+	glUniform1i(id3, 2);
 	m_pointLightShadowMaps->use(2);
 }
 

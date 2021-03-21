@@ -15,10 +15,7 @@ layout (std140) uniform ModelMatrix
     mat4 model;
 } modelMatrix;
 
-layout (location = 0) out vec3 fragPos;
-
 void main()
 {
     gl_Position = modelMatrix.model * vec4(inPosition, 1.0);
-    fragPos = gl_Position.xyz;
 }

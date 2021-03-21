@@ -56,11 +56,11 @@ void GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::draw()
 	if (m_lightSpaceMatrixArray.data.size() > 0)
 	{
 		glEnable(GL_CULL_FACE);
+		glCullFace(GL_FRONT);
 		m_shaderProgram->use();
 		glViewport(0, 0, m_depthTexture->getWidth(), m_depthTexture->getHeight());
 		glBindFramebuffer(GL_FRAMEBUFFER, dephMapFBO);
 		glClear(GL_DEPTH_BUFFER_BIT); 
-		glCullFace(GL_FRONT);
 
 		m_vertexBufferCollection->forEachEntity([&](auto vertexBufferCollection)
 			{
@@ -104,6 +104,23 @@ void GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::updateLights(Engines
 void GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::updateLight(Engines::Graphic::Shaders::LightSpaceMatrix lightSpaceMatrix, uint32_t index, Engines::Graphic::Shaders::LightPositionFarPlane lightPositionFarPlane)
 {
 	m_lightSpaceMatrixArray.data[index] = lightSpaceMatrix;
+	m_lightSpaceMatrixArrayUniform->update(m_lightSpaceMatrixArray.data.data(), m_lightSpaceMatrixArray.data.size(), 0);
+
+	if (m_lightPositionFarPlaneArray.data.size() > 0)
+	{
+		m_lightPositionFarPlaneArray.data[index] = lightPositionFarPlane;
+		m_lightPositionFarPlaneArrayUniform->update(m_lightPositionFarPlaneArray.data.data(), m_lightPositionFarPlaneArray.data.size(), 0);
+	}
+}
+
+void GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::updateLight(std::array<Engines::Graphic::Shaders::LightSpaceMatrix, 6> lightSpaceMatrices, uint32_t index, Engines::Graphic::Shaders::LightPositionFarPlane lightPositionFarPlane)
+{
+	uint32_t startIndex = m_type == LightTypeShadow::point ? index * 6 : index;
+	for (auto& lightSpaceMatrix : lightSpaceMatrices)
+	{
+		m_lightSpaceMatrixArray.data[startIndex] = lightSpaceMatrix;
+		++startIndex;
+	}
 	m_lightSpaceMatrixArrayUniform->update(m_lightSpaceMatrixArray.data.data(), m_lightSpaceMatrixArray.data.size(), 0);
 
 	if (m_lightPositionFarPlaneArray.data.size() > 0)

@@ -15,14 +15,13 @@ layout (std140) uniform LightSpaceMatrixArray
 } lightSpaceMatrix;
 
 #ifdef FRAG
-layout (location = 0) in vec3 fragPos[];
 
 layout (std140) uniform LightPositionFarPlaneArray
 {
     vec4 lightPosFarPlane[LIGHT_COUNT];
 } lightPositionFarPlane;
 
-layout (location = 1) out float fragDepth;
+layout (location = 0) out float fragDepth;
 #endif
 
 void main()
@@ -32,11 +31,12 @@ void main()
         gl_Layer = gl_InvocationID * DEPTH + face;
         for (int i = 0; i < 3; ++i)
         {
+            vec3 fragPosition = gl_in[i].gl_Position.xyz;
             gl_Position = lightSpaceMatrix.lightSpace[gl_Layer] * gl_in[i].gl_Position;
             #ifdef FRAG
             vec3 lightPosition = lightPositionFarPlane.lightPosFarPlane[gl_Layer].xyz;
             float farPlane = lightPositionFarPlane.lightPosFarPlane[gl_Layer].w;
-            fragDepth = length(fragPos[i] - lightPosition) / farPlane;
+            fragDepth = length(fragPosition - lightPosition) / farPlane;
             #endif
             EmitVertex();
         }

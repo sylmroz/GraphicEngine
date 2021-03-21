@@ -24,11 +24,11 @@ GraphicEngine::OpenGL::OpenGLRenderingEngine::OpenGLRenderingEngine(
 
 bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 {
+	// Create shadow maps
 	if (m_renderingOptionsManager->renderingOptions.shadowRendering.directional)
 	{
 		glClearColor(m_viewportManager->backgroudColor.r, m_viewportManager->backgroudColor.g, m_viewportManager->backgroudColor.b, m_viewportManager->backgroudColor.a);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		// Create shadow map
 		m_shadowMapGraphicPipeline->draw();
 	}
 
@@ -121,7 +121,7 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 		Engines::Graphic::Shaders::LightPositionFarPlaneArray pointLightPositionFarPlaneArray;
 		for (auto& pointLight : m_lightManager->getPointLights())
 		{
-			glm::mat4 shadowProj = glm::perspective(glm::radians(90.0f), 1.0f, 1.0f, 25.0f);
+			glm::mat4 shadowProj = glm::perspective(glm::radians(90.0f), 1.0f, 0.0f, 25.0f);
 			pointLightSpaceMatrixArray.data.push_back(shadowProj * glm::lookAt(glm::vec3(pointLight.position), glm::vec3(pointLight.position) + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
 			pointLightSpaceMatrixArray.data.push_back(shadowProj * glm::lookAt(glm::vec3(pointLight.position), glm::vec3(pointLight.position) + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
 			pointLightSpaceMatrixArray.data.push_back(shadowProj * glm::lookAt(glm::vec3(pointLight.position), glm::vec3(pointLight.position) + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
@@ -159,6 +159,17 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 		m_lightManager->onUpdatePointLight([&](uint32_t index, Engines::Graphic::Shaders::PointLight light)
 		{
 			m_pointLights->update(light, index);
+
+			std::array<Engines::Graphic::Shaders::LightSpaceMatrix, 6> lightSpaceMatrices;
+			glm::mat4 shadowProj = glm::perspective(glm::radians(90.0f), 1.0f, 0.0f, 25.0f);
+			lightSpaceMatrices[0] = shadowProj * glm::lookAt(glm::vec3(light.position), glm::vec3(light.position) + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+			lightSpaceMatrices[1] = shadowProj * glm::lookAt(glm::vec3(light.position), glm::vec3(light.position) + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+			lightSpaceMatrices[2] = shadowProj * glm::lookAt(glm::vec3(light.position), glm::vec3(light.position) + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+			lightSpaceMatrices[3] = shadowProj * glm::lookAt(glm::vec3(light.position), glm::vec3(light.position) + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f));
+			lightSpaceMatrices[4] = shadowProj * glm::lookAt(glm::vec3(light.position), glm::vec3(light.position) + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+			lightSpaceMatrices[5] = shadowProj * glm::lookAt(glm::vec3(light.position), glm::vec3(light.position) + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+
+			m_pointLightshadowMapGraphicPipeline->updateLight(lightSpaceMatrices, index, glm::vec4(glm::vec3(light.position), 25.0f));
 		});
 		m_lightManager->onUpdatePointLights([&](std::vector<Engines::Graphic::Shaders::PointLight> lights)
 		{
@@ -167,7 +178,7 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 			Engines::Graphic::Shaders::LightPositionFarPlaneArray pointLightPositionFarPlaneArray;
 			for (auto& pointLight : lights)
 			{
-				glm::mat4 shadowProj = glm::perspective(glm::radians(90.0f), 1.0f, 1.0f, 25.0f);
+				glm::mat4 shadowProj = glm::perspective(glm::radians(90.0f), 1.0f, 0.0f, 25.0f);
 				pointLightSpaceMatrixArray.data.push_back(shadowProj * glm::lookAt(glm::vec3(pointLight.position), glm::vec3(pointLight.position) + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
 				pointLightSpaceMatrixArray.data.push_back(shadowProj * glm::lookAt(glm::vec3(pointLight.position), glm::vec3(pointLight.position) + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
 				pointLightSpaceMatrixArray.data.push_back(shadowProj * glm::lookAt(glm::vec3(pointLight.position), glm::vec3(pointLight.position) + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
@@ -183,7 +194,7 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 		m_lightManager->onUpdateSpotlLight([&](uint32_t index, Engines::Graphic::Shaders::SpotLight light)
 		{
 			m_spotLight->update(light, index);
-			m_spotLightshadowMapGraphicPipeline->updateLight(light.lightSpace, index, glm::vec4(glm::vec3(light.position), light.position.w));
+			m_spotLightshadowMapGraphicPipeline->updateLight(light.lightSpace, index, glm::vec4(glm::vec3(light.position), 50.0f));
 		});
 		m_lightManager->onUpdateSpotlLights([&](std::vector<Engines::Graphic::Shaders::SpotLight> lights)
 		{
