@@ -93,7 +93,6 @@ void GraphicEngine::Vulkan::VulkanSolidColorGraphicPipeline::updateDynamicUnifor
 	{
 		vertexBufferCollection->modelDescriptor.modelMatrix = vertexBufferCollection->mesh->getModelMatrix();
 		vertexBufferCollection->modelDescriptor.normalMatrix = glm::transpose(glm::inverse(m_cameraControllerManager->getActiveCamera()->getViewMatrix() * vertexBufferCollection->modelDescriptor.modelMatrix));
-		vertexBufferCollection->modelDescriptor.color = vertexBufferCollection->mesh->getMaterial().solidColor;
 		m_solidColorModelDescriptors[i] = vertexBufferCollection->modelDescriptor;
 		++i;
 	});

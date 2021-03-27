@@ -4,7 +4,6 @@
 
 layout (location = 0) in vec3 position;
 layout (location = 1) in vec3 normal;
-layout (location = 2) in vec3 solidColor;
 
 struct LightColor
 {
@@ -79,14 +78,19 @@ layout (std140) uniform RenderingOptions
     int globalIllumination;
 } renderingOptions;
 
+layout (std140) uniform Material
+{
+    vec4 ambient;
+    vec4 diffuse;
+    vec4 specular;
+    float shininess;
+} material;
+
 uniform sampler2DArray shadowMap;
 uniform sampler2DArray spotLightShadowMap;
 uniform samplerCubeArray pointLightShadowMap;
 
 const float Pi = 3.14159265;
-
-const float specularStrength = 0.5;
-const float shininess = 32;
 
 
 float when_gt(float x) 
@@ -159,52 +163,52 @@ float PointShadowMapCalculation(samplerCubeArray tex, vec4 fragPosLightSpace, fl
     return shadow;
 }
 
-subroutine vec3 LightShadingEffectType_t(vec3 normal, vec3 lightDir, vec3 diffuseLight, vec3 specularLight, vec3 ambientLight, float shadow);
+subroutine vec4 LightShadingEffectType_t(vec3 normal, vec3 lightDir, vec3 diffuseLight, vec3 specularLight, vec3 ambientLight, float shadow);
 
 subroutine(LightShadingEffectType_t)
-vec3 DiffuseOnly(vec3 normal, vec3 lightDir, vec3 diffuseLight, vec3 specularLight, vec3 ambientLight, float shadow)
+vec4 DiffuseOnly(vec3 normal, vec3 lightDir, vec3 diffuseLight, vec3 specularLight, vec3 ambientLight, float shadow)
 {
     float I = max(dot(normal, lightDir), 0.0);
-    vec3 diffuse = I * solidColor * diffuseLight;
+    vec4 diffuse = vec4((1.0 - shadow) * I * material.diffuse.rgb * diffuseLight, material.diffuse.a);
 
-    return ((1.0 - shadow) * diffuse + ambientLight);
+    return ((1.0 - shadow) * diffuse + vec4(ambientLight, 0.0));
 }
 
 subroutine(LightShadingEffectType_t)
-vec3 Phong(vec3 normal, vec3 lightDir, vec3 diffuseLight, vec3 specularLight, vec3 ambientLight, float shadow)
+vec4 Phong(vec3 normal, vec3 lightDir, vec3 diffuseLight, vec3 specularLight, vec3 ambientLight, float shadow)
 {
     float I = max(dot(normal, lightDir), 0.0);
-    vec3 diffuse = I * solidColor * diffuseLight;
+    vec4 diffuse = vec4((1.0 - shadow) * I * material.diffuse.rgb * diffuseLight, material.diffuse.a);
 
     vec3 viewDir = normalize(vec3(eye.eyePosition) - position);
     vec3 reflectDir = reflect(-lightDir, normal);
     
-    const float energyConservation = ( 2.0 + shininess ) / ( 2.0 * Pi );
-    float spec = energyConservation * pow(max(dot(viewDir, reflectDir), 0.0), shininess) * when_gt(I);
-    vec3 specular = specularStrength * spec * specularLight;
+    const float energyConservation = ( 2.0 + material.shininess ) / ( 2.0 * Pi );
+    float spec = energyConservation * pow(max(dot(viewDir, reflectDir), 0.0), material.shininess) * when_gt(I);
+    vec4 specular = vec4(spec * material.specular.rgb * specularLight, material.specular.a);
 
-    return ((1.0 - shadow) * (diffuse + specular) + ambientLight);
+    return ((1.0 - shadow) * (diffuse + specular) + vec4(ambientLight, 0.0));
 }
 
 subroutine(LightShadingEffectType_t)
-vec3 BlinnPhong(vec3 normal, vec3 lightDir, vec3 diffuseLight, vec3 specularLight, vec3 ambientLight, float shadow)
+vec4 BlinnPhong(vec3 normal, vec3 lightDir, vec3 diffuseLight, vec3 specularLight, vec3 ambientLight, float shadow)
 {
     float I = max(dot(normal, lightDir), 0.0);
-    vec3 diffuse = I * solidColor * diffuseLight;
+    vec4 diffuse = vec4((1.0 - shadow) * I * material.diffuse.rgb * diffuseLight, material.diffuse.a);
 
     vec3 viewDir = normalize(vec3(eye.eyePosition) - position);
     vec3 halfwayDir = normalize(lightDir + viewDir);
     
-    const float energyConservation = ( 8.0 + shininess ) / ( 8.0 * Pi );
-    float spec = energyConservation * pow(max(dot(normal, halfwayDir), 0.0), shininess) * when_gt(I);
-    vec3 specular = specularStrength * spec * specularLight;
+    const float energyConservation = ( 8.0 + material.shininess ) / ( 8.0 * Pi );
+    float spec = energyConservation * pow(max(dot(normal, halfwayDir), 0.0), material.shininess) * when_gt(I);
+    vec4 specular = vec4(spec * material.specular.rgb * specularLight, material.specular.a);
 
-    return ((1.0 - shadow) * (diffuse + specular) + ambientLight);
+    return (diffuse + specular) + vec4(material.ambient.rgb * ambientLight, material.ambient.a);
 }
 
 subroutine uniform LightShadingEffectType_t LightShadingEffectType;
 
-vec3 CalcDirectionalLight(DirectionalLightBuffer light, int layer)
+vec4 CalcDirectionalLight(DirectionalLightBuffer light, int layer)
 {
     vec3 lightDir = normalize(vec3(-light.direction));
     vec4 fragPositionightSpace = light.lightSpace * vec4(position, 1.0);
@@ -215,7 +219,7 @@ vec3 CalcDirectionalLight(DirectionalLightBuffer light, int layer)
     return LightShadingEffectType(n, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow);
 }
 
-vec3 CalcPointLight(PointLightBuffer light, int layer)
+vec4 CalcPointLight(PointLightBuffer light, int layer)
 {
     vec3 lightDir = normalize(vec3(light.position) - position);
 
@@ -229,7 +233,7 @@ vec3 CalcPointLight(PointLightBuffer light, int layer)
     return LightShadingEffectType(n, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow) * attenaution;
 }
 
-vec3 CalcSpotLight(SpotLightBuffer light, int layer)
+vec4 CalcSpotLight(SpotLightBuffer light, int layer)
 {
     vec3 lightDir = normalize(vec3(light.position) - position); 
 
@@ -256,13 +260,13 @@ void main()
     {
         vec3 lightDir = normalize(vec3(eye.eyePosition) - position);
         float I = max(dot(normal, lightDir), 0.0);
-        vec3 color = clamp((I + 0.2), 0 , 1) * solidColor;
+        vec3 color = clamp((I + 0.2), 0 , 1) * material.diffuse.rgb;
         outColor = vec4(color, 1.0);
     }
 
     else
     {
-        vec3 lightStrength;
+        vec4 lightStrength;
         for (int i = 0; i < directionalLight.light_length; i++ )
         { 
             lightStrength += CalcDirectionalLight(directionalLight.directionalLights[i], i);
@@ -278,6 +282,6 @@ void main()
             lightStrength += CalcSpotLight(spotLight.spotLights[i], i);
         }
 
-        outColor = vec4(mix(vec3(0.0), vec3(1.0), lightStrength), 1.0);
+        outColor = vec4(mix(vec4(0.0), vec4(1.0), lightStrength));
     }
 }

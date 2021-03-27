@@ -397,6 +397,9 @@
     <ClCompile Include="UI\ImGui\Widgets\TreeNode.cpp">
       <Filter>UI\ImGui\Widgets</Filter>
     </ClCompile>
+    <ClCompile Include="Engines\Graphic\Shaders\Models\Material.cpp">
+      <Filter>Engines\Graphic\Shaders\Models</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Input\Keyboard\KeyboardEnumKeys.hpp">
@@ -860,6 +863,9 @@
     </ClInclude>
     <ClInclude Include="UI\ImGui\Widgets\TreeNode.hpp">
       <Filter>UI\ImGui\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="Engines\Graphic\Shaders\Models\Material.hpp">
+      <Filter>Engines\Graphic\Shaders\Models</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

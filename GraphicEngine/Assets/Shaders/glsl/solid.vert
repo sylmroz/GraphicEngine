@@ -15,17 +15,13 @@ layout (std140) uniform SolidColorModelDescriptor
 {
     mat4 modelMatrix;
     mat4 normalMatrix;
-    vec4 color;
 } solidColorModelDescriptor;
 
 layout (location = 0) out vec3 position;
 layout (location = 1) out vec3 normal;
-layout (location = 2) out vec3 solidColor;
-layout (location = 3) out vec4 fragPositionightSpace;
 
 void main()
 {
-    solidColor = vec3(solidColorModelDescriptor.color);
     normal = normalize(mat3(solidColorModelDescriptor.normalMatrix) * inNormal);
     position = vec3(solidColorModelDescriptor.modelMatrix * vec4(inPosition, 1.0));
     gl_Position = cameraMatrices.projection * cameraMatrices.view * vec4(position, 1.0);

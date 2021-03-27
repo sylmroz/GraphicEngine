@@ -4,6 +4,7 @@
 #include "../Shaders/Models/SolidColorModelDescriptor.hpp"
 #include "../Shaders/Models/Light.hpp"
 #include "../Shaders/Models/Eye.hpp"
+#include "../Shaders/Models/Material.hpp"
 #include "../../../Core/Math/ImageUtils.hpp"
 #include "../../../Services/CameraControllerManager.hpp"
 #include "../Shaders/Models/CameraMatrices.hpp"
@@ -33,7 +34,6 @@ namespace GraphicEngine::Engines::Graphic
 		{
 			auto vertexBufferCollection = std::make_shared<VSolidColorVertexBufferCollection<VertexType>>();
 			vertexBufferCollection->vertexBuffer = vertexBuffer;
-			vertexBufferCollection->modelDescriptor.color = mesh->getMaterial().solidColor;
 			vertexBufferCollection->mesh = mesh;
 			return vertexBufferCollection;
 		}
@@ -45,5 +45,6 @@ namespace GraphicEngine::Engines::Graphic
 		std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::Eye>> m_eyePositionUniformBuffer;
 		std::shared_ptr<Services::CameraControllerManager> m_cameraControllerManager;
 		std::shared_ptr<UniformBufferDynamic<Shaders::SolidColorModelDescriptor>> m_solidColorUniformBuffer;
+		std::shared_ptr<UniformBufferDynamic<Shaders::Material>> m_materialUniformBuffer;
 	};
 };

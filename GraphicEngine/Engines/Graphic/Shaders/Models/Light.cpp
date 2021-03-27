@@ -53,6 +53,19 @@ GraphicEngine::Engines::Graphic::Shaders::PointLight::PointLight(std::shared_ptr
 GraphicEngine::Engines::Graphic::Shaders::PointLight::PointLight(glm::vec4 position, float constant, float linear, float quadric, LightColor color) :
 	position{ position }, constant{ constant }, linear{ linear }, quadric{ quadric }, color{ color } {}
 
+std::array<GraphicEngine::Engines::Graphic::Shaders::LightSpaceMatrix, 6> GraphicEngine::Engines::Graphic::Shaders::PointLight::getLightSpaceMatrices()
+{
+	std::array<Engines::Graphic::Shaders::LightSpaceMatrix, 6> lightSpaceMatrices;
+	glm::mat4 shadowProj = glm::perspective(glm::radians(90.0f), 1.0f, 0.0f, 25.0f);
+	lightSpaceMatrices[0] = shadowProj * glm::lookAt(glm::vec3(position), glm::vec3(position) + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+	lightSpaceMatrices[1] = shadowProj * glm::lookAt(glm::vec3(position), glm::vec3(position) + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+	lightSpaceMatrices[2] = shadowProj * glm::lookAt(glm::vec3(position), glm::vec3(position) + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	lightSpaceMatrices[3] = shadowProj * glm::lookAt(glm::vec3(position), glm::vec3(position) + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f));
+	lightSpaceMatrices[4] = shadowProj * glm::lookAt(glm::vec3(position), glm::vec3(position) + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+	lightSpaceMatrices[5] = shadowProj * glm::lookAt(glm::vec3(position), glm::vec3(position) + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+	return lightSpaceMatrices;
+}
+
 GraphicEngine::Engines::Graphic::Shaders::SpotLight::SpotLight()
 {
 	calculateLigthSpace();

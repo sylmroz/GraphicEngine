@@ -26,6 +26,8 @@ GraphicEngine::OpenGL::OpenGLSolidColorGraphicPipeline::OpenGLSolidColorGraphicP
 		m_renderingOptionsUniformBuffer->update(&m_renderingOptionsManager->renderingOptions);
 	});
 
+	m_materialUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::Material>>(26, m_shaderProgram);
+
 	m_shaderProgram->use();
 
 	m_diffuseOnlyIndex = glGetSubroutineIndex(m_shaderProgram->getShaderProgramId(), GL_FRAGMENT_SHADER, "BlinnPhong");
@@ -59,8 +61,18 @@ void GraphicEngine::OpenGL::OpenGLSolidColorGraphicPipeline::draw()
 	{
 		vertexBufferCollection->modelDescriptor.modelMatrix = vertexBufferCollection->mesh->getModelMatrix();
 		vertexBufferCollection->modelDescriptor.normalMatrix = glm::transpose(glm::inverse(vertexBufferCollection->modelDescriptor.modelMatrix));
-		vertexBufferCollection->modelDescriptor.color = vertexBufferCollection->mesh->getMaterial().solidColor;
 		m_solidColorUniformBuffer->update(&vertexBufferCollection->modelDescriptor);
+
+		try
+		{
+			auto meshMaterial = vertexBufferCollection->mesh->getMaterial();
+			auto material = std::get<Engines::Graphic::Shaders::Material>(meshMaterial.baseMaterial);
+			m_materialUniformBuffer->update(&material);
+		}
+		catch (const std::bad_variant_access&)
+		{
+			// TODO put textures
+		}
 		vertexBufferCollection->vertexBuffer->drawElements(GL_TRIANGLES);
 	});
 }

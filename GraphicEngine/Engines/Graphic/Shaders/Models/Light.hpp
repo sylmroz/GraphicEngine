@@ -1,15 +1,15 @@
 #pragma once
 
+#include "../../../../Core/Configuration.hpp"
+#include "../../../../Core/Utils/ObjectConverter.hpp"
+#include "LightSpaceMatrix.hpp"
+#include <array>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <vector>
-#include "../../../../Core/Utils/ObjectConverter.hpp"
-#include "../../../../Core/Configuration.hpp"
-#include <iostream>
 
 namespace GraphicEngine::Engines::Graphic::Shaders
 {
-
 	struct LightColor
 	{
 		LightColor() = default;
@@ -46,6 +46,8 @@ namespace GraphicEngine::Engines::Graphic::Shaders
 		float linear{ 0.22 };
 		float quadric{ 0.2 };
 		LightColor color;
+
+		std::array<LightSpaceMatrix, 6> getLightSpaceMatrices();
 	};
 
 	struct SpotLight
@@ -65,14 +67,5 @@ namespace GraphicEngine::Engines::Graphic::Shaders
 		float linear{ 0.014f };
 		float quadric{ 0.007f };
 		LightColor color;
-	};
-
-	struct Light
-	{
-		Light() = default;
-		Light(glm::vec4 position, glm::vec4 color):
-			position{ position }, color{ color } {}
-		alignas(16) glm::vec4 position;
-		alignas(16) glm::vec4 color;
 	};
 }

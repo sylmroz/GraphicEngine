@@ -35,15 +35,11 @@ bool GraphicEngine::Vulkan::VulkanRenderingEngine::drawFrame()
 
 		glm::vec4 eyePosition = glm::vec4(m_cameraControllerManager->getActiveCamera()->getPosition(), 1.0);
 
-		Engines::Graphic::Shaders::Light light{ eyePosition, glm::vec4{ 1.0f } };
 		Engines::Graphic::Shaders::Eye eye{ eyePosition };
 
 		Engines::Graphic::Shaders::CameraMatrices cameraMatrix(view, projection);
 		m_cameraUniformBuffer->updateAndSet(cameraMatrix);
 		m_eyePositionUniformBuffer->updateAndSet(eye);
-		m_directionalLight->update(m_lightManager->getDirectionalLights());
-		//m_pointLights->update(m_lightManager->getPointLights());
-		//m_spotLight->update(m_lightManager->getSpotLights());
 
 		if (m_viewportManager->displayNormal)
 			m_normalDebugGraphicPipeline->updateDynamicUniforms();

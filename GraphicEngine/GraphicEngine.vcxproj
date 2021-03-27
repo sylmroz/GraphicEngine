@@ -213,6 +213,7 @@
     <ClCompile Include="Drivers\Vulkan\VulkanTexture.cpp" />
     <ClCompile Include="Drivers\Vulkan\VulkanTextureCube.cpp" />
     <ClCompile Include="Engines\Graphic\Shaders\Models\Light.cpp" />
+    <ClCompile Include="Engines\Graphic\Shaders\Models\Material.cpp" />
     <ClCompile Include="Main\Application.cpp" />
     <ClCompile Include="Main\Engine.cpp" />
     <ClCompile Include="Main\main.cpp" />
@@ -356,6 +357,7 @@
     <ClInclude Include="Engines\Graphic\Shaders\Models\LightPositionFarPlane.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\LightSpaceMatrix.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\LightSpaceModelMatrices.hpp" />
+    <ClInclude Include="Engines\Graphic\Shaders\Models\Material.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\ModelMatrices.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\ModelMatrix.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\RenderingOptions.hpp" />
