@@ -141,25 +141,23 @@ float ShadowMapCalculation(sampler2DArray tex, vec4 fragPosLightSpace, vec3 ligh
 
     float shadow = 0.0;
     vec2 texelSize = 1.0 / textureSize(tex, 0).xy;
-    float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
+    float bias = max(0.005 * (1.0 - dot(normal, lightDir)), 0.0005);
     for (int i = 0; i < numOfSamples; ++i)
     {
         int index = int(16.0 * random(floor(position * 1000.0), i)) % 16;
         float depth = texture(tex, vec3(projCoords.xy + poissonDisk[index] * texelSize, layer)).r;
-        shadow += projCoords.z > depth ? 1.0 : 0.0;
+        shadow += (projCoords.z - bias) > depth ? 1.0 : 0.0;
     }
     shadow /= numOfSamples;
         
     return shadow;
 }
 
-layout (location = 0) out vec4 outColor;
-
 float PointShadowMapCalculation(samplerCubeArray tex, vec4 fragPosLightSpace, float currentDepth, int layer)
 {
     float closestDepth = texture(tex, vec4(fragPosLightSpace.xyz, layer)).r * 25.0;
     float bias = 0.05; 
-    float shadow = currentDepth  - bias > closestDepth ? 1.0 : 0.0;
+    float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
     return shadow;
 }
 
@@ -251,6 +249,8 @@ vec4 CalcSpotLight(SpotLightBuffer light, int layer)
     vec3 n = gl_FrontFacing == true ? normal : -normal;
     return LightShadingEffectType(n, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow) * intesity * attenaution;
 }
+
+layout (location = 0) out vec4 outColor;
 
 void main()
 {

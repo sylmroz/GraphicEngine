@@ -45,6 +45,7 @@ namespace GraphicEngine::Engines::Graphic
 					auto v = std::make_shared<Vertex>();
 					v->position = glm::vec3(from + step * glm::vec3(x, 0.0f, z));
 					vertices.push_back(v);
+					boudingBox.extendBox(v->position);
 				}
 			}
 
@@ -57,6 +58,7 @@ namespace GraphicEngine::Engines::Graphic
 					v->position = glm::vec3(from + step * glm::vec3(x, 0.0f, z));
 					v->position.y = to.y;
 					vertices.push_back(v);
+					boudingBox.extendBox(v->position);
 				}
 			}
 
@@ -68,6 +70,7 @@ namespace GraphicEngine::Engines::Graphic
 					auto v = std::make_shared<Vertex>();
 					v->position = glm::vec3(from + step * glm::vec3(x, y, 0.0f));
 					vertices.push_back(v);
+					boudingBox.extendBox(v->position);
 				}
 			}
 
@@ -80,6 +83,7 @@ namespace GraphicEngine::Engines::Graphic
 					v->position = glm::vec3(from + step * glm::vec3(x, y, 0.0f));
 					v->position.z = to.z;
 					vertices.push_back(v);
+					boudingBox.extendBox(v->position);
 				}
 			}
 
@@ -91,6 +95,7 @@ namespace GraphicEngine::Engines::Graphic
 					auto v = std::make_shared<Vertex>();
 					v->position = glm::vec3(from + step * glm::vec3(0.0f, y, z));
 					vertices.push_back(v);
+					boudingBox.extendBox(v->position);
 				}
 			}
 
@@ -103,6 +108,7 @@ namespace GraphicEngine::Engines::Graphic
 					v->position = glm::vec3(from + step * glm::vec3(0.0f, y, z));
 					v->position.x = to.x;
 					vertices.push_back(v);
+					boudingBox.extendBox(v->position);
 				}
 			}
 

@@ -17,6 +17,7 @@
       ".geom": "geom"
     },
     "files.associations": {
-      "xstring": "cpp"
+      "xstring": "cpp",
+      "memory": "cpp"
     }
   }

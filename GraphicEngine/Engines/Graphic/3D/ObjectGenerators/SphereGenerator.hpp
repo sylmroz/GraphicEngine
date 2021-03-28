@@ -26,6 +26,7 @@ namespace GraphicEngine::Engines::Graphic
 			auto v1 = std::make_shared<Vertex>();
 			v1->position = glm::vec3(centerPosition.x, centerPosition.z - radius, centerPosition.y);
 			vertices.push_back(v1);
+			boudingBox.extendBox(v1->position);
 
 			for (float theta = -180.0f + thetaStep; theta < -0.1f; theta += thetaStep)
 			{
@@ -40,12 +41,14 @@ namespace GraphicEngine::Engines::Graphic
 					auto v3 = std::make_shared<Vertex>();
 					v3->position = glm::vec3(radius * sinTheta * cosFi, radius * cosTheta, radius * sinTheta * sinFi) + centerPosition;
 					vertices.push_back(v3);
+					boudingBox.extendBox(v3->position);
 				}
 			}
 
 			auto v2 = std::make_shared<Vertex>();
 			v2->position = glm::vec3(centerPosition.x, centerPosition.z + radius, centerPosition.y);
 			vertices.push_back(v2);
+			boudingBox.extendBox(v2->position);
 
 			for (uint32_t i{ 0 }; i < scale.x + 1; ++i)
 			{

@@ -123,16 +123,17 @@ GraphicEngine::OpenGL::TextureDepthArray::TextureDepthArray(int width, int heigh
 	glGenTextures(1, &texture);
 	glBindTexture(textureType, texture);
 
-	glTexImage3D(textureType, 0, GL_DEPTH_COMPONENT, width, height, layers, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+	glTexImage3D(textureType, 0, GL_DEPTH_COMPONENT32F, width, height, layers, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
 
 	glTexParameteri(textureType, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
 	glTexParameteri(textureType, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-	float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	float borderColor[] = { 1.0f, 0.0f, 0.0f, 0.0f };
 	glTexParameterfv(textureType, GL_TEXTURE_BORDER_COLOR, borderColor);
 
 
 	glTexParameteri(textureType, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(textureType, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(textureType, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
 }
 
 int GraphicEngine::OpenGL::TextureArray::getLayers()
@@ -155,15 +156,16 @@ GraphicEngine::OpenGL::TextureCubeDepthArray::TextureCubeDepthArray(int width, i
 	glGenTextures(1, &texture);
 	glBindTexture(textureType, texture);
 
-	glTexImage3D(textureType, 0, GL_DEPTH_COMPONENT, width, height, layers * 6, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+	glTexImage3D(textureType, 0, GL_DEPTH_COMPONENT32F, width, height, layers * 6, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
 
 	glTexParameteri(textureType, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
 	glTexParameteri(textureType, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 	glTexParameteri(textureType, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER);
-	float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	float borderColor[] = { 1.0f, 0.0f, 0.0f, 0.0f };
 	glTexParameterfv(textureType, GL_TEXTURE_BORDER_COLOR, borderColor);
 
 
 	glTexParameteri(textureType, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(textureType, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(textureType, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
 }

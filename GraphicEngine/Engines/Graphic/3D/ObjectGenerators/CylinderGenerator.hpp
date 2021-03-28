@@ -36,6 +36,7 @@ namespace GraphicEngine::Engines::Graphic
 				auto v1 = std::make_shared<Vertex>();
 				v1->position = center;
 				vertices.push_back(v1);
+				boudingBox.extendBox(v1->position);
 
 				verticesOffset = vertices.size();
 
@@ -48,6 +49,7 @@ namespace GraphicEngine::Engines::Graphic
 						auto v2 = std::make_shared<Vertex>();
 						v2->position = glm::vec3(internalRadius * std::cos(internalFi), 0.0f, internalRadius * std::sin(internalFi)) + center;
 						vertices.push_back(v2);
+						boudingBox.extendBox(v2->position);
 					}
 				}
 
@@ -80,6 +82,7 @@ namespace GraphicEngine::Engines::Graphic
 						auto v2 = std::make_shared<Vertex>();
 						v2->position = glm::vec3(internalRadius * std::cos(internalFi), z * heightStep, internalRadius * std::sin(internalFi)) + center;
 						vertices.push_back(v2);
+						boudingBox.extendBox(v2->position);
 					}
 				}
 
@@ -101,6 +104,7 @@ namespace GraphicEngine::Engines::Graphic
 				auto v3 = std::make_shared<Vertex>();
 				v3->position = center + glm::vec3(0.0f, height, 0.0f);
 				vertices.push_back(v3);
+				boudingBox.extendBox(v3->position);
 
 				verticesOffset = vertices.size();
 
@@ -113,6 +117,7 @@ namespace GraphicEngine::Engines::Graphic
 						auto v2 = std::make_shared<Vertex>();
 						v2->position = glm::vec3(internalRadius * std::cos(internalFi), height, internalRadius * std::sin(internalFi)) + center;
 						vertices.push_back(v2);
+						boudingBox.extendBox(v2->position);
 					}
 				}
 

@@ -45,6 +45,7 @@ namespace GraphicEngine::Engines::Graphic
 					v->position = glm::vec3(from + step * glm::vec2(x, y), 0.0f);
 					std::swap(v->position.y, v->position.z);
 					vertices.push_back(v);
+					boudingBox.extendBox(v->position);
 				}
 			}
 

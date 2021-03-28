@@ -400,6 +400,9 @@
     <ClCompile Include="Engines\Graphic\Shaders\Models\Material.cpp">
       <Filter>Engines\Graphic\Shaders\Models</Filter>
     </ClCompile>
+    <ClCompile Include="Drivers\OpenGL\GraphicPipelines\OpenGLGrassGraphicPipeline.cpp">
+      <Filter>Drivers\OpenGL\GraphicPipelines</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Input\Keyboard\KeyboardEnumKeys.hpp">
@@ -866,6 +869,15 @@
     </ClInclude>
     <ClInclude Include="Engines\Graphic\Shaders\Models\Material.hpp">
       <Filter>Engines\Graphic\Shaders\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Engines\Graphic\Pipelines\GrassGraphicPipeline.hpp">
+      <Filter>Engines\Graphic\Pipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="Engines\Graphic\Shaders\Models\GrassParameters.hpp">
+      <Filter>Engines\Graphic\Shaders\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Drivers\OpenGL\GraphicPipelines\OpenGLGrassGraphicPipeline.hpp">
+      <Filter>Drivers\OpenGL\GraphicPipelines</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

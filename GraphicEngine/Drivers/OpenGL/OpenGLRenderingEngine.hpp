@@ -16,6 +16,7 @@
 #include "GraphicPipelines/OpenGLNormalDebugGraphicPileline.hpp"
 #include "GraphicPipelines/OpenGLSkyboxGraphicPipeline.hpp"
 #include "GraphicPipelines/OpenGLShadowMapGraphicPipeline.hpp"
+#include "GraphicPipelines/OpenGLGrassGraphicPipeline.hpp"
 
 #include "../../UI/ImGui/ImGuiImpl.hpp"
 
@@ -54,6 +55,7 @@ namespace GraphicEngine::OpenGL
 		std::unique_ptr<OpenGLWireframeGraphicPipeline> m_wireframeGraphicPipeline;
 		std::unique_ptr<OpenGLSolidColorGraphicPipeline> m_solidColorGraphicPipeline;
 		std::unique_ptr<OpenGLNormalDebugGraphicPipeline> m_normalDebugGraphicPipeline;
+		std::unique_ptr<OpenGLGrassGraphicPipeline> m_grassGraphicPipeline;
 		std::unique_ptr<OpenGLSkyboxGraphicPipeline> m_skyboxGraphicPipeline;
 		std::unique_ptr<OpenGLShadowMapGraphicPipeline> m_shadowMapGraphicPipeline;
 		std::unique_ptr<OpenGLShadowMapGraphicPipeline> m_spotLightshadowMapGraphicPipeline;

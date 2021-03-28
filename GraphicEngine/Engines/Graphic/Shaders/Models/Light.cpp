@@ -33,7 +33,7 @@ GraphicEngine::Engines::Graphic::Shaders::DirectionalLight::DirectionalLight(glm
 
 void GraphicEngine::Engines::Graphic::Shaders::DirectionalLight::calculateLigthSpace()
 {
-	float near_plane = 1.0f, far_plane = 7.5f;
+	float far_plane = 7.5f;
 	glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, -10.0f, 20.0f);
 	glm::mat4 lightView = glm::lookAt(far_plane * glm::vec3(-glm::normalize(direction)), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	lightSpace = lightProjection * lightView;

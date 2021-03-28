@@ -58,6 +58,8 @@ bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 	Engines::Graphic::Shaders::CameraMatrices cameraMatrices{ viewMatrix, projectionMatrix };
 	
 	m_cameraUniformBuffer->update(&cameraMatrices);
+
+	m_grassGraphicPipeline->draw();
 	
 	if (m_viewportManager->displayNormal)
 		m_normalDebugGraphicPipeline->draw();
@@ -101,6 +103,7 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 		m_wireframeGraphicPipeline = std::make_unique<OpenGLWireframeGraphicPipeline>(m_cameraControllerManager);
 		m_solidColorGraphicPipeline = std::make_unique<OpenGLSolidColorGraphicPipeline>(m_cameraControllerManager, m_renderingOptionsManager, m_directionalLightDepthTexture, m_spotLightdepthTexture, m_pointightdepthTexture);
 		m_normalDebugGraphicPipeline = std::make_unique<OpenGLNormalDebugGraphicPipeline>(m_cameraControllerManager);
+		m_grassGraphicPipeline = std::make_unique<OpenGLGrassGraphicPipeline>(m_cameraControllerManager);
 		m_skyboxGraphicPipeline = std::make_unique<OpenGLSkyboxGraphicPipeline>(m_cfg->getProperty<std::string>("scene:skybox:texture path"));
 
 		Engines::Graphic::Shaders::LightSpaceMatrixArray lightSpaceMatrixArray;
@@ -209,6 +212,7 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 				m_shadowMapGraphicPipeline->addVertexBuffer<decltype(mesh)::element_type::vertex_type>(mesh, vb);
 				m_spotLightshadowMapGraphicPipeline->addVertexBuffer<decltype(mesh)::element_type::vertex_type>(mesh, vb);
 				m_pointLightshadowMapGraphicPipeline->addVertexBuffer<decltype(mesh)::element_type::vertex_type>(mesh, vb);
+				m_grassGraphicPipeline->addVertexBuffer<decltype(mesh)::element_type::vertex_type>(mesh, vb);
 			}
 		});
 
