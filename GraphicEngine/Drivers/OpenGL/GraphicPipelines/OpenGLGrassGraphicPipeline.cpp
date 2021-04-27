@@ -24,7 +24,7 @@ GraphicEngine::OpenGL::OpenGLGrassGraphicPipeline::OpenGLGrassGraphicPipeline(st
 	m_materialUniformBuffer->update(&grass);*/
 	
 
-	Engines::Graphic::Shaders::GrassParameters grassParameters(0.02f, 0.2f, 1000);
+	Engines::Graphic::Shaders::GrassParameters grassParameters(0.005f, 0.2f, 1000);
 	m_grassParametersUniformBuffer->update(&grassParameters);
 }
 
@@ -37,7 +37,7 @@ void GraphicEngine::OpenGL::OpenGLGrassGraphicPipeline::draw()
 	m_vertexBufferCollection->forEachEntity([&](auto vertexBufferCollection)
 		{
 			vertexBufferCollection->modelDescriptor.modelMatrix = vertexBufferCollection->mesh->getModelMatrix();
-			vertexBufferCollection->modelDescriptor.normalMatrix = glm::transpose(glm::inverse(viewMatrix * vertexBufferCollection->modelDescriptor.modelMatrix));
+			vertexBufferCollection->modelDescriptor.normalMatrix = glm::transpose(glm::inverse(vertexBufferCollection->modelDescriptor.modelMatrix));
 			m_modelDescriptorUniformBuffer->update(&vertexBufferCollection->modelDescriptor);
 			vertexBufferCollection->vertexBuffer->drawElements(GL_TRIANGLES);
 		});
