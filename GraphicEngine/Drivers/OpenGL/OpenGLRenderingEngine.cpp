@@ -54,10 +54,12 @@ bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 
 	auto viewMatrix = m_cameraControllerManager->getActiveCamera()->getViewMatrix();
 	auto projectionMatrix = m_cameraControllerManager->getActiveCamera()->getProjectionMatrix();
-
 	Engines::Graphic::Shaders::CameraMatrices cameraMatrices{ viewMatrix, projectionMatrix };
-	
 	m_cameraUniformBuffer->update(&cameraMatrices);
+
+	auto eyePosition = m_cameraControllerManager->getActiveCamera()->getPosition();
+	Engines::Graphic::Shaders::Eye eye{ glm::vec4(eyePosition, 1.0) };
+	m_eyeUniformBuffer->update(&eye);
 
 	m_grassGraphicPipeline->draw();
 	
@@ -135,6 +137,7 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 		m_pointLightshadowMapGraphicPipeline = std::make_unique<OpenGLShadowMapGraphicPipeline>(m_pointightdepthTexture, pointLightSpaceMatrixArray, LightTypeShadow::point, pointLightPositionFarPlaneArray);
 
 		m_cameraUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::CameraMatrices>>(0);
+		m_eyeUniformBuffer = std::make_unique<UniformBuffer<Engines::Graphic::Shaders::Eye>>(2);
 
 		m_directionalLight = std::make_shared<ShaderStorageBufferObject<Engines::Graphic::Shaders::DirectionalLight>>(7);
 		m_pointLights = std::make_shared<ShaderStorageBufferObject<Engines::Graphic::Shaders::PointLight>>(8);

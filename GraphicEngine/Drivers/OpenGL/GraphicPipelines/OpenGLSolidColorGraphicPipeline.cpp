@@ -17,7 +17,7 @@ GraphicEngine::OpenGL::OpenGLSolidColorGraphicPipeline::OpenGLSolidColorGraphicP
 	m_pointLightShadowMaps = pointLightShadowMaps;
 
 	m_renderingOptionsManager = renderingOptionsManager;
-	m_eyePositionUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::Eye>>(2, m_shaderProgram);
+	
 	m_solidColorUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::SolidColorModelDescriptor>>(4, m_shaderProgram);
 	
 	m_renderingOptionsUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::RenderingOptions>>(25, m_shaderProgram);
@@ -49,13 +49,6 @@ void GraphicEngine::OpenGL::OpenGLSolidColorGraphicPipeline::draw()
 	m_shaderProgram->use();
 
 	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &m_diffuseOnlyIndex);
-
-	auto viewMatrix = m_cameraControllerManager->getActiveCamera()->getViewMatrix();
-	auto projectionMatrix = m_cameraControllerManager->getActiveCamera()->getProjectionMatrix();
-	auto eyePosition = m_cameraControllerManager->getActiveCamera()->getPosition();
-	Engines::Graphic::Shaders::Eye eye{ glm::vec4(eyePosition, 1.0) };
-	
-	m_eyePositionUniformBuffer->update(&eye);
 
 	m_vertexBufferCollection->forEachEntity([&](auto vertexBufferCollection)
 	{

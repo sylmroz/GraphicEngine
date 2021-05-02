@@ -59,7 +59,7 @@ layout (std430, binding = 9) buffer SpotLight
     SpotLightBuffer spotLights[];
 } spotLight;
 
-layout (std140) uniform Eye
+layout (std140, binding = 2) uniform Eye
 {
     vec4 eyePosition;
 } eye;

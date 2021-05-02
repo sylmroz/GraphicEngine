@@ -42,6 +42,7 @@ namespace GraphicEngine::OpenGL
 		virtual ~OpenGLRenderingEngine() = default;
 	private:
 		std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::CameraMatrices>> m_cameraUniformBuffer;
+		std::unique_ptr<UniformBuffer<Engines::Graphic::Shaders::Eye>> m_eyeUniformBuffer;
 		std::shared_ptr<ShaderStorageBufferObject<Engines::Graphic::Shaders::DirectionalLight>> m_directionalLight;
 		std::shared_ptr<ShaderStorageBufferObject<Engines::Graphic::Shaders::PointLight>> m_pointLights;
 		std::shared_ptr<ShaderStorageBufferObject<Engines::Graphic::Shaders::SpotLight>> m_spotLight;
