@@ -41,28 +41,28 @@ struct SpotLightBuffer
 	LightColor color;
 };
 
-layout (std430, binding = 7) buffer DirectionalLight
+layout (std140, binding = 1) uniform Eye
+{
+    vec4 eyePosition;
+} eye;
+
+layout (std430, binding = 3) buffer DirectionalLight
 {
     uint light_length;
     DirectionalLightBuffer directionalLights[];
 } directionalLight;
 
-layout (std430, binding = 8) buffer PointLight
+layout (std430, binding = 4) buffer PointLight
 {
     uint light_length;
     PointLightBuffer pointLights[];
 } pointLight;
 
-layout (std430, binding = 9) buffer SpotLight
+layout (std430, binding = 5) buffer SpotLight
 {
     uint light_length;
     SpotLightBuffer spotLights[];
 } spotLight;
-
-layout (std140, binding = 2) uniform Eye
-{
-    vec4 eyePosition;
-} eye;
 
 struct ShadowRenderingOptions
 {
@@ -71,7 +71,7 @@ struct ShadowRenderingOptions
     int spot;
 };
 
-layout (std140) uniform RenderingOptions
+layout (std140, binding = 7) uniform RenderingOptions
 {
     ShadowRenderingOptions shadowRendering;
     int ambientOcclusion;

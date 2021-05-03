@@ -11,7 +11,6 @@ namespace GraphicEngine::OpenGL
 	{
 	public:
 		OpenGLSolidColorGraphicPipeline(std::shared_ptr<Services::CameraControllerManager> cameraControllerManager,
-			std::shared_ptr<Services::RenderingOptionsManager> renderingOptionsManager,
 			std::shared_ptr<Texture> depthTexture,
 			std::shared_ptr<Texture> spotLightShadowMaps,
 			std::shared_ptr<Texture> pointLightShadowMaps);
@@ -23,7 +22,5 @@ namespace GraphicEngine::OpenGL
 		std::shared_ptr<Texture> m_directionalLightDepthTexture;
 		std::shared_ptr<Texture> m_spotLightShadowMaps;
 		std::shared_ptr<Texture> m_pointLightShadowMaps;
-		std::shared_ptr<UniformBuffer<Engines::Graphic::Shaders::RenderingOptions>> m_renderingOptionsUniformBuffer;
-		std::shared_ptr<Services::RenderingOptionsManager> m_renderingOptionsManager;
 	};
 }

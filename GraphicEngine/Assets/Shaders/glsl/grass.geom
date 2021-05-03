@@ -13,10 +13,15 @@ layout (location = 0) in VS_OUT
     vec3 normal;
 } gs_in[];
 
-layout (std140, binding = 2) uniform Eye
+layout (std140, binding = 1) uniform Eye
 {
     vec4 eyePosition;
 } eye;
+
+layout (std140) uniform Time
+{
+    int timestamp;
+} time;
 
 layout (std140) uniform GrassParameters
 {
@@ -24,6 +29,13 @@ layout (std140) uniform GrassParameters
     float height;
     int muberOfGrassPerUnit;
 } grassParameters;
+
+layout (std140) uniform WindParameters
+{
+    vec2 direcion;
+    float strength;
+    float speed;
+} windParameters;
 
 layout (location = 0) out vec3 position;
 layout (location = 1) out vec3 normal;
@@ -80,6 +92,8 @@ void generateStraw(int straw, int chunks)
     
     for (int i = 1; i < chunks; ++i)
     {
+        float weight = thickFactorStep * (i + 1);
+        float thickFactor = (1.0 - weight) * thick;
         vec3 y = heightStep * alongNormal;
         vec3 x = grass_normal * bendFactor;
 
@@ -98,7 +112,6 @@ void generateStraw(int straw, int chunks)
         }
 
         normal = mat3(gs_in[0].view) * normalize(alongNormal + 0.2 * grass_normal);
-        float thickFactor = (1.0 - thickFactorStep * (i + 1)) * thick;
 
         gl_Position = gs_in[0].projection * gs_in[0].view * vec4(pos - tangent * thickFactor, 1.0);
         EmitVertex();

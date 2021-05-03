@@ -879,5 +879,8 @@
     <ClInclude Include="Drivers\OpenGL\GraphicPipelines\OpenGLGrassGraphicPipeline.hpp">
       <Filter>Drivers\OpenGL\GraphicPipelines</Filter>
     </ClInclude>
+    <ClInclude Include="Common\ShaderEnums.hpp">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

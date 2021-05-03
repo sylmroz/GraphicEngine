@@ -3,6 +3,8 @@
 #include "../../Core/IO/FileReader.hpp"
 #include "../../Core/IO/FileSystem.hpp"
 
+#include "../../Common/ShaderEnums.hpp"
+
 #include "OpenGLTextureFactory.hpp"
 #include "OpenGLVertexBufferFactory.hpp"
 
@@ -103,7 +105,7 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 		m_pointightdepthTexture = std::make_shared<TextureCubeDepthArray>(256, 256, 5);
 
 		m_wireframeGraphicPipeline = std::make_unique<OpenGLWireframeGraphicPipeline>(m_cameraControllerManager);
-		m_solidColorGraphicPipeline = std::make_unique<OpenGLSolidColorGraphicPipeline>(m_cameraControllerManager, m_renderingOptionsManager, m_directionalLightDepthTexture, m_spotLightdepthTexture, m_pointightdepthTexture);
+		m_solidColorGraphicPipeline = std::make_unique<OpenGLSolidColorGraphicPipeline>(m_cameraControllerManager, m_directionalLightDepthTexture, m_spotLightdepthTexture, m_pointightdepthTexture);
 		m_normalDebugGraphicPipeline = std::make_unique<OpenGLNormalDebugGraphicPipeline>(m_cameraControllerManager);
 		m_grassGraphicPipeline = std::make_unique<OpenGLGrassGraphicPipeline>(m_cameraControllerManager);
 		m_skyboxGraphicPipeline = std::make_unique<OpenGLSkyboxGraphicPipeline>(m_cfg->getProperty<std::string>("scene:skybox:texture path"));
@@ -136,12 +138,18 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 		}
 		m_pointLightshadowMapGraphicPipeline = std::make_unique<OpenGLShadowMapGraphicPipeline>(m_pointightdepthTexture, pointLightSpaceMatrixArray, LightTypeShadow::point, pointLightPositionFarPlaneArray);
 
-		m_cameraUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::CameraMatrices>>(0);
-		m_eyeUniformBuffer = std::make_unique<UniformBuffer<Engines::Graphic::Shaders::Eye>>(2);
+		m_cameraUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::CameraMatrices>>(ShaderBinding::Global_CameraMatrices);
+		m_eyeUniformBuffer = std::make_unique<UniformBuffer<Engines::Graphic::Shaders::Eye>>(ShaderBinding::Global_Eye);
 
-		m_directionalLight = std::make_shared<ShaderStorageBufferObject<Engines::Graphic::Shaders::DirectionalLight>>(7);
-		m_pointLights = std::make_shared<ShaderStorageBufferObject<Engines::Graphic::Shaders::PointLight>>(8);
-		m_spotLight = std::make_shared<ShaderStorageBufferObject<Engines::Graphic::Shaders::SpotLight>>(9);
+		m_renderingOptionsUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::RenderingOptions>>(ShaderBinding::Global_RenderingOptions);
+		m_renderingOptionsUniformBuffer->update(&m_renderingOptionsManager->renderingOptions);
+		m_renderingOptionsManager->onUpdateOptions([&](Engines::Graphic::Shaders::RenderingOptions renderingOptions) {
+			m_renderingOptionsUniformBuffer->update(&m_renderingOptionsManager->renderingOptions);
+		});
+
+		m_directionalLight = std::make_shared<ShaderStorageBufferObject<Engines::Graphic::Shaders::DirectionalLight>>(ShaderBinding::Global_DirectionalLight);
+		m_pointLights = std::make_shared<ShaderStorageBufferObject<Engines::Graphic::Shaders::PointLight>>(ShaderBinding::Global_PointLight);
+		m_spotLight = std::make_shared<ShaderStorageBufferObject<Engines::Graphic::Shaders::SpotLight>>(ShaderBinding::Global_SpotLight);
 
 		m_directionalLight->update(m_lightManager->getDirectionalLights());
 		m_lightManager->onUpdateDirectiionalLight([&](uint32_t index, Engines::Graphic::Shaders::DirectionalLight light)

@@ -2,8 +2,9 @@
 #include "../../../Core/IO/FileReader.hpp"
 #include "../../../Core/IO/FileSystem.hpp"
 
+#include "../../../Common/ShaderEnums.hpp"
+
 GraphicEngine::OpenGL::OpenGLSolidColorGraphicPipeline::OpenGLSolidColorGraphicPipeline(std::shared_ptr<Services::CameraControllerManager> cameraControllerManager,
-	std::shared_ptr<Services::RenderingOptionsManager> renderingOptionsManager,
 	std::shared_ptr<Texture> depthTexture, std::shared_ptr<Texture> spotLightShadowMaps, std::shared_ptr<Texture> pointLightShadowMaps) :
 	Engines::Graphic::SolidColorGraphicPipeline<VertexBuffer, UniformBuffer, UniformBuffer>{ cameraControllerManager }
 {
@@ -15,18 +16,10 @@ GraphicEngine::OpenGL::OpenGLSolidColorGraphicPipeline::OpenGLSolidColorGraphicP
 	m_directionalLightDepthTexture = depthTexture;
 	m_spotLightShadowMaps = spotLightShadowMaps;
 	m_pointLightShadowMaps = pointLightShadowMaps;
-
-	m_renderingOptionsManager = renderingOptionsManager;
 	
-	m_solidColorUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::SolidColorModelDescriptor>>(4, m_shaderProgram);
-	
-	m_renderingOptionsUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::RenderingOptions>>(25, m_shaderProgram);
-	m_renderingOptionsUniformBuffer->update(&m_renderingOptionsManager->renderingOptions);
-	m_renderingOptionsManager->onUpdateOptions([&](Engines::Graphic::Shaders::RenderingOptions renderingOptions) {
-		m_renderingOptionsUniformBuffer->update(&m_renderingOptionsManager->renderingOptions);
-	});
+	m_solidColorUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::SolidColorModelDescriptor>>(ShaderBinding::Solid_SolidColorModelDescriptor, m_shaderProgram);
 
-	m_materialUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::Material>>(26, m_shaderProgram);
+	m_materialUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::Material>>(ShaderBinding::Solid_Material, m_shaderProgram);
 
 	m_shaderProgram->use();
 

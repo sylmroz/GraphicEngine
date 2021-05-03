@@ -2,6 +2,7 @@
 #include "../../../Core/IO/FileReader.hpp"
 #include "../../../Core/IO/FileSystem.hpp"
 
+#include "../../../Common/ShaderEnums.hpp"
 
 GraphicEngine::OpenGL::OpenGLGrassGraphicPipeline::OpenGLGrassGraphicPipeline(std::shared_ptr<Services::CameraControllerManager> cameraControllerManager)
 {
@@ -12,9 +13,9 @@ GraphicEngine::OpenGL::OpenGLGrassGraphicPipeline::OpenGLGrassGraphicPipeline(st
 
 	m_shaderProgram = std::make_shared<OpenGLShaderProgram>(std::vector<OpenGLShader>{ vert, geom, frag });
 
-	m_modelDescriptorUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::ModelMartices>>(27, m_shaderProgram);
+	m_modelDescriptorUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::ModelMartices>>(ShaderBinding::Grass_ModelMartices, m_shaderProgram);
 	//m_materialUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::Material>>(28, m_shaderProgram);
-	m_grassParametersUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::GrassParameters>>(29, m_shaderProgram);
+	m_grassParametersUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::GrassParameters>>(ShaderBinding::Grass_GrassParameters, m_shaderProgram);
 
 	m_shaderProgram->use();
 	/*Engines::Graphic::Shaders::Material grass;

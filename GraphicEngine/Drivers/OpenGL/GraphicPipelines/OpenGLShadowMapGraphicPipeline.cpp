@@ -3,6 +3,8 @@
 #include "../../../Core/IO/FileSystem.hpp"
 #include "../../../Core/Utils/TokenRepleacer.hpp"
 
+#include "../../../Common/ShaderEnums.hpp"
+
 GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::OpenGLShadowMapGraphicPipeline(std::shared_ptr<Texture> depthTexture, Engines::Graphic::Shaders::LightSpaceMatrixArray lightSpaceMatrixArray, LightTypeShadow type, Engines::Graphic::Shaders::LightPositionFarPlaneArray lightPositionFarPlaneArray)
 {
 	m_lightSpaceMatrixArray = lightSpaceMatrixArray;
@@ -29,15 +31,15 @@ GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::OpenGLShadowMapGraphicPip
 	}
 	m_shaderProgram = std::make_shared<OpenGLShaderProgram>(m_shaders);
 
-	m_modelDescriptorUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::LightSpaceModelMatrices>>(12 + getOffset(), m_shaderProgram);
-	m_modelMatrix = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::ModelMatrix>>(13 + getOffset(), m_shaderProgram);
-	m_lightSpaceMatrixArrayUniform = std::make_shared<UniformBufferArray<Engines::Graphic::Shaders::LightSpaceMatrixArray>>(14 + getOffset(), m_shaderProgram);
+	m_modelDescriptorUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::LightSpaceModelMatrices>>(ShaderBinding::ShadowMap_LightSpaceModelMatrices + getOffset(), m_shaderProgram);
+	m_modelMatrix = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::ModelMatrix>>(ShaderBinding::ShadowMap_ModelMatrix + getOffset(), m_shaderProgram);
+	m_lightSpaceMatrixArrayUniform = std::make_shared<UniformBufferArray<Engines::Graphic::Shaders::LightSpaceMatrixArray>>(ShaderBinding::ShadowMap_LightSpaceMatrixArray + getOffset(), m_shaderProgram);
 
 	m_lightSpaceMatrixArrayUniform->update(m_lightSpaceMatrixArray.data.data(), m_lightSpaceMatrixArray.data.size(), 0);
 
 	if (m_type != LightTypeShadow::directional)
 	{
-		m_lightPositionFarPlaneArrayUniform = std::make_shared<UniformBufferArray<Engines::Graphic::Shaders::LightPositionFarPlaneArray>>(15 + getOffset(), m_shaderProgram);
+		m_lightPositionFarPlaneArrayUniform = std::make_shared<UniformBufferArray<Engines::Graphic::Shaders::LightPositionFarPlaneArray>>(ShaderBinding::ShadowMap_LightPositionFarPlaneArray + getOffset(), m_shaderProgram);
 		m_lightPositionFarPlaneArrayUniform->update(m_lightPositionFarPlaneArray.data.data(), m_lightPositionFarPlaneArray.data.size(), 0);
 	}
 
@@ -88,15 +90,15 @@ void GraphicEngine::OpenGL::OpenGLShadowMapGraphicPipeline::updateLights(Engines
 			{"<<PLACEHOLDER_3>>", getDepth()}
 		}));
 	m_shaderProgram = std::make_shared<OpenGLShaderProgram>(m_shaders);
-	m_modelDescriptorUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::LightSpaceModelMatrices>>(12 + getOffset(), m_shaderProgram);
-	m_modelMatrix = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::ModelMatrix>>(13 + getOffset(), m_shaderProgram);
-	m_lightSpaceMatrixArrayUniform = std::make_shared<UniformBufferArray<Engines::Graphic::Shaders::LightSpaceMatrixArray>>(14 + getOffset(), m_shaderProgram);
+	m_modelDescriptorUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::LightSpaceModelMatrices>>(ShaderBinding::ShadowMap_LightSpaceModelMatrices + getOffset(), m_shaderProgram);
+	m_modelMatrix = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::ModelMatrix>>(ShaderBinding::ShadowMap_ModelMatrix + getOffset(), m_shaderProgram);
+	m_lightSpaceMatrixArrayUniform = std::make_shared<UniformBufferArray<Engines::Graphic::Shaders::LightSpaceMatrixArray>>(ShaderBinding::ShadowMap_LightSpaceMatrixArray + getOffset(), m_shaderProgram);
 
 	m_lightSpaceMatrixArrayUniform->update(m_lightSpaceMatrixArray.data.data(), m_lightSpaceMatrixArray.data.size(), 0);
 
 	if (m_type != LightTypeShadow::directional)
 	{
-		m_lightPositionFarPlaneArrayUniform = std::make_shared<UniformBufferArray<Engines::Graphic::Shaders::LightPositionFarPlaneArray>>(15 + getOffset(), m_shaderProgram);
+		m_lightPositionFarPlaneArrayUniform = std::make_shared<UniformBufferArray<Engines::Graphic::Shaders::LightPositionFarPlaneArray>>(ShaderBinding::ShadowMap_LightPositionFarPlaneArray + getOffset(), m_shaderProgram);
 		m_lightPositionFarPlaneArrayUniform->update(m_lightPositionFarPlaneArray.data.data(), m_lightPositionFarPlaneArray.data.size(), 0);
 	}
 }

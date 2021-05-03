@@ -2,6 +2,8 @@
 #include "../../../Core/IO/FileReader.hpp"
 #include "../../../Core/IO/FileSystem.hpp"
 
+#include "../../../Common/ShaderEnums.hpp"
+
 GraphicEngine::OpenGL::OpenGLNormalDebugGraphicPipeline::OpenGLNormalDebugGraphicPipeline(std::shared_ptr<Services::CameraControllerManager> cameraControllerManager)
 {
 	m_cameraControllerManager = cameraControllerManager;
@@ -11,7 +13,7 @@ GraphicEngine::OpenGL::OpenGLNormalDebugGraphicPipeline::OpenGLNormalDebugGraphi
 
 	m_shaderProgram = std::make_shared<OpenGLShaderProgram>(std::vector<OpenGLShader>{ vert, geom, frag });
 
-	m_modelDescriptorUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::ModelMartices>>(5, m_shaderProgram);
+	m_modelDescriptorUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::ModelMartices>>(ShaderBinding::Normal_ModelMartices, m_shaderProgram);
 }
 
 void GraphicEngine::OpenGL::OpenGLNormalDebugGraphicPipeline::draw()

@@ -267,6 +267,7 @@
     <ClInclude Include="Common\Mouse.hpp" />
     <ClInclude Include="Common\RenderingEngine.hpp" />
     <ClInclude Include="Common\Shader.hpp" />
+    <ClInclude Include="Common\ShaderEnums.hpp" />
     <ClInclude Include="Common\TextureFactory.hpp" />
     <ClInclude Include="Common\TextureReader.hpp" />
     <ClInclude Include="Common\UI.hpp" />

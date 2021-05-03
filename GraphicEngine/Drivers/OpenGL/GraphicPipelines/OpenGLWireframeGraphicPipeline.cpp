@@ -2,6 +2,8 @@
 #include "../../../Core/IO/FileReader.hpp"
 #include "../../../Core/IO/FileSystem.hpp"
 
+#include "../../../Common/ShaderEnums.hpp"
+
 GraphicEngine::OpenGL::OpenGLWireframeGraphicPipeline::OpenGLWireframeGraphicPipeline(std::shared_ptr<Services::CameraControllerManager> cameraControllerManager)
 {
 	m_cameraControllerManager = cameraControllerManager;
@@ -10,7 +12,7 @@ GraphicEngine::OpenGL::OpenGLWireframeGraphicPipeline::OpenGLWireframeGraphicPip
 
 	m_shaderProgram = std::make_shared<OpenGLShaderProgram>(std::vector<OpenGLShader>{ vert, frag });
 	
-	m_wireframeModelDescriptorUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::WireframeModelDescriptor>>(1, m_shaderProgram);
+	m_wireframeModelDescriptorUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::WireframeModelDescriptor>>(ShaderBinding::Wireframe_WireframeModelDescriptor, m_shaderProgram);
 }
 
 void GraphicEngine::OpenGL::OpenGLWireframeGraphicPipeline::draw()
