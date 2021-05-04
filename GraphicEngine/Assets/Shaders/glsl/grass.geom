@@ -18,9 +18,9 @@ layout (std140, binding = 1) uniform Eye
     vec4 eyePosition;
 } eye;
 
-layout (std140) uniform Time
+layout (std140, binding = 2) uniform Time
 {
-    int timestamp;
+    float timestamp;
 } time;
 
 layout (std140) uniform GrassParameters
@@ -41,7 +41,7 @@ layout (location = 0) out vec3 position;
 layout (location = 1) out vec3 normal;
 
 // https://github.com/opengl-tutorials/ogl/blob/master/tutorial16_shadowmaps/ShadowMapping.fragmentshader
-float random(vec3 seed, int i){
+float random(vec3 seed, float i){
 	vec4 seed4 = vec4(seed,i);
 	float dot_product = dot(seed4, vec4(12.9898, 78.233, 45.164, 94.673));
 	return (float(int(10000 * fract(sin(dot_product)) * 43758.5453) % 10000) / 10000.0) - 0.5;
@@ -74,7 +74,7 @@ void generateStraw(int straw, int chunks)
     float rnd2 = 2.0 * random(floor(x1 * tangent * 1000.0), straw) * ((tangent.x > 0) ? 1.0: -1.0);
     float rnd3 = 2.0 * random(floor(x2 * tangent * 1000.0), 2 * straw) * ((tangent.x > 0) ? 1.0: -1.0);
     int index = int(16.0 * rnd) % 16;
-    float bendFactor = rnd * heightStep / 2.0;
+    float bendFactor = (rnd * heightStep / 2.0);
     float thick = grassParameters.thick * ((rnd3 + 1.0));
 
     vec3 pos = gl_in[0].gl_Position.xyz + (x1x0 * rnd2 + x2x0*rnd3) * grass_normal;

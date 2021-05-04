@@ -367,7 +367,9 @@
     <ClInclude Include="Engines\Graphic\Shaders\Models\ModelMatrix.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\RenderingOptions.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\SolidColorModelDescriptor.hpp" />
+    <ClInclude Include="Engines\Graphic\Shaders\Models\Time.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\TypeArray.hpp" />
+    <ClInclude Include="Engines\Graphic\Shaders\Models\WindParameters.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\WireframeModelDescriptor.hpp" />
     <ClInclude Include="Main\Application.hpp" />
     <ClInclude Include="Main\Engine.hpp" />

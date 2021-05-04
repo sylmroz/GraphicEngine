@@ -15,11 +15,12 @@ GraphicEngine::Vulkan::VulkanRenderingEngine::VulkanRenderingEngine(std::shared_
 	std::shared_ptr<Services::ViewportManager> viewportManager,
 	std::shared_ptr<Services::RenderingOptionsManager> renderingOptionsManager,
 	std::shared_ptr<Core::EventManager> eventManager,
+	std::shared_ptr<Core::Timer> timer,
 	std::shared_ptr<Common::UI> ui,
 	std::shared_ptr<Core::Configuration> cfg,
 	std::unique_ptr<Core::Logger<VulkanRenderingEngine>> logger) :
 	m_vulkanWindowContext(vulkanWindowContext),
-	RenderingEngine(cameraControllerManager, modelManager, lightManager, viewportManager, renderingOptionsManager, eventManager, ui, cfg)
+	RenderingEngine(cameraControllerManager, modelManager, lightManager, viewportManager, renderingOptionsManager, eventManager, timer, ui, cfg)
 {
 }
 
@@ -34,12 +35,11 @@ bool GraphicEngine::Vulkan::VulkanRenderingEngine::drawFrame()
 		auto projection = m_cameraControllerManager->getActiveCamera()->getProjectionMatrix();
 
 		glm::vec4 eyePosition = glm::vec4(m_cameraControllerManager->getActiveCamera()->getPosition(), 1.0);
-
 		Engines::Graphic::Shaders::Eye eye{ eyePosition };
+		m_eyePositionUniformBuffer->updateAndSet(eye);
 
 		Engines::Graphic::Shaders::CameraMatrices cameraMatrix(view, projection);
 		m_cameraUniformBuffer->updateAndSet(cameraMatrix);
-		m_eyePositionUniformBuffer->updateAndSet(eye);
 
 		if (m_viewportManager->displayNormal)
 			m_normalDebugGraphicPipeline->updateDynamicUniforms();

@@ -74,11 +74,11 @@ std::unique_ptr<GraphicEngine::Engine> GraphicEngine::Engine::createEngine(std::
 		return injector.template create<std::unique_ptr<GraphicEngine::Engine>>();
 	};
 
-	auto engine = driverType == "vulkan" ?
+	/*auto engine = driverType == "vulkan" ?
 		createEngine(GraphicEngine::GLFW::injectGlfwVulkanResources()) :
-		createEngine(GraphicEngine::GLFW::injectGlfwOpenGlResources());
+		createEngine(GraphicEngine::GLFW::injectGlfwOpenGlResources());*/
 
-	return engine;
+	return createEngine(GraphicEngine::GLFW::injectGlfwOpenGlResources());//engine;
 }
 
 GraphicEngine::Engine::~Engine()

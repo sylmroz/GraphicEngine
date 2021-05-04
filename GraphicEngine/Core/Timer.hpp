@@ -13,6 +13,7 @@ namespace GraphicEngine::Core
 		void start()
 		{
 			m_actualTime = std::chrono::system_clock::now();
+			m_startTime = m_actualTime;
 		}
 
 		void updateTime()
@@ -20,6 +21,7 @@ namespace GraphicEngine::Core
 			auto stop = std::chrono::system_clock::now();
 			m_interval = stop - m_actualTime;
 			m_actualTime = stop;
+			m_currentTimeNotifier.notify((stop - m_startTime).count());
 			m_updateNotifier.notify(m_interval.count());
 		}
 
@@ -34,10 +36,18 @@ namespace GraphicEngine::Core
 			m_updateNotifier.subscribe(callback);
 		}
 
+		template <typename Callback>
+		void onCurrentTimeUpdate(Callback callback)
+		{
+			m_currentTimeNotifier.subscribe(callback);
+		}
+
 	protected:
 		std::chrono::time_point<std::chrono::system_clock> m_actualTime;
+		std::chrono::time_point<std::chrono::system_clock> m_startTime;
 		std::chrono::duration<double> m_interval;
 
 		Subject<double> m_updateNotifier;
+		Subject<double> m_currentTimeNotifier;
 	};
 }

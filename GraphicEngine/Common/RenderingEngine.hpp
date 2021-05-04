@@ -32,6 +32,7 @@ namespace GraphicEngine
 			std::shared_ptr<Services::ViewportManager> viewportManager,
 			std::shared_ptr<Services::RenderingOptionsManager> renderingOptionsManager,
 			std::shared_ptr<Core::EventManager> eventManager,
+			std::shared_ptr<Core::Timer> timer,
 			std::shared_ptr<Common::UI> ui,
 			std::shared_ptr<Core::Configuration> cfg);
 
@@ -46,6 +47,7 @@ namespace GraphicEngine
 		std::shared_ptr<Services::ModelManager> m_modelManager;
 		std::shared_ptr<Services::LightManager> m_lightManager;
 		std::shared_ptr<Core::EventManager> m_eventManager;
+		std::shared_ptr<Core::Timer> m_timer;
 		std::shared_ptr<Common::UI> m_ui;
 		std::shared_ptr<Core::Configuration> m_cfg;
 		std::shared_ptr<Services::ViewportManager> m_viewportManager;

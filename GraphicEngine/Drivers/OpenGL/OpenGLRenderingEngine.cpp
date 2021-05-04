@@ -15,11 +15,12 @@ GraphicEngine::OpenGL::OpenGLRenderingEngine::OpenGLRenderingEngine(
 	std::shared_ptr<Services::ViewportManager> viewportManager,
 	std::shared_ptr<Services::RenderingOptionsManager> renderingOptionsManager,
 	std::shared_ptr<Core::EventManager> eventManager,
+	std::shared_ptr<Core::Timer> timer,
 	std::shared_ptr<Common::UI> ui,
 	std::shared_ptr<Core::Configuration> cfg,
 	std::unique_ptr<Core::Logger<OpenGLRenderingEngine>> logger) :
 	m_logger(std::move(logger)),
-	RenderingEngine(cameraControllerManager, modelManager, lightManager, viewportManager, renderingOptionsManager, eventManager, ui, cfg)
+	RenderingEngine(cameraControllerManager, modelManager, lightManager, viewportManager, renderingOptionsManager, eventManager, timer, ui, cfg)
 {
 	m_logger->info(__FILE__, __LINE__, __FUNCTION__, "Create OpenGL rendering engine instance.");
 }
@@ -140,12 +141,19 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 
 		m_cameraUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::CameraMatrices>>(ShaderBinding::Global_CameraMatrices);
 		m_eyeUniformBuffer = std::make_unique<UniformBuffer<Engines::Graphic::Shaders::Eye>>(ShaderBinding::Global_Eye);
+		m_timeUniformBuffer = std::make_unique<UniformBuffer<Engines::Graphic::Shaders::Time>>(ShaderBinding::Global_Time);
+		m_timer->onCurrentTimeUpdate([&](float timestamp)
+			{
+				Engines::Graphic::Shaders::Time t(timestamp/10000000);
+				m_timeUniformBuffer->update(&t);
+			});
 
 		m_renderingOptionsUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::RenderingOptions>>(ShaderBinding::Global_RenderingOptions);
 		m_renderingOptionsUniformBuffer->update(&m_renderingOptionsManager->renderingOptions);
-		m_renderingOptionsManager->onUpdateOptions([&](Engines::Graphic::Shaders::RenderingOptions renderingOptions) {
-			m_renderingOptionsUniformBuffer->update(&m_renderingOptionsManager->renderingOptions);
-		});
+		m_renderingOptionsManager->onUpdateOptions([&](Engines::Graphic::Shaders::RenderingOptions renderingOptions) 
+			{
+				m_renderingOptionsUniformBuffer->update(&m_renderingOptionsManager->renderingOptions);
+			});
 
 		m_directionalLight = std::make_shared<ShaderStorageBufferObject<Engines::Graphic::Shaders::DirectionalLight>>(ShaderBinding::Global_DirectionalLight);
 		m_pointLights = std::make_shared<ShaderStorageBufferObject<Engines::Graphic::Shaders::PointLight>>(ShaderBinding::Global_PointLight);
@@ -172,9 +180,6 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 		m_lightManager->onUpdatePointLight([&](uint32_t index, Engines::Graphic::Shaders::PointLight light)
 		{
 			m_pointLights->update(light, index);
-
-			
-
 			m_pointLightshadowMapGraphicPipeline->updateLight(light.getLightSpaceMatrices(), index, glm::vec4(glm::vec3(light.position), 25.0f));
 		});
 		m_lightManager->onUpdatePointLights([&](std::vector<Engines::Graphic::Shaders::PointLight> lights)
