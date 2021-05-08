@@ -62,7 +62,7 @@ namespace GraphicEngine::OpenGL
 		}
 
 	protected:
-		uint32_t m_ubo;
+		uint32_t m_ubo{};
 	};
 
 	template <typename T, int N = 128>

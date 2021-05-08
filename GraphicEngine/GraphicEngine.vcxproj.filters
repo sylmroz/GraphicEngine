@@ -403,6 +403,12 @@
     <ClCompile Include="Drivers\OpenGL\GraphicPipelines\OpenGLGrassGraphicPipeline.cpp">
       <Filter>Drivers\OpenGL\GraphicPipelines</Filter>
     </ClCompile>
+    <ClCompile Include="Services\WindManager.cpp">
+      <Filter>Services</Filter>
+    </ClCompile>
+    <ClCompile Include="Engines\Graphic\Shaders\Models\WindParameters.cpp">
+      <Filter>Engines\Graphic\Shaders\Models</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Input\Keyboard\KeyboardEnumKeys.hpp">
@@ -887,6 +893,9 @@
     </ClInclude>
     <ClInclude Include="Engines\Graphic\Shaders\Models\WindParameters.hpp">
       <Filter>Engines\Graphic\Shaders\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Services\WindManager.hpp">
+      <Filter>Services</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

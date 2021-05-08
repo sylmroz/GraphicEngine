@@ -33,7 +33,6 @@ layout (std140) uniform GrassParameters
 layout (std140) uniform WindParameters
 {
     vec2 direcion;
-    float strength;
     float speed;
 } windParameters;
 

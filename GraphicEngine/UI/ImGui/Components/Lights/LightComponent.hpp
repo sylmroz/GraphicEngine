@@ -14,7 +14,7 @@ namespace GraphicEngine::GUI
 	public:
 		LightColorComponent(GraphicEngine::Engines::Graphic::Shaders::LightColor lightColor);
 		void onLightColor(std::function<void(Engines::Graphic::Shaders::LightColor)> callback);
-		void setCurrentColors(Engines::Graphic::Shaders::LightColor lightColor);\
+		void setCurrentColors(Engines::Graphic::Shaders::LightColor lightColor);
 		// Inherited via Widget
 		virtual void draw() override;
 	private:

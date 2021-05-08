@@ -215,6 +215,7 @@
     <ClCompile Include="Drivers\Vulkan\VulkanTextureCube.cpp" />
     <ClCompile Include="Engines\Graphic\Shaders\Models\Light.cpp" />
     <ClCompile Include="Engines\Graphic\Shaders\Models\Material.cpp" />
+    <ClCompile Include="Engines\Graphic\Shaders\Models\WindParameters.cpp" />
     <ClCompile Include="Main\Application.cpp" />
     <ClCompile Include="Main\Engine.cpp" />
     <ClCompile Include="Main\main.cpp" />
@@ -228,6 +229,7 @@
     <ClCompile Include="Services\ModelManager.cpp" />
     <ClCompile Include="Services\RenderingOptionsManager.cpp" />
     <ClCompile Include="Services\ViewportManager.cpp" />
+    <ClCompile Include="Services\WindManager.cpp" />
     <ClCompile Include="UI\ImGui\Components\CameraManagerWindow.cpp" />
     <ClCompile Include="UI\ImGui\Components\LightManagerWindow.cpp" />
     <ClCompile Include="UI\ImGui\Components\Lights\DirectionalLightComponent.cpp" />
@@ -391,6 +393,7 @@
     <ClInclude Include="Services\ModelManager.hpp" />
     <ClInclude Include="Services\RenderingOptionsManager.hpp" />
     <ClInclude Include="Services\ViewportManager.hpp" />
+    <ClInclude Include="Services\WindManager.hpp" />
     <ClInclude Include="UI\ImGui\Components\CameraManagerWindow.hpp" />
     <ClInclude Include="UI\ImGui\Components\LightManagerWindow.hpp" />
     <ClInclude Include="UI\ImGui\Components\Lights\DirectionalLightComponent.hpp" />
