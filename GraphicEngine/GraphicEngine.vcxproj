@@ -246,6 +246,7 @@
     <ClCompile Include="UI\ImGui\Widgets\ColorEdit.cpp" />
     <ClCompile Include="UI\ImGui\Widgets\ComboBox.cpp" />
     <ClCompile Include="UI\ImGui\Widgets\InputFloat.cpp" />
+    <ClCompile Include="UI\ImGui\Widgets\Slider.cpp" />
     <ClCompile Include="UI\ImGui\Widgets\TabBar.cpp" />
     <ClCompile Include="UI\ImGui\Widgets\TabBarItem.cpp" />
     <ClCompile Include="UI\ImGui\Widgets\TreeNode.cpp" />
@@ -359,6 +360,7 @@
     <ClInclude Include="Engines\Graphic\Pipelines\WireframeGraphicPipeline.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\CameraMatrices.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\Eye.hpp" />
+    <ClInclude Include="Engines\Graphic\Shaders\Models\GrassMaterial.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\GrassParameters.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\Light.hpp" />
     <ClInclude Include="Engines\Graphic\Shaders\Models\LightPositionFarPlane.hpp" />
@@ -410,6 +412,7 @@
     <ClInclude Include="UI\ImGui\Widgets\ColorEdit.hpp" />
     <ClInclude Include="UI\ImGui\Widgets\ComboBox.hpp" />
     <ClInclude Include="UI\ImGui\Widgets\InputFloat.hpp" />
+    <ClInclude Include="UI\ImGui\Widgets\Slider.hpp" />
     <ClInclude Include="UI\ImGui\Widgets\TabBar.hpp" />
     <ClInclude Include="UI\ImGui\Widgets\TabBarItem.hpp" />
     <ClInclude Include="UI\ImGui\Widgets\TreeNode.hpp" />

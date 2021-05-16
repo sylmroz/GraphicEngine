@@ -3,7 +3,7 @@
 #include "../Shaders/Models/CameraMatrices.hpp"
 #include "../Shaders/Models/GrassParameters.hpp"
 #include "../Shaders/Models/ModelMatrices.hpp"
-#include "../Shaders/Models/Material.hpp"
+#include "../Shaders/Models/GrassMaterial.hpp"
 #include "GraphicPipeline.hpp"
 
 namespace GraphicEngine::Engines::Graphic
@@ -39,6 +39,6 @@ namespace GraphicEngine::Engines::Graphic
 		std::shared_ptr<Services::CameraControllerManager> m_cameraControllerManager;
 		std::shared_ptr<UniformBufferDynamic<Shaders::ModelMartices>> m_modelDescriptorUniformBuffer;
 		std::shared_ptr<UniformBufferDynamic<Shaders::GrassParameters>> m_grassParametersUniformBuffer;
-		std::shared_ptr<UniformBufferDynamic<Shaders::Material>> m_materialUniformBuffer;
+		std::shared_ptr<UniformBufferDynamic<Shaders::GrassMaterial>> m_materialUniformBuffer;
 	};
 }

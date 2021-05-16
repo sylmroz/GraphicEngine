@@ -4,28 +4,61 @@
 
 #include "../../../Common/ShaderEnums.hpp"
 
-GraphicEngine::OpenGL::OpenGLGrassGraphicPipeline::OpenGLGrassGraphicPipeline(std::shared_ptr<Services::CameraControllerManager> cameraControllerManager)
+GraphicEngine::OpenGL::OpenGLGrassGraphicPipeline::OpenGLGrassGraphicPipeline(std::shared_ptr<Services::CameraControllerManager> cameraControllerManager,
+	std::shared_ptr<Texture> directionalLighttShadowMap,
+	std::shared_ptr<Texture> spotLightShadowMaps,
+	std::shared_ptr<Texture> pointLightShadowMaps)
 {
+	using namespace Engines::Graphic::Shaders;
+
 	m_cameraControllerManager = cameraControllerManager;
+	m_directionalLighttShadowMap = directionalLighttShadowMap;
+	m_spotLightShadowMaps = spotLightShadowMaps;
+	m_pointLightShadowMaps = pointLightShadowMaps;
+
 	OpenGLVertexShader vert(GraphicEngine::Core::IO::readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("grass.vert").string()));
 	OpenGLFragmentShader frag(GraphicEngine::Core::IO::readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("grass.frag").string()));
 	OpenGLGeometryShader geom(GraphicEngine::Core::IO::readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("grass.geom").string()));
 
 	m_shaderProgram = std::make_shared<OpenGLShaderProgram>(std::vector<OpenGLShader>{ vert, geom, frag });
 
-	m_modelDescriptorUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::ModelMartices>>(ShaderBinding::Grass_ModelMartices, m_shaderProgram);
-	//m_materialUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::Material>>(28, m_shaderProgram);
-	m_grassParametersUniformBuffer = std::make_shared<UniformBuffer<Engines::Graphic::Shaders::GrassParameters>>(ShaderBinding::Grass_GrassParameters, m_shaderProgram);
+	m_modelDescriptorUniformBuffer = std::make_shared<UniformBuffer<ModelMartices>>(ShaderBinding::Grass_ModelMartices, m_shaderProgram);
+	m_materialUniformBuffer = std::make_shared<UniformBuffer<GrassMaterial>>(ShaderBinding::Grass_Material, m_shaderProgram);
+	m_grassParametersUniformBuffer = std::make_shared<UniformBuffer<GrassParameters>>(ShaderBinding::Grass_GrassParameters, m_shaderProgram);
 
 	m_shaderProgram->use();
-	/*Engines::Graphic::Shaders::Material grass;
-	grass.diffuse = glm::vec4(0.07058f, 0.509803f, 0.078431f, 0.85f);
-	grass.ambient = glm::vec4(0.07058f, 0.509803f, 0.078431f, 0.85f);
-	grass.specular = glm::vec4(0.63137f, 0.89019f, 0.71372f, 0.85f);
-	m_materialUniformBuffer->update(&grass);*/
-	
+	GrassMaterial grass
+	{
+		GrassColor{
+			glm::vec4(0.063137f, 0.572f, 0.071372f, 1.0f),
+			glm::vec4(0.07058f, 0.509803f, 0.078431f, 0.95f),
+			glm::vec4(0.63137f, 0.89019f, 0.71372f, 0.95f),
+			glm::vec4(0.07058f, 0.8901903f, 0.078431f, 0.95f)
+		},
+		GrassColor{
+			glm::vec4(0.163137f, 0.572f, 0.071372f, 1.0f),
+			glm::vec4(0.07058f, 0.509803f, 0.078431f, 0.95f),
+			glm::vec4(0.63137f, 0.89019f, 0.71372f, 0.95f),
+			glm::vec4(0.17058f, 0.95003f, 0.078431f, 0.95f)
+		},
+		32.0f
+	};
 
-	Engines::Graphic::Shaders::GrassParameters grassParameters(0.005f, 0.2f, 1000);
+	m_materialUniformBuffer->update(&grass);
+
+	auto id = glGetUniformLocation(m_shaderProgram->getShaderProgramId(), "shadowMap");
+	glUniform1i(id, 0);
+	m_directionalLighttShadowMap->use(0);
+
+	auto id2 = glGetUniformLocation(m_shaderProgram->getShaderProgramId(), "spotLightShadowMap");
+	glUniform1i(id2, 1);
+	m_spotLightShadowMaps->use(1);
+
+	auto id3 = glGetUniformLocation(m_shaderProgram->getShaderProgramId(), "pointLightShadowMap");
+	glUniform1i(id3, 2);
+	m_pointLightShadowMaps->use(2);
+
+	GrassParameters grassParameters(0.005f, 0.2f, 0.5f);
 	m_grassParametersUniformBuffer->update(&grassParameters);
 }
 

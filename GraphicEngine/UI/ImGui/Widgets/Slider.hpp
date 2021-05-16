@@ -25,7 +25,7 @@ namespace GraphicEngine::GUI
 
 		Val value{};
 	protected:
-		Core::Subject<T> m_sliderValueChange;
+		Core::Subject<Val> m_sliderValueChange;
 		Boundary m_minValue;
 		Boundary m_maxValue;
 	};

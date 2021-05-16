@@ -86,6 +86,21 @@ layout (std140) uniform Material
     float shininess;
 } material;
 
+struct GrassColor
+{
+    vec4 ambient;
+    vec4 diffuse;
+    vec4 specular;
+    vec4 translucent;
+};
+
+layout (std140) uniform GrassMaterial
+{
+    GrassColor front;
+    GrassColor back;
+    float shininess;
+} grassMaterial;
+
 uniform sampler2DArray shadowMap;
 uniform sampler2DArray spotLightShadowMap;
 uniform samplerCubeArray pointLightShadowMap;
@@ -204,6 +219,34 @@ vec4 BlinnPhong(vec3 normal, vec3 lightDir, vec3 diffuseLight, vec3 specularLigh
     return (diffuse + specular) + vec4(material.ambient.rgb * ambientLight, material.ambient.a);
 }
 
+subroutine(LightShadingEffectType_t)
+vec4 GrassRendering(vec3 normal, vec3 lightDir, vec3 diffuseLight, vec3 specularLight, vec3 ambientLight, float shadow)
+{
+    GrassColor grassColor = gl_FrontFacing == true ? grassMaterial.front : grassMaterial.back;
+    vec4 translucent = gl_FrontFacing == true ? grassMaterial.back.translucent : grassMaterial.front.translucent;
+    return translucent;
+    float I = dot(normal, lightDir);
+    if (I >= 0)
+    {
+        vec4 diffuse = vec4((1.0 - shadow) * I * grassColor.diffuse.rgb * diffuseLight, grassColor.diffuse.a);
+
+        vec3 viewDir = normalize(vec3(eye.eyePosition) - position);
+        vec3 halfwayDir = normalize(lightDir + viewDir);
+    
+        const float energyConservation = ( 8.0 + material.shininess ) / ( 8.0 * Pi );
+        float spec = energyConservation * pow(max(dot(normal, halfwayDir), 0.0), grassMaterial.shininess) * when_gt(I);
+        vec4 specular = vec4(spec * grassColor.specular.rgb * specularLight, grassColor.specular.a);
+
+        return (diffuse + specular) + vec4(grassColor.ambient.rgb * ambientLight, grassColor.ambient.a);
+    }
+    else
+    {
+        vec4 translucentSh = vec4((1.0 - shadow) * I * translucent.rgb * diffuseLight, translucent.a);
+
+        return translucentSh + vec4(grassColor.ambient.rgb * ambientLight, grassColor.ambient.a);
+    }
+}
+
 subroutine uniform LightShadingEffectType_t LightShadingEffectType;
 
 vec4 CalcDirectionalLight(DirectionalLightBuffer light, int layer)
@@ -213,7 +256,7 @@ vec4 CalcDirectionalLight(DirectionalLightBuffer light, int layer)
     float shadow = 0.0;
     if (renderingOptions.shadowRendering.directional > 0)
         shadow = ShadowMapCalculation(shadowMap, fragPositionightSpace, lightDir, layer);
-    vec3 n = gl_FrontFacing == true ? normal : -normal;
+    vec3 n = normal;//gl_FrontFacing == true ? normal : -normal;
     return LightShadingEffectType(n, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow);
 }
 
@@ -227,7 +270,7 @@ vec4 CalcPointLight(PointLightBuffer light, int layer)
     float shadow = 0.0;
     if (renderingOptions.shadowRendering.point > 0)
         shadow = PointShadowMapCalculation(pointLightShadowMap, vec4(position - light.position.xyz, 1.0), dist, layer);
-    vec3 n = gl_FrontFacing == true ? normal : -normal;
+    vec3 n = normal;//gl_FrontFacing == true ? normal : -normal;
     return LightShadingEffectType(n, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow) * attenaution;
 }
 
@@ -246,7 +289,7 @@ vec4 CalcSpotLight(SpotLightBuffer light, int layer)
     float shadow = 0.0;
     if (renderingOptions.shadowRendering.spot > 0)
         shadow = ShadowMapCalculation(spotLightShadowMap, fragPositionightSpace, lightDir, layer);
-    vec3 n = gl_FrontFacing == true ? normal : -normal;
+    vec3 n = normal;//gl_FrontFacing == true ? normal : -normal;
     return LightShadingEffectType(n, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow) * intesity * attenaution;
 }
 

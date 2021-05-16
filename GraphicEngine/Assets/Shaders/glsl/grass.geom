@@ -3,13 +3,13 @@
 #extension GL_ARB_separate_shader_objects : enable
 
 layout (triangles) in;
-//layout (points) in;
 layout (triangle_strip, max_vertices = 91) out;
 
 layout (location = 0) in VS_OUT
 {
     mat4 projection;
     mat4 view;
+    mat3 normalMatrix;
     vec3 normal;
 } gs_in[];
 
@@ -27,7 +27,7 @@ layout (std140) uniform GrassParameters
 {
     float thick;
     float height;
-    int muberOfGrassPerUnit;
+    float stiffness;
 } grassParameters;
 
 layout (std140) uniform WindParameters
@@ -68,22 +68,24 @@ void generateStraw(int straw, int chunks)
         grass_normal = -grass_normal;
     }
 
-    float heightStep = grassParameters.height / (chunks + 1);
     float rnd = random(floor(x0 * tangent * 1000.0), 50 * straw) * ((tangent.x > 0) ? 1.0: -1.0);
     float rnd2 = 2.0 * random(floor(x1 * tangent * 1000.0), straw) * ((tangent.x > 0) ? 1.0: -1.0);
     float rnd3 = 2.0 * random(floor(x2 * tangent * 1000.0), 2 * straw) * ((tangent.x > 0) ? 1.0: -1.0);
-    int index = int(16.0 * rnd) % 16;
-    float bendFactor = (rnd * heightStep / 2.0);
+
+    float heightStep = (grassParameters.height * (rnd2 + 1.0)) / (chunks + 1);
+    float bendFactor = (rnd * heightStep / 2.0) * (1.0 - grassParameters.stiffness);
     float thick = grassParameters.thick * ((rnd3 + 1.0));
 
-    vec3 pos = gl_in[0].gl_Position.xyz + (x1x0 * rnd2 + x2x0*rnd3) * grass_normal;
+    vec3 pos = gl_in[0].gl_Position.xyz + (x1x0 * rnd2 + x2x0 * rnd3) * grass_normal;
 
-    normal = mat3(gs_in[0].view) * normalize(alongNormal + 0.2 * grass_normal);
+    normal = gs_in[0].normalMatrix * (-grass_normal);//normalize(alongNormal + 0.2 * grass_normal);
     
-    gl_Position = gs_in[0].projection * gs_in[0].view * vec4(pos - tangent * thick, 1.0);
+    position = pos - tangent * thick;
+    gl_Position = gs_in[0].projection * gs_in[0].view * vec4(position, 1.0);
     EmitVertex();
 
-    gl_Position = gs_in[0].projection * gs_in[0].view * vec4(pos + tangent * thick, 1.0);
+    position = pos + tangent * thick;
+    gl_Position = gs_in[0].projection * gs_in[0].view * vec4(position, 1.0);
     EmitVertex();
 
     vec3 prevPos = pos;
@@ -110,13 +112,16 @@ void generateStraw(int straw, int chunks)
             grass_normal = -grass_normal;
         }
 
-        normal = mat3(gs_in[0].view) * normalize(alongNormal + 0.2 * grass_normal);
+        normal = gs_in[0].normalMatrix * (-grass_normal);//normalize(alongNormal + 0.2 * grass_normal);
 
-        gl_Position = gs_in[0].projection * gs_in[0].view * vec4(pos - tangent * thickFactor, 1.0);
+        position = pos - tangent * thick;
+        gl_Position = gs_in[0].projection * gs_in[0].view * vec4(position, 1.0);
         EmitVertex();
 
-        gl_Position = gs_in[0].projection * gs_in[0].view * vec4(pos + tangent * thickFactor, 1.0);
+        position = pos + tangent * thick;
+        gl_Position = gs_in[0].projection * gs_in[0].view * vec4(position, 1.0);
         EmitVertex();
+
         prevPos = pos;
     }
     vec3 y = heightStep * alongNormal;
@@ -134,8 +139,8 @@ void generateStraw(int straw, int chunks)
     float l = length(y);
     pos = pos - alongNormal * (L - l);
 
-    normal = mat3(gs_in[0].view) * normalize(alongNormal + 0.2 * grass_normal);
-
+    normal = gs_in[0].normalMatrix * (-grass_normal);//normalize(alongNormal + 0.2 * grass_normal);
+    position = pos;
     gl_Position = gs_in[0].projection * gs_in[0].view * vec4(pos, 1.0);
     EmitVertex();
 

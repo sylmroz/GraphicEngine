@@ -409,6 +409,9 @@
     <ClCompile Include="Engines\Graphic\Shaders\Models\WindParameters.cpp">
       <Filter>Engines\Graphic\Shaders\Models</Filter>
     </ClCompile>
+    <ClCompile Include="UI\ImGui\Widgets\Slider.cpp">
+      <Filter>UI\ImGui\Widgets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Input\Keyboard\KeyboardEnumKeys.hpp">
@@ -896,6 +899,12 @@
     </ClInclude>
     <ClInclude Include="Services\WindManager.hpp">
       <Filter>Services</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ImGui\Widgets\Slider.hpp">
+      <Filter>UI\ImGui\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="Engines\Graphic\Shaders\Models\GrassMaterial.hpp">
+      <Filter>Engines\Graphic\Shaders\Models</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
