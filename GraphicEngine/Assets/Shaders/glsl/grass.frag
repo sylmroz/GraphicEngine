@@ -78,14 +78,6 @@ layout (std140, binding = 7) uniform RenderingOptions
     int globalIllumination;
 } renderingOptions;
 
-layout (std140) uniform Material
-{
-    vec4 ambient;
-    vec4 diffuse;
-    vec4 specular;
-    float shininess;
-} material;
-
 struct GrassColor
 {
     vec4 ambient;
@@ -101,7 +93,7 @@ layout (std140) uniform GrassMaterial
     float shininess;
 } grassMaterial;
 
-uniform sampler2DArray shadowMap;
+uniform sampler2DArray directionalLightShadowMap;
 uniform sampler2DArray spotLightShadowMap;
 uniform samplerCubeArray pointLightShadowMap;
 
@@ -188,7 +180,7 @@ vec4 GrassRendering(vec3 normal, vec3 lightDir, vec3 diffuseLight, vec3 specular
         vec3 viewDir = normalize(vec3(eye.eyePosition) - position);
         vec3 halfwayDir = normalize(lightDir + viewDir);
     
-        const float energyConservation = ( 8.0 + material.shininess ) / ( 8.0 * Pi );
+        const float energyConservation = ( 8.0 + grassMaterial.shininess ) / ( 8.0 * Pi );
         float spec = energyConservation * pow(max(dot(normal, halfwayDir), 0.0), grassMaterial.shininess) * when_gt(I);
         vec4 specular = vec4((1.0 - shadow) * spec * grassColor.specular.rgb * specularLight, grassColor.specular.a);
 
@@ -208,9 +200,8 @@ vec4 CalcDirectionalLight(DirectionalLightBuffer light, int layer)
     vec4 fragPositionightSpace = light.lightSpace * vec4(position, 1.0);
     float shadow = 0.0;
     if (renderingOptions.shadowRendering.directional > 0)
-        shadow = ShadowMapCalculation(shadowMap, fragPositionightSpace, lightDir, layer);
-    vec3 n = normal;//gl_FrontFacing == true ? normal : -normal;
-    return GrassRendering(n, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow);
+        shadow = ShadowMapCalculation(directionalLightShadowMap, fragPositionightSpace, lightDir, layer);    
+    return GrassRendering(normal, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow);
 }
 
 vec4 CalcPointLight(PointLightBuffer light, int layer)
@@ -223,8 +214,7 @@ vec4 CalcPointLight(PointLightBuffer light, int layer)
     float shadow = 0.0;
     if (renderingOptions.shadowRendering.point > 0)
         shadow = PointShadowMapCalculation(pointLightShadowMap, vec4(position - light.position.xyz, 1.0), dist, layer);
-    vec3 n = normal;//gl_FrontFacing == true ? normal : -normal;
-    return GrassRendering(n, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow) * attenaution;
+    return GrassRendering(normal, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow) * attenaution;
 }
 
 vec4 CalcSpotLight(SpotLightBuffer light, int layer)
@@ -242,8 +232,7 @@ vec4 CalcSpotLight(SpotLightBuffer light, int layer)
     float shadow = 0.0;
     if (renderingOptions.shadowRendering.spot > 0)
         shadow = ShadowMapCalculation(spotLightShadowMap, fragPositionightSpace, lightDir, layer);
-    vec3 n = normal;//gl_FrontFacing == true ? normal : -normal;
-    return GrassRendering(n, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow) * intesity * attenaution;
+    return GrassRendering(normal, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow) * intesity * attenaution;
 }
 
 layout (location = 0) out vec4 outColor;
@@ -255,9 +244,7 @@ void main()
         spotLight.light_length == 0)
     {
         vec3 lightDir = normalize(vec3(eye.eyePosition) - position);
-        float I = max(dot(normal, lightDir), 0.0);
-        vec3 color = clamp((I + 0.2), 0 , 1) * material.diffuse.rgb;
-        outColor = vec4(color, 1.0);
+        outColor = GrassRendering(normal, lightDir, vec3(1.0), vec3(1.0), vec3(0.01), 0.0);
     }
 
     else

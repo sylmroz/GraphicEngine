@@ -36,6 +36,8 @@ layout (std140) uniform WindParameters
     float speed;
 } windParameters;
 
+uniform sampler2D windMap;
+
 layout (location = 0) out vec3 position;
 layout (location = 1) out vec3 normal;
 
@@ -78,8 +80,7 @@ void generateStraw(int straw, int chunks)
 
     vec3 pos = gl_in[0].gl_Position.xyz + (x1x0 * rnd2 + x2x0 * rnd3) * grass_normal;
 
-    normal = gs_in[0].normalMatrix * (-grass_normal);//normalize(alongNormal + 0.2 * grass_normal);
-    
+    normal = mat3(gs_in[0].view) * grass_normal;
     position = pos - tangent * thick;
     gl_Position = gs_in[0].projection * gs_in[0].view * vec4(position, 1.0);
     EmitVertex();
@@ -112,8 +113,7 @@ void generateStraw(int straw, int chunks)
             grass_normal = -grass_normal;
         }
 
-        normal = gs_in[0].normalMatrix * (-grass_normal);//normalize(alongNormal + 0.2 * grass_normal);
-
+        normal = mat3(gs_in[0].view) * grass_normal;
         position = pos - tangent * thick;
         gl_Position = gs_in[0].projection * gs_in[0].view * vec4(position, 1.0);
         EmitVertex();
@@ -139,7 +139,7 @@ void generateStraw(int straw, int chunks)
     float l = length(y);
     pos = pos - alongNormal * (L - l);
 
-    normal = gs_in[0].normalMatrix * (-grass_normal);//normalize(alongNormal + 0.2 * grass_normal);
+    normal = mat3(gs_in[0].view) * grass_normal;
     position = pos;
     gl_Position = gs_in[0].projection * gs_in[0].view * vec4(pos, 1.0);
     EmitVertex();
@@ -156,22 +156,22 @@ void main()
     if (dist >= 3.5 && dist < 7)
     {
         chunks = 5;
-        grassStraw = 5;
+        grassStraw = 7;
     }
     else if (dist >= 7 && dist < 11)
     {
-        grassStraw = 3;
+        grassStraw = 5;
         chunks = 4;
     }
     else if (dist >= 11 && dist < 15)
     {
-        grassStraw = 2;
+        grassStraw = 3;
         chunks = 3;
     }
     else if (dist > 15 && dist < 20)
     {
         chunks = 2;
-        grassStraw = 1;
+        grassStraw = 2;
     }
     else if (dist >= 20)
     {

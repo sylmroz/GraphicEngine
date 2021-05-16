@@ -41,25 +41,22 @@ GraphicEngine::OpenGL::OpenGLGrassGraphicPipeline::OpenGLGrassGraphicPipeline(st
 			glm::vec4(0.63137f, 0.89019f, 0.71372f, 0.95f),
 			glm::vec4(0.17058f, 0.95003f, 0.078431f, 0.95f)
 		},
-		32.0f
+		2.0f
 	};
-
-	m_materialUniformBuffer->update(&grass);
-
-	auto id = glGetUniformLocation(m_shaderProgram->getShaderProgramId(), "shadowMap");
-	glUniform1i(id, 0);
-	m_directionalLighttShadowMap->use(0);
-
-	auto id2 = glGetUniformLocation(m_shaderProgram->getShaderProgramId(), "spotLightShadowMap");
-	glUniform1i(id2, 1);
-	m_spotLightShadowMaps->use(1);
-
-	auto id3 = glGetUniformLocation(m_shaderProgram->getShaderProgramId(), "pointLightShadowMap");
-	glUniform1i(id3, 2);
-	m_pointLightShadowMaps->use(2);
 
 	GrassParameters grassParameters(0.005f, 0.2f, 0.5f);
 	m_grassParametersUniformBuffer->update(&grassParameters);
+
+	m_materialUniformBuffer->update(&grass);
+
+	glUniform1i(glGetUniformLocation(m_shaderProgram->getShaderProgramId(), "directionalLightShadowMap"), 0);
+	m_directionalLighttShadowMap->use(0);
+
+	glUniform1i(glGetUniformLocation(m_shaderProgram->getShaderProgramId(), "spotLightShadowMap"), 1);
+	m_spotLightShadowMaps->use(1);
+
+	glUniform1i(glGetUniformLocation(m_shaderProgram->getShaderProgramId(), "pointLightShadowMap"), 2);
+	m_pointLightShadowMaps->use(2);
 }
 
 void GraphicEngine::OpenGL::OpenGLGrassGraphicPipeline::draw()
