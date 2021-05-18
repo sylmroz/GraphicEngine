@@ -39,7 +39,7 @@ GraphicEngine::Services::ModelManager::ModelManager(std::shared_ptr<Core::Config
 					auto materialProperties = generatorModelProperties->getProperty<json>("material");
 					Scene::MeshMaterial meshMaterial;
 					meshMaterial.baseMaterial = Engines::Graphic::Shaders::Material(std::make_shared<Core::Configuration>(materialProperties));
-					for (auto mesh : model->getMeshes())
+					for (auto& mesh : model->getMeshes())
 					{
 						mesh->setMaterial(meshMaterial);
 					}
@@ -59,11 +59,11 @@ GraphicEngine::Services::ModelManager::ModelManager(std::shared_ptr<Core::Config
 					auto materialProperties = modelConfiguration->getProperty<json>("material");
 					Scene::MeshMaterial meshMaterial;
 					meshMaterial.baseMaterial = Engines::Graphic::Shaders::Material(std::make_shared<Core::Configuration>(materialProperties));
-					for (auto model : models)
+					for (auto& model : models)
 					{
 						std::lock_guard<std::mutex> guard(m);
 						addModel(model);
-						for (auto mesh : model->getMeshes())
+						for (auto& mesh : model->getMeshes())
 						{
 							mesh->setMaterial(meshMaterial);
 						}
