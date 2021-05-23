@@ -43,8 +43,8 @@ GraphicEngine::OpenGL::Texture2D::Texture2D(const uint8_t* data, int width, int 
 	glGenTextures(1, &texture);
 	glBindTexture(textureType, texture);
 
-	glTexParameteri(textureType, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(textureType, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(textureType, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+	glTexParameteri(textureType, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
 
 	glTexParameteri(textureType, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(textureType, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

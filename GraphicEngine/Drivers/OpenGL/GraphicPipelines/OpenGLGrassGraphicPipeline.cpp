@@ -52,7 +52,7 @@ GraphicEngine::OpenGL::OpenGLGrassGraphicPipeline::OpenGLGrassGraphicPipeline(st
 
 	m_materialUniformBuffer->update(&grass);
 
-	auto windMap = Engines::Graphic::WindGenerator::generate(512, 0.5);
+	auto windMap = Engines::Graphic::WindGenerator::generate(512, 5);
 	m_windMap = std::make_unique<Texture2D>(windMap.data, 512, 512, 4);
 
 	cv::imshow("", windMap);

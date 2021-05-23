@@ -65,10 +65,10 @@ void generateStraw(int straw, int chunks)
     vec3 alongNormal = (gs_in[0].normal + gs_in[1].normal + gs_in[2].normal) / 3;
 
     vec3 grass_normal = normalize(cross(tangent, alongNormal));
-    // if (grass_normal.z < 0) 
-    // {
-    //     grass_normal = -grass_normal;
-    // }
+    if (grass_normal.z < 0) 
+    {
+        grass_normal = -grass_normal;
+    }
 
     float rnd = random(floor(x0 * tangent * 1000.0), 50 * straw) * ((tangent.x > 0) ? 1.0: -1.0);
     float rnd2 = 2.0 * random(floor(x1 * tangent * 1000.0), straw) * ((tangent.x > 0) ? 1.0: -1.0);
@@ -80,9 +80,9 @@ void generateStraw(int straw, int chunks)
 
     vec3 pos = gl_in[0].gl_Position.xyz + (x1x0 * rnd2 + x2x0 * rnd3) * grass_normal;
     float texelSize = textureSize(windMap, 0).x;
-    float timestamp = (time.timestamp / texelSize);
-    vec4 windTexel = texture(windMap, (vec2(timestamp,timestamp)));
-    vec2 windFactor = (windTexel.rb * windParameters.speed * heightStep) * 2;
+    float timestamp = time.timestamp / 10;
+    vec2 windTexel = (2.0 * (texture(windMap, (vec2(pos.x + timestamp, pos.z + timestamp))).rb - vec2(0.5, 0.5)))/5;
+    vec2 windFactor = windTexel * /*vec2(sin(pos.x + time.timestamp), sin(pos.z + time.timestamp)) **/ heightStep;// //(windTexel.rb * windParameters.speed * heightStep) * 10 * vec2(sin(pos.x + timestamp), pos.z + timestamp);
 
     normal = mat3(gs_in[0].view) * grass_normal;
     position = pos - tangent * thick;
@@ -106,17 +106,17 @@ void generateStraw(int straw, int chunks)
         pos = prevPos + x + y;
 
         alongNormal = normalize(pos - prevPos);
-        pos.xz += (windFactor * weight * (1.0 - abs(dot(grass_normal, vec3(windParameters.direcion.x, 0.0, windParameters.direcion.y))))) * windParameters.direcion;
+        pos.xz += windFactor * weight;// (windFactor * weight * (1.0 - abs(dot(grass_normal, vec3(windParameters.direcion.x, 0.0, windParameters.direcion.y))))) * windParameters.direcion;
 
         float L = length(prevPos - pos);
         float l = length(y);
         pos = pos - alongNormal * (L - l);
 
         grass_normal = normalize(cross(tangent, alongNormal));
-        // if (grass_normal.z < 0)
-        // {
-        //     grass_normal = -grass_normal;
-        // }
+        if (grass_normal.z < 0)
+        {
+            grass_normal = -grass_normal;
+        }
 
         normal = mat3(gs_in[0].view) * grass_normal;
         position = pos - tangent * thick;
@@ -134,12 +134,12 @@ void generateStraw(int straw, int chunks)
 
     pos = prevPos + x + y;
     alongNormal = normalize(pos - prevPos);
-    pos.xz += (windFactor * (1.0 - abs(dot(grass_normal, vec3(windParameters.direcion.x, 0.0, windParameters.direcion.y))))) * windParameters.direcion;
+    pos.xz +=  windFactor;//(windFactor * (1.0 - abs(dot(grass_normal, vec3(windParameters.direcion.x, 0.0, windParameters.direcion.y))))) * windParameters.direcion;
     grass_normal = normalize(cross(tangent, alongNormal));
-    // if (grass_normal.z < 0) 
-    // {
-    //     grass_normal = -grass_normal;
-    // }
+    if (grass_normal.z < 0) 
+    {
+        grass_normal = -grass_normal;
+    }
 
     float L = length(prevPos - pos);
     float l = length(y);
