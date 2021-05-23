@@ -52,10 +52,8 @@ GraphicEngine::OpenGL::OpenGLGrassGraphicPipeline::OpenGLGrassGraphicPipeline(st
 
 	m_materialUniformBuffer->update(&grass);
 
-	auto windMap = Engines::Graphic::WindGenerator::generate(512, 5);
+	auto windMap = Engines::Graphic::WindGenerator::generate(512, 1);
 	m_windMap = std::make_unique<Texture2D>(windMap.data, 512, 512, 4);
-
-	cv::imshow("", windMap);
 
 	glUniform1i(glGetUniformLocation(m_shaderProgram->getShaderProgramId(), "windMap"), 0);
 	m_windMap->use(0);
