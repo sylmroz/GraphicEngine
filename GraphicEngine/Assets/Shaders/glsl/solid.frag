@@ -219,34 +219,6 @@ vec4 BlinnPhong(vec3 normal, vec3 lightDir, vec3 diffuseLight, vec3 specularLigh
     return (diffuse + specular) + vec4(material.ambient.rgb * ambientLight, material.ambient.a);
 }
 
-subroutine(LightShadingEffectType_t)
-vec4 GrassRendering(vec3 normal, vec3 lightDir, vec3 diffuseLight, vec3 specularLight, vec3 ambientLight, float shadow)
-{
-    GrassColor grassColor = gl_FrontFacing == true ? grassMaterial.front : grassMaterial.back;
-    vec4 translucent = gl_FrontFacing == true ? grassMaterial.back.translucent : grassMaterial.front.translucent;
-    return translucent;
-    float I = dot(normal, lightDir);
-    if (I >= 0)
-    {
-        vec4 diffuse = vec4((1.0 - shadow) * I * grassColor.diffuse.rgb * diffuseLight, grassColor.diffuse.a);
-
-        vec3 viewDir = normalize(vec3(eye.eyePosition) - position);
-        vec3 halfwayDir = normalize(lightDir + viewDir);
-    
-        const float energyConservation = ( 8.0 + material.shininess ) / ( 8.0 * Pi );
-        float spec = energyConservation * pow(max(dot(normal, halfwayDir), 0.0), grassMaterial.shininess) * when_gt(I);
-        vec4 specular = vec4(spec * grassColor.specular.rgb * specularLight, grassColor.specular.a);
-
-        return (diffuse + specular) + vec4(grassColor.ambient.rgb * ambientLight, grassColor.ambient.a);
-    }
-    else
-    {
-        vec4 translucentSh = vec4((1.0 - shadow) * I * translucent.rgb * diffuseLight, translucent.a);
-
-        return translucentSh + vec4(grassColor.ambient.rgb * ambientLight, grassColor.ambient.a);
-    }
-}
-
 subroutine uniform LightShadingEffectType_t LightShadingEffectType;
 
 vec4 CalcDirectionalLight(DirectionalLightBuffer light, int layer)

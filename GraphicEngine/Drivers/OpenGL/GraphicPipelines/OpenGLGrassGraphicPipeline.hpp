@@ -18,6 +18,8 @@ namespace GraphicEngine::OpenGL
 	private:
 		std::shared_ptr<OpenGLShaderProgram> m_shaderProgram;
 
+		std::unique_ptr<Texture> m_windMap;
+
 		std::shared_ptr<Texture> m_directionalLighttShadowMap;
 		std::shared_ptr<Texture> m_spotLightShadowMaps;
 		std::shared_ptr<Texture> m_pointLightShadowMaps;

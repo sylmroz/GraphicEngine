@@ -213,6 +213,7 @@
     <ClCompile Include="Drivers\Vulkan\VulkanShaderFactory.cpp" />
     <ClCompile Include="Drivers\Vulkan\VulkanTexture.cpp" />
     <ClCompile Include="Drivers\Vulkan\VulkanTextureCube.cpp" />
+    <ClCompile Include="Engines\Graphic\2D\WindGenerator.cpp" />
     <ClCompile Include="Engines\Graphic\Shaders\Models\Light.cpp" />
     <ClCompile Include="Engines\Graphic\Shaders\Models\Material.cpp" />
     <ClCompile Include="Engines\Graphic\Shaders\Models\WindParameters.cpp" />
@@ -344,6 +345,7 @@
     <ClInclude Include="Drivers\Vulkan\VulkanVertexBuffer.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanVertexBufferFactory.hpp" />
     <ClInclude Include="Drivers\Vulkan\VulkanWindowContext.hpp" />
+    <ClInclude Include="Engines\Graphic\2D\WindGenerator.hpp" />
     <ClInclude Include="Engines\Graphic\3D\ObjectGenerator.hpp" />
     <ClInclude Include="Engines\Graphic\3D\ObjectGenerators\ConeGenerator.hpp" />
     <ClInclude Include="Engines\Graphic\3D\ObjectGenerators\CuboidGenerator.hpp" />

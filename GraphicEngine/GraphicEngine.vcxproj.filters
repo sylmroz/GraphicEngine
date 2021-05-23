@@ -412,6 +412,9 @@
     <ClCompile Include="UI\ImGui\Widgets\Slider.cpp">
       <Filter>UI\ImGui\Widgets</Filter>
     </ClCompile>
+    <ClCompile Include="Engines\Graphic\2D\WindGenerator.cpp">
+      <Filter>Engines\Graphic\2D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Input\Keyboard\KeyboardEnumKeys.hpp">
@@ -905,6 +908,9 @@
     </ClInclude>
     <ClInclude Include="Engines\Graphic\Shaders\Models\GrassMaterial.hpp">
       <Filter>Engines\Graphic\Shaders\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Engines\Graphic\2D\WindGenerator.hpp">
+      <Filter>Engines\Graphic\2D</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

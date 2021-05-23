@@ -4,6 +4,9 @@
 
 #include "../../../Common/ShaderEnums.hpp"
 
+// temporary
+#include "../../../Engines/Graphic/2D/WindGenerator.hpp"
+
 GraphicEngine::OpenGL::OpenGLGrassGraphicPipeline::OpenGLGrassGraphicPipeline(std::shared_ptr<Services::CameraControllerManager> cameraControllerManager,
 	std::shared_ptr<Texture> directionalLighttShadowMap,
 	std::shared_ptr<Texture> spotLightShadowMaps,
@@ -49,14 +52,22 @@ GraphicEngine::OpenGL::OpenGLGrassGraphicPipeline::OpenGLGrassGraphicPipeline(st
 
 	m_materialUniformBuffer->update(&grass);
 
-	glUniform1i(glGetUniformLocation(m_shaderProgram->getShaderProgramId(), "directionalLightShadowMap"), 0);
-	m_directionalLighttShadowMap->use(0);
+	auto windMap = Engines::Graphic::WindGenerator::generate(512, 0.5);
+	m_windMap = std::make_unique<Texture2D>(windMap.data, 512, 512, 4);
 
-	glUniform1i(glGetUniformLocation(m_shaderProgram->getShaderProgramId(), "spotLightShadowMap"), 1);
-	m_spotLightShadowMaps->use(1);
+	cv::imshow("", windMap);
 
-	glUniform1i(glGetUniformLocation(m_shaderProgram->getShaderProgramId(), "pointLightShadowMap"), 2);
-	m_pointLightShadowMaps->use(2);
+	glUniform1i(glGetUniformLocation(m_shaderProgram->getShaderProgramId(), "windMap"), 0);
+	m_windMap->use(0);
+
+	glUniform1i(glGetUniformLocation(m_shaderProgram->getShaderProgramId(), "directionalLightShadowMap"), 1);
+	m_directionalLighttShadowMap->use(1);
+
+	glUniform1i(glGetUniformLocation(m_shaderProgram->getShaderProgramId(), "spotLightShadowMap"), 2);
+	m_spotLightShadowMaps->use(2);
+
+	glUniform1i(glGetUniformLocation(m_shaderProgram->getShaderProgramId(), "pointLightShadowMap"), 3);
+	m_pointLightShadowMaps->use(3);
 }
 
 void GraphicEngine::OpenGL::OpenGLGrassGraphicPipeline::draw()
