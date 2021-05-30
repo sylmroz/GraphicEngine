@@ -52,20 +52,20 @@ GraphicEngine::OpenGL::OpenGLGrassGraphicPipeline::OpenGLGrassGraphicPipeline(st
 
 	m_materialUniformBuffer->update(&grass);
 
-	auto windMap = Engines::Graphic::WindGenerator::generate(512, 1);
+	auto windMap = Engines::Graphic::WindGenerator::generate(512, 0.75);
 	m_windMap = std::make_unique<Texture2D>(windMap.data, 512, 512, 4);
 
-	glUniform1i(glGetUniformLocation(m_shaderProgram->getShaderProgramId(), "windMap"), 0);
-	m_windMap->use(0);
+	glUniform1i(glGetUniformLocation(m_shaderProgram->getShaderProgramId(), "directionalLightShadowMap"), 0);
+	m_directionalLighttShadowMap->use(0);
 
-	glUniform1i(glGetUniformLocation(m_shaderProgram->getShaderProgramId(), "directionalLightShadowMap"), 1);
-	m_directionalLighttShadowMap->use(1);
+	glUniform1i(glGetUniformLocation(m_shaderProgram->getShaderProgramId(), "spotLightShadowMap"), 1);
+	m_spotLightShadowMaps->use(1);
 
-	glUniform1i(glGetUniformLocation(m_shaderProgram->getShaderProgramId(), "spotLightShadowMap"), 2);
-	m_spotLightShadowMaps->use(2);
+	glUniform1i(glGetUniformLocation(m_shaderProgram->getShaderProgramId(), "pointLightShadowMap"), 2);
+	m_pointLightShadowMaps->use(2);
 
-	glUniform1i(glGetUniformLocation(m_shaderProgram->getShaderProgramId(), "pointLightShadowMap"), 3);
-	m_pointLightShadowMaps->use(3);
+	glUniform1i(glGetUniformLocation(m_shaderProgram->getShaderProgramId(), "windMap"), 3);
+	m_windMap->use(3);
 }
 
 void GraphicEngine::OpenGL::OpenGLGrassGraphicPipeline::draw()

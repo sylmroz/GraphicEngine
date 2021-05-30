@@ -19,9 +19,8 @@ layout(std140) uniform ModelMartices
 
 layout (location = 0) out VS_OUT
 {
-    mat4 projection;
     mat4 view;
-    mat3 normalMatrix;
+    mat4 viewProjection;
     vec3 normal;
 } vs_out;
 
@@ -29,7 +28,6 @@ void main()
 {
     gl_Position = modelMartices.modelMatrix * vec4(inPosition, 1.0);
     vs_out.normal = mat3(modelMartices.normalMatrix) * inNormal;
-    vs_out.projection = cameraMatrices.projection;
     vs_out.view = cameraMatrices.view;
-    vs_out.normalMatrix = mat3(modelMartices.normalMatrix);
+    vs_out.viewProjection = cameraMatrices.projection * cameraMatrices.view;
 }

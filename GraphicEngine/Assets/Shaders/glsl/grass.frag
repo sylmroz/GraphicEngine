@@ -149,7 +149,7 @@ float ShadowMapCalculation(sampler2DArray tex, vec4 fragPosLightSpace, vec3 ligh
     float shadow = 0.0;
     vec2 texelSize = 1.0 / textureSize(tex, 0).xy;
     float bias = max(0.005 * (1.0 - dot(normal, lightDir)), 0.0005);
-    for (int i = 0; i < numOfSamples; ++i)
+    for (int i = 0; i < 4; ++i)
     {
         int index = int(16.0 * random(floor(position * 1000.0), i)) % 16;
         float depth = texture(tex, vec3(projCoords.xy + poissonDisk[index] * texelSize, layer)).r;
@@ -181,7 +181,7 @@ vec4 GrassRendering(vec3 normal, vec3 lightDir, vec3 diffuseLight, vec3 specular
         vec3 halfwayDir = normalize(lightDir + viewDir);
     
         const float energyConservation = ( 8.0 + grassMaterial.shininess ) / ( 8.0 * Pi );
-        float spec = energyConservation * pow(max(dot(normal, halfwayDir), 0.0), grassMaterial.shininess) * when_gt(I);
+        float spec = energyConservation * pow(max(dot(normal, halfwayDir), 0.0), grassMaterial.shininess);
         vec4 specular = vec4((1.0 - shadow) * spec * grassColor.specular.rgb * specularLight, grassColor.specular.a);
 
         return (diffuse + specular);// + vec4(grassColor.ambient.rgb * ambientLight, grassColor.ambient.a);

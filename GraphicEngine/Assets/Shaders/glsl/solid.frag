@@ -157,7 +157,7 @@ float ShadowMapCalculation(sampler2DArray tex, vec4 fragPosLightSpace, vec3 ligh
     float shadow = 0.0;
     vec2 texelSize = 1.0 / textureSize(tex, 0).xy;
     float bias = max(0.005 * (1.0 - dot(normal, lightDir)), 0.0005);
-    for (int i = 0; i < numOfSamples; ++i)
+    for (int i = 0; i < 4; ++i)
     {
         int index = int(16.0 * random(floor(position * 1000.0), i)) % 16;
         float depth = texture(tex, vec3(projCoords.xy + poissonDisk[index] * texelSize, layer)).r;
@@ -275,7 +275,7 @@ void main()
     {
         vec3 lightDir = normalize(vec3(eye.eyePosition) - position);
         float I = max(dot(normal, lightDir), 0.0);
-        vec3 color = clamp((I + 0.2), 0 , 1) * material.diffuse.rgb;
+        vec3 color = clamp((I + 0.2), 0 ,1) * material.diffuse.rgb;
         outColor = vec4(color, 1.0);
     }
 
