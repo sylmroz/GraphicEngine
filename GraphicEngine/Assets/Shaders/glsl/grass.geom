@@ -44,9 +44,12 @@ layout (location = 1) out vec3 normal;
 
 // https://github.com/opengl-tutorials/ogl/blob/master/tutorial16_shadowmaps/ShadowMapping.fragmentshader
 float random(vec3 seed, float i){
-	vec4 seed4 = vec4(seed,i);
-	float dot_product = dot(seed4, vec4(12.9898, 78.233, 45.164, 94.673));
-	return (mod(float(10000 * fract(sin(dot_product)) * 43758.5453), 10000) / 10000.0) - 0.5;
+  vec4 tmpvar_3;
+  tmpvar_3.xyz = seed;
+  tmpvar_3.w = i;
+  float tmpvar_4;
+  tmpvar_4 = (4.375855e+8 * fract(sin(dot (tmpvar_3, vec4(12.9898, 78.233, 45.164, 94.673)))));
+  return (((tmpvar_4 + -((10000.0 * floor((tmpvar_4 * 0.0001))))) * 0.0001) + -0.5);
 }
 
 void generateStraw(int straw, int chunks, vec3 x1x0, vec3 x2x0, vec3 tangent, vec3 grass_normal, vec3 alongNormal, vec2 windTexel)
@@ -60,7 +63,7 @@ void generateStraw(int straw, int chunks, vec3 x1x0, vec3 x2x0, vec3 tangent, ve
     float bendFactor = (rnd * heightStep / 2.0) * (1.0 - grassParameters.stiffness);
     float thick = grassParameters.thick * ((1.0 - rnd3 * 0.25));
 
-    vec2 windFactor = windTexel * heightStep * windParameters.speed;
+    vec2 windFactor = windTexel * heightStep;
 
     vec3 pos = (x1x0 * rnd2 + x2x0 * rnd3) * grass_normal + gl_in[0].gl_Position.xyz;
 
@@ -75,34 +78,40 @@ void generateStraw(int straw, int chunks, vec3 x1x0, vec3 x2x0, vec3 tangent, ve
 
     vec3 prevPos = pos;
     float thickFactorStep = 1.0 / (chunks + 1);
-    
-    for (int i = 1; i < chunks; ++i)
+    int i=1;
+    while (true)
     {
-        float weight = thickFactorStep * (i + 1);
-        float thickFactor = (1.0 - weight) * thick;
-        vec3 y = heightStep * alongNormal;
-        vec3 x = grass_normal * bendFactor;
+      if (i >= chunks)
+      {
+        break;
+      }
+      float weight = thickFactorStep * (i + 1);
+      float thickFactor = (1.0 - weight) * thick;
+      vec3 y = heightStep * alongNormal;
+      vec3 x = grass_normal * bendFactor;
 
-        pos = prevPos + x + y;
+      pos = prevPos + x + y;
 
-        alongNormal = normalize(pos - prevPos);
-        pos.xz += windFactor * weight;
+      alongNormal = normalize(pos - prevPos);
+      pos.xz += windFactor * weight;
 
-        pos -= alongNormal * (distance(prevPos, pos) - length(y));
+      pos -= alongNormal * (distance(prevPos, pos) - length(y));
 
-        grass_normal = normalize(cross(tangent, alongNormal));
+      grass_normal = normalize(cross(tangent, alongNormal));
 
-        normal = mat3(gs_in[0].view) * grass_normal;
-        position = pos - tangent * thickFactor;
-        gl_Position = gs_in[0].viewProjection * vec4(position, 1.0);
-        EmitVertex();
+      normal = mat3(gs_in[0].view) * grass_normal;
+      position = pos - tangent * thickFactor;
+      gl_Position = gs_in[0].viewProjection * vec4(position, 1.0);
+      EmitVertex();
 
-        position = pos + tangent * thickFactor;
-        gl_Position = gs_in[0].viewProjection * vec4(position, 1.0);
-        EmitVertex();
+      position = pos + tangent * thickFactor;
+      gl_Position = gs_in[0].viewProjection * vec4(position, 1.0);
+      EmitVertex();
 
-        prevPos = pos;
+      prevPos = pos;
+      ++i;
     }
+    
     vec3 y = heightStep * alongNormal;
     vec3 x = grass_normal * bendFactor;
 
@@ -139,14 +148,20 @@ void main()
     vec3 grass_normal = normalize(cross(tangent, alongNormal));
 
     float timestamp = time.timestamp * windParameters.speed;
-    vec2 texelPosition = vec2(gl_in[0].gl_Position.x + timestamp, gl_in[0].gl_Position.z + timestamp) * windParameters.direcion;
-    vec2 windTexel = (2.0 * (texture(windMap, texelPosition).rb - vec2(0.5, 0.5))) * 2;
+    vec2 texelPosition = vec2(gl_in[0].gl_Position.x + timestamp, gl_in[0].gl_Position.z + timestamp) * windParameters.direcion * (windParameters.speed / 2);
+    vec2 windTexel = (2.0 * (texture(windMap, texelPosition).rb - vec2(0.5, 0.5))) * windParameters.speed * 2;
 
     int grassStraw = 5 - int(smoothstep(0.0, 4.0, dist));
     int chunks = 4 - int(smoothstep(0.0, 3.0, dist));
 
-    for (int straw = 0; straw < grassStraw; ++straw)
+    int straw = 0;
+    while (true)
     {
-        generateStraw(straw, chunks, x1x0, x2x0, tangent, grass_normal, alongNormal, windTexel);
+      if (straw >= grassStraw)
+      {
+        break;
+      }
+      generateStraw(straw, chunks, x1x0, x2x0, tangent, grass_normal, alongNormal, windTexel);
+      ++straw;
     }
 }

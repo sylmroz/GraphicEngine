@@ -52,8 +52,9 @@ GraphicEngine::OpenGL::OpenGLGrassGraphicPipeline::OpenGLGrassGraphicPipeline(st
 
 	m_materialUniformBuffer->update(&grass);
 
-	auto windMap = Engines::Graphic::WindGenerator::generate(512, 0.75);
-	m_windMap = std::make_unique<Texture2D>(windMap.data, 512, 512, 4);
+	auto windMap = Engines::Graphic::WindGenerator::generate(1024, 0.5);
+	cv::imshow("Wind", windMap);
+	m_windMap = std::make_unique<Texture2D>(windMap.data, 1024, 1024, 4);
 
 	glUniform1i(glGetUniformLocation(m_shaderProgram->getShaderProgramId(), "directionalLightShadowMap"), 0);
 	m_directionalLighttShadowMap->use(0);

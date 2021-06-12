@@ -141,9 +141,12 @@ vec2 poissonDisk[16] = vec2[](
 
 // https://github.com/opengl-tutorials/ogl/blob/master/tutorial16_shadowmaps/ShadowMapping.fragmentshader
 float random(vec3 seed, int i){
-	vec4 seed4 = vec4(seed,i);
-	float dot_product = dot(seed4, vec4(12.9898,78.233,45.164,94.673));
-	return fract(sin(dot_product) * 43758.5453);
+	vec4 tmpvar_3;
+    tmpvar_3.xyz = seed;
+    tmpvar_3.w = i;
+    float tmpvar_4;
+    tmpvar_4 = (4.375855e+8 * fract(sin(dot (tmpvar_3, vec4(12.9898, 78.233, 45.164, 94.673)))));
+    return (((tmpvar_4 + -((10000.0 * floor((tmpvar_4 * 0.0001))))) * 0.0001) + -0.5);
 }
 
 float ShadowMapCalculation(sampler2DArray tex, vec4 fragPosLightSpace, vec3 lightDir, int layer)
@@ -223,13 +226,12 @@ subroutine uniform LightShadingEffectType_t LightShadingEffectType;
 
 vec4 CalcDirectionalLight(DirectionalLightBuffer light, int layer)
 {
-    vec3 lightDir = normalize(vec3(-light.direction));
     vec4 fragPositionightSpace = light.lightSpace * vec4(position, 1.0);
     float shadow = 0.0;
     if (renderingOptions.shadowRendering.directional > 0)
-        shadow = ShadowMapCalculation(shadowMap, fragPositionightSpace, lightDir, layer);
+        shadow = ShadowMapCalculation(shadowMap, fragPositionightSpace, -light.direction.xyz, layer);
     vec3 n = normal;//gl_FrontFacing == true ? normal : -normal;
-    return LightShadingEffectType(n, lightDir, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow);
+    return LightShadingEffectType(n, -light.direction.xyz, vec3(light.color.diffuse), vec3(light.color.specular), vec3(light.color.ambient), shadow);
 }
 
 vec4 CalcPointLight(PointLightBuffer light, int layer)
@@ -248,13 +250,13 @@ vec4 CalcPointLight(PointLightBuffer light, int layer)
 
 vec4 CalcSpotLight(SpotLightBuffer light, int layer)
 {
-    vec3 lightDir = normalize(vec3(light.position) - position); 
+    vec3 lightDir = normalize(light.position.xyz - position); 
 
-    float theta = dot(lightDir, normalize(-vec3(light.direction)));
+    float theta = dot(lightDir, -light.direction.xyz);
     float epsilon = light.innerCutOff - light.outterCutOff;
     float intesity = clamp((theta - light.outterCutOff) / epsilon, 0.0, 1.0);
 
-    float dist = length(position - vec3(light.position));
+    float dist = length(position - light.position.xyz);
     float attenaution = 1.0 / (light.constant + light.linear * dist + light.quadric * (dist * dist));
 
     vec4 fragPositionightSpace = light.lightSpace * vec4(position, 1.0);
@@ -273,7 +275,7 @@ void main()
         pointLight.light_length == 0 &&
         spotLight.light_length == 0)
     {
-        vec3 lightDir = normalize(vec3(eye.eyePosition) - position);
+        vec3 lightDir = normalize(eye.eyePosition.xyz - position);
         float I = max(dot(normal, lightDir), 0.0);
         vec3 color = clamp((I + 0.2), 0 ,1) * material.diffuse.rgb;
         outColor = vec4(color, 1.0);
