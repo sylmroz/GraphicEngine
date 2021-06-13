@@ -229,6 +229,7 @@
     <ClCompile Include="Services\LightManager.cpp" />
     <ClCompile Include="Services\ModelManager.cpp" />
     <ClCompile Include="Services\RenderingOptionsManager.cpp" />
+    <ClCompile Include="Services\ServicesManager.cpp" />
     <ClCompile Include="Services\ViewportManager.cpp" />
     <ClCompile Include="Services\WindManager.cpp" />
     <ClCompile Include="UI\ImGui\Components\CameraManagerWindow.cpp" />
@@ -240,6 +241,7 @@
     <ClCompile Include="UI\ImGui\Components\RenderingSettingsWindow.cpp" />
     <ClCompile Include="UI\ImGui\Components\SettingsWindow.cpp" />
     <ClCompile Include="UI\ImGui\Components\ViewportSettingsWindow.cpp" />
+    <ClCompile Include="UI\ImGui\Components\WindManagerWindow.cpp" />
     <ClCompile Include="UI\ImGui\ImGuiImpl.cpp" />
     <ClCompile Include="UI\ImGui\Widgets\Button.cpp" />
     <ClCompile Include="UI\ImGui\Widgets\Checkbox.cpp" />
@@ -247,9 +249,11 @@
     <ClCompile Include="UI\ImGui\Widgets\ColorEdit.cpp" />
     <ClCompile Include="UI\ImGui\Widgets\ComboBox.cpp" />
     <ClCompile Include="UI\ImGui\Widgets\InputFloat.cpp" />
+    <ClCompile Include="UI\ImGui\Widgets\Separator.cpp" />
     <ClCompile Include="UI\ImGui\Widgets\Slider.cpp" />
     <ClCompile Include="UI\ImGui\Widgets\TabBar.cpp" />
     <ClCompile Include="UI\ImGui\Widgets\TabBarItem.cpp" />
+    <ClCompile Include="UI\ImGui\Widgets\Text.cpp" />
     <ClCompile Include="UI\ImGui\Widgets\TreeNode.cpp" />
     <ClCompile Include="UI\ImGui\Widgets\WindowBody.cpp" />
   </ItemGroup>
@@ -396,6 +400,7 @@
     <ClInclude Include="Services\LightManager.hpp" />
     <ClInclude Include="Services\ModelManager.hpp" />
     <ClInclude Include="Services\RenderingOptionsManager.hpp" />
+    <ClInclude Include="Services\ServicesManager.hpp" />
     <ClInclude Include="Services\ViewportManager.hpp" />
     <ClInclude Include="Services\WindManager.hpp" />
     <ClInclude Include="UI\ImGui\Components\CameraManagerWindow.hpp" />
@@ -407,6 +412,7 @@
     <ClInclude Include="UI\ImGui\Components\RenderingSettingsWindow.hpp" />
     <ClInclude Include="UI\ImGui\Components\SettingsWindow.hpp" />
     <ClInclude Include="UI\ImGui\Components\ViewportSettingsWindow.hpp" />
+    <ClInclude Include="UI\ImGui\Components\WindManagerWindow.hpp" />
     <ClInclude Include="UI\ImGui\ImGuiImpl.hpp" />
     <ClInclude Include="UI\ImGui\Widgets\Button.hpp" />
     <ClInclude Include="UI\ImGui\Widgets\Checkbox.hpp" />
@@ -414,9 +420,11 @@
     <ClInclude Include="UI\ImGui\Widgets\ColorEdit.hpp" />
     <ClInclude Include="UI\ImGui\Widgets\ComboBox.hpp" />
     <ClInclude Include="UI\ImGui\Widgets\InputFloat.hpp" />
+    <ClInclude Include="UI\ImGui\Widgets\Separator.hpp" />
     <ClInclude Include="UI\ImGui\Widgets\Slider.hpp" />
     <ClInclude Include="UI\ImGui\Widgets\TabBar.hpp" />
     <ClInclude Include="UI\ImGui\Widgets\TabBarItem.hpp" />
+    <ClInclude Include="UI\ImGui\Widgets\Text.hpp" />
     <ClInclude Include="UI\ImGui\Widgets\TreeNode.hpp" />
     <ClInclude Include="UI\ImGui\Widgets\WindowBody.hpp" />
   </ItemGroup>

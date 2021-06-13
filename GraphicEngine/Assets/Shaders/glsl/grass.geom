@@ -149,7 +149,7 @@ void main()
 
     float timestamp = time.timestamp * windParameters.speed;
     vec2 texelPosition = vec2(gl_in[0].gl_Position.x + timestamp, gl_in[0].gl_Position.z + timestamp) * windParameters.direcion * (windParameters.speed / 2);
-    vec2 windTexel = (2.0 * (texture(windMap, texelPosition).rb - vec2(0.5, 0.5))) * windParameters.speed * 2;
+    vec2 windTexel = (texture(windMap, texelPosition).rb - vec2(0.5, 0.5)) * windParameters.speed * 2;
 
     int grassStraw = 5 - int(smoothstep(0.0, 4.0, dist));
     int chunks = 4 - int(smoothstep(0.0, 3.0, dist));

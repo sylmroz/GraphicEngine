@@ -415,6 +415,18 @@
     <ClCompile Include="Engines\Graphic\2D\WindGenerator.cpp">
       <Filter>Engines\Graphic\2D</Filter>
     </ClCompile>
+    <ClCompile Include="Services\ServicesManager.cpp">
+      <Filter>Services</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\ImGui\Components\WindManagerWindow.cpp">
+      <Filter>UI\ImGui\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\ImGui\Widgets\Text.cpp">
+      <Filter>UI\ImGui\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\ImGui\Widgets\Separator.cpp">
+      <Filter>UI\ImGui\Widgets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Input\Keyboard\KeyboardEnumKeys.hpp">
@@ -911,6 +923,18 @@
     </ClInclude>
     <ClInclude Include="Engines\Graphic\2D\WindGenerator.hpp">
       <Filter>Engines\Graphic\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Services\ServicesManager.hpp">
+      <Filter>Services</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ImGui\Components\WindManagerWindow.hpp">
+      <Filter>UI\ImGui\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ImGui\Widgets\Separator.hpp">
+      <Filter>UI\ImGui\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ImGui\Widgets\Text.hpp">
+      <Filter>UI\ImGui\Widgets</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

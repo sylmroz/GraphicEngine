@@ -21,3 +21,9 @@ void GraphicEngine::Services::WindManager::setWindParameters(Engines::Graphic::S
 	m_windParameters = windParameters;
 	m_updateWindParametersSubject.notify(m_windParameters);
 }
+
+void GraphicEngine::Services::WindManager::setWindSpeed(float speed)
+{
+	m_windParameters.speed = speed;
+	m_updateWindParametersSubject.notify(m_windParameters);
+}

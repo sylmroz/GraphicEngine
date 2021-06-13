@@ -9,19 +9,14 @@
 #include "OpenGLVertexBufferFactory.hpp"
 
 GraphicEngine::OpenGL::OpenGLRenderingEngine::OpenGLRenderingEngine(
-	std::shared_ptr<Services::CameraControllerManager> cameraControllerManager,
-	std::shared_ptr<Services::ModelManager> modelManager,
-	std::shared_ptr<Services::LightManager> lightManager,
-	std::shared_ptr<Services::ViewportManager> viewportManager,
-	std::shared_ptr<Services::RenderingOptionsManager> renderingOptionsManager,
-	std::shared_ptr<Services::WindManager> windManager,
+	std::shared_ptr<Services::ServicesManager> servicesManager,
 	std::shared_ptr<Core::EventManager> eventManager,
 	std::shared_ptr<Core::Timer> timer,
 	std::shared_ptr<Common::UI> ui,
 	std::shared_ptr<Core::Configuration> cfg,
 	std::unique_ptr<Core::Logger<OpenGLRenderingEngine>> logger) :
 	m_logger(std::move(logger)),
-	RenderingEngine(cameraControllerManager, modelManager, lightManager, viewportManager, renderingOptionsManager, windManager, eventManager, timer, ui, cfg)
+	RenderingEngine(servicesManager, eventManager, timer, ui, cfg)
 {
 	m_logger->info(__FILE__, __LINE__, __FUNCTION__, "Create OpenGL rendering engine instance.");
 }
