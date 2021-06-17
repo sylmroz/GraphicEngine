@@ -154,6 +154,9 @@
     <Filter Include="UI\ImGui\Components\Lights">
       <UniqueIdentifier>{d34df17d-8e16-4e0c-acaa-51913d3f9df9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Third\ImGUI\Widgets">
+      <UniqueIdentifier>{983bd1c9-3209-46d0-ade8-8ac025f0b842}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -425,6 +428,12 @@
       <Filter>UI\ImGui\Widgets</Filter>
     </ClCompile>
     <ClCompile Include="UI\ImGui\Widgets\Separator.cpp">
+      <Filter>UI\ImGui\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\imGuIZMO.quat\imGuIZMO.quat\imGuIZMOquat.cpp">
+      <Filter>Third\ImGUI\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\ImGui\Widgets\ArrowDirection.cpp">
       <Filter>UI\ImGui\Widgets</Filter>
     </ClCompile>
   </ItemGroup>
@@ -934,6 +943,24 @@
       <Filter>UI\ImGui\Widgets</Filter>
     </ClInclude>
     <ClInclude Include="UI\ImGui\Widgets\Text.hpp">
+      <Filter>UI\ImGui\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libs\imGuIZMO.quat\imGuIZMO.quat\imGuIZMOquat.h">
+      <Filter>Third\ImGUI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libs\imGuIZMO.quat\imGuIZMO.quat\vgConfig.h">
+      <Filter>Third\ImGUI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libs\imGuIZMO.quat\imGuIZMO.quat\vGizmo.h">
+      <Filter>Third\ImGUI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libs\imGuIZMO.quat\imGuIZMO.quat\vGizmoMath.h">
+      <Filter>Third\ImGUI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libs\imGuIZMO.quat\imGuIZMO.quat\vgMath.h">
+      <Filter>Third\ImGUI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ImGui\Widgets\ArrowDirection.hpp">
       <Filter>UI\ImGui\Widgets</Filter>
     </ClInclude>
   </ItemGroup>

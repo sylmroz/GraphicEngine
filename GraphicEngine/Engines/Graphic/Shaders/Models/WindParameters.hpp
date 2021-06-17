@@ -9,9 +9,9 @@ namespace GraphicEngine::Engines::Graphic::Shaders
 	{
 		WindParameters() = default;
 		WindParameters(glm::vec2 direcion, float speed) : 
-            direcion{ direcion }, speed{ speed } {}
+            direction{ direcion }, speed{ speed } {}
 		WindParameters(std::shared_ptr<Core::Configuration> cfg);
-		glm::vec2 direcion;
+		glm::vec2 direction;
         float speed;
 	};
 }

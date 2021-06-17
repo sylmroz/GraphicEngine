@@ -106,9 +106,9 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;USE_STB_IMAGE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;USE_STB_IMAGE;VGIZMO_USES_GLM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\libs\magic_enum\include;C:\libs\glm;C:\VulkanSDK\1.2.162.0\Include;C:\libs\assimp\include\;C:\libs\opencv-4.2\include;C:\libs\glew-2.1.0\include;C:\libs\di\include;C:\libs\di\extension\include;C:\libs\spdlog\include;C:\libs\json\single_include;C:\libs\stb;C:\libs\imgui;C:\Projects\UtilityLib\UtilityLib\Utility;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\libs\magic_enum\include;C:\libs\glm;C:\VulkanSDK\1.2.162.0\Include;C:\libs\assimp\include\;C:\libs\opencv-4.2\include;C:\libs\glew-2.1.0\include;C:\libs\di\include;C:\libs\di\extension\include;C:\libs\spdlog\include;C:\libs\json\single_include;C:\libs\stb;C:\libs\imgui;C:\Projects\UtilityLib\UtilityLib\Utility;C:\libs\imGuIZMO.quat\imGuIZMO.quat;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
@@ -171,6 +171,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\libs\imGuIZMO.quat\imGuIZMO.quat\imGuIZMOquat.cpp" />
     <ClCompile Include="..\..\..\libs\imgui\backends\imgui_impl_glfw.cpp" />
     <ClCompile Include="..\..\..\libs\imgui\backends\imgui_impl_opengl3.cpp" />
     <ClCompile Include="..\..\..\libs\imgui\backends\imgui_impl_vulkan.cpp" />
@@ -243,6 +244,7 @@
     <ClCompile Include="UI\ImGui\Components\ViewportSettingsWindow.cpp" />
     <ClCompile Include="UI\ImGui\Components\WindManagerWindow.cpp" />
     <ClCompile Include="UI\ImGui\ImGuiImpl.cpp" />
+    <ClCompile Include="UI\ImGui\Widgets\ArrowDirection.cpp" />
     <ClCompile Include="UI\ImGui\Widgets\Button.cpp" />
     <ClCompile Include="UI\ImGui\Widgets\Checkbox.cpp" />
     <ClCompile Include="UI\ImGui\Widgets\CollapsingHeader.cpp" />
@@ -258,6 +260,11 @@
     <ClCompile Include="UI\ImGui\Widgets\WindowBody.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\libs\imGuIZMO.quat\imGuIZMO.quat\imGuIZMOquat.h" />
+    <ClInclude Include="..\..\..\libs\imGuIZMO.quat\imGuIZMO.quat\vgConfig.h" />
+    <ClInclude Include="..\..\..\libs\imGuIZMO.quat\imGuIZMO.quat\vGizmo.h" />
+    <ClInclude Include="..\..\..\libs\imGuIZMO.quat\imGuIZMO.quat\vGizmoMath.h" />
+    <ClInclude Include="..\..\..\libs\imGuIZMO.quat\imGuIZMO.quat\vgMath.h" />
     <ClInclude Include="..\..\..\libs\imgui\backends\imgui_impl_glfw.h" />
     <ClInclude Include="..\..\..\libs\imgui\backends\imgui_impl_opengl3.h" />
     <ClInclude Include="..\..\..\libs\imgui\backends\imgui_impl_vulkan.h" />
@@ -414,6 +421,7 @@
     <ClInclude Include="UI\ImGui\Components\ViewportSettingsWindow.hpp" />
     <ClInclude Include="UI\ImGui\Components\WindManagerWindow.hpp" />
     <ClInclude Include="UI\ImGui\ImGuiImpl.hpp" />
+    <ClInclude Include="UI\ImGui\Widgets\ArrowDirection.hpp" />
     <ClInclude Include="UI\ImGui\Widgets\Button.hpp" />
     <ClInclude Include="UI\ImGui\Widgets\Checkbox.hpp" />
     <ClInclude Include="UI\ImGui\Widgets\CollapsingHeader.hpp" />

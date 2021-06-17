@@ -99,7 +99,7 @@ void generateStraw(int straw, int chunks, vec3 x1x0, vec3 x2x0, vec3 tangent, ve
 
       grass_normal = normalize(cross(tangent, alongNormal));
 
-      normal = mat3(gs_in[0].view) * grass_normal;
+      normal = grass_normal;// mat3(gs_in[0].view) * grass_normal;
       position = pos - tangent * thickFactor;
       gl_Position = gs_in[0].viewProjection * vec4(position, 1.0);
       EmitVertex();
@@ -148,8 +148,8 @@ void main()
     vec3 grass_normal = normalize(cross(tangent, alongNormal));
 
     float timestamp = time.timestamp * windParameters.speed;
-    vec2 texelPosition = vec2(gl_in[0].gl_Position.x + timestamp, gl_in[0].gl_Position.z + timestamp) * windParameters.direcion * (windParameters.speed / 2);
-    vec2 windTexel = (texture(windMap, texelPosition).rb - vec2(0.5, 0.5)) * windParameters.speed * 2;
+    vec2 texelPosition = vec2(gl_in[0].gl_Position.x + timestamp, gl_in[0].gl_Position.z + timestamp) * (-windParameters.direcion) * (windParameters.speed / 2);
+    vec2 windTexel = texture(windMap, texelPosition).rb * windParameters.speed * windParameters.direcion;
 
     int grassStraw = 5 - int(smoothstep(0.0, 4.0, dist));
     int chunks = 4 - int(smoothstep(0.0, 3.0, dist));

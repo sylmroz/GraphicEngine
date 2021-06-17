@@ -27,3 +27,9 @@ void GraphicEngine::Services::WindManager::setWindSpeed(float speed)
 	m_windParameters.speed = speed;
 	m_updateWindParametersSubject.notify(m_windParameters);
 }
+
+void GraphicEngine::Services::WindManager::setWindDirection(glm::vec2 direction)
+{
+	m_windParameters.direction = direction;
+	m_updateWindParametersSubject.notify(m_windParameters);
+}

@@ -17,6 +17,7 @@ namespace GraphicEngine::Services
 		void setWindParameters(Engines::Graphic::Shaders::WindParameters windParameters);
 
 		void setWindSpeed(float speed);
+		void setWindDirection(glm::vec2 direction);
 
 	private:
 		Engines::Graphic::Shaders::WindParameters m_windParameters{};
