@@ -10,7 +10,8 @@
 GraphicEngine::OpenGL::OpenGLGrassGraphicPipeline::OpenGLGrassGraphicPipeline(std::shared_ptr<Services::CameraControllerManager> cameraControllerManager,
 	std::shared_ptr<Texture> directionalLighttShadowMap,
 	std::shared_ptr<Texture> spotLightShadowMaps,
-	std::shared_ptr<Texture> pointLightShadowMaps)
+	std::shared_ptr<Texture> pointLightShadowMaps,
+	std::shared_ptr<Texture> windMap)
 {
 	using namespace Engines::Graphic::Shaders;
 
@@ -18,6 +19,7 @@ GraphicEngine::OpenGL::OpenGLGrassGraphicPipeline::OpenGLGrassGraphicPipeline(st
 	m_directionalLighttShadowMap = directionalLighttShadowMap;
 	m_spotLightShadowMaps = spotLightShadowMaps;
 	m_pointLightShadowMaps = pointLightShadowMaps;
+	m_windMap = windMap;
 
 	OpenGLVertexShader vert(GraphicEngine::Core::IO::readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("grass.vert").string()));
 	OpenGLFragmentShader frag(GraphicEngine::Core::IO::readFile<std::string>(Core::FileSystem::getOpenGlShaderPath("grass.frag").string()));
@@ -51,10 +53,6 @@ GraphicEngine::OpenGL::OpenGLGrassGraphicPipeline::OpenGLGrassGraphicPipeline(st
 	m_grassParametersUniformBuffer->update(&grassParameters);
 
 	m_materialUniformBuffer->update(&grass);
-
-	auto windMap = Engines::Graphic::WindGenerator::generate(1024, 0.5);
-	cv::imshow("Wind", windMap);
-	m_windMap = std::make_unique<Texture2D>(windMap.data, 1024, 1024, 4);
 
 	glUniform1i(glGetUniformLocation(m_shaderProgram->getShaderProgramId(), "directionalLightShadowMap"), 0);
 	m_directionalLighttShadowMap->use(0);

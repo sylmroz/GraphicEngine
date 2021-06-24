@@ -250,6 +250,7 @@
     <ClCompile Include="UI\ImGui\Widgets\CollapsingHeader.cpp" />
     <ClCompile Include="UI\ImGui\Widgets\ColorEdit.cpp" />
     <ClCompile Include="UI\ImGui\Widgets\ComboBox.cpp" />
+    <ClCompile Include="UI\ImGui\Widgets\Image.cpp" />
     <ClCompile Include="UI\ImGui\Widgets\InputFloat.cpp" />
     <ClCompile Include="UI\ImGui\Widgets\Separator.cpp" />
     <ClCompile Include="UI\ImGui\Widgets\Slider.cpp" />
@@ -427,6 +428,7 @@
     <ClInclude Include="UI\ImGui\Widgets\CollapsingHeader.hpp" />
     <ClInclude Include="UI\ImGui\Widgets\ColorEdit.hpp" />
     <ClInclude Include="UI\ImGui\Widgets\ComboBox.hpp" />
+    <ClInclude Include="UI\ImGui\Widgets\Image.hpp" />
     <ClInclude Include="UI\ImGui\Widgets\InputFloat.hpp" />
     <ClInclude Include="UI\ImGui\Widgets\Separator.hpp" />
     <ClInclude Include="UI\ImGui\Widgets\Slider.hpp" />

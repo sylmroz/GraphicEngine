@@ -14,6 +14,8 @@ namespace GraphicEngine::GUI
 	public:
 		SettingWindow(std::shared_ptr<ViewportSettingWindow> settingWindow, std::shared_ptr<RenderingSettingsWindow> renderingSettingWindow, std::shared_ptr<CameraManagerWindow> cameraManagerWindow, std::shared_ptr<LightManagerWindow> lightManager,
 			std::shared_ptr<WindManagerWindow> windManagerWindow);
+
+		virtual void init() override;
 	protected:
 		// Inherited via Widget
 		virtual void draw() override;

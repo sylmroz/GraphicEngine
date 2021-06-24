@@ -46,9 +46,9 @@ void GraphicEngine::Engine::initialize()
 		});
 
 	m_renderingEngine->init(m_window->getWidth(), m_window->getHeight());
-
-	m_ui->initialize();
+	
 	m_ui->addWidget(m_settingWindow);
+	m_ui->initialize();
 }
 
 void GraphicEngine::Engine::run()

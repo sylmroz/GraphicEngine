@@ -12,16 +12,16 @@ namespace GraphicEngine::OpenGL
 		OpenGLGrassGraphicPipeline(std::shared_ptr<Services::CameraControllerManager> cameraControllerManager,
 			std::shared_ptr<Texture> directionalLighttShadowMap,
 			std::shared_ptr<Texture> spotLightShadowMaps,
-			std::shared_ptr<Texture> pointLightShadowMaps);
+			std::shared_ptr<Texture> pointLightShadowMaps,
+			std::shared_ptr<Texture> windMap);
 
 		virtual void draw() override;
 	private:
 		std::shared_ptr<OpenGLShaderProgram> m_shaderProgram;
 
-		std::unique_ptr<Texture> m_windMap;
-
 		std::shared_ptr<Texture> m_directionalLighttShadowMap;
 		std::shared_ptr<Texture> m_spotLightShadowMaps;
 		std::shared_ptr<Texture> m_pointLightShadowMaps;
+		std::shared_ptr<Texture> m_windMap;
 	};
 }

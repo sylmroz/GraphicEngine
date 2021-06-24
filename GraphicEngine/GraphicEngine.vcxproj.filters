@@ -436,6 +436,9 @@
     <ClCompile Include="UI\ImGui\Widgets\ArrowDirection.cpp">
       <Filter>UI\ImGui\Widgets</Filter>
     </ClCompile>
+    <ClCompile Include="UI\ImGui\Widgets\Image.cpp">
+      <Filter>UI\ImGui\Widgets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Input\Keyboard\KeyboardEnumKeys.hpp">
@@ -961,6 +964,9 @@
       <Filter>Third\ImGUI\Widgets</Filter>
     </ClInclude>
     <ClInclude Include="UI\ImGui\Widgets\ArrowDirection.hpp">
+      <Filter>UI\ImGui\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ImGui\Widgets\Image.hpp">
       <Filter>UI\ImGui\Widgets</Filter>
     </ClInclude>
   </ItemGroup>

@@ -11,6 +11,11 @@ GraphicEngine::GUI::SettingWindow::SettingWindow(std::shared_ptr<ViewportSetting
 	m_body->addChildren(windManagerWindow);
 }
 
+void GraphicEngine::GUI::SettingWindow::init()
+{
+	m_body->init();
+}
+
 void GraphicEngine::GUI::SettingWindow::draw()
 {
 	m_body->draw();

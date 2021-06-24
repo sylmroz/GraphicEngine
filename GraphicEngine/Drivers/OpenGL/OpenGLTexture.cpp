@@ -1,10 +1,11 @@
 #include "OpenGLTexture.hpp"
 #include "../../Common/TextureReader.hpp"
 #include <stdexcept>
+#include <iostream>
 
 constexpr std::array<GLenum, 4> GraphicEngine::OpenGL::Texture2D::internalFormats;
 
-GraphicEngine::OpenGL::Texture2D::Texture2D(const std::string& path)
+GraphicEngine::OpenGL::Texture2D::Texture2D(const std::string& path, bool generateMipMap)
 {
 	textureType = GL_TEXTURE_2D;
 	try
@@ -27,7 +28,8 @@ GraphicEngine::OpenGL::Texture2D::Texture2D(const std::string& path)
 		if (data)
 		{
 			glTexImage2D(textureType, 0, getFormat(channels), width, height, 0, getFormat(channels), GL_UNSIGNED_BYTE, data);
-			glGenerateMipmap(textureType);
+			if (generateMipMap)
+				glGenerateMipmap(textureType);
 		}
 	}
 
@@ -37,8 +39,11 @@ GraphicEngine::OpenGL::Texture2D::Texture2D(const std::string& path)
 	}
 }
 
-GraphicEngine::OpenGL::Texture2D::Texture2D(const uint8_t* data, int width, int height, int channels)
+GraphicEngine::OpenGL::Texture2D::Texture2D(const uint8_t* data, int width, int height, int channels, bool generateMipMap)
 {
+	this->width = width;
+	this->height = height;
+	this->channels = channels;
 	textureType = GL_TEXTURE_2D;
 	glGenTextures(1, &texture);
 	glBindTexture(textureType, texture);
@@ -52,7 +57,8 @@ GraphicEngine::OpenGL::Texture2D::Texture2D(const uint8_t* data, int width, int 
 	if (data)
 	{
 		glTexImage2D(textureType, 0, getFormat(channels), width, height, 0, getFormat(channels), GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(textureType);
+		if (generateMipMap)
+			glGenerateMipmap(textureType);
 	}
 }
 

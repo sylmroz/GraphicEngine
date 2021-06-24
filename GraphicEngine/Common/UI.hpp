@@ -29,7 +29,6 @@ namespace GraphicEngine::Common
 		UI& addBackend(std::shared_ptr<EngineBackend> renderingEngineBackend)
 		{
 			m_renderingEnginebackend = renderingEngineBackend;
-			
 			return *this;
 		}
 
@@ -43,6 +42,10 @@ namespace GraphicEngine::Common
 		{
 			m_windowBackend->initialize();
 			m_renderingEnginebackend->initialize();
+			for (auto widget : m_widgets)
+			{
+				widget->init();
+			}
 			return *this;
 		}
 

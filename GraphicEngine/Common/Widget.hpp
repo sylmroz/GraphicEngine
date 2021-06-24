@@ -18,6 +18,7 @@ namespace GraphicEngine::GUI
 		std::shared_ptr<Widget> getParent();
 		void addChildren(std::shared_ptr<Widget> children);
 		std::list<std::shared_ptr<Widget>> getChildrens();
+		virtual void init();
 		virtual ~Widget() = default;
 	protected:
 		std::shared_ptr<Widget> m_parent;

@@ -11,6 +11,7 @@ namespace GraphicEngine::GUI
 	{
 	public:
 		WindManagerWindow(std::shared_ptr<Services::WindManager> windManager);
+		virtual void init() override;
 	protected:
 		// Inherited via Widget
 		virtual void draw() override;

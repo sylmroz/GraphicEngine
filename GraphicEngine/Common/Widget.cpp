@@ -27,3 +27,11 @@ std::list<std::shared_ptr<GraphicEngine::GUI::Widget>> GraphicEngine::GUI::Widge
 {
     return m_childrens;
 }
+
+void GraphicEngine::GUI::Widget::init()
+{
+    for (auto widget : m_childrens)
+    {
+        widget->init();
+    }
+}

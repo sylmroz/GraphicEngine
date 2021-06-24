@@ -38,8 +38,8 @@ namespace GraphicEngine::OpenGL
 	class Texture2D : public Texture
 	{
 	public:
-		Texture2D(const std::string& path);
-		Texture2D(const uint8_t* data, int width, int height, int channels);
+		Texture2D(const std::string& path, bool generateMipMap = true);
+		Texture2D(const uint8_t* data, int width, int height, int channels, bool generateMipMap = true);
 
 		static auto getFormat(int channels)
 		{
