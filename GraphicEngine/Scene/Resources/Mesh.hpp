@@ -273,6 +273,34 @@ namespace GraphicEngine::Scene
 			catch (const std::bad_variant_access&) {}
 		}
 
+		std::list<std::string> getAdditionalBindedGraphicPipelines()
+		{
+			return m_additionalBindedGraphicPipelines;
+		}
+
+		void setAdditionalBindedGraphicPipelines(const std::list<std::string>& additionalBindedGraphicPipelines)
+		{
+			m_additionalBindedGraphicPipelines = additionalBindedGraphicPipelines;
+		}
+
+		void bindGraphicPipeline(const std::string& pipeline)
+		{
+			auto it = std::find(m_additionalBindedGraphicPipelines.begin(), m_additionalBindedGraphicPipelines.end(), pipeline);
+			if (it == m_additionalBindedGraphicPipelines.end())
+			{
+				m_additionalBindedGraphicPipelines.push_back(pipeline);
+			}
+		}
+
+		void removeGraphicPipeline(const std::string& pipeline)
+		{
+			auto it = std::find(m_additionalBindedGraphicPipelines.begin(), m_additionalBindedGraphicPipelines.end(), pipeline);
+			if (it != m_additionalBindedGraphicPipelines.end())
+			{
+				m_additionalBindedGraphicPipelines.remove(pipeline);
+			}
+		}
+
 	private:
 		void generateDefaultMaterial()
 		{
@@ -291,5 +319,7 @@ namespace GraphicEngine::Scene
 		std::shared_ptr<Core::Octree<Vertex, OctreeLevels>> m_octree;
 
 		MeshMaterial m_material;
+
+		std::list<std::string> m_additionalBindedGraphicPipelines;
 	};
 }

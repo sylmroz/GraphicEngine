@@ -29,7 +29,7 @@ namespace GraphicEngine::Core
 			{
 				throw std::runtime_error("Property key do not exist!");
 			}
-
+			
 			auto& props = j[keys[index]];
 			if (props.is_null())
 			{
