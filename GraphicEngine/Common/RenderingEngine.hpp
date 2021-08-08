@@ -19,6 +19,11 @@
 
 namespace GraphicEngine
 {
+	namespace Core
+	{
+		class Timer;
+	}
+
 	class RenderingEngine
 	{
 	public:

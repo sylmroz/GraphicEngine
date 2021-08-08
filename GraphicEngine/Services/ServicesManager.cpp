@@ -1,5 +1,12 @@
 #include "ServicesManager.hpp"
 
+#include "CameraControllerManager.hpp"
+#include "LightManager.hpp"
+#include "ModelManager.hpp"
+#include "RenderingOptionsManager.hpp"
+#include "ViewportManager.hpp"
+#include "WindManager.hpp"
+
 GraphicEngine::Services::ServicesManager::ServicesManager(std::shared_ptr<Services::CameraControllerManager> cameraControllerManager,
 	std::shared_ptr<Services::ModelManager> modelManager,
 	std::shared_ptr<Services::LightManager> lightManager,

@@ -6,6 +6,13 @@
 #include "VulkanTextureFactory.hpp"
 #include "VulkanVertexBufferFactory.hpp"
 
+#include "../../Services/CameraControllerManager.hpp"
+#include "../../Services/LightManager.hpp"
+#include "../../Services/ModelManager.hpp"
+#include "../../Services/RenderingOptionsManager.hpp"
+#include "../../Services/ViewportManager.hpp"
+#include "../../Services/WindManager.hpp"
+
 #undef max
 
 GraphicEngine::Vulkan::VulkanRenderingEngine::VulkanRenderingEngine(std::shared_ptr<VulkanWindowContext> vulkanWindowContext,

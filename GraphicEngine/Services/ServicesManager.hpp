@@ -6,16 +6,16 @@
 
 #include "../Core/Utils/GetClassName.hpp"
 
-#include "CameraControllerManager.hpp"
-#include "LightManager.hpp"
-#include "ModelManager.hpp"
-#include "RenderingOptionsManager.hpp"
-#include "ViewportManager.hpp"
-#include "WindManager.hpp"
-
 
 namespace GraphicEngine::Services
 {
+	class CameraControllerManager;
+	class ModelManager;
+	class ViewportManager;
+	class RenderingOptionsManager;
+	class WindManager;
+	class LightManager;
+
 	class ServicesManager
 	{
 	public:

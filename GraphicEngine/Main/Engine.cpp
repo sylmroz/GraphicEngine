@@ -3,6 +3,8 @@
 #include "../Platform/Glfw/OpenGL/GlfwOpenGLInjector.hpp"
 #include "../Platform/Glfw/Vulkan/GlfwVulkanInjector.hpp"
 
+#include "../Services/ModelManager.hpp"
+
 GraphicEngine::Engine::Engine(std::shared_ptr<Common::WindowKeyboardMouse> window,
 	std::shared_ptr<RenderingEngine> renderingEngine,
 	std::shared_ptr<Core::Inputs::KeyboardEventProxy> keyboard,

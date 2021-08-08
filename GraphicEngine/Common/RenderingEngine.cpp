@@ -1,5 +1,12 @@
 #include "RenderingEngine.hpp"
 
+#include "../Services/CameraControllerManager.hpp"
+#include "../Services/LightManager.hpp"
+#include "../Services/ModelManager.hpp"
+#include "../Services/RenderingOptionsManager.hpp"
+#include "../Services/ViewportManager.hpp"
+#include "../Services/WindManager.hpp"
+
 GraphicEngine::RenderingEngine::RenderingEngine(std::shared_ptr<Services::ServicesManager> servicesManager,
 	std::shared_ptr<Core::EventManager> eventManager,
 	std::shared_ptr<Core::Timer> timer,
