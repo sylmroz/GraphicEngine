@@ -157,6 +157,9 @@
     <Filter Include="Third\ImGUI\Widgets">
       <UniqueIdentifier>{983bd1c9-3209-46d0-ade8-8ac025f0b842}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Third\UtilityLib">
+      <UniqueIdentifier>{f91a493e-0122-4319-8aac-1184b8bc4c96}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -273,27 +276,6 @@
     </ClCompile>
     <ClCompile Include="Drivers\Vulkan\Pipelines\VulkanSolidColorGraphicPipeline.cpp">
       <Filter>Drivers\Vulkan\Pipelines</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\libs\imgui\imgui.cpp">
-      <Filter>Third\ImGUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\libs\imgui\backends\imgui_impl_glfw.cpp">
-      <Filter>Third\ImGUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\libs\imgui\backends\imgui_impl_opengl3.cpp">
-      <Filter>Third\ImGUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\libs\imgui\imgui_demo.cpp">
-      <Filter>Third\ImGUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\libs\imgui\imgui_draw.cpp">
-      <Filter>Third\ImGUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\libs\imgui\imgui_widgets.cpp">
-      <Filter>Third\ImGUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\libs\imgui\backends\imgui_impl_vulkan.cpp">
-      <Filter>Third\ImGUI</Filter>
     </ClCompile>
     <ClCompile Include="UI\ImGui\ImGuiImpl.cpp">
       <Filter>UI\ImGui</Filter>
@@ -430,14 +412,47 @@
     <ClCompile Include="UI\ImGui\Widgets\Separator.cpp">
       <Filter>UI\ImGui\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\libs\imGuIZMO.quat\imGuIZMO.quat\imGuIZMOquat.cpp">
-      <Filter>Third\ImGUI\Widgets</Filter>
-    </ClCompile>
     <ClCompile Include="UI\ImGui\Widgets\ArrowDirection.cpp">
       <Filter>UI\ImGui\Widgets</Filter>
     </ClCompile>
     <ClCompile Include="UI\ImGui\Widgets\Image.cpp">
       <Filter>UI\ImGui\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UtilityLib\UtilityLib\Utility\threadpool.cpp">
+      <Filter>Third\UtilityLib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UtilityLib\UtilityLib\Utility\types.cpp">
+      <Filter>Third\UtilityLib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UtilityLib\UtilityLib\Utility\uuid.cpp">
+      <Filter>Third\UtilityLib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UtilityLib\UtilityLib\Utility\UUIDImplementation\uuidGenerator.cpp">
+      <Filter>Third\UtilityLib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\libs\imgui\imgui.cpp">
+      <Filter>Third\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\libs\imgui\imgui_draw.cpp">
+      <Filter>Third\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\libs\imgui\imgui_tables.cpp">
+      <Filter>Third\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\libs\imgui\imgui_widgets.cpp">
+      <Filter>Third\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\libs\imgui\backends\imgui_impl_opengl3.cpp">
+      <Filter>Third\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\libs\imgui\backends\imgui_impl_vulkan.cpp">
+      <Filter>Third\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\libs\imGuIZMO.quat\imGuIZMO.quat\imGuIZMOquat.cpp">
+      <Filter>Third\ImGUI\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\libs\imgui\backends\imgui_impl_glfw.cpp">
+      <Filter>Third\ImGUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -741,33 +756,6 @@
     <ClInclude Include="Engines\Graphic\Pipelines\GraphicPipeline.hpp">
       <Filter>Engines\Graphic\Pipelines</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\libs\imgui\imgui.h">
-      <Filter>Third\ImGUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libs\imgui\backends\imgui_impl_glfw.h">
-      <Filter>Third\ImGUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libs\imgui\backends\imgui_impl_opengl3.h">
-      <Filter>Third\ImGUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libs\imgui\imconfig.h">
-      <Filter>Third\ImGUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libs\imgui\imgui_internal.h">
-      <Filter>Third\ImGUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libs\imgui\imstb_rectpack.h">
-      <Filter>Third\ImGUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libs\imgui\imstb_textedit.h">
-      <Filter>Third\ImGUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libs\imgui\imstb_truetype.h">
-      <Filter>Third\ImGUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libs\imgui\backends\imgui_impl_vulkan.h">
-      <Filter>Third\ImGUI</Filter>
-    </ClInclude>
     <ClInclude Include="UI\ImGui\ImGuiImpl.hpp">
       <Filter>UI\ImGui</Filter>
     </ClInclude>
@@ -948,26 +936,92 @@
     <ClInclude Include="UI\ImGui\Widgets\Text.hpp">
       <Filter>UI\ImGui\Widgets</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\libs\imGuIZMO.quat\imGuIZMO.quat\imGuIZMOquat.h">
-      <Filter>Third\ImGUI\Widgets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libs\imGuIZMO.quat\imGuIZMO.quat\vgConfig.h">
-      <Filter>Third\ImGUI\Widgets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libs\imGuIZMO.quat\imGuIZMO.quat\vGizmo.h">
-      <Filter>Third\ImGUI\Widgets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libs\imGuIZMO.quat\imGuIZMO.quat\vGizmoMath.h">
-      <Filter>Third\ImGUI\Widgets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libs\imGuIZMO.quat\imGuIZMO.quat\vgMath.h">
-      <Filter>Third\ImGUI\Widgets</Filter>
-    </ClInclude>
     <ClInclude Include="UI\ImGui\Widgets\ArrowDirection.hpp">
       <Filter>UI\ImGui\Widgets</Filter>
     </ClInclude>
     <ClInclude Include="UI\ImGui\Widgets\Image.hpp">
       <Filter>UI\ImGui\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UtilityLib\UtilityLib\Utility\nocopyable.hpp">
+      <Filter>Third\UtilityLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UtilityLib\UtilityLib\Utility\stringSearch.hpp">
+      <Filter>Third\UtilityLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UtilityLib\UtilityLib\Utility\threadpool.hpp">
+      <Filter>Third\UtilityLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UtilityLib\UtilityLib\Utility\tokenizer.hpp">
+      <Filter>Third\UtilityLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UtilityLib\UtilityLib\Utility\types.hpp">
+      <Filter>Third\UtilityLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UtilityLib\UtilityLib\Utility\utility.hpp">
+      <Filter>Third\UtilityLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UtilityLib\UtilityLib\Utility\uuid.hpp">
+      <Filter>Third\UtilityLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UtilityLib\UtilityLib\Utility\UUIDImplementation\uuidGenerator.hpp">
+      <Filter>Third\UtilityLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UtilityLib\UtilityLib\Utility\AsyncContainers\container.hpp">
+      <Filter>Third\UtilityLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UtilityLib\UtilityLib\Utility\AsyncContainers\deque.hpp">
+      <Filter>Third\UtilityLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UtilityLib\UtilityLib\Utility\AsyncContainers\list.hpp">
+      <Filter>Third\UtilityLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UtilityLib\UtilityLib\Utility\AsyncContainers\queue.hpp">
+      <Filter>Third\UtilityLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UtilityLib\UtilityLib\Utility\AsyncContainers\vector.hpp">
+      <Filter>Third\UtilityLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\libs\imgui\imconfig.h">
+      <Filter>Third\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\libs\imgui\imgui.h">
+      <Filter>Third\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\libs\imgui\imgui_internal.h">
+      <Filter>Third\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\libs\imgui\imstb_rectpack.h">
+      <Filter>Third\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\libs\imgui\imstb_textedit.h">
+      <Filter>Third\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\libs\imgui\imstb_truetype.h">
+      <Filter>Third\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\libs\imgui\backends\imgui_impl_opengl3.h">
+      <Filter>Third\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\libs\imgui\backends\imgui_impl_vulkan.h">
+      <Filter>Third\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\libs\imGuIZMO.quat\imGuIZMO.quat\imGuIZMOquat.h">
+      <Filter>Third\ImGUI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\libs\imGuIZMO.quat\imGuIZMO.quat\vgConfig.h">
+      <Filter>Third\ImGUI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\libs\imGuIZMO.quat\imGuIZMO.quat\vGizmo.h">
+      <Filter>Third\ImGUI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\libs\imGuIZMO.quat\imGuIZMO.quat\vGizmoMath.h">
+      <Filter>Third\ImGUI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\libs\imGuIZMO.quat\imGuIZMO.quat\vgMath.h">
+      <Filter>Third\ImGUI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\libs\imgui\backends\imgui_impl_glfw.h">
+      <Filter>Third\ImGUI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -75,8 +75,8 @@ bool GraphicEngine::OpenGL::OpenGLRenderingEngine::drawFrame()
 		m_wireframeGraphicPipeline->draw();
 	if (m_viewportManager->displaySolid)
 		m_solidColorGraphicPipeline->draw();
-	if (m_viewportManager->displaySkybox)
-		m_skyboxGraphicPipeline->draw();
+	/*if (m_viewportManager->displaySkybox)
+		m_skyboxGraphicPipeline->draw();*/
 
 	m_ui->drawUi();
 	m_uiRenderingBackend->renderData();
@@ -112,7 +112,7 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 		m_solidColorGraphicPipeline = std::make_unique<OpenGLSolidColorGraphicPipeline>(m_cameraControllerManager, m_directionalLightDepthTexture, m_spotLightdepthTexture, m_pointightdepthTexture);
 		m_normalDebugGraphicPipeline = std::make_unique<OpenGLNormalDebugGraphicPipeline>(m_cameraControllerManager);
 		m_grassGraphicPipeline = std::make_unique<OpenGLGrassGraphicPipeline>(m_cameraControllerManager, m_directionalLightDepthTexture, m_spotLightdepthTexture, m_pointightdepthTexture, m_windManager->getTextureObject<Texture2D>());
-		m_skyboxGraphicPipeline = std::make_unique<OpenGLSkyboxGraphicPipeline>(m_cfg->getProperty<std::string>("scene:skybox:texture path"));
+		// m_skyboxGraphicPipeline = std::make_unique<OpenGLSkyboxGraphicPipeline>(m_cfg->getProperty<std::string>("scene:skybox:texture path"));
 
 		Engines::Graphic::Shaders::LightSpaceMatrixArray lightSpaceMatrixArray;
 		for (auto& dirLight : m_lightManager->getDirectionalLights())
@@ -239,6 +239,7 @@ void GraphicEngine::OpenGL::OpenGLRenderingEngine::init(size_t width, size_t hei
 				m_shadowMapGraphicPipeline->addVertexBuffer<decltype(mesh)::element_type::vertex_type>(mesh, vb);
 				m_spotLightshadowMapGraphicPipeline->addVertexBuffer<decltype(mesh)::element_type::vertex_type>(mesh, vb);
 				m_pointLightshadowMapGraphicPipeline->addVertexBuffer<decltype(mesh)::element_type::vertex_type>(mesh, vb);
+				
 				m_grassGraphicPipeline->addVertexBuffer<decltype(mesh)::element_type::vertex_type>(mesh, vb);
 			}
 		});

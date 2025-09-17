@@ -89,10 +89,8 @@ vk::UniqueInstance GraphicEngine::Vulkan::createUniqueInstance(std::string appNa
 	static vk::DynamicLoader dl;
 #endif
 
-#if !defined(NDEBUG)
 	auto layerProperties = vk::enumerateInstanceLayerProperties();
 	auto extensionProperties = vk::enumerateInstanceExtensionProperties();
-#endif
 
 	std::vector<const char*> requiredLayers;
 	for (auto const& layer : validationLayers)
@@ -123,7 +121,7 @@ vk::UniqueInstance GraphicEngine::Vulkan::createUniqueInstance(std::string appNa
 	vk::ApplicationInfo appInfo(appName.c_str(), VK_MAKE_VERSION(1, 0, 0), engineName.c_str(), VK_MAKE_VERSION(1, 0, 0), apiVersion);
 
 #if defined(NDEBUG)
-	vk::StructureChain<vk::InstanceCreateInfo> createInfo({ {}, &appInfo, requiredLayers.size(), requiredLayers.data(), extensions.size(), extensions.data() });
+	vk::StructureChain<vk::InstanceCreateInfo> createInfo({ {}, &appInfo, static_cast<uint32_t>(requiredLayers.size()), requiredLayers.data(), static_cast<uint32_t>(extensions.size()), extensions.data() });
 #else
 	vk::DebugUtilsMessageSeverityFlagsEXT severityFlag(vk::DebugUtilsMessageSeverityFlagBitsEXT::eError |
 		vk::DebugUtilsMessageSeverityFlagBitsEXT::eWarning |

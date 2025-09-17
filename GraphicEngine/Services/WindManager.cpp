@@ -42,7 +42,7 @@ void GraphicEngine::Services::WindManager::generateWindTexture(uint32_t resoluti
 	m_windTexture = Engines::Graphic::WindGenerator::generate(resolution, speed);
 	m_resolution = resolution;
 	m_textureObject.reset();
-	cv::imwrite(m_windTexturePath, m_windTexture);
+	//cv::imwrite(m_windTexturePath, m_windTexture);
 }
 
 uint32_t GraphicEngine::Services::WindManager::getWindTextureResolution()

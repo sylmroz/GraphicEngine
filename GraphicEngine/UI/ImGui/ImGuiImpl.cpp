@@ -143,11 +143,12 @@ void GraphicEngine::GUI::ImGuiImpl::VulkanRenderEngineBackend::initialize()
 	{
 		//std::cout << err << std::endl;
 	};
-	ImGui_ImplVulkan_Init(&init_info, m_framework->m_renderPass.get());
+	init_info.RenderPass = m_framework->m_renderPass.get();
+	ImGui_ImplVulkan_Init(&init_info);
 
 	Vulkan::singleTimeCommand(m_framework->m_device, m_framework->m_commandPool, m_framework->m_graphicQueue, [&](const vk::UniqueCommandBuffer& commandBuffer)
 	{
-		ImGui_ImplVulkan_CreateFontsTexture(commandBuffer.get());
+		ImGui_ImplVulkan_CreateFontsTexture();
 	});
 }
 
